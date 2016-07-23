@@ -20,4 +20,13 @@ MS visio
 AutoCAD 
 	used for enclosure diagrams, stl files for 3D printing
 	
-
+tortoise git
+	https://tortoisegit.org/
+	a frontend for GIT, utilizing the github repository
+	"git for windows" is needed as the backend for communication/functionality of hte github repository
+	
+git for windows
+	https://git-for-windows.github.io/
+	the backed for git-for-windows
+	
+	
