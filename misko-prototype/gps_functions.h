@@ -102,7 +102,7 @@ void get_nmea_sentences() {
       }
 
       //debug print
-      //Serial.println("debug print of buffer:");      Serial.print(NMEA_buffer);
+      Serial.println("debug print of buffer:");      Serial.print(NMEA_buffer);
 
       // got good data!
       gotGPRMC = strstr(NMEA_buffer, "GPRMC"); // find out if we got a gprmc string      
@@ -135,7 +135,7 @@ void get_nmea_sentences() {
               
         if (! strstr(gps_logfile, "XXX") )
         {
-          Serial.print("debug write into outfile: "); Serial.println(gps_logfile);
+          //Serial.print("debug write into outfile: "); Serial.println(gps_logfile);
 
             gpslogfile.write(NMEA_buffer);
             gpslogfile.close();
