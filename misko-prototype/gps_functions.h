@@ -1,4 +1,4 @@
-#include "gps_config.h"
+//#include "gps_config.h"
 
 int16_t parseHex(char g) // NMEA checksum calculator
 {
@@ -13,30 +13,13 @@ int16_t parseHex(char g) // NMEA checksum calculator
         
   return (-1);
 }
-/*
-char * read_chars_until_key(char *str, char *key) {
-  int len = strcspn(str, key)+1;
-  char d[len+1];
-  int i = 0;
-
-  for (i=0; i<len-1; i++)
-  {
-    d[i] = str[i];
-    d[i+1] = '\0';
-    //    Serial.print("str[i]:");Serial.println(str[i]);
-  }
-  //Serial.print("d:");Serial.println(d);
-  return d;
-}
-*/
-
 
 void get_gps_datetime() { 
 // sample sentences:
   //$GPRMC,154951.285,A,4547.8814,N,01555.2455,E,0.92,115.67,020814,,,A*69
 
   char *p;  // pointer for parsing
-  int i, j = 0;
+  int i = 0;
 
   // hhmmss time data
   p = NMEA_buffer+7;  // set pointer to proper position: 154951.285,A,4547.8814,N,01555.2455,E,0.92,115.67,020814,,,A*69
@@ -68,10 +51,8 @@ void get_nmea_sentences() {
 //  due to iteration from the main loop, eventually the whole NMEA sentence accumulates in the global buffer variable
 
   unsigned int sum; // variable for the NMEA checksum of each sentence
-  bool fix = false; // boolean to determine if we have a fix or not
   bool gotGPRMC = false;    // flag that indicates GPRMC or GPGGA strings
   unsigned int i;  // iterator for various loops
-  char old_gps_date[] = "";
   char *p;
  
   if (Serial3.available()) // if serial3 is availiable
@@ -102,7 +83,8 @@ void get_nmea_sentences() {
       }
 
       //debug print
-      Serial.println("debug print of buffer:");      Serial.print(NMEA_buffer);
+      //Serial.println("debug print of buffer:");      
+      Serial.print(NMEA_buffer);
 
       // got good data!
       gotGPRMC = strstr(NMEA_buffer, "GPRMC"); // find out if we got a gprmc string      
@@ -117,12 +99,10 @@ void get_nmea_sentences() {
         if (*p == 'A') // valid fix - indicate it by lighting up the reed LED
         { 
           digitalWrite(gps_green_led_pin, HIGH);
-          fix = true;
         } 
         else 
         {
           digitalWrite(gps_green_led_pin, LOW);
-          fix = false;
         }
       }
 
