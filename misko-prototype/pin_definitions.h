@@ -12,7 +12,7 @@
 
 // UART Serial 3
 //free
-
+#define bluetooth_power_pin 9 // FIXME: supplies power via PWM (100% duty cycle) to bluetooth module FIXME: move to digital pin and drive via mosfet
 #define sd_ss_pin 10 // SD/SPI slave select
 #define sd_sck_pin 11 // SD/SPI serial clock
 #define sd_miso_pin 12 // SD/SPI master in slave out
