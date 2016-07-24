@@ -93,7 +93,6 @@ void get_nmea_sentences() {
       { 
         get_gps_datetime();
 
-        
         p = strchr(strchr(NMEA_buffer, ',')+1, ',')+1; // skip to position after 2nd comma
         
         if (*p == 'A') // valid fix - indicate it by lighting up the reed LED
@@ -110,7 +109,7 @@ void get_nmea_sentences() {
 
         bufferid++; // ?!? needed??
 
-        digitalWrite(gps_red_led_pin, HIGH);      // Turn on LED 2 (indicates write to SD)
+        digitalWrite(gps_red_led_pin, HIGH);      // Turn on red LED, indicates begin of write to SD
         File gpslogfile = SD.open(gps_logfile, FILE_WRITE);
               
         if (! strstr(gps_logfile, "XXX") )
@@ -121,11 +120,9 @@ void get_nmea_sentences() {
             gpslogfile.close();
         } 
 
-        digitalWrite(gps_red_led_pin, LOW);    //turn off LED2 (write to SD is finished)
+        digitalWrite(gps_red_led_pin, LOW);    //turn off red LED, indicates write to SD is finished
         bufferid = 0;    //reset buffer pointer
         return;
-
-     
     } // if (c == '\n')
     
     bufferid++;
