@@ -1,6 +1,6 @@
 // PIN MODES
 //pinMode(interrupt_0_pin, INPUT); // meant to power the whole thing off via acceleroeter -- FIXME: not in use
-pinMode(gps_power_pin, OUTPUT); // powers the gps (PWM) -- FIXME: direct power through the atmega2560; better is using a mosfet
+pinMode(gps_power_pin, OUTPUT); // powers the gps (PWM) -- FIXME: direct power through the atmega2560; better is using a mosfet, draws ~4mA regardless of fix
 pinMode(gps_red_led_pin, OUTPUT); // write cycle to SD card indicator (blinks on write), on by default until GPS gets fix, then off
 pinMode(gps_green_led_pin, OUTPUT); // GPS fix indiator: on - has fix, off - has no fix
 pinMode(sd_ss_pin, OUTPUT); // FIXME
