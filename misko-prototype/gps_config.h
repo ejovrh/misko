@@ -1,5 +1,5 @@
 // what to log 
-// FIXME
+// FIXME - not used in gps_functions
 #define LOG_DDM 0
 #define LOG_RMC 1 // RMC-Recommended Minimum Specific GNSS Data, message 103,04
 #define LOG_GGA 0 // GGA-Global Positioning System Fixed Data, message 103,00
@@ -7,7 +7,8 @@
 #define LOG_GSA 1 // GSA-GNSS DOP and Active Satellites, message 103,02
 #define LOG_GSV 1 // GSV-GNSS Satellites in View, message 103,03
 #define LOG_VTG 0 // VTG-Course Over Ground and Ground Speed, message 103,05
-#define USE_WAAS 0 // useful in US, but slower fix
+
+
       /* EXAMPLE
       
       $PSRF103,<msg>,<mode>,<rate>,<cksumEnable>*CKSUM<CR><LF>
@@ -61,7 +62,6 @@
 #define RMC_OFF  "$PSRF103,04,00,00,01*20\r\n"
 
 // VTG-Course Over Ground and Ground Speed, message 103,05
-
 #define VTG_ON   "$PSRF103,05,00,01,01*20\r\n"
 #define VTG_OFF  "$PSRF103,05,00,00,01*21\r\n"
 
@@ -69,5 +69,6 @@
 #define DDM_ON   "$PSRF105,01*3E\r\n"
 #define DDM_OFF  "$PSRF105,00*3F\r\n"
 
-#define WAAS_ON    "$PSRF151,01*3F\r\n"       // the command for turning on WAAS
-#define WAAS_OFF   "$PSRF151,00*3E\r\n"       // the command for turning off WAAS
+// use WAAS
+#define WAAS_ON    "$PSRF151,01*3F\r\n"
+#define WAAS_OFF   "$PSRF151,00*3E\r\n"
