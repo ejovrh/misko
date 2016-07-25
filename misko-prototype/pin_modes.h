@@ -5,7 +5,7 @@ pinMode(bluetooth_mosfet_gate_pin, OUTPUT); // bluetooth power control, bluetoot
 pinMode(gps_green_led_pin, OUTPUT); // GPS fix indiator: on - has fix, off - has no fix
 pinMode(gps_power_pin, OUTPUT); // powers the gps (PWM) -- FIXME: direct power through the atmega2560; better is using a mosfet, draws ~4mA regardless of fix
 pinMode(gps_red_led_pin, OUTPUT); // write cycle to SD card indicator (blinks on write), on by default until GPS gets fix, then off
-pinMode(lcd_mosfet_gate_pin, OUTPUT); // LCD module power control, FIXME: how much current??
+pinMode(lcd_mosfet_gate_pin, OUTPUT); // LCD module power control, draws 25mA (blank screen), FIXME: how much current exactly (off, with characters displayed)
 pinMode(sd_ss_pin, OUTPUT); // FIXME - add description
 
 // PIN STATES
