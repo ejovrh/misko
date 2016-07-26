@@ -15,5 +15,5 @@ digitalWrite(bluetooth_mosfet_gate_pin, HIGH); // mosfet gate for bluetooth modu
 digitalWrite(gps_green_led_pin, LOW); // off(low) by befault until GPS gets fix
 digitalWrite(gps_power_pin, LOW); // low(on), high(off) 
 digitalWrite(gps_red_led_pin, HIGH); // on(high) by default until gps gets fix, then off, blinks on SD card write
-digitalWrite(lcd_mosfet_gate_pin, HIGH); // on(high), low(off)
+digitalWrite(lcd_mosfet_gate_pin, LOW); // on(high), low(off)
 
