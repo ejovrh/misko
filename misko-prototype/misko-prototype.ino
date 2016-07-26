@@ -49,11 +49,5 @@ void setup()
 
 void loop() 
 {
-  if (digitalRead(bluetooth_power_button_pin) == HIGH) 
-  {   digitalWrite(bluetooth_mosfet_gate_pin, LOW);
-  }   
-  else
-      digitalWrite(bluetooth_mosfet_gate_pin, HIGH);
-
   get_nmea_sentences();
 } 
