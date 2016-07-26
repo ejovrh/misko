@@ -14,6 +14,7 @@
 #define sd_miso_pin 12 // SD/SPI master in slave out
 #define sd_mosi_pin 13 // SD/SPI master out slave in
 
+#define bluetooth_power_button_pin 40
 #define lcd_mosfet_gate_pin 49 // LCD power control via mosfet
   #define weird_behaviour_pin_50 50 // FIXME: exibits weird behaviour - high/low dont change state?
   #define weird_behaviour_pin_51 51 // FIXME: exibits weird behaviour - high/low dont change state?
