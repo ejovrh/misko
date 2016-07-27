@@ -1,6 +1,7 @@
 // libraries
 #include <SoftwareSerial.h> // serial library
 #include <SD.h> // sd card library
+#include <EEPROMex.h> // extended EEPROM library
 
 // local files
 #include "gps_config.h" // gps stuff
