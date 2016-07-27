@@ -8,7 +8,7 @@
 #include "pin_definitions.h" // pin layout
 
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
-#define CONFIG_VERSION 0 // protection against excessive EEPROM writes
+#define CONFIG_VERSION 2 // protection against excessive EEPROM writes
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
 
 #define GPSRATE 4800
@@ -66,7 +66,8 @@ void loop()
     Serial.println(" eeprom debug output: ");
     for (int i = 0; i < 13; i++)
     {
-      sprintf(debug_out, "%d - %d \n", i, EEPROM[0]);
+      int val = EEPROM[i];
+      sprintf(debug_out, "%d - %d \n", i, val);
       Serial.print(debug_out);
     }
     printed = 1;
