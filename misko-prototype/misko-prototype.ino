@@ -8,7 +8,7 @@
 #include "pin_definitions.h" // pin layout
 
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
-#define CONFIG_VERSION 2 // protection against excessive EEPROM writes
+#define CONFIG_VERSION 1 // protection against excessive EEPROM writes
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
 
 #define GPSRATE 4800
