@@ -23,6 +23,7 @@ char gps_logfile[13] = "";
 void setup() 
 {
 #include "pin_modes.h"
+#include "setup.h" // defines the setup data structure with its default values
 
   Serial.begin(SERIALRATE); // connect to the serial terminal
   Serial.println("start");
@@ -30,10 +31,11 @@ void setup()
   // initialize GPS
   Serial3.begin(GPSRATE);   // connect to the GPS at the desired rate
   Serial3.print(SERIAL_SET); // set gps serial comm. parameter
-  Serial3.print(WAAS_ON);
-  Serial3.print(RMC_ON);
-  Serial3.print(GSA_ON);
-  Serial3.print(GSV_ON);
+  Serial3.print(DDM_OFF); // will become obsolete through EEPROM setup
+  Serial3.print(WAAS_ON); // will become obsolete through EEPROM setup
+  Serial3.print(RMC_ON); // will become obsolete through EEPROM setup
+  Serial3.print(GSA_ON); // will become obsolete through EEPROM setup
+  Serial3.print(GSV_ON); // will become obsolete through EEPROM setup
     
   delay(50);
 
