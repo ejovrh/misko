@@ -13,6 +13,7 @@
 
    CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE BELOW
 */
+
 if (EEPROM[0] != CONFIG_VERSION) // only if the version did change we will write into the EERPOM
 {
   EEPROM[0] = CONFIG_VERSION; // indicates changes in structure, increment by one in case of any change
@@ -28,4 +29,4 @@ if (EEPROM[0] != CONFIG_VERSION) // only if the version did change we will write
   EEPROM[10] = 1; // LOG_GSV - default on, GSV-GNSS Satellites in View
   EEPROM[11] = 0; // LOG_VTG - default off, VTG-Course Over Ground and Ground Speed
   EEPROM[12] = 1; // USE_WAAS - default on
-}   
+}
