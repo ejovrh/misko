@@ -31,10 +31,10 @@ void setup()
   // initialize GPS
   Serial3.begin(GPSRATE);   // connect to the GPS at the desired rate
   Serial3.print(SERIAL_SET); // set gps serial comm. parameter
-  Serial3.print(WAAS_ON);
-  Serial3.print(RMC_ON);
-  Serial3.print(GSA_ON);
-  Serial3.print(GSV_ON);
+  Serial3.print(WAAS_ON); // will become obsolete via EEPROM and setup
+  Serial3.print(RMC_ON); // will become obsolete via EEPROM and setup
+  Serial3.print(GSA_ON); // will become obsolete via EEPROM and setup
+  Serial3.print(GSV_ON); // will become obsolete via EEPROM and setup
     
   delay(50);
 
