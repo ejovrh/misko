@@ -7,6 +7,7 @@
 #include "gps_config.h" // gps stuff
 #include "pin_definitions.h" // pin layout
 
+#define CONFIG_VERSION 0 // version of the config structure in setup.h, if changes need to be written into EEPROM, it MUST be incremented
 #define GPSRATE 4800
 #define SERIALRATE 9600
 //BLUETOOTHSERIALRATE is hardcoded in device
