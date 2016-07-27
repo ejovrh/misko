@@ -70,7 +70,11 @@ miško - the self sufficient gps tracker
 		https://git-for-windows.github.io/
 		the backed for git-for-windows
 	
-	
+	EEPROMex
+		http://thijs.elenbaas.net/downloads/?did=6
+		an library with extended functionalities than the core Arduino EEPROM library
+		
+		
 3. FILES / FOLDERS
 	datasheets: contains datasheets, user guides for components
 	misko-prototype: prototype firmware code which provides GPS tracker functionality
