@@ -1,14 +1,15 @@
-// libraries
+  // libraries
 #include <SoftwareSerial.h> // serial library
 #include <SD.h> // sd card library
 #include <EEPROM.h> // EEPROM library
 
 // local files
+#include "functions.h"
 #include "gps_config.h" // gps stuff
 #include "pin_definitions.h" // pin layout
 
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
-#define CONFIG_VERSION 1 // protection against excessive EEPROM writes
+#define CONFIG_VERSION 2 // protection against excessive EEPROM writes
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
 
 #define GPSRATE 4800
@@ -20,6 +21,8 @@
 char NMEA_buffer[NMEA_BUFFERSIZE] = "";        // string buffer for the NMEA sentence
 unsigned int bufferid = 0; // holds the current position in the NMEA_buffer array, used fo walk through the buffer
 
+unsigned long time;
+unsigned long bluetooth_button_press_time = millis();
 char gps_date[9] = "20XXXXXX"; // 0-7 + 1 for '\0'
 char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
 char gps_logfile[13] = "";
@@ -57,6 +60,10 @@ void setup()
    int printed = 0;
 void loop() 
 {
+  
+  //if (abs(millis() - long_bluetooth_button_press_time) > EEPROM[4])
+  //  
+  
   if (digitalRead(menu_left_buttton) == HIGH)
     Serial.println("left button press");
 
@@ -69,10 +76,18 @@ void loop()
   if (digitalRead(menu_down_buttton) == HIGH)
     Serial.println("down button press");
 
-  if (digitalRead(bluetooth_power_toggle_pin) == HIGH)
-    Serial.println("BT power toggle button press");
 
-    
+  
+  if (eeprom_timer(bluetooth_button_press_time, 4))
+      digitalWrite(bluetooth_mosfet_gate_pin, LOW);
+
+  if (digitalRead(bluetooth_power_toggle_pin) == HIGH)
+  {
+    bluetooth_button_press_time = millis();
+    digitalWrite(bluetooth_mosfet_gate_pin, HIGH);
+  }
+
+
   get_nmea_sentences();
 
         /*
