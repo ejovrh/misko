@@ -16,7 +16,7 @@ pinMode(sd_ss_pin, OUTPUT); // FIXME - add description
 
 // PIN STATES
 digitalWrite(bluetooth_power_toggle_pin, LOW); // 
-digitalWrite(bluetooth_mosfet_gate_pin, HIGH); // mosfet gate for bluetooth module, on(high), off(low)
+digitalWrite(bluetooth_mosfet_gate_pin, LOW); // mosfet gate for bluetooth module, on(high), off(low)
 digitalWrite(gps_green_led_pin, LOW); // off(low) by befault until GPS gets fix
 digitalWrite(gps_power_pin, LOW); // low(on), high(off) 
 digitalWrite(gps_red_led_pin, HIGH); // on(high) by default until gps gets fix, then off, blinks on SD card write
