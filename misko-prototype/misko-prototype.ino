@@ -75,18 +75,18 @@ void loop()
     
   get_nmea_sentences();
 
-  // poor mans debugging
-
-  if (digitalRead(bluetooth_power_button_pin) == HIGH && printed == 0)
-  {
-    Serial.println(" eeprom debug output: ");
-    for (int i = 0; i < 13; i++)
-    {
-      int val = EEPROM[i];
-      sprintf(debug_out, "%d - %d \n", i, val);
-      Serial.print(debug_out);
-    }
-    printed = 1;
-  }
-  
+        /*
+          // poor mans debugging
+          if (digitalRead(bluetooth_power_toggle_pin) == HIGH && printed == 0)
+          {
+            Serial.println(" eeprom debug output: ");
+            for (int i = 0; i < 13; i++)
+            {
+              int val = EEPROM[i];
+              sprintf(debug_out, "%d - %d \n", i, val);
+              Serial.print(debug_out);
+            }
+            printed = 1;
+          }
+         */
 } 
