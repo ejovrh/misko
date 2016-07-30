@@ -84,7 +84,7 @@ void get_nmea_sentences() {
 
       //debug print
       //Serial.println("debug print of buffer:");      
-      Serial.print(NMEA_buffer);
+      //Serial.print(NMEA_buffer);
 
       // got good data!
       gotGPRMC = strstr(NMEA_buffer, "GPRMC"); // find out if we got a gprmc string      
