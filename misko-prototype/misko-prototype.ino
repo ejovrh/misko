@@ -49,5 +49,21 @@ void setup()
 
 void loop() 
 {
+  if (digitalRead(menu_left_buttton) == HIGH)
+    Serial.println("left button press");
+
+  if (digitalRead(menu_right_buttton) == HIGH)
+    Serial.println("right button press");
+
+  if (digitalRead(menu_up_buttton) == HIGH)
+    Serial.println("up button press");
+
+  if (digitalRead(menu_down_buttton) == HIGH)
+    Serial.println("down button press");
+
+  if (digitalRead(bluetooth_power_toggle_pin) == HIGH)
+    Serial.println("BT power toggle button press");
+
+    
   get_nmea_sentences();
 } 
