@@ -9,7 +9,7 @@
  * 
  * times are in milliseconds !!
  */
-int foo_func(unsigned int in_button_press_time, unsigned int in_eeprom_index)
+int eeprom_timer(unsigned int in_button_press_time, unsigned int in_eeprom_index)
 {
   return (abs( in_button_press_time - millis()) / 1000 > EEPROM[in_eeprom_index] ?  1 :  0); 
 }
