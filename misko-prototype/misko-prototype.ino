@@ -9,7 +9,7 @@
 #include "pin_definitions.h" // pin layout
 
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
-#define CONFIG_VERSION 1 // protection against excessive EEPROM writes
+#define CONFIG_VERSION 2 // protection against excessive EEPROM writes
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
 
 #define GPSRATE 4800
@@ -26,6 +26,7 @@ char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
 char gps_logfile[13] = "";
 
 unsigned long bluetooth_button_press_time = millis();
+bool flag_bluetooth_is_on = 0;
 
 char debug_out[80] = "";
 
@@ -78,11 +79,14 @@ void loop()
   {
     bluetooth_button_press_time = millis(); // record time of button press; this is used in eeprom_timer()
     digitalWrite(bluetooth_mosfet_gate_pin, HIGH); // turn on the device
+    flag_bluetooth_is_on = 1;
   }
 
-  if (eeprom_timer(bluetooth_button_press_time, 4)) // if enough time has passed
+  if (flag_bluetooth_is_on && eeprom_timer(bluetooth_button_press_time, 4)) // if enough time has passed
+  {
       digitalWrite(bluetooth_mosfet_gate_pin, LOW); // turn off the device
-
+      flag_bluetooth_is_on = 0;
+  }
 
   get_nmea_sentences();
 
