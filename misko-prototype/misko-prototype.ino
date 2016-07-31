@@ -25,8 +25,10 @@ char gps_date[9] = "20XXXXXX"; // 0-7 + 1 for '\0'
 char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
 char gps_logfile[13] = "";
 
-unsigned long bluetooth_button_press_time = millis(); // start time of button press
-bool flag_bluetooth_is_on = 0; // flag is bt device is powered on or off
+unsigned long bluetooth_button_press_time = millis(); // time of button press
+unsigned long bluetooth_button_release_time = 0; // time of button release
+bool flag_bluetooth_is_on = 0; // flag is BT device is powered on or off
+bool flag_bluetooth_power_toggle_pressed = 0; // flag marks bluetooth button pressed or not - used to recognize button state change for proper high/low handling
 
 char debug_out[80] = "";
 
@@ -75,13 +77,20 @@ void loop()
 
 
   // bluetooth activation per button press
-  if (digitalRead(bluetooth_power_toggle_pin) == HIGH) // if button is pressed
-  {
+  if (!flag_bluetooth_power_toggle_pressed && digitalRead(bluetooth_power_toggle_pin) == HIGH) // if was not pressed and now gets pressed (will execute once even if button is held)
+  { // flag_bluetooth_power_toggle_pressed prevents mutiple executions of this if() block
     bluetooth_button_press_time = millis(); // record time of button press; this is used in eeprom_timer()
     digitalWrite(bluetooth_mosfet_gate_pin, HIGH); // turn on the device
     flag_bluetooth_is_on = 1; // set flag to on
+    flag_bluetooth_power_toggle_pressed = 1; // mark button as pressed
   }
 
+  if (flag_bluetooth_power_toggle_pressed && digitalRead(bluetooth_power_toggle_pin) == LOW) // if was pressed and now gets released (will execute once even if button is held)
+  { // flag_bluetooth_power_toggle_pressed prevents mutiple executions of this if() block
+    bluetooth_button_release_time = millis(); // record time of button press; this is used in 
+    flag_bluetooth_power_toggle_pressed = 0; // mark button as released
+  }
+  
   if (flag_bluetooth_is_on && eeprom_timer(bluetooth_button_press_time, 4)) // if the device is on and enough time has passed
   { // flag_bluetooth_is_on is needed because we do not want to execute this code on every loop
       digitalWrite(bluetooth_mosfet_gate_pin, LOW); // turn off the device
