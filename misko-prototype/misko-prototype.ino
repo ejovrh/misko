@@ -25,8 +25,8 @@ char gps_date[9] = "20XXXXXX"; // 0-7 + 1 for '\0'
 char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
 char gps_logfile[13] = "";
 
-unsigned long bluetooth_button_press_time = millis();
-bool flag_bluetooth_is_on = 0;
+unsigned long bluetooth_button_press_time = millis(); // start time of button press
+bool flag_bluetooth_is_on = 0; // flag is bt device is powered on or off
 
 char debug_out[80] = "";
 
@@ -74,18 +74,18 @@ void loop()
     Serial.println("down button press");
 
 
-     // bluetooth activation per button press
+  // bluetooth activation per button press
   if (digitalRead(bluetooth_power_toggle_pin) == HIGH) // if button is pressed
   {
     bluetooth_button_press_time = millis(); // record time of button press; this is used in eeprom_timer()
     digitalWrite(bluetooth_mosfet_gate_pin, HIGH); // turn on the device
-    flag_bluetooth_is_on = 1;
+    flag_bluetooth_is_on = 1; // set flag to on
   }
 
-  if (flag_bluetooth_is_on && eeprom_timer(bluetooth_button_press_time, 4)) // if enough time has passed
-  {
+  if (flag_bluetooth_is_on && eeprom_timer(bluetooth_button_press_time, 4)) // if the device is on and enough time has passed
+  { // flag_bluetooth_is_on is needed because we do not want to execute this code on every loop
       digitalWrite(bluetooth_mosfet_gate_pin, LOW); // turn off the device
-      flag_bluetooth_is_on = 0;
+      flag_bluetooth_is_on = 0; // set flag to off
   }
 
   get_nmea_sentences();
