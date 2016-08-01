@@ -2,6 +2,8 @@
 #include <SoftwareSerial.h> // serial library
 #include <SD.h> // sd card library
 #include <EEPROM.h> // EEPROM library
+#include <IIC_without_ACK.h> // some obscure (chinese) I2C library for the SSD1306 OLED chipset
+#include "oledfont.c"   // OLED fonts
 
 // local files
 #include "gps_config.h" // gps stuff
@@ -16,7 +18,11 @@
 //BLUETOOTHSERIALRATE is hardcoded in device
 #define NMEA_BUFFERSIZE 80 // plenty big
 
-// global variables
+// global variables start
+
+// initalize OLED display
+IIC_without_ACK OLED(oled_sda_pin, oled_scl_pin); // heavy C++ style instantation, declaration and everything...
+
 char NMEA_buffer[NMEA_BUFFERSIZE] = "";        // string buffer for the NMEA sentence
 unsigned int bufferid = 0; // holds the current position in the NMEA_buffer array, used fo walk through the buffer
 
@@ -38,6 +44,7 @@ bool flag_lcd_button_left_pressed = 0; // flag marks button pressed or not
 bool flag_lcd_button_right_pressed = 0; // flag marks button pressed or not
 
 char debug_out[80] = "";
+// global variables end
 
 #include "functions.h" // useful functions
 
@@ -64,7 +71,9 @@ void setup()
   {  
     Serial.println("SD Card failed, or not present");
     return;
-  }
+  }  
+
+  OLED.Initial(); // initializes the display (values are hardcoded in "IIC_without_ACK.cpp"
 
 } // setup end 
 
@@ -72,6 +81,15 @@ void setup()
    int printed = 0;
 void loop() 
 {
+  /*
+  OLED.Fill_Screen(0x00);
+  OLED.Char_F6x8(0,0,"line 1");
+  OLED.Char_F6x8(0,1,"line 2");
+  OLED.Char_F6x8(0,2,"line 3");
+  OLED.Char_F6x8(0,3,"line 4");
+  OLED.Char_F6x8(0,4,"line 5");
+  */
+  
   handle_bluetooth_button(); // handles the bluetooth power button
   
   handle_lcd_buttons(); // handles the lcd buttons
