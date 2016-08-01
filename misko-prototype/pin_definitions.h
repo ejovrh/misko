@@ -22,6 +22,8 @@
 #define menu_up_buttton 32 // user menu - up button
 #define menu_right_buttton 33 // user menu - right button
 #define bluetooth_power_toggle_pin 40 // user menu - bluetooth power toggle
+#define oled_scl_pin 46 // OLED SCL
+#define oled_sda_pin 47 // OLED SDA - MOSI
 #define bluetooth_mosfet_gate_pin 48 // bluetooth power control via mosfet
 #define lcd_mosfet_gate_pin 49 // LCD power control via mosfet
 #define spi_miso_pin 50 // SPI - Master In Slave Out - not used yet
