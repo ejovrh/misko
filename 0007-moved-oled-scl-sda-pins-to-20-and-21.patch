@@ -1,0 +1,27 @@
+From e5d228a82d9012b3fdac169403ee00d94cf755cd Mon Sep 17 00:00:00 2001
+From: ejovrh <hrvoje.ivanic@gmx.net>
+Date: Tue, 2 Aug 2016 23:19:00 +0200
+Subject: [PATCH 7/8] - moved oled scl/sda pins to 20 and 21
+
+---
+ misko-prototype/pin_definitions.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/misko-prototype/pin_definitions.h b/misko-prototype/pin_definitions.h
+index 5590954..3d94174 100644
+--- a/misko-prototype/pin_definitions.h
++++ b/misko-prototype/pin_definitions.h
+@@ -22,8 +22,8 @@
+ #define menu_up_buttton 32 // user menu - up button
+ #define menu_right_buttton 33 // user menu - right button
+ #define bluetooth_power_toggle_pin 40 // user menu - bluetooth power toggle
+-#define oled_scl_pin 46 // OLED SCL
+-#define oled_sda_pin 47 // OLED SDA - MOSI
++#define oled_scl_pin 21 // OLED SCL
++#define oled_sda_pin 20 // OLED SDA - MOSI
+ #define bluetooth_mosfet_gate_pin 48 // bluetooth power control via mosfet
+ //#define lcd_mosfet_gate_pin 49 // LCD power control via mosfet
+ #define spi_miso_pin 50 // SPI - Master In Slave Out - not used yet
+-- 
+2.9.2.windows.1
+
