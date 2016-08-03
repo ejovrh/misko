@@ -14,6 +14,9 @@
   char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
   char gps_logfile[13] = "";
 
+// initalize OLED object
+U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_NO_ACK);  // Display which does not send AC
+
 // bluetooth flags
   unsigned long bluetooth_button_press_time = millis(); // time of button press
   unsigned long bluetooth_button_release_time = 0; // time of button release
