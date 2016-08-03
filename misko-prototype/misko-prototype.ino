@@ -2,8 +2,8 @@
 #include <SoftwareSerial.h> // serial library
 #include <SD.h> // sd card library
 #include <EEPROM.h> // EEPROM library
-#include <IIC_without_ACK.h> // some obscure (chinese) I2C library for the SSD1306 OLED chipset
-#include "oledfont.c"   // OLED fonts
+#include <U8glib.h> // https://github.com/olikraus/u8glib/wiki/userreference
+
 
 // local files
 #include "gps_config.h" // gps stuff
@@ -36,21 +36,13 @@ void setup()
     return;
   }  
 
-  OLED.Initial(); // initializes the display (values are hardcoded in "IIC_without_ACK.cpp"
+
 } // setup end 
 
 #include "gps_functions.h" // gps functions
 
 void loop() 
 {
-  /*
-  OLED.Fill_Screen(0x00);
-  OLED.Char_F6x8(0,0,"line 1");
-  OLED.Char_F6x8(0,1,"line 2");
-  OLED.Char_F6x8(0,2,"line 3");
-  OLED.Char_F6x8(0,3,"line 4");
-  OLED.Char_F6x8(0,4,"line 5");
-  */
   
   handle_bluetooth_button(); // handles the bluetooth power button
   
