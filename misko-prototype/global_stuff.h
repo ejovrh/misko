@@ -7,9 +7,6 @@
 //BLUETOOTHSERIALRATE is hardcoded in device
 #define NMEA_BUFFERSIZE 80 // plenty big
 
-// initalize OLED display
-  IIC_without_ACK OLED(oled_sda_pin, oled_scl_pin); // heavy C++ style instantation, declaration and everything...
-
 // GPS variuables
   char NMEA_buffer[NMEA_BUFFERSIZE] = "";        // string buffer for the NMEA sentence
   unsigned int bufferid = 0; // holds the current position in the NMEA_buffer array, used fo walk through the buffer
