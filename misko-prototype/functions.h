@@ -59,13 +59,13 @@ void handle_lcd_buttons()
   if (!flag_lcd_button_down_pressed && digitalRead(menu_down_buttton) == HIGH)
   {
     //digitalWrite(lcd_mosfet_gate_pin, HIGH); // turn on the device
-    OLED.Write_IIC_Command(0xAF); // turn on the device
+    //OLED.Write_IIC_Command(0xAF); // turn on the device
     flag_lcd_is_on = 1; // set flag to on
     flag_lcd_button_down_pressed = 1; // flag button as pressed
     lcd_button_press_time = millis(); // record time of button press
     //Serial.println("down button press");
-    OLED.Fill_Screen(0x00);
-    OLED.Char_F6x8(0,1,"down");
+    //OLED.Fill_Screen(0x00);
+    //OLED.Char_F6x8(0,1,"down");
   }
 
   // LCD down button release
@@ -79,13 +79,13 @@ void handle_lcd_buttons()
   if (!flag_lcd_button_up_pressed && digitalRead(menu_up_buttton) == HIGH)
   {
     //digitalWrite(lcd_mosfet_gate_pin, HIGH); // turn on the device
-    OLED.Write_IIC_Command(0xAF); // turn on the device
+    //OLED.Write_IIC_Command(0xAF); // turn on the device
     flag_lcd_is_on = 1; // set flag to on
     flag_lcd_button_up_pressed = 1; // flag button as pressed
     lcd_button_press_time = millis(); // record time of button press
     //Serial.println("up button press");
-    OLED.Fill_Screen(0x00);
-    OLED.Char_F6x8(0,1,"up");
+    //OLED.Fill_Screen(0x00);
+    //OLED.Char_F6x8(0,1,"up");
   }
 
   // LCD up button release
@@ -99,13 +99,13 @@ void handle_lcd_buttons()
   if (!flag_lcd_button_left_pressed && digitalRead(menu_left_buttton) == HIGH)
   {
     //digitalWrite(lcd_mosfet_gate_pin, HIGH); // turn on the device
-    OLED.Write_IIC_Command(0xAF); // turn on the device
+    //OLED.Write_IIC_Command(0xAF); // turn on the device
     flag_lcd_is_on = 1; // set flag to on
     flag_lcd_button_left_pressed = 1; // flag button as pressed
     lcd_button_press_time = millis(); // record time of button press
     //Serial.println("left button press");
-    OLED.Fill_Screen(0x00);
-    OLED.Char_F6x8(0,1,"left");
+    //OLED.Fill_Screen(0x00);
+    //OLED.Char_F6x8(0,1,"left");
   }
 
   // LCD left button release
@@ -119,13 +119,13 @@ void handle_lcd_buttons()
   if (!flag_lcd_button_right_pressed && digitalRead(menu_right_buttton) == HIGH)
   {
     //digitalWrite(lcd_mosfet_gate_pin, HIGH); // turn on the device
-    OLED.Write_IIC_Command(0xAF); // turn on the device
+    //OLED.Write_IIC_Command(0xAF); // turn on the device
     flag_lcd_is_on = 1; // set flag to on
     flag_lcd_button_right_pressed = 1; // flag button as pressed
     lcd_button_press_time = millis(); // record time of button press
     //Serial.println("right button press");
-    OLED.Fill_Screen(0x00);
-    OLED.Char_F6x8(0,1,"right");
+    //OLED.Fill_Screen(0x00);
+    //OLED.Char_F6x8(0,1,"right");
   }
 
   // LCD right button release
@@ -143,7 +143,7 @@ void handle_lcd_buttons()
   // flag_lcd_is_on prevents code execution on every loop
   { 
       //digitalWrite(lcd_mosfet_gate_pin, LOW); // turn off the device
-      OLED.Write_IIC_Command(0xAE); // turn off the device
+      //OLED.Write_IIC_Command(0xAE); // turn off the device
       flag_lcd_is_on = 0; // set flag to off
   }
 }
