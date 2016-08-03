@@ -148,7 +148,6 @@ void handle_lcd_buttons()
 void draw(void) // draw function used in the picture loop
 {
   // graphic commands to redraw the complete screen should be placed here  
-  OLED.setFont(u8g_font_unifont); // https://github.com/olikraus/u8glib/wiki/userreference#setfont
-  OLED.drawStr( 0, 20, "Hello World!");
+  OLED.drawStr( 0, 20, "Hello World!"); // https://github.com/olikraus/u8glib/wiki/userreference#drawstr
 }
 
