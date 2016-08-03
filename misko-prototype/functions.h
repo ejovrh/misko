@@ -133,11 +133,6 @@ void handle_lcd_buttons()
   // flag_lcd_button_pressed prevents mutiple executions of this if() block
     flag_lcd_button_right_pressed = 0; // mark button as released
 
-
-
-
-
-
   // LCD timed power off
   if ( flag_lcd_is_on && eeprom_timer(lcd_button_press_time, 3)) // if the device is on and enough time has passed
   // flag_lcd_is_on prevents code execution on every loop
@@ -147,3 +142,13 @@ void handle_lcd_buttons()
       flag_lcd_is_on = 0; // set flag to off
   }
 }
+
+
+
+void draw(void) // draw function used in the picture loop
+{
+  // graphic commands to redraw the complete screen should be placed here  
+  OLED.setFont(u8g_font_unifont); // https://github.com/olikraus/u8glib/wiki/userreference#setfont
+  OLED.drawStr( 0, 20, "Hello World!");
+}
+
