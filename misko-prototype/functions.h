@@ -63,7 +63,7 @@ void handle_lcd_buttons()
     flag_lcd_is_on = 1; // set flag to on
     flag_lcd_button_down_pressed = 1; // flag button as pressed
     lcd_button_press_time = millis(); // record time of button press
-    //Serial.println("down button press");
+    Serial.println("down button press");
     //OLED.Fill_Screen(0x00);
     //OLED.Char_F6x8(0,1,"down");
   }
@@ -83,7 +83,7 @@ void handle_lcd_buttons()
     flag_lcd_is_on = 1; // set flag to on
     flag_lcd_button_up_pressed = 1; // flag button as pressed
     lcd_button_press_time = millis(); // record time of button press
-    //Serial.println("up button press");
+    Serial.println("up button press");
     //OLED.Fill_Screen(0x00);
     //OLED.Char_F6x8(0,1,"up");
   }
@@ -103,7 +103,7 @@ void handle_lcd_buttons()
     flag_lcd_is_on = 1; // set flag to on
     flag_lcd_button_left_pressed = 1; // flag button as pressed
     lcd_button_press_time = millis(); // record time of button press
-    //Serial.println("left button press");
+    Serial.println("left button press");
     //OLED.Fill_Screen(0x00);
     //OLED.Char_F6x8(0,1,"left");
   }
@@ -123,7 +123,7 @@ void handle_lcd_buttons()
     flag_lcd_is_on = 1; // set flag to on
     flag_lcd_button_right_pressed = 1; // flag button as pressed
     lcd_button_press_time = millis(); // record time of button press
-    //Serial.println("right button press");
+    Serial.println("right button press");
     //OLED.Fill_Screen(0x00);
     //OLED.Char_F6x8(0,1,"right");
   }
@@ -143,12 +143,7 @@ void handle_lcd_buttons()
   }
 }
 
-
-
-void draw(void) // draw function used in the picture loop
-{
-  // graphic commands to redraw the complete screen should be placed here  
-  OLED.setFont(u8g_font_6x10); // https://github.com/olikraus/u8glib/wiki/userreference#setfont and https://github.com/olikraus/u8glib/wiki/fontgroup
-  OLED.drawStr( 0, 20, "foo bar!"); // https://github.com/olikraus/u8glib/wiki/userreference#drawstr
-}
-
+  void draw(void) 
+  {
+    m2.draw();
+  }

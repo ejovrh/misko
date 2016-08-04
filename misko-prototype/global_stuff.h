@@ -14,8 +14,8 @@
   char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
   char gps_logfile[13] = "";
 
-// initalize OLED object
-//U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_NO_ACK);  // Display which does not send AC
+// initalize u8g object
+//U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NO_ACK);  // Display which does not send AC
 U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_FAST);
 
 // bluetooth flags
@@ -32,4 +32,9 @@ U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_FAST);
   bool flag_lcd_button_up_pressed = 0; // flag marks button pressed or not
   bool flag_lcd_button_left_pressed = 0; // flag marks button pressed or not
   bool flag_lcd_button_right_pressed = 0; // flag marks button pressed or not
-  bool OLED_redraw_required = 1; // flags the U8glib picture loop to execute
+  
+  bool u8g_redraw_required = 1; // flags the U8glib picture loop to execute
+
+  M2_LABEL(hello_world_label, NULL, "foXXXouu World"); // https://code.google.com/archive/p/m2tklib/wikis/t01u8g.wiki 
+  M2tk m2(&hello_world_label, NULL, NULL, m2_gh_u8g_bfs); // https://code.google.com/archive/p/m2tklib/wikis/t01u8g.wiki
+  

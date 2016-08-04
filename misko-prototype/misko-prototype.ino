@@ -4,6 +4,7 @@
 #include <EEPROM.h> // EEPROM library
 #include <U8glib.h> // https://github.com/olikraus/u8glib/wiki/userreference
 #include "M2tk.h" // https://code.google.com/archive/p/m2tklib/
+#include "utility/m2ghu8g.h"
 
 // local files
 #include "gps_config.h" // gps stuff
@@ -13,9 +14,10 @@
 
 void setup() 
 {
+
 #include "pin_modes.h"
 #include "setup.h"
-
+  
   Serial.begin(SERIALRATE); // connect to the serial terminal
   Serial.println("start");
 
@@ -28,23 +30,25 @@ void setup()
   Serial3.print(GSV_ON); // will become obsolete via EEPROM and setup
     
   delay(50);
-
+  
+/*
+FIXME: seems to crash the graphics library
   // initialize SD card  
   if (!SD.begin(sd_ss_pin)) // see if the card is present and can be initialized
   {  
     Serial.println("SD Card failed, or not present");
     return;
   }  
-
-  OLED.begin();
+*/
+  m2_SetU8g(OLED.getU8g(), m2_u8g_box_icon); // connect u8glib with m2tklib
+  m2.setFont(0, u8g_font_6x10); // assign u8g_font_6x10 font to index 0
+  
 } // setup end 
 
 #include "gps_functions.h" // gps functions
 
 void loop() 
 {
-  if (OLED_redraw_required)
-  {
     // picture loop - https://github.com/olikraus/u8glib/wiki/tpictureloop
     OLED.firstPage();  // https://github.com/olikraus/u8glib/wiki/userreference#firstpage
     do 
@@ -52,8 +56,6 @@ void loop()
       draw(); // defined in functions.h
     }
     while( OLED.nextPage() ); // https://github.com/olikraus/u8glib/wiki/userreference#nextpage
-  }
-  OLED_redraw_required = 0;
       
   handle_bluetooth_button(); // handles the bluetooth power button
   
