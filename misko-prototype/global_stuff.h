@@ -15,7 +15,8 @@
   char gps_logfile[13] = "";
 
 // initalize OLED object
-U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_NO_ACK);  // Display which does not send AC
+//U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_NO_ACK);  // Display which does not send AC
+U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_FAST);
 
 // bluetooth flags
   unsigned long bluetooth_button_press_time = millis(); // time of button press
@@ -31,4 +32,4 @@ U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_NO_ACK);  // Display which does not send 
   bool flag_lcd_button_up_pressed = 0; // flag marks button pressed or not
   bool flag_lcd_button_left_pressed = 0; // flag marks button pressed or not
   bool flag_lcd_button_right_pressed = 0; // flag marks button pressed or not
-
+  bool OLED_redraw_required = 0;
