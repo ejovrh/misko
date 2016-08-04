@@ -36,21 +36,24 @@ void setup()
     return;
   }  
 
-
+  OLED.begin();
 } // setup end 
 
 #include "gps_functions.h" // gps functions
 
 void loop() 
 {
-  // picture loop - https://github.com/olikraus/u8glib/wiki/tpictureloop
-  OLED.firstPage();  // https://github.com/olikraus/u8glib/wiki/userreference#firstpage
-  do 
+  if (OLED_redraw_required)
   {
-    draw(); // defined in functions.h
+    // picture loop - https://github.com/olikraus/u8glib/wiki/tpictureloop
+    OLED.firstPage();  // https://github.com/olikraus/u8glib/wiki/userreference#firstpage
+    do 
+    {
+      draw(); // defined in functions.h
+    }
+    while( OLED.nextPage() ); // https://github.com/olikraus/u8glib/wiki/userreference#nextpage
   }
-  while( OLED.nextPage() ); // https://github.com/olikraus/u8glib/wiki/userreference#nextpage
-  
+      
   handle_bluetooth_button(); // handles the bluetooth power button
   
   handle_lcd_buttons(); // handles the lcd buttons
