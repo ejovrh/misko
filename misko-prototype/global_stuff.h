@@ -32,4 +32,4 @@ U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_FAST);
   bool flag_lcd_button_up_pressed = 0; // flag marks button pressed or not
   bool flag_lcd_button_left_pressed = 0; // flag marks button pressed or not
   bool flag_lcd_button_right_pressed = 0; // flag marks button pressed or not
-  bool OLED_redraw_required = 0;
+  bool OLED_redraw_required = 1; // flags the U8glib picture loop to execute

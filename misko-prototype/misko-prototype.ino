@@ -3,7 +3,7 @@
 #include <SD.h> // sd card library
 #include <EEPROM.h> // EEPROM library
 #include <U8glib.h> // https://github.com/olikraus/u8glib/wiki/userreference
-
+#include "M2tk.h" // https://code.google.com/archive/p/m2tklib/
 
 // local files
 #include "gps_config.h" // gps stuff
@@ -53,6 +53,7 @@ void loop()
     }
     while( OLED.nextPage() ); // https://github.com/olikraus/u8glib/wiki/userreference#nextpage
   }
+  OLED_redraw_required = 0;
       
   handle_bluetooth_button(); // handles the bluetooth power button
   
