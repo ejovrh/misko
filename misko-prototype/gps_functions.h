@@ -40,20 +40,24 @@ void get_gps_datetime() {
   memcpy(gps_time, p, 6* sizeof(char)); // fill gps_time by copying from one array into another
 
   p = strchr(p, ',')+3; // 4547.8814,N,01555.2455,E,0.92,115.67,020814,,,A*69
+  
   if (gps_fix)
     memcpy(gps_latitude+(2*sizeof(char)), p, 9 * sizeof(char)); // fill up gps_latitude[] , part 1
   
   p = strchr(p, ',')+1; // N,01555.2455,E,0.92,115.67,020814,,,A*69
+  
   if (gps_fix)
-  *gps_latitude = *p; // fill up gps_latitude[] , part 2
+    *gps_latitude = *p; // fill up gps_latitude[] , part 2
   
   p = strchr(p, ',')+1; // 01555.2455,E,0.92,115.67,020814,,,A*69
+  
   if (gps_fix)
-  memcpy(gps_longtitude+(2*sizeof(char)), p, 10 * sizeof(char)); // fill up gps_longtitude[] , part 1
+    memcpy(gps_longtitude+(2*sizeof(char)), p, 10 * sizeof(char)); // fill up gps_longtitude[] , part 1
     
   p = strchr(p, ',')+1; // E,0.92,115.67,020814,,,A*69
+  
   if (gps_fix)
-  *gps_longtitude = *p; // fill up gps_longtitude[] , part 2
+    *gps_longtitude = *p; // fill up gps_longtitude[] , part 2
   
   p = strchr(p, ',')+1; // 0.92,115.67,020814,,,A*69
   p = strchr(p, ',')+1; // 115.67,020814,,,A*69
