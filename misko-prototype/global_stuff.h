@@ -15,8 +15,8 @@
   char gps_date[9] = "20XXXXXX"; // 0-7 + 1 for '\0'
   char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
   char gps_logfile[13] = "";
-  char gps_latitude[12] = "X hhmm.ssss"; // N or S
-  char gps_longtitude[13] = "Y hhhmm.ssss"; // W or E
+  char gps_latitude[12] = "Y hhmm.ssss"; // N or S
+  char gps_longtitude[13] = "X hhhmm.ssss"; // W or E
   char gps_altitude[6] = "0000m";
   
 // initalize u8g object
@@ -48,10 +48,10 @@ U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_FAST);
 
   
   M2_HLIST(el_1st_line, NULL, datetime); //1st line
-  M2_LABEL(el_latitude, "f0", gps_latitude); // 2nd line
   M2_LABEL(el_longtitude, "f0", gps_longtitude); // 3rd line
+  M2_LABEL(el_latitude, "f0", gps_latitude); // 2nd line
 
-  M2_LIST(el_lines) = {&el_1st_line, &el_latitude, &el_longtitude};
+  M2_LIST(el_lines) = {&el_1st_line, &el_longtitude, &el_latitude};
 
   M2_VLIST(el_dispay, NULL, el_lines);
   M2_ALIGN(top_el_display, "-0|2", &el_dispay);
