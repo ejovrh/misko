@@ -52,6 +52,10 @@ miško - the self sufficient gps tracker
 				the appropriate driver is located in the arduino installation
 				go to device manager, find the faulty USB device, manually update driver from the arduino install path
 		
+	Arduino core libraries
+		https://www.arduino.cc/en/Reference/Libraries
+		SoftwareSerial, SD, EEPROM for interfacing various devices offered by the atmega2560
+
 	Fritzing - an open source entry-level PCB design tool
 		http://fritzing.org/download/?donation=0
 		
@@ -69,10 +73,14 @@ miško - the self sufficient gps tracker
 	git for windows
 		https://git-for-windows.github.io/
 		the backed for git-for-windows
-	
-	EEPROMex
-		http://thijs.elenbaas.net/downloads/?did=6
-		an library with extended functionalities than the core Arduino EEPROM library
+			
+	u8glib
+		https://github.com/olikraus/u8glib
+		a display driver library for all kinds of displays
+		
+	m2tklib
+		https://github.com/olikraus/m2tklib
+		an graphics library for all kinds of display devices
 		
 		
 3. FILES / FOLDERS
