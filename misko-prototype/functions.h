@@ -143,7 +143,7 @@ void handle_lcd_buttons()
   }
 }
 
-  void draw(void) 
+inline void draw(void) 
   {
     m2.draw();
   }
