@@ -34,7 +34,13 @@ U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_FAST);
   bool flag_lcd_button_right_pressed = 0; // flag marks button pressed or not
   
   bool u8g_redraw_required = 1; // flags the U8glib picture loop to execute
+  
+  uint32_t number = 1234;
+  M2_U32NUM(el_num, "a0c4", &number);
 
-  M2_LABEL(hello_world_label, NULL, "foXXXo World"); // https://code.google.com/archive/p/m2tklib/wikis/t01u8g.wiki 
-  M2tk m2(&hello_world_label, m2_es_arduino, m2_eh_4bs, m2_gh_u8g_bfs); // https://code.google.com/archive/p/m2tklib/wikis/t01u8g.wiki
+  //M2_LABEL(hello_world_label, NULL, "foXXXo World"); // https://code.google.com/archive/p/m2tklib/wikis/t01u8g.wiki 
+  M2tk m2(&el_num, m2_es_arduino, m2_eh_4bs, m2_gh_u8g_fb); // https://code.google.com/archive/p/m2tklib/wikis/t01u8g.wiki
+  
+
+
   
