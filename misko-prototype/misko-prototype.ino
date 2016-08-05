@@ -29,13 +29,14 @@ void setup()
     
   delay(50);
 
+/*
   // initialize SD card  
   if (!SD.begin(sd_ss_pin)) // see if the card is present and can be initialized
   {  
     Serial.println("SD Card failed, or not present");
     return;
   }  
-
+*/
   OLED.Initial(); // initializes the display (values are hardcoded in "IIC_without_ACK.cpp"
 } // setup end 
 
