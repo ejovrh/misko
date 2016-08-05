@@ -15,8 +15,21 @@ int16_t parseHex(char g) // NMEA checksum calculator
 }
 
 void get_gps_datetime() { 
-// sample sentences:
-  //$GPRMC,154951.285,A,4547.8814,N,01555.2455,E,0.92,115.67,020814,,,A*69
+      /*
+      $GPRMC,170942.000,A,4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
+      $GPGGA,170943.000,4547.9091,N,01555.1251,E,1,06,1.7,139.9,M,42.5,M,,0000*55
+      $GPGSA,A,3,08,11,22,03,27,32,,,,,,,3.2,1.7,2.7*3F
+      $GPGSV,3,1,11,11,74,284,34,22,53,248,34,08,48,190,39,32,44,068,24*71
+      $GPGSV,3,2,11,03,28,245,32,27,19,165,29,10,18,060,,01,58,304,28*78
+      $GPGSV,3,3,11,14,51,100,,28,17,299,,17,02,324,*46
+      $GPRMC,170943.000,A,4547.9091,N,01555.1251,E,0.19,110.80,050816,,,A*6C
+      $GPGGA,170944.000,4547.9089,N,01555.1250,E,1,07,1.3,140.5,M,42.5,M,,0000*5D
+      $GPGSA,A,3,08,11,22,03,27,32,10,,,,,,2.3,1.3,1.9*37
+      $GPRMC,170944.000,A,4547.9089,N,01555.1250,E,0.22,182.76,050816,,,A*69
+      $GPGGA,170945.000,4547.9087,N,01555.1248,E,1,07,1.3,141.2,M,42.5,M,,0000*5D
+      $GPGSA,A,3,08,11,22,03,27,32,10,,,,,,2.3,1.3,1.9*37
+      $GPRMC,170945.000,A,4547.9087,N,01555.1248,E,0.38,191.61,050816,,,A*60
+      */
 
   char *p;  // pointer for parsing
   int i = 0;
@@ -24,13 +37,24 @@ void get_gps_datetime() {
   // hhmmss time data
   p = NMEA_buffer+7;  // set pointer to proper position: 154951.285,A,4547.8814,N,01555.2455,E,0.92,115.67,020814,,,A*69
 
-  for (i=0; i<6; i++) // fill gps_time 
-    *(gps_time+i) = *(p+i); // by copying from one array into another
+  memcpy(gps_time, p, 6* sizeof(char)); // fill gps_time by copying from one array into another
 
   p = strchr(p, ',')+3; // 4547.8814,N,01555.2455,E,0.92,115.67,020814,,,A*69
+  if (gps_fix)
+    memcpy(gps_latitude+(2*sizeof(char)), p, 9 * sizeof(char)); // fill up gps_latitude[] , part 1
+  
   p = strchr(p, ',')+1; // N,01555.2455,E,0.92,115.67,020814,,,A*69
+  if (gps_fix)
+  *gps_latitude = *p; // fill up gps_latitude[] , part 2
+  
   p = strchr(p, ',')+1; // 01555.2455,E,0.92,115.67,020814,,,A*69
+  if (gps_fix)
+  memcpy(gps_longtitude+(2*sizeof(char)), p, 10 * sizeof(char)); // fill up gps_longtitude[] , part 1
+    
   p = strchr(p, ',')+1; // E,0.92,115.67,020814,,,A*69
+  if (gps_fix)
+  *gps_longtitude = *p; // fill up gps_longtitude[] , part 2
+  
   p = strchr(p, ',')+1; // 0.92,115.67,020814,,,A*69
   p = strchr(p, ',')+1; // 115.67,020814,,,A*69
   p = strchr(p, ',')+1; // 020814,,,A*69
@@ -42,8 +66,8 @@ void get_gps_datetime() {
       *(gps_date+5) = *(p+3);  // M - 2
       *(gps_date+6) = *(p+0);  // D - 6
       *(gps_date+7) = *(p+1);  // D - 6
-//    Serial.print("gps_date: ");  Serial.println(gps_date);
-//    Serial.print("gps_time: ");  Serial.println(gps_time);
+    //Serial.print("gps_date: ");  Serial.println(gps_date);
+    //Serial.print("gps_time: ");  Serial.println(gps_time);
 }
 
 void get_nmea_sentences() {
@@ -97,10 +121,12 @@ void get_nmea_sentences() {
         
         if (*p == 'A') // valid fix - indicate it by lighting up the reed LED
         { 
+          gps_fix = 1;
           digitalWrite(gps_green_led_pin, HIGH);
         } 
         else 
         {
+          gps_fix = 0;
           digitalWrite(gps_green_led_pin, LOW);
         }
       }
