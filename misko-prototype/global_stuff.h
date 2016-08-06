@@ -56,8 +56,18 @@ U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_FAST);
   M2_LABEL(el_sat_in_view, "f0", "sat 12");
   M2_LIST(el_alt_sat) ={&el_altitude, &el_space, &el_sat_in_view};
   M2_HLIST(el_4th_line, NULL, el_alt_sat); // 4th line
-  
-  M2_LIST(el_lines) = {&el_1st_line, &el_2nd_line, &el_3rd_line, &el_4th_line}; // line up elements
+
+  M2_LABEL(el_batt_a, "fo", "batA 100%");
+  M2_LABEL(el_batt_b, "fo", "batB 100%");
+  M2_LIST(el_battery) = {&el_batt_a, &el_space, &el_batt_b};
+  M2_HLIST(el_5th_line, NULL, el_battery); // 5th line
+
+  M2_LABEL(el_bluetooth, "f0", "bt");
+  M2_LABEL(el_accel, "f0", "accel");
+  M2_LIST(el_misc) = {&el_bluetooth, &el_space, &el_accel};
+  M2_HLIST(el_6th_line, NULL, el_misc); // 5th line
+    
+  M2_LIST(el_lines) = {&el_1st_line, &el_2nd_line, &el_3rd_line, &el_4th_line, &el_5th_line, &el_6th_line}; // line up elements
 
   M2_VLIST(el_dispay, NULL, el_lines); // list the lineup into a vertical list
   M2_ALIGN(top_el_display, "-0|2", &el_dispay); // align it top&left
