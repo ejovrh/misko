@@ -39,22 +39,20 @@ U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_FAST);
   bool flag_lcd_button_right_pressed = 0; // flag marks button pressed or not
   
 // menu construction  
-  M2_LABEL(el_space, "f0", " ");
-  M2_LABEL(el_colon, "f0", "");
+  M2_LABEL(el_space, "f0", ' '); // label for space character
   
-  M2_LABEL(el_gps_date, "f0", gps_date);
-  M2_LABEL(el_gps_time, "f0", gps_time);
-  M2_LIST(datetime) {&el_gps_time, &el_space, &el_gps_date} ;
-
+  M2_LABEL(el_gps_date, "f0", gps_date); // label for gps_date
+  M2_LABEL(el_gps_time, "f0", gps_time); // label for gps_time
+  M2_LIST(datetime) {&el_gps_time, &el_space, &el_gps_date} ; // create a list of gps date and time
   
-  M2_HLIST(el_1st_line, NULL, datetime); //1st line
-  M2_LABEL(el_longtitude, "f0", gps_longtitude); // 3rd line
+  M2_HLIST(el_1st_line, NULL, datetime); // 1st line
   M2_LABEL(el_latitude, "f0", gps_latitude); // 2nd line
+  M2_LABEL(el_longtitude, "f0", gps_longtitude); // 3rd line
 
-  M2_LIST(el_lines) = {&el_1st_line, &el_longtitude, &el_latitude};
+  M2_LIST(el_lines) = {&el_1st_line, &el_longtitude, &el_latitude}; // line up elements
 
-  M2_VLIST(el_dispay, NULL, el_lines);
-  M2_ALIGN(top_el_display, "-0|2", &el_dispay);
+  M2_VLIST(el_dispay, NULL, el_lines); // list the lineup into a vertical list
+  M2_ALIGN(top_el_display, "-0|2", &el_dispay); // align it top&left
 
-  M2tk m2(&top_el_display, m2_es_arduino, m2_eh_2bs, m2_gh_u8g_fb);
+  M2tk m2(&top_el_display, m2_es_arduino, m2_eh_2bs, m2_gh_u8g_fb); // push it into the display object
 
