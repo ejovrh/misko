@@ -12,6 +12,16 @@
 #include "global_stuff.h" // global variables et al.
 #include "functions.h" // useful functions
 
+// EERPOM indices
+#define EERPOM_LCD_POWER_INDEX 1
+#define EERPOM_BLUETOOTH_POWER_INDEX 2
+#define EERPOM_LCD_AUTO_TIMEOUT_INDEX 3
+#define EERPOM_BLUETOOTH_ATUO_TIMEOUT_INDEX 4
+#define EERPOM_TIMEZONE_INDEX 5
+#define EEPROM_GPS_GPRMC_INDEX 6
+#define EEPROM_GPS_GPGGA_INDEX 7
+#define EEPROM_GPS_USE_WAAS_INDEX 8
+
 void setup() 
 {
   #include "setup.h"
