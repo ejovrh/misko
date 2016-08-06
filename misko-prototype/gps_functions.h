@@ -47,7 +47,7 @@ void get_gps_datetime() {
   p = strchr(p, ',')+1; // N,01555.2455,E,0.92,115.67,020814,,,A*69
   
   if (gps_fix)
-    *(gps_latitude+13) = *p; // fill up gps_latitude[] , part 2, appends letter
+    memcpy(gps_latitude+(13*sizeof(char)), p, sizeof(char));
   
   p = strchr(p, ',')+1; // 01555.2455,E,0.92,115.67,020814,,,A*69
   
@@ -57,7 +57,7 @@ void get_gps_datetime() {
   p = strchr(p, ',')+1; // E,0.92,115.67,020814,,,A*69
   
   if (gps_fix)
-    *(gps_longtitude+14) = *p; // fill up gps_longtitude[] , part 2, appends letter
+    memcpy(gps_longtitude+(14*sizeof(char)), p, sizeof(char)); // fill up gps_longtitude[] , part 2, appends letter
   
   p = strchr(p, ',')+1; // 0.92,115.67,020814,,,A*69
   p = strchr(p, ',')+1; // 115.67,020814,,,A*69
@@ -72,6 +72,11 @@ void get_gps_datetime() {
       *(gps_date+7) = *(p+1);  // D - 6
     //Serial.print("gps_date: ");  Serial.println(gps_date);
     //Serial.print("gps_time: ");  Serial.println(gps_time);
+}
+
+void get_gps_hdop()
+{
+  ;
 }
 
 void get_nmea_sentences() {
@@ -114,6 +119,7 @@ void get_nmea_sentences() {
       //Serial.println("debug print of buffer:");      
       Serial.print(NMEA_buffer);
 
+      // check for GPRMC sentence
       if (memcmp(NMEA_buffer, gprmc, 6*sizeof(char)) == 0) // if we have a GPRMC sentence (compare the NMEA buffer with its sentence to gprmc[])
       { 
         get_gps_datetime();
@@ -132,6 +138,12 @@ void get_nmea_sentences() {
         }
       }
 
+      // check for GPGGA sentence
+      if (memcmp(NMEA_buffer, gpgga, 6*sizeof(char)) == 0) // if we have a GPRMC sentence (compare the NMEA buffer with its sentence to gprmc[])
+      { 
+        get_gps_hdop();
+          
+      }
         strcat(strcpy(gps_logfile,gps_date), ".gps"); 
 
         bufferid++; // ?!? needed??
