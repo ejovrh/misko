@@ -74,9 +74,31 @@ void get_gps_datetime() {
     //Serial.print("gps_time: ");  Serial.println(gps_time);
 }
 
-void get_gps_hdop()
+void get_gpgga_hdop_and_sat() // parses out sattelites used and HDOP
 {
-  ;
+  char *p; // char pointer for string tokenizer
+  p = strtok(NMEA_buffer, ","); // set up the tokenizer for string seperation on comma
+  int i = 0; // counter for substrings
+
+  while (p != NULL) // while there are tokenizable substrings in string
+  {
+     i++; // increment by one
+
+     if (i == 8) // the 8th field is the satellite in view
+     {
+        memcpy( gps_satellites_in_view + ( sizeof(char) ), p, strlen(p)*sizeof(char) ); // copy the value 
+        strcat(gps_satellites_in_view, '\0'); // terminate the string
+     }
+
+     if (i == 9) // the 9th field is the HDOP
+     {
+      memcpy( gps_hdop + ( sizeof(char) ), p, strlen(p)*sizeof(char) ); // copy the value 
+      strcat(gps_hdop, '\0'); // terminate the string
+      return; // finish the loop because we do not need anything else here
+     }
+     
+     p = strtok(NULL, ","); // tokenize further
+  }
 }
 
 void get_nmea_sentences() {
@@ -117,7 +139,7 @@ void get_nmea_sentences() {
 
       //debug print
       //Serial.println("debug print of buffer:");      
-      Serial.print(NMEA_buffer);
+      //Serial.print(NMEA_buffer);
 
       // check for GPRMC sentence
       if (memcmp(NMEA_buffer, gprmc, 6*sizeof(char)) == 0) // if we have a GPRMC sentence (compare the NMEA buffer with its sentence to gprmc[])
@@ -139,11 +161,12 @@ void get_nmea_sentences() {
       }
 
       // check for GPGGA sentence
-      if (memcmp(NMEA_buffer, gpgga, 6*sizeof(char)) == 0) // if we have a GPRMC sentence (compare the NMEA buffer with its sentence to gprmc[])
+      if (memcmp(NMEA_buffer, gpgga, 6*sizeof(char)) == 0) // if we have a GPRMC sentence
       { 
-        get_gps_hdop();
-          
+        if (gps_fix) // if we dont have a fix we get garbage (leads to too compliated code)
+          get_gpgga_hdop_and_sat(); // get HDOP and satellites used
       }
+      
         strcat(strcpy(gps_logfile,gps_date), ".gps"); 
 
         bufferid++; // ?!? needed??
