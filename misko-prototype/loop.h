@@ -6,7 +6,7 @@
       OLED.firstPage();  // https://github.com/olikraus/u8glib/wiki/userreference#firstpage
       do 
       {
-        draw(); // defined in functions.h
+        m2.draw(); // defined in functions.h
       }
       while( OLED.nextPage() ); // https://github.com/olikraus/u8glib/wiki/userreference#nextpage
     } 
