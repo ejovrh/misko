@@ -14,6 +14,7 @@
   bool gps_fix = 0;
   char gps_date[9] = "20XXXXXX"; // 0-7 + 1 for '\0'
   char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
+  char gps_utc[7] = "UTC+  ";
   char gps_logfile[13] = "";
   char gps_latitude[12] = "Y hhmm.ssss"; // N or S
   char gps_longtitude[13] = "X hhhmm.ssss"; // W or E
@@ -38,12 +39,14 @@ U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_FAST);
   bool flag_lcd_button_left_pressed = 0; // flag marks button pressed or not
   bool flag_lcd_button_right_pressed = 0; // flag marks button pressed or not
   
-// menu construction  
+// display construction  
   M2_LABEL(el_space, "f0", ' '); // label for space character
   
   M2_LABEL(el_gps_date, "f0", gps_date); // label for gps_date
   M2_LABEL(el_gps_time, "f0", gps_time); // label for gps_time
-  M2_LIST(datetime) {&el_gps_time, &el_space, &el_gps_date} ; // create a list of gps date and time
+//  M2_LABEL(el_gps_tz, "f0", gps_utc);
+  M2_LABEL(el_gps_tz, "f0", "UTC+2");
+  M2_LIST(datetime) {&el_gps_date, &el_space, &el_gps_time, &el_gps_tz} ; // create a list of gps date and time
   
   M2_HLIST(el_1st_line, NULL, datetime); // 1st line
   M2_LABEL(el_latitude, "f0", gps_latitude); // 2nd line
