@@ -30,5 +30,5 @@ m2.setFont(0, u8g_font_6x10); // assign u8g_font_6x10 font to index 0
 m2.setPin(M2_KEY_SELECT, menu_up_buttton); // up
 m2.setPin(M2_KEY_PREV, menu_left_buttton); // left
 m2.setPin(M2_KEY_NEXT, menu_right_buttton); // right
-m2.setPin(M2_KEY_HOME, menu_down_buttton); // down
+m2.setPin(M2_KEY_EXIT, menu_down_buttton); // down
 
