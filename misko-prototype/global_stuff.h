@@ -16,8 +16,8 @@
   char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
   char gps_utc[7] = "UTC+  ";
   char gps_logfile[13] = "";
-  char gps_latitude[12] = "Y hhmm.ssss"; // N or S
-  char gps_longtitude[13] = "X hhhmm.ssss"; // W or E
+  char gps_latitude[15] = "lat hhmm.ssss "; // N or S
+  char gps_longtitude[16] = "lon hhhmm.ssss "; // W or E
   char gps_altitude[6] = "0000m";
   
 // initalize u8g object
@@ -44,15 +44,20 @@ U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_FAST);
   
   M2_LABEL(el_gps_date, "f0", gps_date); // label for gps_date
   M2_LABEL(el_gps_time, "f0", gps_time); // label for gps_time
-//  M2_LABEL(el_gps_tz, "f0", gps_utc);
+//  M2_LABEL(el_gps_tz, "f0", gps_utc); // FIXME
   M2_LABEL(el_gps_tz, "f0", "UTC+2");
   M2_LIST(datetime) {&el_gps_date, &el_space, &el_gps_time, &el_gps_tz} ; // create a list of gps date and time
   
   M2_HLIST(el_1st_line, NULL, datetime); // 1st line
-  M2_LABEL(el_latitude, "f0", gps_latitude); // 2nd line
-  M2_LABEL(el_longtitude, "f0", gps_longtitude); // 3rd line
+  M2_LABEL(el_2nd_line, "f0", gps_latitude); // 2nd line
+  M2_LABEL(el_3rd_line, "f0", gps_longtitude); // 3rd line
 
-  M2_LIST(el_lines) = {&el_1st_line, &el_longtitude, &el_latitude}; // line up elements
+  M2_LABEL(el_altitude, "f0", "alt 123m");
+  M2_LABEL(el_sat_in_view, "f0", "sat 12");
+  M2_LIST(el_alt_sat) ={&el_altitude, &el_space, &el_sat_in_view};
+  M2_HLIST(el_4th_line, NULL, el_alt_sat); // 4th line
+  
+  M2_LIST(el_lines) = {&el_1st_line, &el_2nd_line, &el_3rd_line, &el_4th_line}; // line up elements
 
   M2_VLIST(el_dispay, NULL, el_lines); // list the lineup into a vertical list
   M2_ALIGN(top_el_display, "-0|2", &el_dispay); // align it top&left
