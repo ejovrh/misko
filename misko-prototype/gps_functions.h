@@ -14,7 +14,7 @@ int16_t parseHex(char g) // NMEA checksum calculator
   return (-1);
 }
 
-void gps_parse_gprmc() // still buggy? 3rd line gets garbled
+void gps_parse_gprmc() // determines fix or not, parses coordinates, datetime
 { 
   // sample NMEA GPRMC sentence
   //    $GPRMC,170942.000,A,4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
@@ -89,17 +89,25 @@ void gps_parse_gpgga() // parses out sattelites used and HDOP
 
      if (i == 8) // the 8th field is the satellite in view
      {
-        memcpy( gps_satellites_in_view + ( sizeof(char) ), p, strlen(p)*sizeof(char) ); // copy the value 
+        memcpy( gps_satellites_in_view + sizeof(char), p, strlen(p)*sizeof(char) ); // copy the value 
         strcat(gps_satellites_in_view, '\0'); // terminate the string
      }
 
-     if (i == 9) // the 9th field is the HDOP
+     if (i == 9) // the 9th field is the HDOP - a dimensionless value
      {
-      memcpy( gps_hdop + ( sizeof(char) ), p, strlen(p)*sizeof(char) ); // copy the value 
-      strcat(gps_hdop, '\0'); // terminate the string
-      return; // finish the loop because we do not need anything else here
+        memcpy( gps_hdop + sizeof(char), p, strlen(p)*sizeof(char) ); // copy the value 
+        strcat(gps_hdop, '\0'); // terminate the string
      }
-     
+
+     if (i == 10) // the 10th field is the altitude above MSL in meters
+     {
+        memcpy( gps_altitude + ( 4*sizeof(char) ), p, strlen(p) * sizeof(char) ); // copy the numbers...
+        char *p = (char *) memchr(gps_altitude, '.', strlen(gps_altitude)); // find position of decimal symbol
+        *p = 'm'; // at this position, put the meter symbol
+        *(p+1) = '\0'; // at the next position, terminate the string
+        
+        return; // finish the loop because we do not need anything else here
+     }
      p = strtok(NULL, ","); // tokenize further
   }
 }
