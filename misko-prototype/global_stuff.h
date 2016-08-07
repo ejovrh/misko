@@ -17,11 +17,12 @@ char gps_date[9] = "20XXXXXX"; // 0-7 + 1 for '\0' -- YEAR 2100-BUG, HERE WE COM
 char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
 char gps_utc[7] = "UTC+2"; // timezone string
 char gps_logfile[13] = "";
-char gps_latitude[16] = "lat hhmm.ssss  "; // N or S, memcpy needs to start to write at pos 4 ( happens in gps_functions.h:gps_parse_gprmc() )
-char gps_longtitude[17] = "lon hhhmm.ssss  "; // W or E, memcpy needs to start to write at pos 4 ( happens in gps_functions.h:gps_parse_gprmc() )
-char gps_altitude[9] = "alt"; // GPS altitude: "altxxxxm"
-char gps_hdop[6] = "D"; // GPS horizontal dilution of position
+char gps_latitude[16] = "lat hhmm.ssss  "; // N or S, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
+char gps_longtitude[17] = "lon hhhmm.ssss  "; // W or E, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
+char gps_altitude[10] = "alt "; // GPS altitude: "alt xxxxm" or "alt -xxxm", populated in gps_functions.h:gps_parse_gpgga()
+char gps_hdop[6] = "D"; // GPS horizontal dilution of position: "D12.5" , populated in gps_functions.h:gps_parse_gprmc()
 char gps_satellites_in_view[4] = "S"; // GPS satellites in view
+char temperature[6] = "T+30C"; // temperature, "T-12C" or "T+56C"
 
 // initalize u8g object
 //U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NO_ACK);  // Display which does not send AC
@@ -71,8 +72,9 @@ M2_HLIST(el_3rd_line, NULL, el_lon_sat); // 3rd line
 
 // 4th line begin
 M2_LABEL(el_altitude, "rf0", gps_altitude);
-M2_LIST(el_alt_sat) = {&el_altitude};
-M2_HLIST(el_4th_line, NULL, el_alt_sat); // 4th line
+M2_LABEL(el_temperature, "rf0", temperature);
+M2_LIST(el_alt_temp) = {&el_altitude, &el_space, &el_temperature};
+M2_HLIST(el_4th_line, NULL, el_alt_temp); // 4th line
 // 4th line begin
 
 // 5th line begin
