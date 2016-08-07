@@ -14,68 +14,71 @@ int16_t parseHex(char g) // NMEA checksum calculator
   return (-1);
 }
 
-void get_gps_datetime() { 
-      /*
-      $GPRMC,170942.000,A,4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
-      $GPGGA,170943.000,4547.9091,N,01555.1251,E,1,06,1.7,139.9,M,42.5,M,,0000*55
-      $GPGSA,A,3,08,11,22,03,27,32,,,,,,,3.2,1.7,2.7*3F
-      $GPGSV,3,1,11,11,74,284,34,22,53,248,34,08,48,190,39,32,44,068,24*71
-      $GPGSV,3,2,11,03,28,245,32,27,19,165,29,10,18,060,,01,58,304,28*78
-      $GPGSV,3,3,11,14,51,100,,28,17,299,,17,02,324,*46
-      $GPRMC,170943.000,A,4547.9091,N,01555.1251,E,0.19,110.80,050816,,,A*6C
-      $GPGGA,170944.000,4547.9089,N,01555.1250,E,1,07,1.3,140.5,M,42.5,M,,0000*5D
-      $GPGSA,A,3,08,11,22,03,27,32,10,,,,,,2.3,1.3,1.9*37
-      $GPRMC,170944.000,A,4547.9089,N,01555.1250,E,0.22,182.76,050816,,,A*69
-      $GPGGA,170945.000,4547.9087,N,01555.1248,E,1,07,1.3,141.2,M,42.5,M,,0000*5D
-      $GPGSA,A,3,08,11,22,03,27,32,10,,,,,,2.3,1.3,1.9*37
-      $GPRMC,170945.000,A,4547.9087,N,01555.1248,E,0.38,191.61,050816,,,A*60
-      */
+void gps_parse_gprmc() // still buggy? 3rd line gets garbled
+{ 
+  // sample NMEA GPRMC sentence
+  //    $GPRMC,170942.000,A,4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
+  //    $GPRMC,221939.869,V,,,,,,,060816,,,N*41
 
+  // real programmers would probably do this in a more elegant way..
+  // strtok would be a much cooler way but i done want to have a loop within a loop (nema parser) (within a loop (loop()) )
+  //  p = strchr(p, ',')+1, on the other hand, lets me seek the next comma in a non destructive way
   char *p;  // pointer for parsing
-  int i = 0;
 
-  // hhmmss time data
+  // field 2 - hhmmss time data: 170942.000,A,4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
   p = NMEA_buffer+7;  // set pointer to proper position: 154951.285,A,4547.8814,N,01555.2455,E,0.92,115.67,020814,,,A*69
+  memcpy(gps_time, p, 6* sizeof(char)); // fill char gps_time[7] = "XXXXXX" by copying from one array into another
 
-  memcpy(gps_time, p, 6* sizeof(char)); // fill gps_time by copying from one array into another
+  // field 3 - fix indicator: A,4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
+  p = strchr(p, ',')+1; // finds position of next comma and puts the cursor one position further
+    if (*p == 'A') // good fix
+      gps_fix = 1; // flag good fix
+            
+    if (*p == 'V') // invaid fix
+      gps_fix = 0; // flag bad fix
+     
+  // field 4 - latitude: 4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
+  p = strchr(p, ',')+1; 
+  if (gps_fix)
+     memcpy(gps_latitude+(4*sizeof(char)), p, 9 * sizeof(char)); // fill up gps_latitude[] , part 1
 
-  p = strchr(p, ',')+3; // 4547.8814,N,01555.2455,E,0.92,115.67,020814,,,A*69
-  
+  // field 5 - latitude indicator: N,01555.1254,E,0.13,142.38,050816,,,A*63
+  p = strchr(p, ',')+1;
   if (gps_fix)
-    memcpy(gps_latitude+(4*sizeof(char)), p, 9 * sizeof(char)); // fill up gps_latitude[] , part 1
-  
-  p = strchr(p, ',')+1; // N,01555.2455,E,0.92,115.67,020814,,,A*69
-  
-  if (gps_fix)
-    memcpy(gps_latitude+(13*sizeof(char)), p, sizeof(char));
-  
-  p = strchr(p, ',')+1; // 01555.2455,E,0.92,115.67,020814,,,A*69
-  
+    memcpy(gps_latitude+(13*sizeof(char)), p, sizeof(char)); // fill up gps_latitude[] , part 2
+
+  // field 6 - longtitude: 01555.1254,E,0.13,142.38,050816,,,A*63
+  p = strchr(p, ',')+1;
   if (gps_fix)
     memcpy(gps_longtitude+(4*sizeof(char)), p, 10 * sizeof(char)); // fill up gps_longtitude[] , part 1
-    
-  p = strchr(p, ',')+1; // E,0.92,115.67,020814,,,A*69
-  
+
+  // field 7 - longtitude indicator: E,0.13,142.38,050816,,,A*63
+  p = strchr(p, ',')+1;
   if (gps_fix)
     memcpy(gps_longtitude+(14*sizeof(char)), p, sizeof(char)); // fill up gps_longtitude[] , part 2, appends letter
+
+  // [not needed] field 8 - speed over ground: 0.13,142.38,050816,,,A*63
+  p = strchr(p, ',')+1;
+  // [not needed] field 9 - course over ground: 142.38,050816,,,A*63
+  p = strchr(p, ',')+1;
   
-  p = strchr(p, ',')+1; // 0.92,115.67,020814,,,A*69
-  p = strchr(p, ',')+1; // 115.67,020814,,,A*69
-  p = strchr(p, ',')+1; // 020814,,,A*69
+  // field 10 - date: 050816,,,A*63
+  p = strchr(p, ',')+1;
   
   // fill gps_date 
-      *(gps_date+2) = *(p+4);  // Y - 2
-      *(gps_date+3) = *(p+5);  // Y - 2
-      *(gps_date+4) = *(p+2);  // M - 2
-      *(gps_date+5) = *(p+3);  // M - 2
-      *(gps_date+6) = *(p+0);  // D - 6
-      *(gps_date+7) = *(p+1);  // D - 6
+      *(gps_date+2) = *(p+4);  // Y - 1
+      *(gps_date+3) = *(p+5);  // Y - 6
+      *(gps_date+4) = *(p+2);  // M - 0
+      *(gps_date+5) = *(p+3);  // M - 8
+      *(gps_date+6) = *(p+0);  // D - 0
+      *(gps_date+7) = *(p+1);  // D - 5
     //Serial.print("gps_date: ");  Serial.println(gps_date);
     //Serial.print("gps_time: ");  Serial.println(gps_time);
 }
 
-void get_gpgga_hdop_and_sat() // parses out sattelites used and HDOP
+void gps_parse_gpgga() // parses out sattelites used and HDOP 
 {
+  // FIXME: still some overrun somewhere: 3rd line gets garbled
   char *p; // char pointer for string tokenizer
   p = strtok(NMEA_buffer, ","); // set up the tokenizer for string seperation on comma
   int i = 0; // counter for substrings
@@ -139,32 +142,26 @@ void get_nmea_sentences() {
 
       //debug print
       //Serial.println("debug print of buffer:");      
-      //Serial.print(NMEA_buffer);
+      Serial.print(NMEA_buffer);
 
       // check for GPRMC sentence
       if (memcmp(NMEA_buffer, gprmc, 6*sizeof(char)) == 0) // if we have a GPRMC sentence (compare the NMEA buffer with its sentence to gprmc[])
       { 
-        get_gps_datetime();
+        gps_parse_gprmc();
 
-        p = strchr(strchr(NMEA_buffer, ',')+1, ',')+1; // skip to position after 2nd comma
+        //p = strchr(strchr(NMEA_buffer, ',')+1, ',')+1; // skip to position after 2nd comma
         
-        if (*p == 'A') // valid fix - indicate it by lighting up the reed LED
-        { 
-          gps_fix = 1;
+        if (gps_fix) // valid fix - indicate it by lighting up the reed LED
           digitalWrite(gps_green_led_pin, HIGH);
-        } 
         else 
-        {
-          gps_fix = 0;
           digitalWrite(gps_green_led_pin, LOW);
-        }
       }
 
       // check for GPGGA sentence
       if (memcmp(NMEA_buffer, gpgga, 6*sizeof(char)) == 0) // if we have a GPRMC sentence
       { 
         if (gps_fix) // if we dont have a fix we get garbage (leads to too compliated code)
-          get_gpgga_hdop_and_sat(); // get HDOP and satellites used
+          gps_parse_gpgga(); // get HDOP and satellites used
       }
       
         strcat(strcpy(gps_logfile,gps_date), ".gps"); 
