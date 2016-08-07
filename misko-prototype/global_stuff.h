@@ -45,7 +45,7 @@ bool flag_lcd_button_right_pressed = 0; // flag marks button pressed or not
 
 
 
-// display construction
+// display construction start
 M2_LABEL(el_space, "f0", ' '); // label for space character
 
 // 1st line begin
@@ -91,10 +91,13 @@ M2_LIST(el_misc) = {&el_bluetooth, &el_space, &el_accel};
 M2_HLIST(el_6th_line, NULL, el_misc); // 6th line
 // 6th line begin
 
+// settings menu start
+// settings menu end
+
 M2_LIST(el_lines) = {&el_1st_line, &el_2nd_line, &el_3rd_line, &el_4th_line, &el_5th_line, &el_6th_line}; // line up elements
 
 M2_VLIST(el_dispay, NULL, el_lines); // list the lineup into a vertical list
 M2_ALIGN(top_el_display, "-0|2", &el_dispay); // align it top&left
 
 M2tk m2(&top_el_display, m2_es_arduino, m2_eh_2bs, m2_gh_u8g_fb); // push it into the display object
-
+// display construction end
