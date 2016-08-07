@@ -17,10 +17,10 @@ char gps_date[9] = "20XXXXXX"; // 0-7 + 1 for '\0' -- YEAR 2100-BUG, HERE WE COM
 char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
 char gps_utc[7] = "UTC+2"; // timezone string
 char gps_logfile[13] = "";
-char gps_latitude[15] = "lat hhmm.ssss "; // N or S, memcpy needs to start to write at pos 4
-char gps_longtitude[16] = "lon hhhmm.ssss "; // W or E, memcpy needs to start to write at pos 4
-char gps_altitude[6] = ""; // GPS altitude
-char gps_hdop[5] = "D"; // GPS horizontal dilution of position
+char gps_latitude[16] = "lat hhmm.ssss  "; // N or S, memcpy needs to start to write at pos 4 ( happens in gps_functions.h:gps_parse_gprmc() )
+char gps_longtitude[17] = "lon hhhmm.ssss  "; // W or E, memcpy needs to start to write at pos 4 ( happens in gps_functions.h:gps_parse_gprmc() )
+char gps_altitude[9] = "alt"; // GPS altitude: "altxxxxm"
+char gps_hdop[6] = "D"; // GPS horizontal dilution of position
 char gps_satellites_in_view[4] = "S"; // GPS satellites in view
 
 // initalize u8g object
@@ -70,7 +70,7 @@ M2_HLIST(el_3rd_line, NULL, el_lon_sat); // 3rd line
 // 3rd line begin
 
 // 4th line begin
-M2_LABEL(el_altitude, "rf0", "alt 123m");
+M2_LABEL(el_altitude, "rf0", gps_altitude);
 M2_LIST(el_alt_sat) = {&el_altitude};
 M2_HLIST(el_4th_line, NULL, el_alt_sat); // 4th line
 // 4th line begin
