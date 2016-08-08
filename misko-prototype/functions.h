@@ -71,3 +71,87 @@ void handle_bluetooth_button(void)
   }
 }
 
+<<<<<<< HEAD
+=======
+void handle_lcd_buttons()
+{
+  // LCD button down
+  if (!flag_lcd_button_down_pressed && digitalRead(menu_down_buttton) == HIGH)
+  {
+    //digitalWrite(lcd_mosfet_gate_pin, HIGH); // turn on the device
+    flag_lcd_is_on = 1; // set flag to on
+    flag_lcd_button_down_pressed = 1; // flag button as pressed
+    lcd_button_press_time = millis(); // record time of button press
+    Serial.println("down button press");
+  }
+
+  // LCD down button release
+  if (flag_lcd_button_down_pressed && digitalRead(menu_down_buttton) == LOW  ) // if button was  pressed and now gets released
+  // flag_lcd_button_pressed prevents mutiple executions of this if() block
+    flag_lcd_button_down_pressed = 0; // mark button as released
+
+
+
+  // LCD button up
+  if (!flag_lcd_button_up_pressed && digitalRead(menu_up_buttton) == HIGH)
+  {
+    //digitalWrite(lcd_mosfet_gate_pin, HIGH); // turn on the device
+    flag_lcd_is_on = 1; // set flag to on
+    flag_lcd_button_up_pressed = 1; // flag button as pressed
+    lcd_button_press_time = millis(); // record time of button press
+    Serial.println("up button press");
+  }
+
+  // LCD up button release
+  if (flag_lcd_button_up_pressed && digitalRead(menu_up_buttton) == LOW  ) // if button was  pressed and now gets released
+  // flag_lcd_button_pressed prevents mutiple executions of this if() block
+    flag_lcd_button_up_pressed = 0; // mark button as released
+
+
+
+  // LCD button left
+  if (!flag_lcd_button_left_pressed && digitalRead(menu_left_buttton) == HIGH)
+  {
+    //digitalWrite(lcd_mosfet_gate_pin, HIGH); // turn on the device
+    flag_lcd_is_on = 1; // set flag to on
+    flag_lcd_button_left_pressed = 1; // flag button as pressed
+    lcd_button_press_time = millis(); // record time of button press
+    Serial.println("left button press");
+  }
+
+  // LCD left button release
+  if (flag_lcd_button_left_pressed && digitalRead(menu_left_buttton) == LOW  ) // if button was  pressed and now gets released
+  // flag_lcd_button_pressed prevents mutiple executions of this if() block
+    flag_lcd_button_left_pressed = 0; // mark button as released
+
+
+  
+  // LCD button right
+  if (!flag_lcd_button_right_pressed && digitalRead(menu_right_buttton) == HIGH)
+  {
+    //digitalWrite(lcd_mosfet_gate_pin, HIGH); // turn on the device
+    flag_lcd_is_on = 1; // set flag to on
+    flag_lcd_button_right_pressed = 1; // flag button as pressed
+    lcd_button_press_time = millis(); // record time of button press
+    Serial.println("right button press");
+  }
+
+  // LCD right button release
+  if (flag_lcd_button_right_pressed && digitalRead(menu_right_buttton) == LOW  ) // if button was  pressed and now gets released
+  // flag_lcd_button_pressed prevents mutiple executions of this if() block
+    flag_lcd_button_right_pressed = 0; // mark button as released
+
+
+
+
+
+
+  // LCD timed power off
+  if ( flag_lcd_is_on && eeprom_timer(lcd_button_press_time, 3)) // if the device is on and enough time has passed
+  // flag_lcd_is_on prevents code execution on every loop
+  { 
+      //digitalWrite(lcd_mosfet_gate_pin, LOW); // turn off the device
+      flag_lcd_is_on = 0; // set flag to off
+  }
+}
+>>>>>>> master
