@@ -40,7 +40,7 @@ fn_set_eerpom_bluetooth_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val)
     return eeprom_get(EERPOM_BLUETOOTH_POWER_INDEX); // set val to the EEPROM value at that index
   
   if ( msg == M2_U8_MSG_SET_VALUE ) // if we get a SET message
-    eeprom_set(EERPOM_BLUETOOTH_POWER_INDEX); // set the EEPROM value at that index to val
+    eeprom_set(val, EERPOM_BLUETOOTH_POWER_INDEX); // set the EEPROM value at that index to val
 }
 
 // timezone start 
