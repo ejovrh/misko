@@ -1,32 +1,33 @@
-/* basic container for setup items
+#include "pin_modes.h"
+#include "eeprom_config.h"
 
-  the container is the EEPROM object (offered by EEPROM.h) 
-    Arduino offers the phyiscal EEPROM to be accessed in an array-like manner, which is 
-    for our needs at the moment simple enough
+Serial.begin(SERIALRATE); // connect to the serial terminal
+Serial.println("start");
 
-  the idea is to initialize the EEPROM exactly once and not upon every boot
+// initialize GPS
+Serial3.begin(GPSRATE);   // connect to the GPS at the desired rate
+Serial3.print(SERIAL_SET); // set gps serial comm. parameter
+Serial3.print(WAAS_ON); // will become obsolete via EEPROM and setup
+Serial3.print(RMC_ON); // will become obsolete via EEPROM and setup
+Serial3.print(GSA_ON); // will become obsolete via EEPROM and setup
+//Serial3.print(GSV_ON); // will become obsolete via EEPROM and setup
     
-  kind of like "key - value", in a linear fashion
-    a totally primitive approach but really good enough
-
-  in order to prevent unnecessary EEPROM writes,  CONFIG_VERSION is checked
-
-   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE BELOW
+delay(50);
+  
+/*
+FIXME: seems to crash the graphics library
+  // initialize SD card  
+  if (!SD.begin(sd_ss_pin)) // see if the card is present and can be initialized
+  {  
+    Serial.println("SD Card failed, or not present");
+    return;
+  }  
 */
 
-if (EEPROM[0] != CONFIG_VERSION) // only if the version did change we will write into the EERPOM
-{
-  EEPROM[0] = CONFIG_VERSION; // indicates changes in structure, increment by one in case of any change
-  EEPROM[1] = 'a'; // lcd power - on(1), off(0), auto(a), default auto
-  EEPROM[2] = 'a'; // bluetooth power - on(1), off(0), auto(a), default auto
-  EEPROM[3] = 2; // lcd auto timeout - auto timeout in seconds, 0, 1, ..., 254, default 2s
-  EEPROM[4] = 5; // bluetooth auto timeout - auto timeout in seconds, 0, 1, ..., 254, default 60s
-  EEPROM[5] = 2; // UTC timezone, -12, ..., +12, default +2
-  EEPROM[6] = 1; // LOG_RMC - default on, RMC-Recommended Minimum Specific GNSS Data
-  EEPROM[7] = 0; // LOG_GGA - default off, GGA-Global Positioning System Fixed Data
-  EEPROM[8] = 0; // LOG_GLL - default off, GLL-Geographic Position-Latitude/Longitude
-  EEPROM[9] = 1; // LOG_GSA - default on, GSA-GNSS DOP and Active Satellites 
-  EEPROM[10] = 1; // LOG_GSV - default on, GSV-GNSS Satellites in View
-  EEPROM[11] = 0; // LOG_VTG - default off, VTG-Course Over Ground and Ground Speed
-  EEPROM[12] = 1; // USE_WAAS - default on
-}
+m2_SetU8g(OLED.getU8g(), m2_u8g_box_icon); // connect u8glib with m2tklib
+m2.setFont(0, u8g_font_6x10); // assign u8g_font_6x10 font to index 0
+m2.setPin(M2_KEY_SELECT, menu_right_buttton); // 33
+m2.setPin(M2_KEY_PREV, menu_up_buttton); // 32
+m2.setPin(M2_KEY_NEXT, menu_down_buttton); // 31
+m2.setPin(M2_KEY_EXIT, menu_left_buttton); // 30
+

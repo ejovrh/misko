@@ -17,6 +17,8 @@
 #define sd_miso_pin 12 // SD/SPI master in slave out
 #define sd_mosi_pin 13 // SD/SPI master out slave in
 
+#define oled_scl_pin 21 // OLED SCL
+#define oled_sda_pin 20 // OLED SDA - MOSI
 #define menu_left_buttton 30 // user menu - left button, the buttons draw each 0.5 mA (we have 5 of them)
 #define menu_down_buttton 31 // user menu - down button
 #define menu_up_buttton 32 // user menu - up button

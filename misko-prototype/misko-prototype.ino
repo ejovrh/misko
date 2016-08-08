@@ -2,15 +2,27 @@
 #include <SoftwareSerial.h> // serial library
 #include <SD.h> // sd card library
 #include <EEPROM.h> // EEPROM library
+#include <U8glib.h> // https://github.com/olikraus/u8glib/wiki/userreference
+#include "M2tk.h" // https://code.google.com/archive/p/m2tklib/
+#include "utility/m2ghu8g.h" // the u8g graphics handler
 
 // local files
 #include "gps_config.h" // gps stuff
 #include "pin_definitions.h" // pin layout
+<<<<<<< HEAD
+#include "global_variables.h" // global variables et al.
+=======
 #include "global_stuff.h" // global variables et al.
+>>>>>>> master
 #include "functions.h" // useful functions
+#include "display.h"
 
 void setup() 
 {
+<<<<<<< HEAD
+  #include "setup.h"
+}
+=======
 #include "pin_modes.h"
 #include "setup.h"
 
@@ -34,14 +46,19 @@ void setup()
     return;
   }  
 } // setup end 
+>>>>>>> master
 
 #include "gps_functions.h" // gps functions
 
 void loop() 
 {
+<<<<<<< HEAD
+  #include "loop.h"
+=======
   handle_bluetooth_button(); // handles the bluetooth power button
   
   handle_lcd_buttons(); // handles the lcd buttons
   
   get_nmea_sentences(); // gets NMEA sentences out of the GPS and deals with them
+>>>>>>> master
 } 

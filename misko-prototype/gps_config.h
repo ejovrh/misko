@@ -2,11 +2,11 @@
 // FIXME - not used in gps_functions
 #define LOG_DDM 0
 #define LOG_RMC 1 // RMC-Recommended Minimum Specific GNSS Data, message 103,04
-#define LOG_GGA 0 // GGA-Global Positioning System Fixed Data, message 103,00
-#define LOG_GLL 0 // GLL-Geographic Position-Latitude/Longitude, message 103,01
-#define LOG_GSA 1 // GSA-GNSS DOP and Active Satellites, message 103,02
-#define LOG_GSV 1 // GSV-GNSS Satellites in View, message 103,03
-#define LOG_VTG 0 // VTG-Course Over Ground and Ground Speed, message 103,05
+#define LOG_GGA 1 // GGA-Global Positioning System Fixed Data, message 103,00
+//#define LOG_GLL 0 // GLL-Geographic Position-Latitude/Longitude, message 103,01
+//#define LOG_GSA 0 // GSA-GNSS DOP and Active Satellites, message 103,02
+//#define LOG_GSV 0 // GSV-GNSS Satellites in View, message 103,03
+//#define LOG_VTG 0 // VTG-Course Over Ground and Ground Speed, message 103,05
 
 
       /* EXAMPLE

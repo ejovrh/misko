@@ -52,6 +52,10 @@ miško - the self sufficient gps tracker
 				the appropriate driver is located in the arduino installation
 				go to device manager, find the faulty USB device, manually update driver from the arduino install path
 		
+	Arduino core libraries
+		https://www.arduino.cc/en/Reference/Libraries
+		SoftwareSerial, SD, EEPROM for interfacing various devices offered by the atmega2560
+
 	Fritzing - an open source entry-level PCB design tool
 		http://fritzing.org/download/?donation=0
 		
@@ -69,10 +73,14 @@ miško - the self sufficient gps tracker
 	git for windows
 		https://git-for-windows.github.io/
 		the backed for git-for-windows
-	
-	EEPROMex
-		http://thijs.elenbaas.net/downloads/?did=6
-		an library with extended functionalities than the core Arduino EEPROM library
+			
+	u8glib
+		https://github.com/olikraus/u8glib
+		a display driver library for all kinds of displays
+		
+	m2tklib
+		https://github.com/olikraus/m2tklib
+		an graphics library for all kinds of display devices
 		
 		
 3. FILES / FOLDERS
@@ -108,4 +116,18 @@ miško - the self sufficient gps tracker
 		
 		Developers who know me from my work environment are entitled to my opinion and may now laugh as much as they want.
 		
-5. TODO?
+5. HARDWARE USED
+
+	- Analog Devices TMP36FSZ Temperature Sensor 8-Pin SOIC
+		http://hr.rsdelivers.com/product/analog-devices/tmp36fsz/analog-devices-tmp36fsz-temperature-sensor-8-pin-soic-40-125-c/0412973.aspx?query=TMP36FSZ
+	
+	- International Rectifier IRLZ44NSTRLPBF N-channel MOSFET Transistor, 47 A, 55 V, 3-Pin D2PAK
+		http://hr.rsdelivers.com/product/international-rectifier/irlz44nstrlpbf/international-rectifier-irlz44nstrlpbf-n-channel-mosfet-transistor-47-a-55-v-3-pin-d2pak/8303417.aspx
+		
+	- Texas Instruments SN74AHC14D, Hex Schmitt Trigger Inverter, 8mA, 2 → 5.5 V, 14-Pin SOIC
+
+		http://hr.rsdelivers.com/product/texas-instruments/sn74ahc14d/texas-instruments-sn74ahc14d-hex-schmitt-trigger-inverter-8ma-2-55-v-14-pin-soic/0526616.aspx
+		
+	- http://hr.rsdelivers.com/catalogue/search.aspx?query=atmega2560&Family=9511#PI-1|viewtype-0|A-236854|
+	
+	- 
