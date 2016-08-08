@@ -19,7 +19,7 @@ inline void eeprom_set(int in_val, int in_index) // sets EEPROM[in_index to val
   EEPROM[in_index] = in_val;  
 }
 
-inline int8_t eeprom_set(int in_index)
+inline int8_t eeprom_get(int in_index)
 {
   return EEPROM[in_index];
 }
