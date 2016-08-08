@@ -1,4 +1,13 @@
-
+/*
+ * here the display is defined
+ * 
+ * references for the libraries used are:
+ * https://github.com/olikraus/u8glib/wiki
+ * https://github.com/olikraus/m2tklib/wiki/ghref
+ * https://github.com/olikraus/m2tklib/wiki
+ * 
+ * 
+ */
 
 
 // display construction start
@@ -22,9 +31,9 @@ const char *fn_idx_to_bluetooth_power_value(uint8_t idx)
 
 const char *fn_idx_to_lcd_power_value(uint8_t idx)
 {
-  if ( idx == 1 )
+  if ( idx == 0 )
     return "on";
-  else if (idx == 2 )
+  else if (idx == 1 )
     return "auto";
 }
 
@@ -46,6 +55,23 @@ fn_set_eerpom_bluetooth_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val)
     eeprom_set(val, EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX); // set the EEPROM value at that index to val
 }
 
+fn_set_eerpom_lcd_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val)
+{
+  if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
+    return (uint8_t) eeprom_get(EERPOM_LCD_AUTO_TIMEOUT_INDEX); // set val to the EEPROM value at that index
+  
+  if ( msg == M2_U8_MSG_SET_VALUE ) // if we get a SET message
+    eeprom_set(val, EERPOM_LCD_AUTO_TIMEOUT_INDEX); // set the EEPROM value at that index to val
+}
+
+fn_set_eerpom_gps_log_freq(m2_rom_void_p element, uint8_t msg, uint8_t val)
+{
+  if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
+    return (uint8_t) eeprom_get(EEPROM_GPS_GPRMC_GGA_FREQ_INDEX); // set val to the EEPROM value at that index
+  
+  if ( msg == M2_U8_MSG_SET_VALUE ) // if we get a SET message
+    eeprom_set(val, EEPROM_GPS_GPRMC_GGA_FREQ_INDEX); // set the EEPROM value at that index to val
+}
 // timezone start 
 M2_LABEL(el_timezone_utc, NULL, "UTC");
 M2_S8NUMFN(el_timezone_utc_value, "+1c2", -12, 12, fn_set_eerpom_tz);
@@ -67,16 +93,16 @@ M2_ALIGN(el_top_bluetooth_menu, "-1|1W64H64", &el_bluetooth_grid);
 
 // lcd start
 M2_LABEL(el_lcd_power, NULL, "Power");
-M2_COMBO(el_lcd_power_value, NULL, &select_color, 3, fn_idx_to_lcd_power_value);
-M2_LIST(el_lcd_list) = { &el_lcd_power, &el_lcd_power_value, &el_ok };
+M2_COMBO(el_lcd_power_value, NULL, &select_color, 2, fn_idx_to_lcd_power_value);
+M2_S8NUMFN(el_lcd_power_timeout, "+0c1", 1, 5, fn_set_eerpom_lcd_timeout);
+M2_LIST(el_lcd_list) = { &el_lcd_power, &el_lcd_power_value, &el_lcd_power_timeout, &el_ok };
 M2_GRIDLIST(el_lcd_grid, "c2", el_lcd_list);
 M2_ALIGN(el_top_lcd_menu, "-1|1W64H64", &el_lcd_grid);
 // lcd end
 
 // gps start
-uint8_t gps = 2;
 M2_LABEL(el_gps_freq, NULL, "Frequency");
-M2_U8NUM(el_gps_freq_value, "+0c2", 1, 20, &gps);
+M2_S8NUMFN(el_gps_freq_value, "+0c2", 1, 20, fn_set_eerpom_gps_log_freq);
 M2_ROOT(el_gps_ok, "f4", "OK", &top_el_expandable_menu);
 M2_LIST(el_gps_list) = { &el_gps_freq, &el_gps_freq_value, &el_gps_ok };
 M2_GRIDLIST(el_gps_grid, "c2", el_gps_list);
