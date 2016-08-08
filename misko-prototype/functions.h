@@ -14,6 +14,15 @@ int eeprom_timer(unsigned int in_button_press_time, unsigned int in_eeprom_index
   return (abs( in_button_press_time - millis()) / 1000 > EEPROM[in_eeprom_index] ?  1 :  0); 
 }
 
+inline void set_eeprom(int in_val, int in_index) // sets EEPROM[in_index to val
+{
+  EEPROM[in_index] = in_val;  
+}
+
+inline int8_t get_eeprom(int in_index)
+{
+  return EEPROM[in_index];
+}
 
 void handle_bluetooth_button(void)
 {
@@ -44,7 +53,7 @@ void handle_bluetooth_button(void)
   }
 
   // bluetooth timed power off
-  if ( (!flag_bluetooth_power_keep_on && flag_bluetooth_is_on) && eeprom_timer(bluetooth_button_press_time, 4)) // if the device is on and enough time has passed
+  if ( (!flag_bluetooth_power_keep_on && flag_bluetooth_is_on) && eeprom_timer(bluetooth_button_press_time, EERPOM_BLUETOOTH_ATUO_TIMEOUT_INDEX)) // if the device is on and enough time has passed
   // flag_bluetooth_power_keep_on prevents the timer from kicking in if we want the BT device to stay on
   // flag_bluetooth_is_on prevents code execution on every loop
   { 
