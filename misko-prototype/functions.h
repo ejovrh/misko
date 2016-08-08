@@ -37,12 +37,12 @@ void handle_bluetooth_button(void)
 
     int i;
     // poor man's debugging
-    for (i=1; i< 7; i++)
+    for (i=0; i< 7; i++)
     {
       Serial.print(i); Serial.print(" - ");Serial.println(EEPROM[i]);
     }
-    int8_t tz = EEPROM[5];
-    Serial.print("tz - ");Serial.println(tz);
+    //int8_t tz = EEPROM[5];
+    //Serial.print("tz - ");Serial.println(tz);
   }
 
   // bluetooth power off
@@ -62,7 +62,7 @@ void handle_bluetooth_button(void)
   }
 
   // bluetooth timed power off
-  if ( (!flag_bluetooth_power_keep_on && flag_bluetooth_is_on) && eeprom_timer(bluetooth_button_press_time, EERPOM_BLUETOOTH_ATUO_TIMEOUT_INDEX)) // if the device is on and enough time has passed
+  if ( (!flag_bluetooth_power_keep_on && flag_bluetooth_is_on) && eeprom_timer(bluetooth_button_press_time, EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX)) // if the device is on and enough time has passed
   // flag_bluetooth_power_keep_on prevents the timer from kicking in if we want the BT device to stay on
   // flag_bluetooth_is_on prevents code execution on every loop
   { 

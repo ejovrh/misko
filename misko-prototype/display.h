@@ -28,19 +28,19 @@ const char *fn_idx_to_lcd_power_value(uint8_t idx)
 int8_t fn_set_eerpom_tz(m2_rom_void_p element, uint8_t msg, int8_t val) // callback for EEPROM timezone setting
 {
   if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
-    return eeprom_set(EERPOM_TIMEZONE_INDEX);
+    return (int8_t) eeprom_get(EERPOM_TIMEZONE_INDEX);
   
   if ( msg == M2_U8_MSG_SET_VALUE ) // if we get a SET message
-    eeprom_get(val, EERPOM_TIMEZONE_INDEX);
+    eeprom_set(val, EERPOM_TIMEZONE_INDEX);
 }
 
 fn_set_eerpom_bluetooth_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val)
 {
   if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
-    return eeprom_get(EERPOM_BLUETOOTH_POWER_INDEX); // set val to the EEPROM value at that index
+    return (uint8_t) eeprom_get(EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX); // set val to the EEPROM value at that index
   
   if ( msg == M2_U8_MSG_SET_VALUE ) // if we get a SET message
-    eeprom_set(val, EERPOM_BLUETOOTH_POWER_INDEX); // set the EEPROM value at that index to val
+    eeprom_set(val, EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX); // set the EEPROM value at that index to val
 }
 
 // timezone start 
@@ -73,7 +73,7 @@ M2_ALIGN(el_top_lcd_menu, "-1|1W64H64", &el_lcd_grid);
 // gps start
 uint8_t gps = 2;
 M2_LABEL(el_gps_freq, NULL, "Frequency");
-M2_U8NUM(el_gps_freq_value, "+0c2", 1, 30, &gps);
+M2_U8NUM(el_gps_freq_value, "+0c2", 1, 20, &gps);
 M2_ROOT(el_gps_ok, "f4", "OK", &top_el_expandable_menu);
 M2_LIST(el_gps_list) = { &el_gps_freq, &el_gps_freq_value, &el_gps_ok };
 M2_GRIDLIST(el_gps_grid, "c2", el_gps_list);

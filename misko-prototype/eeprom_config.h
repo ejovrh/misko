@@ -23,9 +23,8 @@ if (EEPROM[0] != CONFIG_VERSION) // only if the version did change we will write
   EEPROM[EERPOM_LCD_POWER_INDEX] = 'a'; // lcd power - on(1), off(0), auto(a), default auto
   EEPROM[EERPOM_BLUETOOTH_POWER_INDEX] = 'a'; // bluetooth power - on(1), off(0), auto(a), default auto
   EEPROM[EERPOM_LCD_AUTO_TIMEOUT_INDEX] = 2; // lcd auto timeout - auto timeout in seconds, 0, 1, ..., 254, default 2s
-  EEPROM[EERPOM_BLUETOOTH_ATUO_TIMEOUT_INDEX] = 5; // bluetooth auto timeout - auto timeout in seconds, 0, 1, ..., 254, default 60s
+  EEPROM[EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX] = 5; // bluetooth auto timeout - auto timeout in seconds, 0, 1, ..., 254, default 60s
   EEPROM[EERPOM_TIMEZONE_INDEX] = 2; // UTC timezone, -12, ..., +12, default +2
-  EEPROM[EEPROM_GPS_GPRMC_INDEX] = 1; // LOG_RMC - default on, RMC-Recommended Minimum Specific GNSS Data
-  EEPROM[EEPROM_GPS_GPGGA_INDEX] = 1; // LOG_GGA - default off, GGA-Global Positioning System Fixed Data
+  EEPROM[EEPROM_GPS_GPRMC_GGA_FREQ_INDEX] = 1; // frequency of RMC and GGA messages from the em406 module, 1 - 20
   EEPROM[EEPROM_GPS_USE_WAAS_INDEX] = 1; // USE_WAAS - default on
 }
