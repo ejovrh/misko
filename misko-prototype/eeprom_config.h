@@ -12,6 +12,9 @@
   in order to prevent unnecessary EEPROM writes,  CONFIG_VERSION is checked
 
    CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE BELOW
+
+   EEPROM values are stored as uint8_t -- CAST PROPERLY BEFORE USE
+   
 */
 
 if (EEPROM[0] != CONFIG_VERSION) // only if the version did change we will write into the EERPOM
