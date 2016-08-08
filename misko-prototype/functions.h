@@ -34,6 +34,15 @@ void handle_bluetooth_button(void)
     digitalWrite(bluetooth_mosfet_gate_pin, HIGH); // turn on the device
     flag_bluetooth_is_on = 1; // set flag to on
     flag_bluetooth_power_toggle_pressed = 1; // mark button as pressed
+
+    int i;
+    // poor man's debugging
+    for (i=1; i< 7; i++)
+    {
+      Serial.print(i); Serial.print(" - ");Serial.println(EEPROM[i]);
+    }
+    int8_t tz = EEPROM[5];
+    Serial.print("tz - ");Serial.println(tz);
   }
 
   // bluetooth power off
