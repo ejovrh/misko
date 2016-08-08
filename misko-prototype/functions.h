@@ -14,12 +14,12 @@ int eeprom_timer(unsigned int in_button_press_time, unsigned int in_eeprom_index
   return (abs( in_button_press_time - millis()) / 1000 > EEPROM[in_eeprom_index] ?  1 :  0); 
 }
 
-inline void set_eeprom(int in_val, int in_index) // sets EEPROM[in_index to val
+inline void eeprom_set(int in_val, int in_index) // sets EEPROM[in_index to val
 {
   EEPROM[in_index] = in_val;  
 }
 
-inline int8_t get_eeprom(int in_index)
+inline int8_t eeprom_set(int in_index)
 {
   return EEPROM[in_index];
 }
