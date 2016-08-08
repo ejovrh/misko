@@ -7,6 +7,17 @@
 //BLUETOOTHSERIALRATE is hardcoded in device
 #define NMEA_BUFFERSIZE 80 // plenty big
 
+
+// EERPOM indices
+#define EERPOM_LCD_POWER_INDEX 1
+#define EERPOM_BLUETOOTH_POWER_INDEX 2
+#define EERPOM_LCD_AUTO_TIMEOUT_INDEX 3
+#define EERPOM_BLUETOOTH_ATUO_TIMEOUT_INDEX 4
+#define EERPOM_TIMEZONE_INDEX 5
+#define EEPROM_GPS_GPRMC_INDEX 6
+#define EEPROM_GPS_GPGGA_INDEX 7
+#define EEPROM_GPS_USE_WAAS_INDEX 8
+
 // GPS variuables
 char NMEA_buffer[NMEA_BUFFERSIZE] = "";        // string buffer for the NMEA sentence
 unsigned int bufferid = 0; // holds the current position in the NMEA_buffer array, used fo walk through the buffer
@@ -42,62 +53,3 @@ bool flag_lcd_button_down_pressed = 0; // flag marks button pressed or not
 bool flag_lcd_button_up_pressed = 0; // flag marks button pressed or not
 bool flag_lcd_button_left_pressed = 0; // flag marks button pressed or not
 bool flag_lcd_button_right_pressed = 0; // flag marks button pressed or not
-
-
-
-// display construction start
-M2_LABEL(el_space, "f0", ' '); // label for space character
-
-// 1st line begin
-M2_LABEL(el_gps_date, "rf0", gps_date); // label for gps_date
-M2_LABEL(el_gps_time, "rf0", gps_time); // label for gps_time
-M2_LABEL(el_gps_utc, "rf0", gps_utc); // timezone string
-M2_LIST(datetime) { &el_gps_date, &el_space, &el_gps_time, &el_gps_utc} ; // create a list of gps date, time, timezone
-M2_HLIST(el_1st_line, NULL, datetime); // 1st line
-// 1st line end
-
-// 2nd line begin
-M2_LABEL(el_gps_latitude, "rf0", gps_latitude); 
-M2_LABEL(el_gps_hdop, "rf0", gps_hdop);
-M2_LIST(el_lat_hdop) = {&el_gps_latitude, &el_space, &el_gps_hdop};
-M2_HLIST(el_2nd_line, NULL, el_lat_hdop); // 2nd line
-// 2nd line end
-
-// 3rd line begin
-M2_LABEL(el_gps_longtitude, "rf0", gps_longtitude);
-M2_LABEL(el_gps_sat_in_view, "rf0", gps_satellites_in_view);
-M2_LIST(el_lon_sat) = {&el_gps_longtitude, &el_space, &el_gps_sat_in_view};
-M2_HLIST(el_3rd_line, NULL, el_lon_sat); // 3rd line
-// 3rd line begin
-
-// 4th line begin
-M2_LABEL(el_altitude, "rf0", gps_altitude);
-M2_LABEL(el_temperature, "rf0", temperature);
-M2_LIST(el_alt_temp) = {&el_altitude, &el_space, &el_temperature};
-M2_HLIST(el_4th_line, NULL, el_alt_temp); // 4th line
-// 4th line begin
-
-// 5th line begin
-M2_LABEL(el_batt_a, "rfo", "batA 100%");
-M2_LABEL(el_batt_b, "rfo", "batB 100%");
-M2_LIST(el_battery) = {&el_batt_a, &el_space, &el_batt_b};
-M2_HLIST(el_5th_line, NULL, el_battery); // 5th line
-// 5th line begin
-
-// 6th line begin
-M2_LABEL(el_bluetooth, "rf0", "bt");
-M2_LABEL(el_accel, "rf0", "accel");
-M2_LIST(el_misc) = {&el_bluetooth, &el_space, &el_accel};
-M2_HLIST(el_6th_line, NULL, el_misc); // 6th line
-// 6th line begin
-
-// settings menu start
-// settings menu end
-
-M2_LIST(el_lines) = {&el_1st_line, &el_2nd_line, &el_3rd_line, &el_4th_line, &el_5th_line, &el_6th_line}; // line up elements
-
-M2_VLIST(el_dispay, NULL, el_lines); // list the lineup into a vertical list
-M2_ALIGN(top_el_display, "-0|2", &el_dispay); // align it top&left
-
-M2tk m2(&top_el_display, m2_es_arduino, m2_eh_2bs, m2_gh_u8g_fb); // push it into the display object
-// display construction end
