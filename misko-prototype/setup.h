@@ -30,4 +30,3 @@ m2.setPin(M2_KEY_SELECT, menu_right_buttton); // 33
 m2.setPin(M2_KEY_PREV, menu_up_buttton); // 32
 m2.setPin(M2_KEY_NEXT, menu_down_buttton); // 31
 m2.setPin(M2_KEY_EXIT, menu_left_buttton); // 30
-
