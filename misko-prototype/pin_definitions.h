@@ -25,9 +25,9 @@
 #define menu_right_buttton 33 // user menu - right button
 #define bluetooth_power_toggle_pin 40 // user menu - bluetooth power toggle
 #define bluetooth_mosfet_gate_pin 48 // bluetooth power control via mosfet
-//#define lcd_mosfet_gate_pin 49 // LCD power control via mosfet
+#define spi_oled_reset_pin 49 // OLED reset pin
 #define spi_miso_pin 50 // SPI - Master In Slave Out - not used yet
 #define spi_mosi_pin 51 // SPI - Master Out Slave In - not used yet
-#define spi_sck_pin 52 // SPI - Serial Clock - not used yet
+#define spi_sck_pin 52 // SPI - Serial Clock - not used yet -
 #define spi_ss_pin 53 // SPI - Slave Select - not used yet
 
