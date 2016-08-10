@@ -1,6 +1,7 @@
 // libraries
 #include <SoftwareSerial.h> // serial library
 #include <SD.h> // sd card library
+#include <SPI.h> // SPI library
 #include <EEPROM.h> // EEPROM library
 #include <U8glib.h> // https://github.com/olikraus/u8glib/wiki/userreference
 #include "M2tk.h" // https://code.google.com/archive/p/m2tklib/
