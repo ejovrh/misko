@@ -37,8 +37,9 @@ char temperature[6] = "T+30C"; // temperature, "T-12C" or "T+56C"
 // initalize u8g object
 //U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NO_ACK);  // Display which does not send AC
 //U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_FAST);
-U8GLIB_SH1106_128X64_2X OLED(spi_sck_pin, spi_mosi_pin, spi_ss_pin, spi_oled_a0_pin, spi_oled_reset_pin); // look in the library source for precise info
- 
+//U8GLIB_SH1106_128X64_2X OLED(spi_sck_pin, spi_mosi_pin, spi_ss_pin, spi_oled_a0_pin, spi_oled_reset_pin); // SW SPI - look in the library source for precise info
+U8GLIB_SH1106_128X64_2X OLED(spi_ss_pin,  spi_oled_a0_pin,  spi_oled_reset_pin); // HW SPI - look in the library source for precise info
+
 // bluetooth flags
 unsigned long bluetooth_button_press_time = millis(); // time of button press
 unsigned long bluetooth_button_release_time = 0; // time of button release
