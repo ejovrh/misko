@@ -33,6 +33,7 @@ char gps_altitude[10] = "alt "; // GPS altitude: "alt xxxxm" or "alt -xxxm", pop
 char gps_hdop[6] = "D"; // GPS horizontal dilution of position: "D12.5" , populated in gps_functions.h:gps_parse_gprmc()
 char gps_satellites_in_view[4] = "S"; // GPS satellites in view
 char temperature[6] = "T+30C"; // temperature, "T-12C" or "T+56C"
+int8_t timezone;
 
 // initalize u8g object
 //U8GLIB_SSD1306_128X64 u8g(U8G_I2C_OPT_NO_ACK);  // Display which does not send AC
