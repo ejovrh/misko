@@ -20,8 +20,8 @@
 // GPS variuables
 char NMEA_buffer[NMEA_BUFFERSIZE] = "";        // string buffer for the NMEA sentence
 unsigned int bufferid = 0; // holds the current position in the NMEA_buffer array, used fo walk through the buffer
-const char gprmc[] = "$GPRMC"; // beginning of GPRMC sentence, used to fish out datetime via memcmp in gps_functions.h
-const char gpgga[] = "$GPGGA"; // beginning of GPGGA sentence, used to fish out datetime via memcmp in gps_functions.h 
+const char PROGMEM gprmc[] = "$GPRMC"; // beginning of GPRMC sentence, used to fish out datetime via memcmp in gps_functions.h
+const char PROGMEM gpgga[] = "$GPGGA"; // beginning of GPGGA sentence, used to fish out datetime via memcmp in gps_functions.h 
 bool gps_fix = 0;
 char gps_date[9] = "20XXXXXX"; // 0-7 + 1 for '\0' -- YEAR 2100-BUG, HERE WE COME!!!
 char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
