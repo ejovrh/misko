@@ -14,19 +14,20 @@ Serial3.print(GSA_ON); // will become obsolete via EEPROM and setup
     
 delay(50);
   
-/*
-FIXME: seems to crash the graphics library
-  // initialize SD card  
-  if (!SD.begin(sd_ss_pin)) // see if the card is present and can be initialized
-  {  
-    Serial.println("SD Card failed, or not present");
-    return;
-  }  
-*/
-
 m2_SetU8g(OLED.getU8g(), m2_u8g_box_icon); // connect u8glib with m2tklib
 m2.setFont(0, u8g_font_6x10); // assign u8g_font_6x10 font to index 0
 m2.setPin(M2_KEY_SELECT, menu_right_buttton); // 33
 m2.setPin(M2_KEY_PREV, menu_up_buttton); // 32
 m2.setPin(M2_KEY_NEXT, menu_down_buttton); // 31
 m2.setPin(M2_KEY_EXIT, menu_left_buttton); // 30
+
+// we'll use the initialization code from the utility libraries
+// since we're just testing if the card is working!
+if (!card.init(SPI_FULL_SPEED, spi_ss_sd_card)) 
+{
+  Serial.println("initialization failed. Things to check:");
+}
+else 
+{
+    Serial.println("Wiring is correct and a card is present.");
+}
