@@ -2,12 +2,13 @@
 #define CONFIG_VERSION 3 // protection against excessive EEPROM writes
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
 
+#define AREF_VOLTAGE 3.35 // analog reference voltage measured at 3V3 out
+#define TEMPERATURE_SAMPLE_PERIOD 120 // temperature measure interval in seconds
 #define GPSRATE 4800
 #define SERIALRATE 9600
 //BLUETOOTHSERIALRATE is hardcoded in device
 #define NMEA_BUFFERSIZE 80 // plenty big
 #define SD_BUFFERSIZE 4096 // huge buffer for NMEA sentences to be written to SD card
-
 
 // EERPOM indices
 #define EERPOM_LCD_POWER_INDEX 1
@@ -33,7 +34,7 @@ char gps_longtitude[17] = "lon hhhmm.ssss  "; // W or E, memcpy needs to start t
 char gps_altitude[10] = "alt "; // GPS altitude: "alt xxxxm" or "alt -xxxm", populated in gps_functions.h:gps_parse_gpgga()
 char gps_hdop[6] = "D"; // GPS horizontal dilution of position: "D12.5" , populated in gps_functions.h:gps_parse_gprmc()
 char gps_satellites_in_view[4] = "S"; // GPS satellites in view
-char temperature[6] = "T+30C"; // temperature, "T-12C" or "T+56C"
+char temperature[6] = "T+xxC"; // temperature, "T-12C" or "T+56C"
 int8_t timezone;
 char sd_buffer[SD_BUFFERSIZE];
 
@@ -59,3 +60,5 @@ U8GLIB_SH1106_128X64_2X OLED(spi_ss_pin,  spi_oled_a0_pin,  spi_oled_reset_pin);
 Sd2Card card;
 SdVolume volume;
 SdFile root;
+
+unsigned long temperature_last_reading = 0;
