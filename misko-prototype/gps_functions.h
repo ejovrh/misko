@@ -119,8 +119,6 @@ void get_nmea_sentences() {
 
   uint8_t sum; // variable for the NMEA checksum of each sentence
   bool gotGPRMC = false;    // flag that indicates GPRMC or GPGGA strings
-  //uint8_t i;  // iterator for various loops
-  //char *p;
  
   if (Serial3.available()) // if serial3 is availiable
   {  
