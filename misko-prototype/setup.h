@@ -2,7 +2,7 @@
 #include "eeprom_config.h"
 
 Serial.begin(SERIALRATE); // connect to the serial terminal
-Serial.println("start");
+Serial.println(F("start"));
 
 // initialize GPS
 Serial3.begin(GPSRATE);   // connect to the GPS at the desired rate
@@ -25,9 +25,9 @@ m2.setPin(M2_KEY_EXIT, menu_left_buttton); // 30
 // since we're just testing if the card is working!
 if (!card.init(SPI_FULL_SPEED, spi_ss_sd_card)) 
 {
-  Serial.println("initialization failed. Things to check:");
+  Serial.println(F("initialization failed. Things to check:"));
 }
 else 
 {
-    Serial.println("Wiring is correct and a card is present.");
+    Serial.println(F("Wiring is correct and a card is present."));
 }
