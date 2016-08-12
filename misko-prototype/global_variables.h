@@ -6,7 +6,7 @@
 #define SERIALRATE 9600
 //BLUETOOTHSERIALRATE is hardcoded in device
 #define NMEA_BUFFERSIZE 80 // plenty big
-#define SD_BUFFERSIZE 5120 // huge buffer for NMEA sentences to be written to SD card
+#define SD_BUFFERSIZE 4096 // huge buffer for NMEA sentences to be written to SD card
 
 
 // EERPOM indices
@@ -20,7 +20,7 @@
 
 // GPS variuables
 char NMEA_buffer[NMEA_BUFFERSIZE] = "";        // string buffer for the NMEA sentence
-unsigned int bufferid = 0; // holds the current position in the NMEA_buffer array, used fo walk through the buffer
+uint8_t bufferid = 0; // holds the current position in the NMEA_buffer array, used fo walk through the buffer
 const char gprmc[] = "$GPRMC"; // beginning of GPRMC sentence, used to fish out datetime via memcmp in gps_functions.h
 const char gpgga[] = "$GPGGA"; // beginning of GPGGA sentence, used to fish out datetime via memcmp in gps_functions.h 
 bool gps_fix = 0;
