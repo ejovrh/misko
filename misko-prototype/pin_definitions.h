@@ -12,10 +12,10 @@
 // UART Serial 3
 //free
 
-#define DO_NOT_USE_pin 10 // was SW SPI SD/SPI slave select - see Sd2Card.h:47
-#define DO_NOT_USE_pin 11 // SD/SPI serial clock
-#define DO_NOT_USE_pin 12 // SD/SPI master in slave out
-#define DO_NOT_USE_pin 13 // SD/SPI master out slave in
+#define DO_NOT_USE_pin_10 10 // was SW SPI SD/SPI slave select - see Sd2Card.h:47
+#define DO_NOT_USE_pin_11 11 // SD/SPI serial clock
+#define DO_NOT_USE_pin_12 12 // SD/SPI master in slave out
+#define DO_NOT_USE_pin_13 13 // SD/SPI master out slave in
 
 //#define oled_scl_pin 21 // OLED SCL
 //#define oled_sda_pin 20 // OLED SDA - MOSI
