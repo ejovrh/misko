@@ -69,3 +69,23 @@ void handle_bluetooth_button(void)
       flag_bluetooth_is_on = 0; // set flag to off
   }
 }
+
+int calculate_temperature(void) // calculates temperature by reading the TMP36 analog data
+{
+	// the temperature field is defined as:
+	// 		char temperature[6] = "T+30C"; // temperature, "T-12C" or "T+56C"
+	
+	if ( abs(millis() -  temperature_last_reading) / 1000 > TEMPERATURE_SAMPLE_PERIOD  || temperature_last_reading == 0)
+	{
+		int tempReading = analogRead(tmp36_pin);  // read raw sensor data (voltage)
+  
+		float voltage = tempReading * AREF_VOLTAGE; // converting reading to voltage, based on AREF
+		voltage /= 1024.0; 
+ 
+		int8_t temperatureC = (voltage - 0.5) * 100 ;  // 10 mv per C, 500 mV offset
+
+		sprintf(temperature + sizeof(char), "%+.2d\C", temperatureC); // THE way to print
+		
+		temperature_last_reading = millis(); // update last read time of value
+	}	
+}
