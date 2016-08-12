@@ -1,4 +1,5 @@
 // define pins by function, order by pin number on board
+#define tmp36_pin A0 // TMP36 temoerature sensor 97
 #define gps_power_pin 4 // supplies power via PWM (100% duty cycle) to em406a
 #define gps_green_led_pin 5 // LED1, blinks on write onto SD card
 #define gps_red_led_pin 6 // LED2, on - GPS has fix, off - GPS has no fix
