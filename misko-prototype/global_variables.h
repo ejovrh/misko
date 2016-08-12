@@ -6,6 +6,7 @@
 #define SERIALRATE 9600
 //BLUETOOTHSERIALRATE is hardcoded in device
 #define NMEA_BUFFERSIZE 80 // plenty big
+#define SD_BUFFERSIZE 5120 // huge buffer for NMEA sentences to be written to SD card
 
 
 // EERPOM indices
@@ -34,6 +35,7 @@ char gps_hdop[6] = "D"; // GPS horizontal dilution of position: "D12.5" , popula
 char gps_satellites_in_view[4] = "S"; // GPS satellites in view
 char temperature[6] = "T+30C"; // temperature, "T-12C" or "T+56C"
 int8_t timezone;
+char sd_buffer[SD_BUFFERSIZE];
 
 // bluetooth flags
 unsigned long bluetooth_button_press_time = millis(); // time of button press
