@@ -1,6 +1,8 @@
 #include "pin_modes.h"
 #include "eeprom_config.h"
 
+analogReference(EXTERNAL); // external voltage reference
+
 Serial.begin(SERIALRATE); // connect to the serial terminal
 Serial.println(F("start"));
 
