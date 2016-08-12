@@ -35,9 +35,8 @@ void handle_bluetooth_button(void)
     flag_bluetooth_is_on = 1; // set flag to on
     flag_bluetooth_power_toggle_pressed = 1; // mark button as pressed
 
-    int i;
     // poor man's debugging
-    for (i=0; i< 7; i++)
+    for (uint8_t i=0; i< 7; i++)
     {
       Serial.print(i); Serial.print(" - ");Serial.println(EEPROM[i]);
     }
