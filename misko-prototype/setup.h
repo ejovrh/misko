@@ -1,7 +1,7 @@
 #include "pin_modes.h"
 #include "eeprom_config.h"
 
-analogReference(EXTERNAL); // external voltage reference
+analogReference(EXTERNAL); // external voltage reference - Vcc (measured in functions.h readVcc() 
 
 Serial.begin(SERIALRATE); // connect to the serial terminal
 Serial.println(F("start"));
