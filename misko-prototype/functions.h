@@ -70,22 +70,55 @@ void handle_bluetooth_button(void)
   }
 }
 
-int calculate_temperature(void) // calculates temperature by reading the TMP36 analog data
+float readVcc() // http://provideyourown.com/2012/secret-arduino-voltmeter-measure-battery-voltage/
+{
+  // Read 1.1V reference against AVcc
+  // set the reference to Vcc and the measurement to the internal 1.1V reference
+	ADMUX = _BV(REFS0) | _BV(MUX4) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1);
+ 
+  delay(2); // Wait for Vref to settle
+  ADCSRA |= _BV(ADSC); // Start conversion
+  while (bit_is_set(ADCSRA,ADSC)); // measuring
+
+  uint8_t low  = ADCL; // must read ADCL first - it then locks ADCH  
+  uint8_t high = ADCH; // unlocks both
+
+  long result = (high<<8) | low;
+
+  float retval = 1125.300 / result; // Calculate Vcc in V; 1125.300 = 1.1*1023
+  return retval; // Vcc in V
+}
+
+void calculate_temperature(void) // calculates temperature by reading the TMP36 analog data
 {
 	// the temperature field is defined as:
 	// 		char temperature[6] = "T+30C"; // temperature, "T-12C" or "T+56C"
 	
 	if ( abs(millis() -  temperature_last_reading) / 1000 > TEMPERATURE_SAMPLE_PERIOD  || temperature_last_reading == 0)
 	{
-		int tempReading = analogRead(tmp36_pin);  // read raw sensor data (voltage)
-  
-		float voltage = tempReading * AREF_VOLTAGE; // converting reading to voltage, based on AREF
-		voltage /= 1024.0; 
+		int tempReading = analogRead(tmp36_pin);  // read raw sensor data (voltage) - 10bit resolution -> values form 0-1023
+
+		float voltage = ( tempReading * readVcc()) / 1024.0 ; // converting reading to voltage, based on AREF
  
 		int8_t temperatureC = (voltage - 0.5) * 100 ;  // 10 mv per C, 500 mV offset
 
-		sprintf(temperature + sizeof(char), "%+.2d\C", temperatureC); // THE way to print
+		sprintf(temperature + sizeof(char), "%+.2d", temperatureC); // THE way to print
+		strncat( temperature + 4*sizeof(char), "C", sizeof(char)); // append C and a null terminator
+/*
+		int reading3v3 = analogRead(A1);
+		float voltage3v3 = reading3v3 * readVcc();
+		voltage3v3 /= 1024.0;
 		
+		int readingvcc = analogRead(A2);
+		float voltagevcc = readingvcc * readVcc();
+		voltagevcc /= 1024.0;
+		
+		Serial.print("Vref - "); Serial.print(readVcc()); 
+		Serial.print(" Vcc - "); Serial.print(voltagevcc); 
+		Serial.print(" 3V3 - "); Serial.print(voltage3v3); 
+		Serial.print(" V temp - "); Serial.print(voltage);
+		Serial.print(" temp - ");Serial.println(temperature);
+*/
 		temperature_last_reading = millis(); // update last read time of value
 	}	
 }
