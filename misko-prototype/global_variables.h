@@ -2,7 +2,6 @@
 #define CONFIG_VERSION 3 // protection against excessive EEPROM writes
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
 
-#define AREF_VOLTAGE 3.35 // analog reference voltage measured at 3V3 out
 #define TEMPERATURE_SAMPLE_PERIOD 120 // temperature measure interval in seconds
 #define GPSRATE 4800
 #define SERIALRATE 9600
