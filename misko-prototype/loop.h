@@ -19,4 +19,4 @@
  get_nmea_sentences(); // gets NMEA sentences out of the GPS and deals with them
  //Serial.println(millis());
   
-calculate_temperature();
+calculate_temperature(); // calculates the temperature via a TMP36 sensor
