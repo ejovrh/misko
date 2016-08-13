@@ -118,6 +118,9 @@ miško - the self sufficient gps tracker
 		
 5. HARDWARE USED
 
+	- Arduino Mega2560
+		http://hr.rsdelivers.com/product/arduino/a000067/arduino-mega/7154084.aspx
+
 	- Analog Devices TMP36FSZ Temperature Sensor 8-Pin SOIC
 		http://hr.rsdelivers.com/product/analog-devices/tmp36fsz/analog-devices-tmp36fsz-temperature-sensor-8-pin-soic-40-125-c/0412973.aspx?query=TMP36FSZ
 	
@@ -128,6 +131,12 @@ miško - the self sufficient gps tracker
 
 		http://hr.rsdelivers.com/product/texas-instruments/sn74ahc14d/texas-instruments-sn74ahc14d-hex-schmitt-trigger-inverter-8ma-2-55-v-14-pin-soic/0526616.aspx
 		
-	- http://hr.rsdelivers.com/catalogue/search.aspx?query=atmega2560&Family=9511#PI-1|viewtype-0|A-236854|
+	- Atmel 2560
 	
+		http://hr.rsdelivers.com/catalogue/search.aspx?query=atmega2560&Family=9511#PI-1|viewtype-0|A-236854|
+	
+	- Microchip 23K256-I/SN SRAM Memory, 256kbit, 2.7 → 3.6 V, 25ns 8-Pin SOIC
+	
+		http://hr.rsdelivers.com/product/microchip/23k256-i-sn/microchip-23k256-i-sn-sram-memory-256kbit-27-36-v-25ns-8-pin-soic/6668148.aspx
+		
 	- 
