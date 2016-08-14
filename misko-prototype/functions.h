@@ -113,12 +113,13 @@ void calculate_temperature(void) // calculates temperature by reading the TMP36 
 		float voltagevcc = readingvcc * readVcc();
 		voltagevcc /= 1024.0;
 		
-		Serial.print("Vref - "); Serial.print(readVcc()); 
-		Serial.print(" Vcc - "); Serial.print(voltagevcc); 
-		Serial.print(" 3V3 - "); Serial.print(voltage3v3); 
-		Serial.print(" V temp - "); Serial.print(voltage);
-		Serial.print(" temp - ");Serial.println(temperature);
+		Serial.print(F("Vref - ")); Serial.print(readVcc()); 
+		Serial.print(F(" Vcc - ")); Serial.print(voltagevcc); 
+		Serial.print(F(" 3V3 - ")); Serial.print(voltage3v3); 
 */
+		Serial.print(F(" V temp - ")); Serial.print(voltage);
+		Serial.print(F(" temp - "));Serial.println(temperature);
+
 		temperature_last_reading = millis(); // update last read time of value
 	}	
 }
