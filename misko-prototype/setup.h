@@ -1,5 +1,6 @@
 #include "pin_modes.h"
-#include "eeprom_config.h"
+#include "eeprom_config.h" // definition of EEPROM fields
+#include "adxl345.h" // definition of ADXL345 register addresses
 
 analogReference(EXTERNAL); // external voltage reference - Vcc (measured in functions.h readVcc() 
 
@@ -13,9 +14,8 @@ Serial3.print(WAAS_ON); // will become obsolete via EEPROM and setup
 Serial3.print(RMC_ON); // will become obsolete via EEPROM and setup
 Serial3.print(GSA_ON); // will become obsolete via EEPROM and setup
 //Serial3.print(GSV_ON); // will become obsolete via EEPROM and setup
-    
+
 delay(50);
-  
 m2_SetU8g(OLED.getU8g(), m2_u8g_box_icon); // connect u8glib with m2tklib
 m2.setFont(0, u8g_font_6x10); // assign u8g_font_6x10 font to index 0
 m2.setPin(M2_KEY_SELECT, menu_right_buttton); // 33
@@ -23,9 +23,10 @@ m2.setPin(M2_KEY_PREV, menu_up_buttton); // 32
 m2.setPin(M2_KEY_NEXT, menu_down_buttton); // 31
 m2.setPin(M2_KEY_EXIT, menu_left_buttton); // 30
 
+
 // we'll use the initialization code from the utility libraries
 // since we're just testing if the card is working!
-if (!card.init(SPI_FULL_SPEED, SPI_SS_SD_card_pin)) 
+if (!card.init(SPI_HALF_SPEED, SPI_SS_SD_card_pin)) 
 {
   Serial.println(F("initialization failed. Things to check:"));
 }
@@ -33,3 +34,15 @@ else
 {
     Serial.println(F("Wiring is correct and a card is present."));
 }
+
+
+// ADXL345 config start
+SPI.begin(); //Initiate an SPI communication instance.
+SPI.setDataMode(SPI_MODE3); //Configure the SPI connection for the ADXL345.
+
+adxl345_readByte(DEVID);
+adxl345_writeByte(THRESH_TAP, 0xDB);
+adxl345_readByte(THRESH_TAP);
+
+SPI.end();
+// ADXL345 config end

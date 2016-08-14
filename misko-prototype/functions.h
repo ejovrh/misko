@@ -32,6 +32,7 @@ void handle_bluetooth_button(void)
   { 
     bluetooth_button_press_time = millis(); // record time of button press; this is used in eeprom_timer()
     digitalWrite(bluetooth_mosfet_gate_pin, HIGH); // turn on the device
+		digitalWrite(bluetooth_power_led_pin, HIGH); // turn on fancy blue LED
     flag_bluetooth_is_on = 1; // set flag to on
     flag_bluetooth_power_toggle_pressed = 1; // mark button as pressed
 
@@ -55,6 +56,7 @@ void handle_bluetooth_button(void)
     {
       if (flag_bluetooth_power_keep_on) // if the BT device was on
         digitalWrite(bluetooth_mosfet_gate_pin, LOW); // turn off the BT device
+				digitalWrite(bluetooth_power_led_pin, LOW); // turn off fancy blue LED
 
       flag_bluetooth_power_keep_on = !flag_bluetooth_power_keep_on; // invert the flag (on -> off or off -> on)
     }
@@ -66,6 +68,7 @@ void handle_bluetooth_button(void)
   // flag_bluetooth_is_on prevents code execution on every loop
   { 
       digitalWrite(bluetooth_mosfet_gate_pin, LOW); // turn off the device
+			digitalWrite(bluetooth_power_led_pin, LOW); // turn off fancy blue LED
       flag_bluetooth_is_on = 0; // set flag to off
   }
 }
@@ -122,4 +125,27 @@ void calculate_temperature(void) // calculates temperature by reading the TMP36 
 
 		temperature_last_reading = millis(); // update last read time of value
 	}	
+}
+
+byte adxl345_readByte(byte registerAddress) // reads one byte at registerAddress
+{
+			Serial.print("registerAddress -");Serial.print(registerAddress, BIN); Serial.println("- registerAddress");
+			Serial.print("0x80 registerAddress -");Serial.print(0x80 | registerAddress, BIN); Serial.println("- 0x80 registerAddress");
+		digitalWrite(SPI_SS_ADXL345_pin, LOW); // reserve the slave
+    
+		SPI.transfer(0x80 | registerAddress); // set the MSB to 1 (the read command), then send address to read from
+		
+		byte retval = SPI.transfer(0x00); // send one byte (0xff) into the circular fifo buffer, get one byte back
+			Serial.print("retval -");Serial.print(retval, BIN); Serial.println("- retval");
+		
+		digitalWrite(SPI_SS_ADXL345_pin, HIGH); // release the slave
+    return retval;  // return value
+}
+
+void adxl345_writeByte(byte registerAddress, byte value)
+{
+	digitalWrite(SPI_SS_ADXL345_pin, LOW); // signal the slave
+	SPI.transfer(registerAddress); // send address to write to
+	SPI.transfer(value); // send the byte
+	digitalWrite(SPI_SS_ADXL345_pin, HIGH); // release the slave
 }

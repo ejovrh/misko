@@ -53,7 +53,8 @@ bool flag_lcd_button_left_pressed = 0; // flag marks button pressed or not
 bool flag_lcd_button_right_pressed = 0; // flag marks button pressed or not
 
 // device initializations
-U8GLIB_SH1106_128X64_2X OLED(SPI_SS_OLED_pin,  SPI_OLED_a0_pin,  SPI_OLED_reset_pin); // HW SPI - look in the library source for precise info
+U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_FAST);
+//U8GLIB_SH1106_128X64_2X OLED(SPI_SS_OLED_pin,  SPI_OLED_a0_pin,  SPI_OLED_reset_pin); // HW SPI - look in the library source for precise info
 
 // set up variables using the SD utility library functions:
 Sd2Card card;
