@@ -96,7 +96,7 @@ void calculate_temperature(void) // calculates temperature by reading the TMP36 
 	
 	if ( abs(millis() -  temperature_last_reading) / 1000 > TEMPERATURE_SAMPLE_PERIOD  || temperature_last_reading == 0)
 	{
-		int tempReading = analogRead(tmp36_pin);  // read raw sensor data (voltage) - 10bit resolution -> values form 0-1023
+		uint16_t tempReading = analogRead(tmp36_pin);  // read raw sensor data (voltage) - 10bit resolution -> values form 0-1023
 
 		float voltage = ( tempReading * readVcc()) / 1024.0 ; // converting reading to voltage, based on AREF
  
