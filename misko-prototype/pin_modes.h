@@ -11,7 +11,8 @@ pinMode(menu_left_buttton, INPUT); // user buttons - left
 pinMode(menu_right_buttton, INPUT); //  user buttons - right
 pinMode(menu_up_buttton, INPUT); //  user buttons - up
 pinMode(menu_left_buttton, INPUT); // 
-pinMode(spi_ss_sd_card, OUTPUT); // SPI SS for the SD card
+pinMode(SPI_SS_SD_card_pin, OUTPUT); // SPI SS for the SD card
+pinMode(SPI_SS_ADXL345_pin, OUTPUT); // SPI SS for ADXL345
 
 // PIN STATES
 digitalWrite(bluetooth_power_toggle_pin, LOW); // 
