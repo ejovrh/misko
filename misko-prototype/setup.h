@@ -25,7 +25,7 @@ m2.setPin(M2_KEY_EXIT, menu_left_buttton); // 30
 
 // we'll use the initialization code from the utility libraries
 // since we're just testing if the card is working!
-if (!card.init(SPI_FULL_SPEED, spi_ss_sd_card)) 
+if (!card.init(SPI_FULL_SPEED, SPI_SS_SD_card_pin)) 
 {
   Serial.println(F("initialization failed. Things to check:"));
 }
