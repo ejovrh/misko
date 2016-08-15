@@ -1,7 +1,6 @@
 // define pin modes and states, order by pin name
 
 // PIN MODES
-pinMode(bluetooth_power_led_pin, OUTPUT); // bluetooth power indiator LED
 pinMode(bluetooth_mosfet_gate_pin, OUTPUT); // bluetooth power control, bluetooth module draws ~40mA when not connected, 20-30 in connected state
 pinMode(bluetooth_power_toggle_pin, INPUT); // user buttons - bluetooth power toggle
 pinMode(gps_green_led_pin, OUTPUT); // GPS fix indiator: on - has fix, off - has no fix
@@ -17,7 +16,6 @@ pinMode(SPI_SS_ADXL345_pin, OUTPUT); // SPI SS for ADXL345
 pinMode(DO_NOT_USE_pin_10, OUTPUT);
 
 // PIN STATES
-digitalWrite(bluetooth_power_led_pin, LOW); // bluetooth indicator, blue LED of course
 digitalWrite(bluetooth_power_toggle_pin, LOW); // 
 digitalWrite(bluetooth_mosfet_gate_pin, LOW); // mosfet gate for bluetooth module, on(high), off(low)
 digitalWrite(gps_green_led_pin, LOW); // off(low) by befault until GPS gets fix
