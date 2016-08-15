@@ -62,3 +62,4 @@ SdVolume volume;
 SdFile root;
 
 uint32_t temperature_last_reading = 0;
+bool adxl345_int1 = 0;
