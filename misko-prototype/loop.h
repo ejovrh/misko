@@ -20,3 +20,6 @@
  //Serial.println(millis());
   
 calculate_temperature(); // calculates the temperature via a TMP36 sensor
+
+if (adxl345_int1) // if the ADXL345 INT1 flag is set
+	handle_adx_intl(); // execute the function
