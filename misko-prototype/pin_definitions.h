@@ -1,6 +1,5 @@
 // define pins by function, order by pin number on board
 #define tmp36_pin A0 // TMP36 temoerature sensor 97
-#define bluetooth_power_led_pin A1 // bluetooth power led, ALSO used for SPI debugging
 #define gps_power_pin 4 // supplies power via PWM (100% duty cycle) to em406a
 #define gps_green_led_pin 5 // LED1, blinks on write onto SD card
 #define gps_red_led_pin 6 // LED2, on - GPS has fix, off - GPS has no fix
@@ -14,6 +13,7 @@
 // UART Serial 3
 //free
 
+// Pins used were SS 10, MOSI 11, MISO 12, and SCK 13.
 #define DO_NOT_USE_pin_10 10 // SD/SPI SS -> SPI_SS_SD_card_pin; reason: see Sd2Card.h:47
 #define DO_NOT_USE_pin_11 11 // SD/SPI SCK -> SPI_SCK_pin
 #define DO_NOT_USE_pin_12 12 // SD/SPI MISO -> SPI_MISO_pin
