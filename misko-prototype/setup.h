@@ -1,8 +1,7 @@
-#include "pin_modes.h"
-#include "eeprom_config.h" // definition of EEPROM fields
-#include "adxl345.h" // definition of ADXL345 register addresses
 
 analogReference(EXTERNAL); // external voltage reference - Vcc (measured in functions.h readVcc() 
+
+attachInterrupt(digitalPinToInterrupt(2), isr_adxl345_int1, CHANGE); // ADXL345 INT1 pin connects to here, fires IRQ on act/inact
 
 Serial.begin(SERIALRATE); // connect to the serial terminal
 Serial.println(F("start"));
@@ -23,12 +22,11 @@ m2.setPin(M2_KEY_PREV, menu_up_buttton); // 32
 m2.setPin(M2_KEY_NEXT, menu_down_buttton); // 31
 m2.setPin(M2_KEY_EXIT, menu_left_buttton); // 30
 
-
 // we'll use the initialization code from the utility libraries
 // since we're just testing if the card is working!
 if (!card.init(SPI_HALF_SPEED, SPI_SS_SD_card_pin)) 
 {
-  Serial.println(F("initialization failed. Things to check:"));
+  Serial.println(F("SD card initialization failed"));
 }
 else 
 {
@@ -37,12 +35,23 @@ else
 
 
 // ADXL345 config start
-SPI.begin(); //Initiate an SPI communication instance.
-SPI.setDataMode(SPI_MODE3); //Configure the SPI connection for the ADXL345.
+SPI.beginTransaction(SPISettings(20000000, MSBFIRST, SPI_MODE3));
+delay(10);
 
-adxl345_readByte(DEVID);
-adxl345_writeByte(THRESH_TAP, 0xDB);
-adxl345_readByte(THRESH_TAP);
+adxl345_readByte(DEVID); // weird issue: the 1st read returns 0, subsequent reads return proper values
 
-SPI.end();
+if (adxl345_readByte(DEVID) != B11100101)
+	Serial.println(F("ADXL345 init failed"));
+
+	adxl345_writeByte(DATA_FORMAT, DATA_FORMAT_CFG); // see adxl345.h
+	adxl345_writeByte(INT_MAP, INT_MAP_CFG);
+  adxl345_writeByte(INT_ENABLE, INT_ENABLE_CFG);
+  adxl345_writeByte(TIME_INACT, TIME_INACT_CFG);
+  adxl345_writeByte(THRESH_INACT, THRESH_INACT_CFG);
+  adxl345_writeByte(THRESH_ACT, THRESH_ACT_CFG);
+	adxl345_writeByte(ACT_INACT_CTL, ACT_INACT_CTL_CFG);
+  adxl345_writeByte(POWER_CTL, POWER_CTL_CFG);
+	adxl345_writeByte(BW_RATE, BW_RATE_CFG);
+
+	SPI.endTransaction();
 // ADXL345 config end
