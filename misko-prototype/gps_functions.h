@@ -81,7 +81,7 @@ void gps_parse_gpgga() // parses out sattelites used and HDOP
   // FIXME: still some overrun somewhere: 3rd line gets garbled
   char *p; // char pointer for string tokenizer
   p = strtok(NMEA_buffer, ","); // set up the tokenizer for string seperation on comma
-  int i = 0; // counter for substrings
+  uint8_t i = 0; // counter for substrings
 
   while (p != NULL) // while there are tokenizable substrings in string
   {
@@ -108,6 +108,7 @@ void gps_parse_gpgga() // parses out sattelites used and HDOP
         
         return; // finish the loop because we do not need anything else here
      }
+	 
      p = strtok(NULL, ","); // tokenize further
   }
 }
@@ -116,10 +117,8 @@ void get_nmea_sentences() {
 // reads one char at a time from the gps device; 
 //  due to iteration from the main loop, eventually the whole NMEA sentence accumulates in the global buffer variable
 
-  unsigned int sum; // variable for the NMEA checksum of each sentence
+  uint8_t sum; // variable for the NMEA checksum of each sentence
   bool gotGPRMC = false;    // flag that indicates GPRMC or GPGGA strings
-  unsigned int i;  // iterator for various loops
-  char *p;
  
   if (Serial3.available()) // if serial3 is availiable
   {  
@@ -139,7 +138,7 @@ void get_nmea_sentences() {
       sum = parseHex(NMEA_buffer[bufferid-3]) * 16; // sum the last fields for the checksum
       sum += parseHex(NMEA_buffer[bufferid-2]);
 
-      for (i=1; i < (bufferid-4); i++) 
+      for (uint8_t i=1; i < (bufferid-4); i++) 
         sum ^= *(NMEA_buffer+i); // check checksum
       
       if (sum != 0) // checksum bad
@@ -150,15 +149,13 @@ void get_nmea_sentences() {
 
       //debug print
       //Serial.println("debug print of buffer:");      
-      //Serial.print(NMEA_buffer);
+      Serial.print(NMEA_buffer);
 
       // check for GPRMC sentence
       if (memcmp(NMEA_buffer, gprmc, 6*sizeof(char)) == 0) // if we have a GPRMC sentence (compare the NMEA buffer with its sentence to gprmc[])
       { 
         gps_parse_gprmc();
 
-        //p = strchr(strchr(NMEA_buffer, ',')+1, ',')+1; // skip to position after 2nd comma
-        
         if (gps_fix) // valid fix - indicate it by lighting up the reed LED
           digitalWrite(gps_green_led_pin, HIGH);
         else 

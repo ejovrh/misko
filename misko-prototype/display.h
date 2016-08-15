@@ -37,16 +37,21 @@ const char *fn_idx_to_lcd_power_value(uint8_t idx)
     return "auto";
 }
 
+// callback for timezone
 int8_t fn_set_eerpom_tz(m2_rom_void_p element, uint8_t msg, int8_t val) // callback for EEPROM timezone setting
 {
   if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
-    return (int8_t) eeprom_get(EERPOM_TIMEZONE_INDEX);
+  {
+	timezone = eeprom_get(EERPOM_TIMEZONE_INDEX);
+    return timezone;
+  }
   
   if ( msg == M2_U8_MSG_SET_VALUE ) // if we get a SET message
     eeprom_set(val, EERPOM_TIMEZONE_INDEX);
 }
 
-fn_set_eerpom_bluetooth_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val)
+// callback for bluetooth timeout
+fn_set_eerpom_bluetooth_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val) 
 {
   if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
     return (uint8_t) eeprom_get(EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX); // set val to the EEPROM value at that index
@@ -55,6 +60,7 @@ fn_set_eerpom_bluetooth_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val)
     eeprom_set(val, EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX); // set the EEPROM value at that index to val
 }
 
+// callback for lcd timeout
 fn_set_eerpom_lcd_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val)
 {
   if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
@@ -64,6 +70,7 @@ fn_set_eerpom_lcd_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val)
     eeprom_set(val, EERPOM_LCD_AUTO_TIMEOUT_INDEX); // set the EEPROM value at that index to val
 }
 
+// callback for gps log frequency
 fn_set_eerpom_gps_log_freq(m2_rom_void_p element, uint8_t msg, uint8_t val)
 {
   if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
@@ -72,6 +79,38 @@ fn_set_eerpom_gps_log_freq(m2_rom_void_p element, uint8_t msg, uint8_t val)
   if ( msg == M2_U8_MSG_SET_VALUE ) // if we get a SET message
     eeprom_set(val, EEPROM_GPS_GPRMC_GGA_FREQ_INDEX); // set the EEPROM value at that index to val
 }
+
+M2_BUTTON(el_ok, "f4", "ok", fn_ok); // an ok button
+// data output start
+
+// datetime and timezone
+M2_LABEL(el_gps_date, "rf0", gps_date); // label for gps_date
+M2_LABEL(el_gps_time, "rf0", gps_time); // label for gps_time
+M2_LABEL(el_gps_utc, "rf0", (int8_t) eeprom_get(EERPOM_TIMEZONE_INDEX)); // timezone string
+M2_LIST(el_datetime_list) { &el_gps_date, &el_gps_time, &el_gps_utc, &el_ok} ; // create a list of gps date, time, timezone
+M2_GRIDLIST(el_datetime_grid, "c1", el_datetime_list);
+M2_ALIGN(el_top_datetime_menu, "-1|1W64H64", &el_datetime_grid);
+
+// GPS position
+M2_LABEL(el_gps_latitude, "rf0", gps_latitude); 
+M2_LABEL(el_gps_longtitude, "rf0", gps_longtitude);
+M2_LABEL(el_altitude, "rf0", gps_altitude);
+M2_LABEL(el_gps_sat_in_view, "rf0", gps_satellites_in_view);
+M2_LABEL(el_gps_hdop, "rf0", gps_hdop);
+M2_LIST(el_position_list) = {&el_gps_latitude, &el_gps_longtitude, &el_gps_sat_in_view, &el_gps_hdop, &el_ok};
+M2_GRIDLIST(el_position_grid, "c1", el_position_list);
+M2_ALIGN(el_top_position_menu, "-1|1W64H64", &el_position_grid);
+
+// misc
+M2_LABEL(el_temperature, "rf0", temperature);
+M2_LABEL(el_batt_a, "rfo", "batA 100%");
+M2_LABEL(el_batt_b, "rfo", "batB 100%");
+M2_LIST(el_device_misc_list) = {&el_batt_a, &el_batt_b, &el_temperature, &el_ok};
+M2_GRIDLIST(el_device_misc_grid, "c1", el_device_misc_list);
+M2_ALIGN(el_top_device_misc_menu, "-1|1W64H64", &el_device_misc_grid);
+
+// data output end
+
 // timezone start 
 M2_LABEL(el_timezone_utc, NULL, "UTC");
 M2_S8NUMFN(el_timezone_utc_value, "+1c2", -12, 12, fn_set_eerpom_tz);
@@ -85,7 +124,6 @@ M2_ALIGN(el_top_timezone_menu, "-1|1W64H64", &el_timezone_grid);
 M2_LABEL(el_bluetooth_power, NULL, "Power");
 M2_COMBO(el_bluetooth_power_value, NULL, &select_color, 3, fn_idx_to_bluetooth_power_value);
 M2_S8NUMFN(el_bluetooth_power_timeout, "+0c1", 1, 5, fn_set_eerpom_bluetooth_timeout);
-M2_BUTTON(el_ok, "f4", "ok", fn_ok);
 M2_LIST(el_bluetooth_list) = { &el_bluetooth_power, &el_bluetooth_power_value, &el_bluetooth_power_timeout, &el_ok };
 M2_GRIDLIST(el_bluetooth_grid, "c2", el_bluetooth_list);
 M2_ALIGN(el_top_bluetooth_menu, "-1|1W64H64", &el_bluetooth_grid);
@@ -112,8 +150,9 @@ M2_ALIGN(el_top_gps_menu, "-1|1W64H64", &el_gps_grid);
 m2_menu_entry m2_2lmenu_data[] = 
 {
   { "Data", NULL },
-  { ". GPS", NULL },
-  { ". Device", NULL },
+  { ". Datetime", &el_top_datetime_menu },
+  { ". Position", &el_top_position_menu },
+  { ". misc", &el_top_device_misc_menu}, 
   { "Settings", NULL },
   { ". Timezone", &el_top_timezone_menu },
   { ". Bluetooth", &el_top_bluetooth_menu },
