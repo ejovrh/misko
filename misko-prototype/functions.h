@@ -14,6 +14,55 @@ int eeprom_timer(unsigned int in_button_press_time, unsigned int in_eeprom_index
   return (abs( in_button_press_time - millis()) / 1000 > EEPROM[in_eeprom_index] ?  1 :  0); 
 }
 
+byte adxl345_readByte(byte registerAddress) // reads one byte at registerAddress
+{
+			//Serial.print("registerAddress -");Serial.print(registerAddress, BIN); Serial.println("- registerAddress");
+			//Serial.print("0x80 registerAddress -");Serial.print(0x80 | registerAddress, BIN); Serial.println("- 0x80 registerAddress");
+		digitalWrite(SPI_SS_ADXL345_pin, LOW); // reserve the slave
+    
+		SPI.transfer(0x80 | registerAddress); // set the MSB to 1 (the read command), then send address to read from
+		
+		byte retval = SPI.transfer(0x00); // send one byte (0xff) into the circular fifo buffer, get one byte back
+			//Serial.print("retval -");Serial.print(retval, BIN); Serial.println("- retval");
+		
+		digitalWrite(SPI_SS_ADXL345_pin, HIGH); // release the slave
+    return retval;  // return value
+}
+
+bool adxl345_writeByte(byte registerAddress, byte value)
+{
+	digitalWrite(SPI_SS_ADXL345_pin, LOW); // signal the slave
+	SPI.transfer(registerAddress); // send address to write to
+	SPI.transfer(value); // send the byte
+	digitalWrite(SPI_SS_ADXL345_pin, HIGH); // release the slave
+	
+	if (adxl345_readByte(registerAddress) != value) // verify correct setting
+	{
+		Serial.print(F("registerAddress was not set:"));Serial.print(registerAddress);Serial.print("-");Serial.println(value);
+		return 1;
+	}
+		
+	return 0;
+}
+
+void poor_mans_debugging(void)
+{
+/* 	    // poor man's debugging
+    for (uint8_t i=0; i< 7; i++)
+    {
+      Serial.print(i); Serial.print(" - ");Serial.println(EEPROM[i]);
+    }
+    //int8_t tz = EEPROM[5];
+    //Serial.print("tz - ");Serial.println(tz);
+		SPI.beginTransaction(SPISettings(20000000, MSBFIRST, SPI_MODE3));
+		adxl345_readByte(0x00);
+		Serial.print("INT_SOURCE -");Serial.print(adxl345_readByte(0x30), BIN);Serial.println("-");
+		Serial.print("INT_MAP -");Serial.print(adxl345_readByte(0x2F), BIN);Serial.println("-");
+		Serial.print("INT_ENABLE -");Serial.print(adxl345_readByte(0x2E), BIN);Serial.println("-");
+		
+		SPI.endTransaction(); */
+}
+
 inline void eeprom_set(int in_val, int in_index) // sets EEPROM[in_index to val
 {
   EEPROM[in_index] = in_val;  
@@ -32,17 +81,10 @@ void handle_bluetooth_button(void)
   { 
     bluetooth_button_press_time = millis(); // record time of button press; this is used in eeprom_timer()
     digitalWrite(bluetooth_mosfet_gate_pin, HIGH); // turn on the device
-		digitalWrite(bluetooth_power_led_pin, HIGH); // turn on fancy blue LED
     flag_bluetooth_is_on = 1; // set flag to on
     flag_bluetooth_power_toggle_pressed = 1; // mark button as pressed
 
-    // poor man's debugging
-    for (uint8_t i=0; i< 7; i++)
-    {
-      Serial.print(i); Serial.print(" - ");Serial.println(EEPROM[i]);
-    }
-    //int8_t tz = EEPROM[5];
-    //Serial.print("tz - ");Serial.println(tz);
+		poor_mans_debugging();
   }
 
   // bluetooth power off
@@ -56,7 +98,6 @@ void handle_bluetooth_button(void)
     {
       if (flag_bluetooth_power_keep_on) // if the BT device was on
         digitalWrite(bluetooth_mosfet_gate_pin, LOW); // turn off the BT device
-				digitalWrite(bluetooth_power_led_pin, LOW); // turn off fancy blue LED
 
       flag_bluetooth_power_keep_on = !flag_bluetooth_power_keep_on; // invert the flag (on -> off or off -> on)
     }
@@ -68,7 +109,6 @@ void handle_bluetooth_button(void)
   // flag_bluetooth_is_on prevents code execution on every loop
   { 
       digitalWrite(bluetooth_mosfet_gate_pin, LOW); // turn off the device
-			digitalWrite(bluetooth_power_led_pin, LOW); // turn off fancy blue LED
       flag_bluetooth_is_on = 0; // set flag to off
   }
 }
@@ -127,25 +167,38 @@ void calculate_temperature(void) // calculates temperature by reading the TMP36 
 	}	
 }
 
-byte adxl345_readByte(byte registerAddress) // reads one byte at registerAddress
+void handle_adx_intl(void)
 {
-			Serial.print("registerAddress -");Serial.print(registerAddress, BIN); Serial.println("- registerAddress");
-			Serial.print("0x80 registerAddress -");Serial.print(0x80 | registerAddress, BIN); Serial.println("- 0x80 registerAddress");
-		digitalWrite(SPI_SS_ADXL345_pin, LOW); // reserve the slave
+	byte adxl345_irq_src = adxl345_readByte(INT_SOURCE);
+	Serial.print("adxl345_irq_src");Serial.print(adxl345_irq_src,BIN);Serial.println("adxl345_irq_src");
+	
     
-		SPI.transfer(0x80 | registerAddress); // set the MSB to 1 (the read command), then send address to read from
-		
-		byte retval = SPI.transfer(0x00); // send one byte (0xff) into the circular fifo buffer, get one byte back
-			Serial.print("retval -");Serial.print(retval, BIN); Serial.println("- retval");
-		
-		digitalWrite(SPI_SS_ADXL345_pin, HIGH); // release the slave
-    return retval;  // return value
-}
+		// inactivity
+    if(adxl345_irq_src & 0x08) // if the inact bit is set
+		{
+      Serial.println("Inactivity");
 
-void adxl345_writeByte(byte registerAddress, byte value)
-{
-	digitalWrite(SPI_SS_ADXL345_pin, LOW); // signal the slave
-	SPI.transfer(registerAddress); // send address to write to
-	SPI.transfer(value); // send the byte
-	digitalWrite(SPI_SS_ADXL345_pin, HIGH); // release the slave
+      byte bwRate = adxl345_readByte(BW_RATE); // get current config
+      adxl345_writeByte(BW_RATE, (bwRate | 0x10) ); // set to low power mode, bit 5 (was 0x0A, becomes 0x1A)
+    }
+		
+		// activity
+    if(adxl345_irq_src & 0x10) // if the act bit is set
+		{
+      Serial.println("Activity");
+      
+      byte powerCTL = adxl345_readByte(POWER_CTL); // get current config
+      // set the device back in measurement mode
+      // as suggested on the datasheet, we put it in standby then in measurement mode
+      //writeTo(DEVICE, R_POWER_CTL, powerCTL & B8(11110011));
+      adxl345_writeByte(POWER_CTL, 0x04); // first standby
+      delay(10); // let's give it some time (not sure if this is needed)
+      //writeTo(DEVICE, R_POWER_CTL, powerCTL & B8(11111011));
+      adxl345_writeByte(POWER_CTL, POWER_CTL_CFG); // then full measurement mode
+      
+      // set the LOW_POWER bit to 0 in R_BW_RATE: get back to full accuracy measurement (we will consume more power)
+      byte bwRate = adxl345_readByte(BW_RATE);
+      adxl345_writeByte(BW_RATE, (BW_RATE & 0x08) );
+    }
+    adxl345_int1 = 0;
 }
