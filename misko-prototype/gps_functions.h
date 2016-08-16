@@ -149,8 +149,9 @@ void get_nmea_sentences() {
 
       //debug print
       //Serial.println("debug print of buffer:");      
-      Serial.print(NMEA_buffer);
-
+      #if NMEA_DEBUG_PRINT
+			Serial.print(NMEA_buffer);
+			#endif
       // check for GPRMC sentence
       if (memcmp(NMEA_buffer, gprmc, 6*sizeof(char)) == 0) // if we have a GPRMC sentence (compare the NMEA buffer with its sentence to gprmc[])
       { 
