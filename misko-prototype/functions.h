@@ -170,7 +170,7 @@ void calculate_temperature(void) // calculates temperature by reading the TMP36 
 void handle_adx_intl(void)
 {
 	byte adxl345_irq_src = adxl345_readByte(INT_SOURCE);
-	Serial.print("adxl345_irq_src");Serial.print(adxl345_irq_src,BIN);Serial.println("adxl345_irq_src");
+	//Serial.print("adxl345_irq_src");Serial.print(adxl345_irq_src,BIN);Serial.println("adxl345_irq_src");
 	
     
 		// inactivity
