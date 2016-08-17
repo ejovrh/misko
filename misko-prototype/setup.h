@@ -1,10 +1,12 @@
 
 analogReference(EXTERNAL); // external voltage reference - Vcc (measured in functions.h readVcc() 
 
-attachInterrupt(digitalPinToInterrupt(2), isr_adxl345_int1, CHANGE); // ADXL345 INT1 pin connects to here, fires IRQ on act/inact
+attachInterrupt(digitalPinToInterrupt(interrupt_adxl345_int1_pin), isr_adxl345_int1, CHANGE); // ADXL345 INT1 pin connects to here, fires IRQ on act/inact
 
 Serial.begin(SERIALRATE); // connect to the serial terminal
 Serial.println(F("start"));
+
+Serial2.begin(9600); // set up the terminal for the SIM800L
 
 // initialize GPS
 Serial3.begin(GPSRATE);   // connect to the GPS at the desired rate
@@ -53,5 +55,5 @@ if (adxl345_readByte(DEVID) != B11100101)
   adxl345_writeByte(POWER_CTL, POWER_CTL_CFG);
 	adxl345_writeByte(BW_RATE, BW_RATE_CFG);
 
-	SPI.endTransaction();
+SPI.endTransaction();
 // ADXL345 config end
