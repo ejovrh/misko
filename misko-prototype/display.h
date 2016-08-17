@@ -51,7 +51,7 @@ int8_t fn_set_eerpom_tz(m2_rom_void_p element, uint8_t msg, int8_t val) // callb
 }
 
 // callback for bluetooth timeout
-fn_set_eerpom_bluetooth_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val) 
+uint8_t fn_set_eerpom_bluetooth_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val) 
 {
   if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
     return (uint8_t) eeprom_get(EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX); // set val to the EEPROM value at that index
@@ -61,24 +61,40 @@ fn_set_eerpom_bluetooth_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val)
 }
 
 // callback for lcd timeout
-fn_set_eerpom_lcd_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val)
+uint8_t fn_set_eerpom_lcd_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val)
 {
   if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
     return (uint8_t) eeprom_get(EERPOM_LCD_AUTO_TIMEOUT_INDEX); // set val to the EEPROM value at that index
   
   if ( msg == M2_U8_MSG_SET_VALUE ) // if we get a SET message
-    eeprom_set(val, EERPOM_LCD_AUTO_TIMEOUT_INDEX); // set the EEPROM value at that index to val
+	{
+		eeprom_set(val, EERPOM_LCD_AUTO_TIMEOUT_INDEX); // set the EEPROM value at that index to val
+		lcd_adjust_log_freq(val);
+	}
 }
 
 // callback for gps log frequency
-fn_set_eerpom_gps_log_freq(m2_rom_void_p element, uint8_t msg, uint8_t val)
+uint8_t fn_set_eerpom_gps_log_freq(m2_rom_void_p element, uint8_t msg, uint8_t val)
 {
   if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
     return (uint8_t) eeprom_get(EEPROM_GPS_GPRMC_GGA_FREQ_INDEX); // set val to the EEPROM value at that index
   
   if ( msg == M2_U8_MSG_SET_VALUE ) // if we get a SET message
+	{
     eeprom_set(val, EEPROM_GPS_GPRMC_GGA_FREQ_INDEX); // set the EEPROM value at that index to val
+		gps_adjust_log_freq(val);
+	}
 }
+
+// callback for Vcc
+const char *fn_get_Vcc(m2_rom_void_p element)
+{
+ 	//  sprintf(vcc + 3*sizeof(char), "%.2f", readVcc()); // dont work - on arduinos the %f is not supported
+	dtostrf(readVcc(), 3, 2, vcc+3*sizeof(char)); // instead, this works
+		// http://www.atmel.com/webdoc/AVRLibcReferenceManual/group__avr__stdlib_1ga060c998e77fb5fc0d3168b3ce8771d42.html
+	strcat(vcc, "V");
+	return vcc;
+} 
 
 M2_BUTTON(el_ok, "f4", "ok", fn_ok); // an ok button
 // data output start
@@ -97,15 +113,16 @@ M2_LABEL(el_gps_longtitude, "rf0", gps_longtitude);
 M2_LABEL(el_altitude, "rf0", gps_altitude);
 M2_LABEL(el_gps_sat_in_view, "rf0", gps_satellites_in_view);
 M2_LABEL(el_gps_hdop, "rf0", gps_hdop);
-M2_LIST(el_position_list) = {&el_gps_latitude, &el_gps_longtitude, &el_gps_sat_in_view, &el_gps_hdop, &el_ok};
+M2_LIST(el_position_list) = {&el_gps_latitude, &el_gps_longtitude, &el_altitude, &el_gps_sat_in_view, &el_gps_hdop, &el_ok};
 M2_GRIDLIST(el_position_grid, "c1", el_position_list);
 M2_ALIGN(el_top_position_menu, "-1|1W64H64", &el_position_grid);
 
 // misc
 M2_LABEL(el_temperature, "rf0", temperature);
-M2_LABEL(el_batt_a, "rfo", "batA 100%");
-M2_LABEL(el_batt_b, "rfo", "batB 100%");
-M2_LIST(el_device_misc_list) = {&el_batt_a, &el_batt_b, &el_temperature, &el_ok};
+M2_LABEL(el_batt_a, "rf0", "batA 100%");
+M2_LABEL(el_batt_b, "rf0", "batB 100%");
+M2_LABELFN(el_vcc, "rf0", fn_get_Vcc);
+M2_LIST(el_device_misc_list) = {&el_batt_a, &el_batt_b, &el_temperature, &el_vcc, &el_ok};
 M2_GRIDLIST(el_device_misc_grid, "c1", el_device_misc_list);
 M2_ALIGN(el_top_device_misc_menu, "-1|1W64H64", &el_device_misc_grid);
 
@@ -158,6 +175,7 @@ m2_menu_entry m2_2lmenu_data[] =
   { ". Bluetooth", &el_top_bluetooth_menu },
   { ". Display", &el_top_lcd_menu },
   { ". GPS", &el_top_gps_menu },
+	{ ". GSM", NULL},
   { NULL, NULL },
 };
 
