@@ -129,42 +129,44 @@ float readVcc() // http://provideyourown.com/2012/secret-arduino-voltmeter-measu
   long result = (high<<8) | low;
 
   float retval = 1125.300 / result; // Calculate Vcc in V; 1125.300 = 1.1*1023
+	 
   return retval; // Vcc in V
 }
 
-void calculate_temperature(void) // calculates temperature by reading the TMP36 analog data
+float calculate_voltage(int pin) // calculates the voltage on a given pin by considering readVcc()
+{
+	uint16_t reading = analogRead(pin); // read raw sensor data (voltage) - 10bit resolution -> values form 0-1023
+	return (float)  (reading * readVcc() / 1024.0) ; // converting reading to voltage, based on AREF
+}
+
+void calculate_temperature(void) // executed from loop() - calculates temperature by reading the TMP36 analog data
 {
 	// the temperature field is defined as:
 	// 		char temperature[6] = "T+30C"; // temperature, "T-12C" or "T+56C"
 	
 	if ( abs(millis() -  temperature_last_reading) / 1000 > TEMPERATURE_SAMPLE_PERIOD  || temperature_last_reading == 0)
 	{
-		uint16_t tempReading = analogRead(tmp36_pin);  // read raw sensor data (voltage) - 10bit resolution -> values form 0-1023
-
-		float voltage = ( tempReading * readVcc()) / 1024.0 ; // converting reading to voltage, based on AREF
- 
-		int8_t temperatureC = (voltage - 0.5) * 100 ;  // 10 mv per C, 500 mV offset
+		int8_t temperatureC = (calculate_voltage(tmp36_pin) - 0.5) * 100 ;  // 10 mv per C, 500 mV offset
 
 		sprintf(temperature + sizeof(char), "%+.2d", temperatureC); // THE way to print
 		strncat( temperature + 4*sizeof(char), "C", sizeof(char)); // append C and a null terminator
-/*
-		int reading3v3 = analogRead(A1);
-		float voltage3v3 = reading3v3 * readVcc();
-		voltage3v3 /= 1024.0;
-		
-		int readingvcc = analogRead(A2);
-		float voltagevcc = readingvcc * readVcc();
-		voltagevcc /= 1024.0;
-		
-		Serial.print(F("Vref - ")); Serial.print(readVcc()); 
-		Serial.print(F(" Vcc - ")); Serial.print(voltagevcc); 
-		Serial.print(F(" 3V3 - ")); Serial.print(voltage3v3); 
-*/
-		Serial.print(F(" V temp - ")); Serial.print(voltage);
-		Serial.print(F(" temp - "));Serial.println(temperature);
-
 		temperature_last_reading = millis(); // update last read time of value
 	}	
+}
+
+uint8_t calculate_battery_percentage(float in_voltage) // calculated charge percentage of given battery
+{
+	return 100;
+}
+
+void gps_adjust_log_freq(uint8_t in_val) // adjusts the NMEA frequency by sending the EM406A module an appropriate config sentence
+{ // TODO
+	Serial.print(in_val); Serial.println(" TODO GPS LOG FREQ");
+}
+
+void lcd_adjust_log_freq(uint8_t in_val) // TODO
+{	// TODO
+	Serial.print(in_val); Serial.println(" TODO LCD LOG FREQ");
 }
 
 void handle_adx_intl(void)
