@@ -1,7 +1,7 @@
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
 #define CONFIG_VERSION 3 // protection against excessive EEPROM writes
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
-#define NMEA_DEBUG_PRINT 1
+#define NMEA_DEBUG_PRINT 0
 #define TEMPERATURE_SAMPLE_PERIOD 10 // temperature measure interval in seconds
 #define GPSRATE 4800
 #define SERIALRATE 9600
@@ -34,6 +34,7 @@ char gps_altitude[10] = "alt "; // GPS altitude: "alt xxxxm" or "alt -xxxm", pop
 char gps_hdop[6] = "D"; // GPS horizontal dilution of position: "D12.5" , populated in gps_functions.h:gps_parse_gprmc()
 char gps_satellites_in_view[4] = "S"; // GPS satellites in view
 char temperature[6] = "T+xxC"; // temperature, "T-12C" or "T+56C"
+char vcc[9] = "Vccx.xxV";
 int8_t timezone;
 char sd_buffer[SD_BUFFERSIZE];
 
