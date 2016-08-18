@@ -132,11 +132,16 @@ float readVcc() // http://provideyourown.com/2012/secret-arduino-voltmeter-measu
 	 
   return retval; // Vcc in V
 }
-
-float calculate_voltage(int pin) // calculates the voltage on a given pin by considering readVcc()
+ 
+inline float read_Varef() // the external reference voltage is set to 4.30V via a zener diode
+{
+	return AREF_VOLTAGE;
+}
+ 
+float calculate_voltage(int pin) // calculates the voltage on a given pin by considering read_aref_V()
 {
 	uint16_t reading = analogRead(pin); // read raw sensor data (voltage) - 10bit resolution -> values form 0-1023
-	return (float)  (reading * readVcc() / 1024.0) ; // converting reading to voltage, based on AREF
+	return (float) (reading * read_Varef() / 1024.0); // converting reading to voltage, based on AREF;
 }
 
 void calculate_temperature(void) // executed from loop() - calculates temperature by reading the TMP36 analog data
@@ -146,8 +151,7 @@ void calculate_temperature(void) // executed from loop() - calculates temperatur
 	
 	if ( abs(millis() -  temperature_last_reading) / 1000 > TEMPERATURE_SAMPLE_PERIOD  || temperature_last_reading == 0)
 	{
-		int8_t temperatureC = (calculate_voltage(tmp36_pin) - 0.5) * 100 ;  // 10 mv per C, 500 mV offset
-
+		int8_t temperatureC = (calculate_voltage(tmp36_pin) - 0.5) * 100.0 ;  // 10 mv per C, 500 mV offset
 		sprintf(temperature + sizeof(char), "%+.2d", temperatureC); // THE way to print
 		strncat( temperature + 4*sizeof(char), "C", sizeof(char)); // append C and a null terminator
 		temperature_last_reading = millis(); // update last read time of value
@@ -156,6 +160,7 @@ void calculate_temperature(void) // executed from loop() - calculates temperatur
 
 uint8_t calculate_battery_percentage(float in_voltage) // calculated charge percentage of given battery
 {
+	// use read_Varef();
 	return 100;
 }
 
