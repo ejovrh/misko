@@ -1,12 +1,12 @@
 
-analogReference(EXTERNAL); // external voltage reference - Vcc (measured in functions.h readVcc() 
+analogReference(EXTERNAL); // AREF_VOLTAGE - 4.30 via zener diode
 
 attachInterrupt(digitalPinToInterrupt(interrupt_adxl345_int1_pin), isr_adxl345_int1, CHANGE); // ADXL345 INT1 pin connects to here, fires IRQ on act/inact
 
 Serial.begin(SERIALRATE); // connect to the serial terminal
-Serial.println(F("start"));
+Serial.println(F("serial set"));
 
-Serial2.begin(9600); // set up the terminal for the SIM800L
+Serial2.begin(SERIALRATE); // set up the terminal for the SIM800L
 
 // initialize GPS
 Serial3.begin(GPSRATE);   // connect to the GPS at the desired rate
