@@ -151,7 +151,7 @@ void calculate_temperature(void) // executed from loop() - calculates temperatur
 	
 	if ( abs(millis() -  temperature_last_reading) / 1000 > TEMPERATURE_SAMPLE_PERIOD  || temperature_last_reading == 0)
 	{
-		int8_t temperatureC = (calculate_voltage(tmp36_pin) - 0.5) * 100.0 ;  // 10 mv per C, 500 mV offset
+		int8_t temperatureC = (calculate_voltage(TMP36_Vsense_pin) - 0.5) * 100.0 ;  // 10 mv per C, 500 mV offset
 		sprintf(temperature + sizeof(char), "%+.2d", temperatureC); // THE way to print
 		strncat( temperature + 4*sizeof(char), "C", sizeof(char)); // append C and a null terminator
 		temperature_last_reading = millis(); // update last read time of value
