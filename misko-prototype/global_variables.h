@@ -1,11 +1,12 @@
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
 #define CONFIG_VERSION 3 // protection against excessive EEPROM writes
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
+
+#define AREF_VOLTAGE 4.30
 #define NMEA_DEBUG_PRINT 0
 #define TEMPERATURE_SAMPLE_PERIOD 10 // temperature measure interval in seconds
 #define GPSRATE 4800
 #define SERIALRATE 9600
-//BLUETOOTHSERIALRATE is hardcoded in device
 #define NMEA_BUFFERSIZE 80 // plenty big
 #define SD_BUFFERSIZE 4096 // huge buffer for NMEA sentences to be written to SD card
 
