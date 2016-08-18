@@ -1,5 +1,5 @@
 // define pins by function, order by pin number on board
-#define tmp36_pin A0 // TMP36 temoerature sensor 97
+#define TMP36_Vsense_pin A0 // TMP36 temoerature sensor 97
 #define bat_A_pin A1 // battery A voltage
 //#define bat_B_pin A2 // battery B voltage
 #define interrupt_adxl345_int1_pin 2 // goes to ADXL345 INT1 pin
@@ -25,12 +25,14 @@
 
 //#define OLED_scl_pin 21 // OLED SCL
 //#define OLED_sda_pin 20 // OLED SDA - MOSI
+#define unassigned_6th_button_pin 29 // not yet implemented
 #define menu_left_buttton 30 // user menu - left button, the buttons draw each 0.5 mA (we have 5 of them)
 #define menu_down_buttton 31 // user menu - down button
 #define menu_up_buttton 32 // user menu - up button
 #define menu_right_buttton 33 // user menu - right button
+#define TMP36_shutdown_pin 39 // not yet implemented
 #define bluetooth_power_toggle_pin 40 // user menu - bluetooth power toggle
-#define sim800l_mosfet_gate_pin 44 // SIM800L power control via mosfet
+#define SIM800L_mosfet_gate_pin 44 // SIM800L power control via mosfet
 #define SPI_SS_SD_card_pin 45 // SD card SPI SS pin
 #define SPI_SS_ADXL345_pin 46 // slave select for ADXL345(CS)
 #define SPI_OLED_a0_pin 47 // OLED address0 pin
