@@ -17,6 +17,7 @@ pinMode(menu_right_buttton, INPUT); //  user buttons - right
 pinMode(menu_up_buttton, INPUT); //  user buttons - up
 pinMode(sim800l_mosfet_gate_pin, OUTPUT); // SIM800L power control, connected directly to battery ( due to up 2A current )
 pinMode(sleep_indicator_pin, OUTPUT);
+pinMode(TMP36_shutdown_pin, OUTPUT); // TMP36 shutdown control
 
 // PIN STATES
 digitalWrite(DO_NOT_USE_pin_10, HIGH); // SD card SS pin - have the SD card inactive by default
@@ -33,4 +34,5 @@ digitalWrite(menu_right_buttton, LOW); // on(high), low(off)
 digitalWrite(menu_up_buttton, LOW); // on(high), low(off)
 digitalWrite(sim800l_mosfet_gate_pin, LOW);  // mosfet gate for SIM800L module, on(high), off(low)
 digitalWrite(sleep_indicator_pin, LOW); // sleep LED, off by default
+digitalWrite(TMP36_shutdown_pin, HIGH); // on(high), low(off), on by default
 delay(1); // delay for the last command to settle
