@@ -4,8 +4,9 @@
 #include <SPI.h> // SPI library
 #include <EEPROM.h> // EEPROM library
 #include <U8glib.h> // https://github.com/olikraus/u8glib/wiki/userreference
-#include "M2tk.h" // https://code.google.com/archive/p/m2tklib/
+#include <M2tk.h> // https://code.google.com/archive/p/m2tklib/
 #include "utility/m2ghu8g.h" // the u8g graphics handler
+#include <gprs.h>
 #include <avr/sleep.h> // AVR sleep management
 #include <avr/power.h> // AVR power saving
 
