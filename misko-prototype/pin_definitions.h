@@ -1,7 +1,7 @@
 // define pins by function, order by pin number on board
 #define tmp36_pin A0 // TMP36 temoerature sensor 97
 #define bat_A_pin A1 // battery A voltage
-//#define bat_A_pint A2 // battery A voltage
+//#define bat_B_pin A2 // battery B voltage
 #define interrupt_adxl345_int1_pin 2 // goes to ADXL345 INT1 pin
 #define gps_power_pin 4 // supplies power via PWM (100% duty cycle) to em406a
 #define gps_green_led_pin 5 // LED1, blinks on write onto SD card
