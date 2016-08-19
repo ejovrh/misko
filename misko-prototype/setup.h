@@ -7,7 +7,9 @@ Serial.begin(SERIALRATE); // connect to the serial terminal
 Serial.println(F("serial set"));
 
 Serial2.begin(SERIALRATE); // set up the terminal for the SIM800L
-Serial.write("AT");
+delay(10);
+Serial.write("AT"); // 1st AT
+Serial.write("ATE0"); // turn off command echo
 
 // initialize GPS
 Serial3.begin(GPSRATE);   // connect to the GPS at the desired rate
