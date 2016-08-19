@@ -30,6 +30,10 @@
 #define menu_down_buttton 31 // user menu - down button
 #define menu_up_buttton 32 // user menu - up button
 #define menu_right_buttton 33 // user menu - right button
+#define MCP73871_battery_low_pin 35 // battery low indicator
+#define MCP73871_charge_status_1_pin 36 // charge status indicator 1
+#define MCP73871_charge_status_1_pin 37 // charge status indicator 1
+#define MCP73871_power_good_indicator_pin 38 // supply power indicator
 #define TMP36_shutdown_pin 39 // not yet implemented
 #define bluetooth_power_toggle_pin 40 // user menu - bluetooth power toggle
 #define SIM800L_mosfet_gate_pin 44 // SIM800L power control via mosfet
