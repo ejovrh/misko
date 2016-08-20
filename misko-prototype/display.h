@@ -37,8 +37,8 @@ const char *fn_idx_to_lcd_power_value(uint8_t idx)
     return "auto";
 }
 
-// callback for timezone
-int8_t fn_set_eerpom_tz(m2_rom_void_p element, uint8_t msg, int8_t val) // callback for EEPROM timezone setting
+// callback for EEPROM timezone setting
+int8_t fn_set_eerpom_tz(m2_rom_void_p element, uint8_t msg, int8_t val)
 {
   if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
   {
@@ -96,6 +96,33 @@ const char *fn_get_Vcc(m2_rom_void_p element)
 	return vcc;
 } 
 
+// callback for MCP73871 battery charge status
+const char *fn_get_batt_charge_status(m2_rom_void_p element)
+{
+	if (digitalRead(MCP73871_power_good_indicator_pin) == LOW)
+	{
+		if (digitalRead(MCP73871_charge_status_1_pin) == HIGH || digitalRead(MCP73871_charge_status_2_pin) == LOW)
+			return "charging ";
+		if (digitalRead(MCP73871_charge_status_1_pin) == LOW || digitalRead(MCP73871_charge_status_2_pin) == HIGH)
+			return "charged ";
+	}
+	
+	if (digitalRead(MCP73871_power_good_indicator_pin) == LOW)
+	{
+		if (digitalRead(MCP73871_charge_status_1_pin) == HIGH || digitalRead(MCP73871_charge_status_2_pin) == LOW)
+			return "BATT LOW";
+	}		
+}
+
+// callback for MCP73871 input power status
+const char *fn_get_power_good_status(m2_rom_void_p element)
+{
+	if (digitalRead(MCP73871_power_good_indicator_pin) == LOW)
+		return "ExtPw ok ";
+	
+		return "ExtPw off ";
+}
+
 M2_BUTTON(el_ok, "f4", "ok", fn_ok); // an ok button
 // data output start
 
@@ -118,11 +145,16 @@ M2_GRIDLIST(el_position_grid, "c1", el_position_list);
 M2_ALIGN(el_top_position_menu, "-1|1W64H64", &el_position_grid);
 
 // misc
-M2_LABEL(el_temperature, "rf0", temperature);
-M2_LABEL(el_batt_a, "rf0", "batA 100%");
-M2_LABEL(el_batt_b, "rf0", "batB 100%");
+M2_LABELFN(el_power_good, "fr0", fn_get_power_good_status);
+M2_LABELFN(el_batt_charge, "rf0", fn_get_batt_charge_status);
+M2_LIST(el_bat_list) = {&el_power_good, &el_batt_charge};
+M2_HLIST(el_batt_hlist, "rf0", el_bat_list);
+M2_LABEL(el_batt_a, "rf0", "BatA100%");
 M2_LABELFN(el_vcc, "rf0", fn_get_Vcc);
-M2_LIST(el_device_misc_list) = {&el_batt_a, &el_batt_b, &el_temperature, &el_vcc, &el_ok};
+M2_LIST(el_bat_a) = {&el_batt_a, &el_vcc};
+M2_HLIST(el_batta_hlist, "rf0", el_bat_a);
+M2_LABEL(el_temperature, "rf0", temperature);
+M2_LIST(el_device_misc_list) = {&el_batt_hlist, &el_batta_hlist, &el_temperature, &el_ok};
 M2_GRIDLIST(el_device_misc_grid, "c1", el_device_misc_list);
 M2_ALIGN(el_top_device_misc_menu, "-1|1W64H64", &el_device_misc_grid);
 
