@@ -90,7 +90,7 @@ m2_menu_entry m2_2lmenu_data[] =
   { "Data", NULL },
   { ". Datetime", &el_top_datetime_menu },
   { ". Position", &el_top_position_menu },
-  { ". misc", &el_top_device_misc_menu}, 
+  { ". Device Status", &el_top_device_misc_menu}, 
   { "Settings", NULL },
   { ". Timezone", &el_top_timezone_menu },
   { ". Bluetooth", &el_top_bluetooth_menu },
