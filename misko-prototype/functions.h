@@ -14,6 +14,7 @@ int eeprom_timer(unsigned int in_button_press_time, unsigned int in_eeprom_index
   return (abs( in_button_press_time - millis()) / 1000 > EEPROM[in_eeprom_index] ?  1 :  0); 
 }
 
+// ready a byte from the ADXL345
 byte adxl345_readByte(byte registerAddress) // reads one byte at registerAddress
 {
 			//Serial.print("registerAddress -");Serial.print(registerAddress, BIN); Serial.println("- registerAddress");
@@ -29,6 +30,7 @@ byte adxl345_readByte(byte registerAddress) // reads one byte at registerAddress
     return retval;  // return value
 }
 
+// writes a byte into the ADXL345
 bool adxl345_writeByte(byte registerAddress, byte value)
 {
 	digitalWrite(SPI_SS_ADXL345_pin, LOW); // signal the slave
@@ -45,16 +47,19 @@ bool adxl345_writeByte(byte registerAddress, byte value)
 	return 0;
 }
 
+// sets an eeprom value at a certain index
 inline void eeprom_set(int in_val, int in_index) // sets EEPROM[in_index to val
 {
   EEPROM[in_index] = in_val;  
 }
 
+// gets an eeprom value from a certain index
 inline int8_t eeprom_get(int in_index)
 {
   return EEPROM[in_index];
 }
 
+// returns processor-determined Vcc in volts
 float readVcc() // http://provideyourown.com/2012/secret-arduino-voltmeter-measure-battery-voltage/
 {
   // Read 1.1V reference against AVcc
@@ -75,17 +80,20 @@ float readVcc() // http://provideyourown.com/2012/secret-arduino-voltmeter-measu
   return retval; // Vcc in V
 }
  
+ // returns the external voltage reference in volts
 inline float read_Varef() // the external reference voltage is set to 4.30V via a zener diode
 {
 	return AREF_VOLTAGE;
 }
  
+ // returns the voltage on a given pin
 float calculate_voltage(int pin) // calculates the voltage on a given pin by considering read_aref_V()
 {
 	uint16_t reading = analogRead(pin); // read raw sensor data (voltage) - 10bit resolution -> values form 0-1023
 	return (float) (reading * read_Varef() / 1024.0); // converting reading to voltage, based on AREF;
 }
 
+// calculates the temperature by reading voltage from the TMP36
 void calculate_temperature(void) // executed from loop() - calculates temperature by reading the TMP36 analog data
 {
 	// the temperature field is defined as:
@@ -231,8 +239,6 @@ void handle_bluetooth_button(void)
 			// flag_bluetooth_power_keep_on = 0; 
 	}
 }
-
-
 
 // puts the oled to sleep accrding to the eeprom setting
 void handle_lcd_sleep(void)
