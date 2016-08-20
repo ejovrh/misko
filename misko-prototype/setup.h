@@ -40,7 +40,7 @@ else
 
 
 // ADXL345 config start
-SPI.beginTransaction(SPISettings(20000000, MSBFIRST, SPI_MODE3));
+SPI.beginTransaction(SPISettings(5000000, MSBFIRST, SPI_MODE3));
 delay(10);
 
 adxl345_readByte(DEVID); // weird issue: the 1st read returns 0, subsequent reads return proper values
@@ -58,5 +58,9 @@ if (adxl345_readByte(DEVID) != B11100101)
   adxl345_writeByte(POWER_CTL, POWER_CTL_CFG);
 	adxl345_writeByte(BW_RATE, BW_RATE_CFG);
 
+	adxl345_readByte(0x30);
+	adxl345_readByte(0x2F);
+	adxl345_readByte(0x2E);
+	
 SPI.endTransaction();
 // ADXL345 config end
