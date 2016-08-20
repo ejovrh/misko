@@ -1,19 +1,31 @@
  //Serial.println(millis());
- m2.checkKey();
+ m2.checkKey(); // check for key events
 
- if (m2.handleKey() != 0)
+ if (m2.handleKey() != 0) // if there are key events in the queue
  {
+	 lcd_button_press_time = millis(); // save the button press time
+	 
+	 // oled wakeup control
+	 if (oled_sleep) // if the sleep flag is set
+	 {
+			oled_sleep = !oled_sleep; // unset the sleep flag
+			OLED.sleepOff(); // wake up the oled
+	 }
+		
 	 // picture loop - https://github.com/olikraus/u8glib/wiki/tpictureloop
      OLED.firstPage();  // https://github.com/olikraus/u8glib/wiki/userreference#firstpage
+		 
      do 
      {
-				m2.draw(); // defined in functions.h
+				m2.draw(); // draw the display
      }
      while( OLED.nextPage() ); // https://github.com/olikraus/u8glib/wiki/userreference#nextpage
  } 
  //Serial.println(millis());
     
  handle_bluetooth_button(); // handles the bluetooth power button
+ 
+ handle_lcd_sleep(); // checks if it is time for the display to go to sleep
   
  //Serial.println(millis());
  get_nmea_sentences(); // gets NMEA sentences out of the GPS and deals with them
