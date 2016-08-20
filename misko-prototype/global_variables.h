@@ -1,5 +1,5 @@
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
-#define CONFIG_VERSION 3 // protection against excessive EEPROM writes
+#define CONFIG_VERSION 4 // protection against excessive EEPROM writes
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
 
 #define AREF_VOLTAGE 4.27
@@ -34,10 +34,12 @@ char gps_longtitude[17] = "lon hhhmm.ssss  "; // W or E, memcpy needs to start t
 char gps_altitude[10] = "alt "; // GPS altitude: "alt xxxxm" or "alt -xxxm", populated in gps_functions.h:gps_parse_gpgga()
 char gps_hdop[6] = "D"; // GPS horizontal dilution of position: "D12.5" , populated in gps_functions.h:gps_parse_gprmc()
 char gps_satellites_in_view[4] = "S"; // GPS satellites in view
+int8_t timezone;
+
+// device variables
 char temperature[6] = "T+xxC"; // temperature, "T-12C" or "T+56C"
 char vcc[9] = "Vccx.xxV";
 char bat_a_pct[9] = "batAxxx%";
-int8_t timezone;
 char sd_buffer[SD_BUFFERSIZE];
 
 // bluetooth flags
@@ -47,15 +49,13 @@ bool flag_bluetooth_is_on = 0; // flag is BT device is powered on or off
 bool flag_bluetooth_power_toggle_pressed = 0; // flag marks bluetooth button pressed or not - used to recognize button state change for proper high/low handling
 bool flag_bluetooth_power_keep_on = 0;
 
-// LCD flags
+// display variables
 uint32_t lcd_button_press_time = millis(); // time of button press
 bool flag_lcd_is_on = 0; // flag is BT device is powered on or off
-bool flag_lcd_button_down_pressed = 0; // flag marks button pressed or not
-bool flag_lcd_button_up_pressed = 0; // flag marks button pressed or not
-bool flag_lcd_button_left_pressed = 0; // flag marks button pressed or not
-bool flag_lcd_button_right_pressed = 0; // flag marks button pressed or not
+bool oled_sleep = 0;
+M2_EXTERN_ALIGN(top_el_expandable_menu); // Forward declaration of the toplevel element
 
-// device initializations
+// display device initializations
 //U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_FAST);
 U8GLIB_SH1106_128X64_2X OLED(SPI_SS_OLED_pin,  SPI_OLED_a0_pin,  SPI_OLED_reset_pin); // HW SPI - look in the library source for precise info
 
