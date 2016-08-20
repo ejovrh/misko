@@ -45,24 +45,6 @@ bool adxl345_writeByte(byte registerAddress, byte value)
 	return 0;
 }
 
-void poor_mans_debugging(void)
-{
- 	    // poor man's debugging
-    for (uint8_t i=0; i< 7; i++)
-    {
-      Serial.print(i); Serial.print(" - ");Serial.println(EEPROM[i]);
-    }
-    //int8_t tz = EEPROM[5];
-    //Serial.print("tz - ");Serial.println(tz);
-		SPI.beginTransaction(SPISettings(20000000, MSBFIRST, SPI_MODE3));
-		adxl345_readByte(0x00);
-		Serial.print("INT_SOURCE -");Serial.print(adxl345_readByte(0x30), BIN);Serial.println("-");
-		Serial.print("INT_MAP -");Serial.print(adxl345_readByte(0x2F), BIN);Serial.println("-");
-		Serial.print("INT_ENABLE -");Serial.print(adxl345_readByte(0x2E), BIN);Serial.println("-");
-		
-		SPI.endTransaction(); 
-}
-
 inline void eeprom_set(int in_val, int in_index) // sets EEPROM[in_index to val
 {
   EEPROM[in_index] = in_val;  
@@ -71,46 +53,6 @@ inline void eeprom_set(int in_val, int in_index) // sets EEPROM[in_index to val
 inline int8_t eeprom_get(int in_index)
 {
   return EEPROM[in_index];
-}
-
-void handle_bluetooth_button(void)
-{
-    // bluetooth power on
-  if (!flag_bluetooth_power_toggle_pressed && digitalRead(bluetooth_power_toggle_pin) == HIGH) // if button was not pressed and now gets pressed
-  //  flag_bluetooth_power_toggle_pressed prevents mutiple executions of this if() block
-  { 
-    bluetooth_button_press_time = millis(); // record time of button press; this is used in eeprom_timer()
-    digitalWrite(bluetooth_mosfet_gate_pin, HIGH); // turn on the device
-    flag_bluetooth_is_on = 1; // set flag to on
-    flag_bluetooth_power_toggle_pressed = 1; // mark button as pressed
-
-		poor_mans_debugging();
-  }
-
-  // bluetooth power off
-  if (flag_bluetooth_power_toggle_pressed && digitalRead(bluetooth_power_toggle_pin) == LOW) // if button was  pressed and now gets released
-  // flag_bluetooth_power_toggle_pressed prevents mutiple executions of this if() block
-  { 
-    bluetooth_button_release_time = millis(); // record time of button press; this is used in 
-    flag_bluetooth_power_toggle_pressed = 0; // mark button as released
-
-    if (abs(bluetooth_button_release_time - bluetooth_button_press_time) > 500) // if button is held long enough
-    {
-      if (flag_bluetooth_power_keep_on) // if the BT device was on
-        digitalWrite(bluetooth_mosfet_gate_pin, LOW); // turn off the BT device
-
-      flag_bluetooth_power_keep_on = !flag_bluetooth_power_keep_on; // invert the flag (on -> off or off -> on)
-    }
-  }
-
-  // bluetooth timed power off
-  if ( (!flag_bluetooth_power_keep_on && flag_bluetooth_is_on) && eeprom_timer(bluetooth_button_press_time, EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX)) // if the device is on and enough time has passed
-  // flag_bluetooth_power_keep_on prevents the timer from kicking in if we want the BT device to stay on
-  // flag_bluetooth_is_on prevents code execution on every loop
-  { 
-      digitalWrite(bluetooth_mosfet_gate_pin, LOW); // turn off the device
-      flag_bluetooth_is_on = 0; // set flag to off
-  }
 }
 
 float readVcc() // http://provideyourown.com/2012/secret-arduino-voltmeter-measure-battery-voltage/
@@ -164,6 +106,76 @@ uint8_t calculate_battery_percentage(float in_voltage) // calculated charge perc
 	return 100;
 }
 
+// callback for Vcc
+const char *fn_get_Vcc(m2_rom_void_p element)
+{
+ 	//  sprintf(vcc + 3*sizeof(char), "%.2f", readVcc()); // dont work - on arduinos the %f is not supported
+	dtostrf(readVcc(), 3, 2, vcc+3*sizeof(char)); // instead, this works
+		// http://www.atmel.com/webdoc/AVRLibcReferenceManual/group__avr__stdlib_1ga060c998e77fb5fc0d3168b3ce8771d42.html
+	strcat(vcc, "V");
+	return vcc;
+} 
+
+void poor_mans_debugging(void)
+{
+ 	    // poor man's debugging
+    for (uint8_t i=0; i< 7; i++)
+    {
+      Serial.print(i); Serial.print(" - ");Serial.println(EEPROM[i]);
+    }
+    //int8_t tz = EEPROM[5];
+    //Serial.print("tz - ");Serial.println(tz);
+		SPI.beginTransaction(SPISettings(20000000, MSBFIRST, SPI_MODE3));
+		adxl345_readByte(0x00);
+		Serial.print("INT_SOURCE -");Serial.print(adxl345_readByte(0x30), BIN);Serial.println("-");
+		Serial.print("INT_MAP -");Serial.print(adxl345_readByte(0x2F), BIN);Serial.println("-");
+		Serial.print("INT_ENABLE -");Serial.print(adxl345_readByte(0x2E), BIN);Serial.println("-");
+		
+		Serial.print("vbatt -");Serial.print(calculate_voltage(bat_A_pin));Serial.println("-");
+		
+		SPI.endTransaction(); 
+}
+
+void handle_bluetooth_button(void)
+{
+    // bluetooth power on
+  if (!flag_bluetooth_power_toggle_pressed && digitalRead(bluetooth_power_toggle_pin) == HIGH) // if button was not pressed and now gets pressed
+  //  flag_bluetooth_power_toggle_pressed prevents mutiple executions of this if() block
+  { 
+    bluetooth_button_press_time = millis(); // record time of button press; this is used in eeprom_timer()
+    digitalWrite(bluetooth_mosfet_gate_pin, HIGH); // turn on the device
+    flag_bluetooth_is_on = 1; // set flag to on
+    flag_bluetooth_power_toggle_pressed = 1; // mark button as pressed
+
+		poor_mans_debugging();
+  }
+
+  // bluetooth power off
+  if (flag_bluetooth_power_toggle_pressed && digitalRead(bluetooth_power_toggle_pin) == LOW) // if button was  pressed and now gets released
+  // flag_bluetooth_power_toggle_pressed prevents mutiple executions of this if() block
+  { 
+    bluetooth_button_release_time = millis(); // record time of button press; this is used in 
+    flag_bluetooth_power_toggle_pressed = 0; // mark button as released
+
+    if (abs(bluetooth_button_release_time - bluetooth_button_press_time) > 500) // if button is held long enough
+    {
+      if (flag_bluetooth_power_keep_on) // if the BT device was on
+        digitalWrite(bluetooth_mosfet_gate_pin, LOW); // turn off the BT device
+
+      flag_bluetooth_power_keep_on = !flag_bluetooth_power_keep_on; // invert the flag (on -> off or off -> on)
+    }
+  }
+
+  // bluetooth timed power off
+  if ( (!flag_bluetooth_power_keep_on && flag_bluetooth_is_on) && eeprom_timer(bluetooth_button_press_time, EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX)) // if the device is on and enough time has passed
+  // flag_bluetooth_power_keep_on prevents the timer from kicking in if we want the BT device to stay on
+  // flag_bluetooth_is_on prevents code execution on every loop
+  { 
+      digitalWrite(bluetooth_mosfet_gate_pin, LOW); // turn off the device
+      flag_bluetooth_is_on = 0; // set flag to off
+  }
+}
+
 void gps_adjust_log_freq(uint8_t in_val) // adjusts the NMEA frequency by sending the EM406A module an appropriate config sentence
 { // TODO
 	Serial.print(in_val); Serial.println(" TODO GPS LOG FREQ");
@@ -178,11 +190,13 @@ uint8_t select_color = 0;
 
 M2_EXTERN_ALIGN(top_el_expandable_menu); // Forward declaration of the toplevel element
 
-void fn_ok(m2_el_fnarg_p fnarg) // accept selection
+// callback for ok button
+void fn_ok(m2_el_fnarg_p fnarg)
 {
   m2_SetRoot(&top_el_expandable_menu);
 }
 
+// callback for bluetooth power setting
 const char *fn_idx_to_bluetooth_power_value(uint8_t idx)
 {
   if ( idx == 0 )
@@ -192,6 +206,7 @@ const char *fn_idx_to_bluetooth_power_value(uint8_t idx)
   return "auto";
 }
 
+// callback for lcd power setting
 const char *fn_idx_to_lcd_power_value(uint8_t idx)
 {
   if ( idx == 0 )
@@ -249,16 +264,6 @@ uint8_t fn_set_eerpom_gps_log_freq(m2_rom_void_p element, uint8_t msg, uint8_t v
 	}
 }
 
-// callback for Vcc
-const char *fn_get_Vcc(m2_rom_void_p element)
-{
- 	//  sprintf(vcc + 3*sizeof(char), "%.2f", readVcc()); // dont work - on arduinos the %f is not supported
-	dtostrf(readVcc(), 3, 2, vcc+3*sizeof(char)); // instead, this works
-		// http://www.atmel.com/webdoc/AVRLibcReferenceManual/group__avr__stdlib_1ga060c998e77fb5fc0d3168b3ce8771d42.html
-	strcat(vcc, "V");
-	return vcc;
-} 
-
 // callback for MCP73871 battery charge status
 const char *fn_get_batt_charge_status(m2_rom_void_p element)
 {
@@ -286,6 +291,7 @@ const char *fn_get_power_good_status(m2_rom_void_p element)
 		return "ExtPw off ";
 }
 
+// interrupt handler for ADXL345
 void handle_adx_intl(void)
 {
 	byte adxl345_irq_src = adxl345_readByte(INT_SOURCE);
