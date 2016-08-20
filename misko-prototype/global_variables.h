@@ -2,7 +2,7 @@
 #define CONFIG_VERSION 3 // protection against excessive EEPROM writes
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
 
-#define AREF_VOLTAGE 4.30
+#define AREF_VOLTAGE 4.27
 #define NMEA_DEBUG_PRINT 0
 #define TEMPERATURE_SAMPLE_PERIOD 10 // temperature measure interval in seconds
 #define GPSRATE 4800
@@ -36,6 +36,7 @@ char gps_hdop[6] = "D"; // GPS horizontal dilution of position: "D12.5" , popula
 char gps_satellites_in_view[4] = "S"; // GPS satellites in view
 char temperature[6] = "T+xxC"; // temperature, "T-12C" or "T+56C"
 char vcc[9] = "Vccx.xxV";
+char bat_a_pct[9] = "batAxxx%";
 int8_t timezone;
 char sd_buffer[SD_BUFFERSIZE];
 
