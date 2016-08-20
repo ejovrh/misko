@@ -34,12 +34,12 @@ M2_GRIDLIST(el_position_grid, "c1", el_position_list);
 M2_ALIGN(el_top_position_menu, "-1|1W64H64", &el_position_grid);
 
 // misc
-M2_LABELFN(el_power_good, "fr0", fn_get_power_good_status);
-M2_LABELFN(el_batt_charge, "rf0", fn_get_batt_charge_status);
+M2_LABELFN(el_power_good, "fr0", fn_cb_get_power_good_status);
+M2_LABELFN(el_batt_charge, "rf0", fn_cb_get_batt_charge_status);
 M2_LIST(el_bat_list) = {&el_power_good, &el_batt_charge};
 M2_HLIST(el_batt_hlist, "rf0", el_bat_list);
-M2_LABELFN(el_batt_a, "rf0", fn_get_bat_pct);
-M2_LABELFN(el_vcc, "rf0", fn_get_Vcc);
+M2_LABELFN(el_batt_a, "rf0", fn_cb_get_bat_pct);
+M2_LABELFN(el_vcc, "rf0", fn_cb_get_Vcc);
 M2_LIST(el_bat_a) = {&el_batt_a, &el_vcc};
 M2_HLIST(el_batta_hlist, "rf0", el_bat_a);
 M2_LABEL(el_temperature, "rf0", temperature);
@@ -50,8 +50,8 @@ M2_ALIGN(el_top_device_misc_menu, "-1|1W64H64", &el_device_misc_grid);
 // data output end
 
 // timezone start 
-M2_LABEL(el_timezone_utc, NULL, "UTC");
-M2_S8NUMFN(el_timezone_utc_value, "+1c2", -12, 12, fn_set_eerpom_tz);
+M2_LABEL(el_timezone_utc, "rf0", "UTC");
+M2_S8NUMFN(el_timezone_utc_value, "+1c2", -12, 12, fn_cb_set_eerpom_tz);
 M2_ROOT(el_timezone_ok, "f4", "OK", &top_el_expandable_menu);
 M2_LIST(el_timezone_list) = { &el_timezone_utc, &el_timezone_utc_value, &el_timezone_ok };
 M2_GRIDLIST(el_timezone_grid, "c2", el_timezone_list);
@@ -59,27 +59,27 @@ M2_ALIGN(el_top_timezone_menu, "-1|1W64H64", &el_timezone_grid);
 // timezone end
 
 // bluetooth start
-M2_LABEL(el_bluetooth_power, NULL, "Power");
-M2_COMBO(el_bluetooth_power_value, NULL, &select_color, 3, fn_idx_to_bluetooth_power_value);
-M2_S8NUMFN(el_bluetooth_power_timeout, "+0c1", 1, 5, fn_set_eerpom_bluetooth_timeout);
+M2_LABEL(el_bluetooth_power, "rf0", "Power");
+M2_COMBOFN(el_bluetooth_power_value, "rf0", 3, fn_cb_bluetooth_power_setting);
+M2_S8NUMFN(el_bluetooth_power_timeout, "+0c1", 1, 5, fn_cb_set_eerpom_bluetooth_timeout);
 M2_LIST(el_bluetooth_list) = { &el_bluetooth_power, &el_bluetooth_power_value, &el_bluetooth_power_timeout, &el_ok };
 M2_GRIDLIST(el_bluetooth_grid, "c2", el_bluetooth_list);
 M2_ALIGN(el_top_bluetooth_menu, "-1|1W64H64", &el_bluetooth_grid);
 // bluetooth end
 
 // lcd start
-M2_LABEL(el_lcd_power, NULL, "Power");
-M2_COMBO(el_lcd_power_value, NULL, &select_color, 2, fn_idx_to_lcd_power_value);
-M2_S8NUMFN(el_lcd_power_timeout, "+0c1", 1, 5, fn_set_eerpom_lcd_timeout);
+M2_LABEL(el_lcd_power, "rf0", "Power");
+M2_COMBOFN(el_lcd_power_value, "rf0", 2, fn_cb_lcd_power_setting);
+M2_S8NUMFN(el_lcd_power_timeout, "+0c1", 1, 5, fn_cb_set_eerpom_lcd_timeout);
 M2_LIST(el_lcd_list) = { &el_lcd_power, &el_lcd_power_value, &el_lcd_power_timeout, &el_ok };
 M2_GRIDLIST(el_lcd_grid, "c2", el_lcd_list);
 M2_ALIGN(el_top_lcd_menu, "-1|1W64H64", &el_lcd_grid);
 // lcd end
 
 // gps start
-M2_LABEL(el_gps_freq, NULL, "Frequency");
-M2_S8NUMFN(el_gps_freq_value, "+0c2", 1, 20, fn_set_eerpom_gps_log_freq);
-M2_ROOT(el_gps_ok, "f4", "OK", &top_el_expandable_menu);
+M2_LABEL(el_gps_freq, "rf0", "Frequency");
+M2_S8NUMFN(el_gps_freq_value, "+0c2", 1, 20, fn_cb_set_eerpom_gps_log_freq);
+M2_ROOT(el_gps_ok, "f0", "OK", &top_el_expandable_menu);
 M2_LIST(el_gps_list) = { &el_gps_freq, &el_gps_freq_value, &el_gps_ok };
 M2_GRIDLIST(el_gps_grid, "c2", el_gps_list);
 M2_ALIGN(el_top_gps_menu, "-1|1W64H64", &el_gps_grid);
