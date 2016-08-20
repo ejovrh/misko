@@ -38,7 +38,7 @@ M2_LABELFN(el_power_good, "fr0", fn_get_power_good_status);
 M2_LABELFN(el_batt_charge, "rf0", fn_get_batt_charge_status);
 M2_LIST(el_bat_list) = {&el_power_good, &el_batt_charge};
 M2_HLIST(el_batt_hlist, "rf0", el_bat_list);
-M2_LABEL(el_batt_a, "rf0", "BatA100%");
+M2_LABELFN(el_batt_a, "rf0", fn_get_bat_pct);
 M2_LABELFN(el_vcc, "rf0", fn_get_Vcc);
 M2_LIST(el_bat_a) = {&el_batt_a, &el_vcc};
 M2_HLIST(el_batta_hlist, "rf0", el_bat_a);
