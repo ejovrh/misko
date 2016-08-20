@@ -101,7 +101,7 @@ void calculate_temperature(void) // executed from loop() - calculates temperatur
 }
 
 // callback for Vcc
-const char *fn_get_Vcc(m2_rom_void_p element)
+const char *fn_cb_get_Vcc(m2_rom_void_p element)
 {
  	//  sprintf(vcc + 3*sizeof(char), "%.2f", readVcc()); // dont work - on arduinos the %f is not supported
 	dtostrf(readVcc(), 3, 2, vcc+3*sizeof(char)); // instead, this works
@@ -111,103 +111,147 @@ const char *fn_get_Vcc(m2_rom_void_p element)
 } 
 
 // callback for battery percentage
-const char *fn_get_bat_pct(m2_rom_void_p element)
+const char *fn_cb_get_bat_pct(m2_rom_void_p element)
 {
-		// union battery datasheet: charge cutoff voltage: Vbat 4.20V, discharge cutoff voltage: Vbat 2.75V
-		//	over the voltage divider this gives 2.10V and 1.375V
-	//	our voltage divider gives 0.5 Vbat
+	/* the percentage calculation
+		union battery datasheet: charge cutoff voltage: Vbat 4.20V, discharge cutoff voltage: Vbat 2.75V
+			over the voltage divider this gives 2.10V and 1.375V
+			our voltage divider gives 0.5 Vbat
 	
-	// percentage calculation see https://racelogic.support/02VBOX_Motorsport/Video_Data_Loggers/Video_VBOX_Range/Video_VBOX_-_User_manual/24_-_Calculating_Scale_and_Offset
+	 percentage calculation see https://racelogic.support/02VBOX_Motorsport/Video_Data_Loggers/Video_VBOX_Range/Video_VBOX_-_User_manual/24_-_Calculating_Scale_and_Offset
 	
-	//	dX is 2.1 - 1.375 = 0.725
-	//	dY is 100 - 0 = 100
-	// the gradient is dX/dY = 137.93
+		dX is 2.1 - 1.375 = 0.725
+		dY is 100 - 0 = 100
+	 the gradient is dX/dY = 137.93
 	
-	// Y = percent = 0, X = Voltage = 1.375V
-	// 	0 = ((dX/dY)* voltage) + c
-	//	0 = (137.93 * 1.375) + c <=> 0 = 189.66 + c <=> c = -189.66
-	//	our equation is: y = 137.93 * x - 189.66
-	// elementary, dr. watson!
-	float pct = (137.93 * calculate_voltage(bat_A_pin)) - 189.66;
- 	dtostrf(pct, 3, 0, bat_a_pct+4*sizeof(char)); // instead, this works
+	 Y = percent = 0, X = Voltage = 1.375V
+	 	0 = ((dX/dY)* voltage) + c
+		0 = (137.93 * 1.375) + c <=> 0 = 189.66 + c <=> c = -189.66
+		our equation is: y = 137.93 * x - 189.66
+	
+	elementary, dr. watson!
+ 	*/
+	dtostrf((138 * calculate_voltage(bat_A_pin)) - 190, 3, 0, bat_a_pct + 4*sizeof(char)); // instead, this works
 		// http://www.atmel.com/webdoc/AVRLibcReferenceManual/group__avr__stdlib_1ga060c998e77fb5fc0d3168b3ce8771d42.html
 	strcat(bat_a_pct, "%");
 	return bat_a_pct;
 } 
 
+// primitive BT button-activated printout
 void poor_mans_debugging(void)
 {
- 	    // poor man's debugging
+ 	  // poor man's debugging
+			
+		// EEPROM fields
+		Serial.println("EERPOM fields");
     for (uint8_t i=0; i< 7; i++)
     {
       Serial.print(i); Serial.print(" - ");Serial.println(EEPROM[i]);
     }
-    //int8_t tz = EEPROM[5];
-    //Serial.print("tz - ");Serial.println(tz);
+		Serial.println("EERPOM fields");
+
+		//SPI voodoo
 		SPI.beginTransaction(SPISettings(20000000, MSBFIRST, SPI_MODE3));
 		adxl345_readByte(0x00);
 		Serial.print("INT_SOURCE -");Serial.print(adxl345_readByte(0x30), BIN);Serial.println("-");
 		Serial.print("INT_MAP -");Serial.print(adxl345_readByte(0x2F), BIN);Serial.println("-");
 		Serial.print("INT_ENABLE -");Serial.print(adxl345_readByte(0x2E), BIN);Serial.println("-");
-		
 		Serial.print("vbatt -");Serial.print(calculate_voltage(bat_A_pin));Serial.println("-");
-		
 		SPI.endTransaction(); 
+		
+		
+		
 }
 
+// handler for the bluetooth power toggle button
 void handle_bluetooth_button(void)
 {
-    // bluetooth power on
-  if (!flag_bluetooth_power_toggle_pressed && digitalRead(bluetooth_power_toggle_pin) == HIGH) // if button was not pressed and now gets pressed
-  //  flag_bluetooth_power_toggle_pressed prevents mutiple executions of this if() block
-  { 
-    bluetooth_button_press_time = millis(); // record time of button press; this is used in eeprom_timer()
-    digitalWrite(bluetooth_mosfet_gate_pin, HIGH); // turn on the device
-    flag_bluetooth_is_on = 1; // set flag to on
-    flag_bluetooth_power_toggle_pressed = 1; // mark button as pressed
+	/* purpose: control BT power based on eeprom settings
+		
+		the idea is: via one button control BT power according to EERPOM settings.
 
-		poor_mans_debugging();
-  }
+		the button functions are, if auto mode is enabled:
+			- press and the device turns on. after EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX is over, turn off
+			- hold pressed to keep the device on until manually turned off by again holding pressed (timeout then doesnt count)
+			
+		if auto mode is not enabled, the button does nothing.
+		
+		in order to accomplish this, we need to track in what mode we are in (EERPOM_BLUETOOTH_POWER_INDEX),
+			how long the device is supposed to be turned on (EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX) and how long the BT button
+			was held pressed (bluetooth_button_press_time and bluetooth_button_release_time).
+	
+		additionally, we need to make sure that one button press equals one event - we need to know if the button is 
+			held pressed or not (flag_bluetooth_power_toggle_pressed)
+	
+	*/
+	
+	if (!flag_bluetooth_power_toggle_pressed) // if the button is not flagged as pressed
+	{
+		if(digitalRead(bluetooth_power_toggle_pin) == HIGH) // if the button gets pressed
+		{
+			flag_bluetooth_power_toggle_pressed = 1; // flag the button as pressed, prevents multiple calls
+			poor_mans_debugging(); // execute poor mans debugging
+			
+			if (EEPROM[EERPOM_BLUETOOTH_POWER_INDEX] != 2) // if bt setting is not auto (meaning is set to on or off)
+				return; // do nothing
+			
+			if (flag_bluetooth_power_keep_on) // prevent the timer from starting when we want to turn off manually toggled power
+				return; // do nothing
+			
+			bluetooth_button_press_time = millis(); // record time of button press; this is used in a bit down to keep bt on on auto
+			digitalWrite(bluetooth_mosfet_gate_pin, HIGH); // turn on the device
+			flag_bluetooth_is_on = 1; // set flag to on
+		}
+	}
+	else // the button is already flagged as pressed == is held pressed
+	{
+		if (EEPROM[EERPOM_BLUETOOTH_POWER_INDEX] != 2) // if bt setting is auto
+			return;
+				
+		if ( digitalRead(bluetooth_power_toggle_pin) == LOW) // the button is released
+		{ 
+			bluetooth_button_release_time = millis(); // record time of button release
+			flag_bluetooth_power_toggle_pressed = 0; // mark button as released
 
-  // bluetooth power off
-  if (flag_bluetooth_power_toggle_pressed && digitalRead(bluetooth_power_toggle_pin) == LOW) // if button was  pressed and now gets released
-  // flag_bluetooth_power_toggle_pressed prevents mutiple executions of this if() block
-  { 
-    bluetooth_button_release_time = millis(); // record time of button press; this is used in 
-    flag_bluetooth_power_toggle_pressed = 0; // mark button as released
+			if (abs(bluetooth_button_release_time - bluetooth_button_press_time) > 500) // if button is held long enough
+						flag_bluetooth_power_keep_on = !flag_bluetooth_power_keep_on; // toggle the power state on -> off and vice versa
+		}
+	}
 
-    if (abs(bluetooth_button_release_time - bluetooth_button_press_time) > 500) // if button is held long enough
-    {
-      if (flag_bluetooth_power_keep_on) // if the BT device was on
-        digitalWrite(bluetooth_mosfet_gate_pin, LOW); // turn off the BT device
-
-      flag_bluetooth_power_keep_on = !flag_bluetooth_power_keep_on; // invert the flag (on -> off or off -> on)
-    }
-  }
-
-  // bluetooth timed power off
-  if ( (!flag_bluetooth_power_keep_on && flag_bluetooth_is_on) && eeprom_timer(bluetooth_button_press_time, EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX)) // if the device is on and enough time has passed
-  // flag_bluetooth_power_keep_on prevents the timer from kicking in if we want the BT device to stay on
-  // flag_bluetooth_is_on prevents code execution on every loop
-  { 
-      digitalWrite(bluetooth_mosfet_gate_pin, LOW); // turn off the device
-      flag_bluetooth_is_on = 0; // set flag to off
-  }
+	if (EEPROM[EERPOM_BLUETOOTH_POWER_INDEX] != 2) // if bt setting is not auto
+		return; // do nothing
+	
+	if (flag_bluetooth_power_keep_on) // if the BT device is marked to be kept on
+		return;	// do nothing 
+			
+	if ( flag_bluetooth_is_on && eeprom_timer(bluetooth_button_press_time, EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX)) // if the device is on and enough time has passed
+	{ 
+			digitalWrite(bluetooth_mosfet_gate_pin, LOW); // turn off the device
+			flag_bluetooth_is_on = 0; // set flag to off
+			// flag_bluetooth_power_keep_on = 0; 
+	}
 }
 
+
+
+// puts the oled to sleep accrding to the eeprom setting
+void handle_lcd_sleep(void)
+{
+	if (oled_sleep || EEPROM[EERPOM_LCD_POWER_INDEX] == 1) // dont do anything on "on" setting or in sleep mode
+		return;
+	
+	if (eeprom_timer(lcd_button_press_time, EEPROM[EERPOM_LCD_AUTO_TIMEOUT_INDEX])) // true if tiem is up
+	{
+		oled_sleep = 1;
+		OLED.sleepOn();
+	}
+}
+
+// TODO
 void gps_adjust_log_freq(uint8_t in_val) // adjusts the NMEA frequency by sending the EM406A module an appropriate config sentence
-{ // TODO
+{ 
 	Serial.print(in_val); Serial.println(" TODO GPS LOG FREQ");
 }
-
-void lcd_adjust_log_freq(uint8_t in_val) // TODO
-{	// TODO
-	Serial.print(in_val); Serial.println(" TODO LCD LOG FREQ");
-}
-
-uint8_t select_color = 0;
-
-M2_EXTERN_ALIGN(top_el_expandable_menu); // Forward declaration of the toplevel element
 
 // callback for ok button
 void fn_ok(m2_el_fnarg_p fnarg)
@@ -216,26 +260,75 @@ void fn_ok(m2_el_fnarg_p fnarg)
 }
 
 // callback for bluetooth power setting
-const char *fn_idx_to_bluetooth_power_value(uint8_t idx)
+const char *fn_cb_bluetooth_power_setting(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
 {
-  if ( idx == 0 )
-    return "off";
-  else if (idx == 1 )
-    return "on";
-  return "auto";
+	// see https://github.com/olikraus/m2tklib/wiki/elref#combofn
+	switch(msg) // msg can be one of: M2_COMBOFN_MSG_GET_VALUE, M2_COMBOFN_MSG_SET_VALUE, M2_COMBOFN_MSG_GET_STRING
+  {
+		case M2_COMBOFN_MSG_GET_VALUE: // we get the vaue from eeprom
+			*valptr = EEPROM[EERPOM_BLUETOOTH_POWER_INDEX];
+      break;
+			
+    case M2_COMBOFN_MSG_SET_VALUE: // we set the value into eeprom
+			EEPROM[EERPOM_BLUETOOTH_POWER_INDEX] = *valptr;
+      break;
+			
+    case M2_COMBOFN_MSG_GET_STRING: // we get the string _and_ set it (implicitly via M2_COMBOFN_MSG_SET_VALUE) via *valptr
+      if (*valptr == 0) // values are coded in eeprom.h
+			{
+				digitalWrite(bluetooth_mosfet_gate_pin, LOW);
+        return "off";
+			}
+			
+      if (*valptr == 1)
+			{
+				digitalWrite(bluetooth_mosfet_gate_pin, HIGH);
+        return "on";
+			}
+			
+      if (*valptr == 2)
+			{
+				digitalWrite(bluetooth_mosfet_gate_pin, LOW);
+        return "auto";
+			}
+  }
+				
+  return NULL;
 }
 
 // callback for lcd power setting
-const char *fn_idx_to_lcd_power_value(uint8_t idx)
+const char *fn_cb_lcd_power_setting(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
 {
-  if ( idx == 0 )
-    return "on";
-  else if (idx == 1 )
-    return "auto";
+	// see fn_cb_bluetooth_power_setting for comments
+	switch(msg)
+  {
+		case M2_COMBOFN_MSG_GET_VALUE:
+			*valptr = EEPROM[EERPOM_LCD_POWER_INDEX];
+      break;
+			
+    case M2_COMBOFN_MSG_SET_VALUE:
+			EEPROM[EERPOM_LCD_POWER_INDEX] = *valptr;
+      break;
+			
+    case M2_COMBOFN_MSG_GET_STRING:
+      if (*valptr == 0)
+			{
+				//digitalWrite(bluetooth_mosfet_gate_pin, LOW);
+        return "auto";
+			}
+			
+      if (*valptr == 1)
+			{
+				//digitalWrite(bluetooth_mosfet_gate_pin, HIGH);
+        return "on";
+			}
+  }
+				
+  return NULL;
 }
 
 // callback for EEPROM timezone setting
-int8_t fn_set_eerpom_tz(m2_rom_void_p element, uint8_t msg, int8_t val)
+int8_t fn_cb_set_eerpom_tz(m2_rom_void_p element, uint8_t msg, int8_t val)
 {
   if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
   {
@@ -248,7 +341,7 @@ int8_t fn_set_eerpom_tz(m2_rom_void_p element, uint8_t msg, int8_t val)
 }
 
 // callback for bluetooth timeout
-uint8_t fn_set_eerpom_bluetooth_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val) 
+uint8_t fn_cb_set_eerpom_bluetooth_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val) 
 {
   if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
     return (uint8_t) eeprom_get(EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX); // set val to the EEPROM value at that index
@@ -258,20 +351,17 @@ uint8_t fn_set_eerpom_bluetooth_timeout(m2_rom_void_p element, uint8_t msg, uint
 }
 
 // callback for lcd timeout
-uint8_t fn_set_eerpom_lcd_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val)
+uint8_t fn_cb_set_eerpom_lcd_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val)
 {
   if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
     return (uint8_t) eeprom_get(EERPOM_LCD_AUTO_TIMEOUT_INDEX); // set val to the EEPROM value at that index
   
   if ( msg == M2_U8_MSG_SET_VALUE ) // if we get a SET message
-	{
 		eeprom_set(val, EERPOM_LCD_AUTO_TIMEOUT_INDEX); // set the EEPROM value at that index to val
-		lcd_adjust_log_freq(val);
-	}
 }
 
 // callback for gps log frequency
-uint8_t fn_set_eerpom_gps_log_freq(m2_rom_void_p element, uint8_t msg, uint8_t val)
+uint8_t fn_cb_set_eerpom_gps_log_freq(m2_rom_void_p element, uint8_t msg, uint8_t val)
 {
   if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
     return (uint8_t) eeprom_get(EEPROM_GPS_GPRMC_GGA_FREQ_INDEX); // set val to the EEPROM value at that index
@@ -284,7 +374,7 @@ uint8_t fn_set_eerpom_gps_log_freq(m2_rom_void_p element, uint8_t msg, uint8_t v
 }
 
 // callback for MCP73871 battery charge status
-const char *fn_get_batt_charge_status(m2_rom_void_p element)
+const char *fn_cb_get_batt_charge_status(m2_rom_void_p element)
 {
 	if (digitalRead(MCP73871_power_good_indicator_pin) == LOW)
 	{
@@ -302,7 +392,7 @@ const char *fn_get_batt_charge_status(m2_rom_void_p element)
 }
 
 // callback for MCP73871 input power status
-const char *fn_get_power_good_status(m2_rom_void_p element)
+const char *fn_cb_get_power_good_status(m2_rom_void_p element)
 {
 	if (digitalRead(MCP73871_power_good_indicator_pin) == LOW)
 		return "ExtPw ok ";
