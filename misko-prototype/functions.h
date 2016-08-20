@@ -47,7 +47,7 @@ bool adxl345_writeByte(byte registerAddress, byte value)
 
 void poor_mans_debugging(void)
 {
-/* 	    // poor man's debugging
+ 	    // poor man's debugging
     for (uint8_t i=0; i< 7; i++)
     {
       Serial.print(i); Serial.print(" - ");Serial.println(EEPROM[i]);
@@ -60,7 +60,7 @@ void poor_mans_debugging(void)
 		Serial.print("INT_MAP -");Serial.print(adxl345_readByte(0x2F), BIN);Serial.println("-");
 		Serial.print("INT_ENABLE -");Serial.print(adxl345_readByte(0x2E), BIN);Serial.println("-");
 		
-		SPI.endTransaction(); */
+		SPI.endTransaction(); 
 }
 
 inline void eeprom_set(int in_val, int in_index) // sets EEPROM[in_index to val
