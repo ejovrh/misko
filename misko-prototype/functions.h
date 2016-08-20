@@ -100,12 +100,6 @@ void calculate_temperature(void) // executed from loop() - calculates temperatur
 	}	
 }
 
-uint8_t calculate_battery_percentage(float in_voltage) // calculated charge percentage of given battery
-{
-	// use read_Varef();
-	return 100;
-}
-
 // callback for Vcc
 const char *fn_get_Vcc(m2_rom_void_p element)
 {
@@ -114,6 +108,31 @@ const char *fn_get_Vcc(m2_rom_void_p element)
 		// http://www.atmel.com/webdoc/AVRLibcReferenceManual/group__avr__stdlib_1ga060c998e77fb5fc0d3168b3ce8771d42.html
 	strcat(vcc, "V");
 	return vcc;
+} 
+
+// callback for battery percentage
+const char *fn_get_bat_pct(m2_rom_void_p element)
+{
+		// union battery datasheet: charge cutoff voltage: Vbat 4.20V, discharge cutoff voltage: Vbat 2.75V
+		//	over the voltage divider this gives 2.10V and 1.375V
+	//	our voltage divider gives 0.5 Vbat
+	
+	// percentage calculation see https://racelogic.support/02VBOX_Motorsport/Video_Data_Loggers/Video_VBOX_Range/Video_VBOX_-_User_manual/24_-_Calculating_Scale_and_Offset
+	
+	//	dX is 2.1 - 1.375 = 0.725
+	//	dY is 100 - 0 = 100
+	// the gradient is dX/dY = 137.93
+	
+	// Y = percent = 0, X = Voltage = 1.375V
+	// 	0 = ((dX/dY)* voltage) + c
+	//	0 = (137.93 * 1.375) + c <=> 0 = 189.66 + c <=> c = -189.66
+	//	our equation is: y = 137.93 * x - 189.66
+	// elementary, dr. watson!
+	float pct = (137.93 * calculate_voltage(bat_A_pin)) - 189.66;
+ 	dtostrf(pct, 3, 0, bat_a_pct+4*sizeof(char)); // instead, this works
+		// http://www.atmel.com/webdoc/AVRLibcReferenceManual/group__avr__stdlib_1ga060c998e77fb5fc0d3168b3ce8771d42.html
+	strcat(bat_a_pct, "%");
+	return bat_a_pct;
 } 
 
 void poor_mans_debugging(void)
