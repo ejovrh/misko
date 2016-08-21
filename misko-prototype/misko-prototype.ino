@@ -32,7 +32,8 @@ void loop()
   #include "loop.h" // the actual loop [ without () ] 
 } 
 
-void isr_adxl345_int1(void) //ISR for the ADXL345 accelerometer
+//ISR for the ADXL345 accelerometer
+void isr_adxl345_int1(void) 
 {
 	adxl345_int1 = 1; // simply (for now) set a flag to true (is false by default)
 }
@@ -40,4 +41,11 @@ void isr_adxl345_int1(void) //ISR for the ADXL345 accelerometer
 void sleep_led(void)
 {
 	digitalWrite(sleep_indicator_pin, !digitalRead(sleep_indicator_pin) );
+}
+
+// ISR for timer5 events - generated every second
+//	stuff that needs to run periodically goes here
+ISR(TIMER5_COMPA_vect)
+{
+	avg_temperature(calculate_temperature(), 10); // calculates the temperature via a TMP36 sensor over 10 iterations
 }
