@@ -31,15 +31,6 @@
 	get_nmea_sentences(); // gets NMEA sentences out of the GPS and deals with them
 	//Serial.println(millis());
   
-	// poor man's scheduler - runs roughly every 1s
-	if (abs(millis() -  scheduler_last_run) / 1000 > 1 || scheduler_last_run == 0)
-	{
-		Serial.println(scheduler_run_count);
-		avg_temperature(calculate_temperature(), 10); // calculates the temperature via a TMP36 sensor over 10 iterations
-		scheduler_last_run = millis();
-		scheduler_run_count++;
-	}
-	
 	if (adxl345_int1) // if the ADXL345 INT1 flag is set
 		handle_adx_intl(); // execute the function
 	
