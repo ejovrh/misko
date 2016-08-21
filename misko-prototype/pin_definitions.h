@@ -3,10 +3,11 @@
 #define bat_A_pin A1 // battery A voltage
 //#define bat_B_pin A2 // battery B voltage
 #define interrupt_adxl345_int1_pin 2 // goes to ADXL345 INT1 pin
+#define GPS_PPS_pin 3 // GPS PPS signal
 #define gps_power_pin 4 // supplies power via PWM (100% duty cycle) to em406a
 #define gps_green_led_pin 5 // LED1, blinks on write onto SD card
 #define gps_red_led_pin 6 // LED2, on - GPS has fix, off - GPS has no fix
-#define sleep_indicator_pin 7 // LED which lights up when the controller is sleeping
+#define sleep_indicator_pin 9 // LED which lights up when the controller is sleeping
 
 // UART Serial 1 (pins 18 and 19)
 // free
