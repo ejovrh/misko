@@ -38,7 +38,6 @@
 		avg_temperature(calculate_temperature(), 10); // calculates the temperature via a TMP36 sensor over 10 iterations
 		scheduler_last_run = millis();
 		scheduler_run_count++;
-		scheduler_run = 0;
 	}
 	
 	if (adxl345_int1) // if the ADXL345 INT1 flag is set
