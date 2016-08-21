@@ -66,6 +66,4 @@ Sd2Card card;
 SdVolume volume;
 SdFile root;
 
-uint32_t scheduler_last_run = 0; // time value of scheduler last run in loop()
-uint8_t scheduler_run_count = 1; // keeps track of how many times the scheduler was executed
 volatile bool adxl345_int1 = 0;
