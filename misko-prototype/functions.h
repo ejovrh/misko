@@ -102,12 +102,15 @@ inline int8_t calculate_temperature(void) // executed from loop()
 // calculates the average temperature after in_count readings
 void avg_temperature(int8_t in_temp, uint8_t in_count)
 {
-	avg_temp += in_temp;
+	if (scheduler_run_count < 10) // if its the 1st iteration
+		temperature = calculate_temperature(); // at least have some value displayed
 	
-	if (scheduler_run_count % in_count == 0)
+	avg_temp += in_temp; // sum up the vaules
+	
+	if (scheduler_run_count % in_count == 0) // if we have 10 complete iterations
 	{
-		temperature = avg_temp / in_count;
-		avg_temp = 0;
+		temperature = avg_temp / in_count; // divide sum and store in the global variable
+		avg_temp = 0; // reset the sum
 	}
 }
 
