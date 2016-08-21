@@ -42,7 +42,7 @@ M2_LABELFN(el_batt_a, "rf0", fn_cb_get_bat_pct);
 M2_LABELFN(el_vcc, "rf0", fn_cb_get_Vcc);
 M2_LIST(el_bat_a) = {&el_batt_a, &el_vcc};
 M2_HLIST(el_batta_hlist, "rf0", el_bat_a);
-M2_LABEL(el_temperature, "rf0", temperature);
+M2_LABELFN(el_temperature, "rf0", fn_cb_get_temperature);
 M2_LIST(el_device_misc_list) = {&el_batt_hlist, &el_batta_hlist, &el_temperature, &el_ok};
 M2_GRIDLIST(el_device_misc_grid, "c1", el_device_misc_list);
 M2_ALIGN(el_top_device_misc_menu, "-1|1W64H64", &el_device_misc_grid);
