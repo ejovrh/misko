@@ -1,3 +1,28 @@
+// timer setup
+/*
+	a good read: http://www.engblaze.com/microcontroller-tutorial-avr-and-arduino-timer-interrupts/
+	
+	according to the arduino schematic, the following timers are available and tied to the following pins:
+		OC0: 4, 13 - 8bit
+		OC1: 11, 12 - 16bit
+		OC2: 9, 10 - 8bit
+		OC3: 2, 3, 5 - 16bit
+		OC4: 6, 7, 8 - 16bit
+		OC5: 44, 45, 46 - 16bit, i dont need PWM, this is a 16bit counter which means i'll use this one
+*/
+
+noInterrupts(); // gobally disable interrupts
+
+TCCR5A  = 0; // clear the register (A and B)
+TCCR5B  = 0;
+OCR5A = 15624; // set compare match register to desired timer count
+TCCR5B |= (1 << WGM12); // turn on CTC mode
+TCCR5B |= (1 << CS10); // Set CS10 and CS12 bits for 1024 prescaler
+TCCR5B |= (1 << CS12);
+TIMSK5 |= (1 << OCIE5A); // enable timer compare interrupt
+
+interrupts(); // globally enable interrupts
+
 
 analogReference(EXTERNAL); // AREF_VOLTAGE - 4.30 via zener diode
 
