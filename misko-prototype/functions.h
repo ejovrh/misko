@@ -94,18 +94,21 @@ float calculate_voltage(int pin) // calculates the voltage on a given pin by con
 }
 
 // calculates the temperature by reading voltage from the TMP36
-void calculate_temperature(void) // executed from loop() - calculates temperature by reading the TMP36 analog data
+inline int8_t calculate_temperature(void) // executed from loop()
 {
-	// the temperature field is defined as:
-	// 		char temperature[6] = "T+30C"; // temperature, "T-12C" or "T+56C"
+	return (calculate_voltage(TMP36_Vsense_pin) - 0.5) * 100.0 ;  // 10 mv per C, 500 mV offset
+}
+
+// calculates the average temperature after in_count readings
+void avg_temperature(int8_t in_temp, uint8_t in_count)
+{
+	avg_temp += in_temp;
 	
-	if ( abs(millis() -  temperature_last_reading) / 1000 > TEMPERATURE_SAMPLE_PERIOD  || temperature_last_reading == 0)
+	if (scheduler_run_count % in_count == 0)
 	{
-		int8_t temperatureC = (calculate_voltage(TMP36_Vsense_pin) - 0.5) * 100.0 ;  // 10 mv per C, 500 mV offset
-		sprintf(temperature + sizeof(char), "%+.2d", temperatureC); // THE way to print
-		strncat( temperature + 4*sizeof(char), "C", sizeof(char)); // append C and a null terminator
-		temperature_last_reading = millis(); // update last read time of value
-	}	
+		temperature = avg_temp / in_count;
+		avg_temp = 0;
+	}
 }
 
 // callback for Vcc
@@ -263,6 +266,14 @@ void gps_adjust_log_freq(uint8_t in_val) // adjusts the NMEA frequency by sendin
 void fn_ok(m2_el_fnarg_p fnarg)
 {
   m2_SetRoot(&top_el_expandable_menu);
+}
+
+// callback for temperature 
+const char *fn_cb_get_temperature(m2_rom_void_p element)
+{
+	sprintf(temp + sizeof(char), "%+.2d", temperature); // THE way to print
+	strncat( temp + 4*sizeof(char), "C", sizeof(char)); // append C and a null terminator
+	return temp;
 }
 
 // callback for bluetooth power setting
