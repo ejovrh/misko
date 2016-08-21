@@ -37,7 +37,9 @@ char gps_satellites_in_view[4] = "S"; // GPS satellites in view
 int8_t timezone;
 
 // device variables
-char temperature[6] = "T+xxC"; // temperature, "T-12C" or "T+56C"
+int8_t temperature = 0; // temperature in degrees Celsius
+char temp[6] = "T+xxC";
+uint16_t avg_temp = 0;
 char vcc[9] = "Vccx.xxV";
 char bat_a_pct[9] = "batAxxx%";
 char sd_buffer[SD_BUFFERSIZE];
@@ -64,5 +66,6 @@ Sd2Card card;
 SdVolume volume;
 SdFile root;
 
-uint32_t temperature_last_reading = 0;
-bool adxl345_int1 = 0;
+uint32_t scheduler_last_run = 0; // time value of scheduler last run in loop()
+uint8_t scheduler_run_count = 1; // keeps track of how many times the scheduler was executed
+volatile bool adxl345_int1 = 0;
