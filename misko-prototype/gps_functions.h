@@ -1,19 +1,5 @@
 //#include "gps_config.h"
 
-int16_t parseHex(char g) // NMEA checksum calculator
-{
-  if (g >= '0' && g <= '9') 
-    return (g - '0');
-  else 
-    if (g >= 'A' && g <= 'F') 
-      return (g + 10 - 'A');
-    else 
-      if (g >= 'a' && g <= 'f') 
-        return (g + 10 - 'a');
-        
-  return (-1);
-}
-
 void gps_parse_gprmc() // determines fix or not, parses coordinates, datetime
 { 
   // sample NMEA GPRMC sentence
@@ -78,39 +64,34 @@ void gps_parse_gprmc() // determines fix or not, parses coordinates, datetime
 
 void gps_parse_gpgga() // parses out sattelites used and HDOP 
 {
-  // FIXME: still some overrun somewhere: 3rd line gets garbled
+	if (!gps_fix)
+		return;
+	
   char *p; // char pointer for string tokenizer
-  p = strtok(NMEA_buffer, ","); // set up the tokenizer for string seperation on comma
-  uint8_t i = 0; // counter for substrings
+	// $GPGGA,185447.258,4547.8986,N,01555.1525,E,1,04,4.3,126.8,M,42.5,M,,0000*5F
 
-  while (p != NULL) // while there are tokenizable substrings in string
-  {
-     i++; // increment by one
-
-     if (i == 8) // the 8th field is the satellite in view
-     {
-        memcpy( gps_satellites_in_view + sizeof(char), p, strlen(p)*sizeof(char) ); // copy the value 
-        strcat(gps_satellites_in_view, '\0'); // terminate the string
-     }
-
-     if (i == 9) // the 9th field is the HDOP - a dimensionless value
-     {
-        memcpy( gps_hdop + sizeof(char), p, strlen(p)*sizeof(char) ); // copy the value 
-        strcat(gps_hdop, '\0'); // terminate the string
-     }
-
-     if (i == 10) // the 10th field is the altitude above MSL in meters
-     {
-        memcpy( gps_altitude + ( 4*sizeof(char) ), p, strlen(p) * sizeof(char) ); // copy the numbers...
-        char *p = (char *) memchr(gps_altitude, '.', strlen(gps_altitude)); // find position of decimal symbol
-        *p = 'm'; // at this position, put the meter symbol
-        *(p+1) = '\0'; // at the next position, terminate the string
-        
-        return; // finish the loop because we do not need anything else here
-     }
-	 
-     p = strtok(NULL, ","); // tokenize further
-  }
+  p = NMEA_buffer+7; // set the pointer to position 185447.258,4547.8986,N,01555.1525,E,1,04,4.3,126.8,M,42.5,M,,0000*5F
+	p = strchr(p, ',')+1; // 4547.8986,N,01555.1525,E,1,04,4.3,126.8,M,42.5,M,,0000*5F
+	p = strchr(p, ',')+1; // N,01555.1525,E,1,04,4.3,126.8,M,42.5,M,,0000*5F
+	p = strchr(p, ',')+1; // 01555.1525,E,1,04,4.3,126.8,M,42.5,M,,0000*5F
+	p = strchr(p, ',')+1; // E,1,04,4.3,126.8,M,42.5,M,,0000*5F
+	p = strchr(p, ',')+1; // 1,04,4.3,126.8,M,42.5,M,,0000*5F
+	
+	// satellites in view
+	p = strchr(p, ',')+1; // 04,4.3,126.8,M,42.5,M,,0000*5F
+	memcpy( gps_satellites_in_view + 3 * sizeof(char), p, 2 * sizeof(char) ); // copy the value 
+  *(gps_satellites_in_view+5) = '\0'; // terminate the string
+	
+	// HDOP
+	p = strchr(p, ',')+1; // 4.3,126.8,M,42.5,M,,0000*5F
+  memcpy( gps_hdop + 3 * sizeof(char), p, strcspn (p, ",") * sizeof(char) ); // copy the value 
+  *(gps_hdop+7) = '\0'; // terminate the string
+	
+	// altitude
+	p = strchr(p, ',')+1; // 126.8,M,42.5,M,,0000*5F
+  memcpy( gps_altitude + ( 4*sizeof(char) ), p, strcspn (p, ".") * sizeof(char) ); // copy the numbers...
+  *(p+7) = 'm'; // at this position, put the meter symbol
+  *(p+8) = '\0'; // at the next position, terminate the string
 }
 
 void get_nmea_sentences() {
