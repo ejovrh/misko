@@ -264,7 +264,8 @@ uint8_t getCheckSum(char *string)
 {
   int XOR = 0;	
 	
-  for (int i = 1; i < strlen(string); i++) 
+  for (int i = 1; i < 20; i++) 
+  // for (int i = 1; i < strlen(string); i++) 
     XOR = XOR ^ *(string+i);
 
   return XOR;
@@ -291,9 +292,6 @@ void gps_adjust_log_freq(uint8_t in_val)
       /* EXAMPLE
       
       $PSRF103,<msg>,<mode>,<rate>,<cksumEnable>*CKSUM<CR><LF>
-			$PSRF103,04,02
-
-
       <msg> 00=GGA,01=GLL,02=GSA,03=GSV,04=RMC,05=VTG
       <mode> 00=SetRate,01=Query
       <rate> Output every <rate>seconds, off=00,max=255
@@ -302,7 +300,7 @@ void gps_adjust_log_freq(uint8_t in_val)
       
       Example 1: Query the GGA message with checksum enabled
       $PSRF103,00,01,00,01*25
-      
+
       Example 2: Enable VTG message for a 1Hz constant output with checksum enabled
       $PSRF103,05,00,01,01*20
       
@@ -313,64 +311,22 @@ void gps_adjust_log_freq(uint8_t in_val)
       http://www.hhhh.org/wiml/proj/nmeaxor.html
       */
 			
-/* 			//char RMC[22] = "$PSRF103,04,00,xx*hh";
-			char GGA[20] = "$PSRF103,00,00,xx*hh";
+			if (in_val > 10) // some bug in the menu
+				in_val -= 10;
 			
-			//sprintf(RMC + 15 * sizeof(char), "%.2d", in_val); // 
-			sprintf(GGA + 15 * sizeof(char), "%.2d", in_val); // 
+			char gps_command_buffer[24];
+			
+			sprintf(gps_command_buffer, "$PSRF103,04,00,%.2d,01*", in_val);
+			sprintf(gps_command_buffer + strlen(gps_command_buffer), "%02X\r\n", getCheckSum(gps_command_buffer));
+			
+			Serial3.write(gps_command_buffer);
 
-			// sprintf(RMC + 18 * sizeof(char), "%02X", getCheckSum(RMC));
-			sprintf(GGA + 18 * sizeof(char), "%02X", getCheckSum(GGA));
+			sprintf(gps_command_buffer, "$PSRF103,00,00,%.2d,01*", in_val);
+			sprintf(gps_command_buffer + strlen(gps_command_buffer), "%02X\r\n", getCheckSum(gps_command_buffer));
 			
-			// *(RMC+17) = '*';
-			*(GGA+17) = '*';
-			
-			// *(RMC+20) = '\r';
-			// *(GGA+20) = '\r';
-			
-			// *(RMC+21) = '\n';
-			// *(GGA+21) = '\n';
-			
-			// Serial3.write(RMC, 22);
-			Serial3.write(GGA, 22);
-			// Serial.println("rmc:");Serial.print(RMC);
-			Serial.println("gga:");Serial.print(GGA);
-			
-			Serial.println("GGA");
-			for (uint8_t i=0; i<24; i++)
-			{
-				Serial.print(i); Serial.print("-");Serial.print(*(GGA+i), DEC);Serial.print(" ");		
-			}				
-			Serial.println("GGA\r\n"); */
+			Serial3.write(gps_command_buffer);
 			
 	return;
-/* 			uint8_t i = 10;
-			switch (in_val)
-			{
-				case 2:
-				do
-				{
-					Serial3.write("$PSRF103,00,00,01,02*26\r"); // GGA
-					Serial3.write("$PSRF103,04,00,01,02*22\r"); // RMC
-				} while (i--);
-				break;
-				
-				case 3:
-				do
-				{
-					Serial3.write("$PSRF103,00,00,01,03*27\r"); // GGA
-					Serial3.write("$PSRF103,04,00,01,03*23\r"); // RMC
-					} while (i--);
-				break;
-				
-				case 5:
-				do
-				{
-					Serial3.write("$PSRF103,00,00,01,05*21\r"); // GGA
-					Serial3.write("$PSRF103,04,00,01,05*25\r"); // RMC
-					} while (i--);
-				break;
-			} */
 }
 
 // callback for ok button
