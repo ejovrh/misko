@@ -48,4 +48,5 @@ void sleep_led(void)
 ISR(TIMER5_COMPA_vect)
 {
 	avg_temperature(calculate_temperature(), 10); // calculates the temperature via a TMP36 sensor over 10 iterations
+	scheduler_run_count++;
 }
