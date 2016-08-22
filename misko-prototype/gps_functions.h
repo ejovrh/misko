@@ -17,16 +17,13 @@ void gps_parse_gprmc() // determines fix or not, parses coordinates, datetime
 
   // field 3 - fix indicator: A,4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
   p = strchr(p, ',')+1; // finds position of next comma and puts the cursor one position further
-    if (*p == 'A') // good fix
-      gps_fix = 1; // flag good fix
-            
-    if (*p == 'V') // invaid fix
-      gps_fix = 0; // flag bad fix
-     
+	
+	gps_fix = ( *p == 'A' ? 1 : 0 ); // sets gps_fix to 1 if there is a fix
+	
   // field 4 - latitude: 4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
   p = strchr(p, ',')+1; 
   if (gps_fix)
-     memcpy(gps_latitude+(4*sizeof(char)), p, 9 * sizeof(char)); // fill up gps_latitude[] , part 1
+    memcpy(gps_latitude+(4*sizeof(char)), p, 9 * sizeof(char)); // fill up gps_latitude[] , part 1
 
   // field 5 - latitude indicator: N,01555.1254,E,0.13,142.38,050816,,,A*63
   p = strchr(p, ',')+1;
@@ -67,7 +64,9 @@ void gps_parse_gpgga() // parses out sattelites used and HDOP
 	if (!gps_fix)
 		return;
 	
-  char *p; // char pointer for string tokenizer
+	uint8_t len = 0;
+	
+  char *p; // char pointer for string search
 	// $GPGGA,185447.258,4547.8986,N,01555.1525,E,1,04,4.3,126.8,M,42.5,M,,0000*5F
 
   p = NMEA_buffer+7; // set the pointer to position 185447.258,4547.8986,N,01555.1525,E,1,04,4.3,126.8,M,42.5,M,,0000*5F
@@ -79,19 +78,22 @@ void gps_parse_gpgga() // parses out sattelites used and HDOP
 	
 	// satellites in view
 	p = strchr(p, ',')+1; // 04,4.3,126.8,M,42.5,M,,0000*5F
-	memcpy( gps_satellites_in_view + 3 * sizeof(char), p, 2 * sizeof(char) ); // copy the value 
-  *(gps_satellites_in_view+5) = '\0'; // terminate the string
+	len = strcspn (p, ",");
+	memcpy( gps_satellites_in_view + 3 * sizeof(char), p, len * sizeof(char) ); // copy the value 
+  *(gps_satellites_in_view+2+len+1) = '\0'; // terminate the string
 	
 	// HDOP
 	p = strchr(p, ',')+1; // 4.3,126.8,M,42.5,M,,0000*5F
-  memcpy( gps_hdop + 3 * sizeof(char), p, strcspn (p, ",") * sizeof(char) ); // copy the value 
-  *(gps_hdop+7) = '\0'; // terminate the string
+	len = strcspn (p, ",");
+  memcpy( gps_hdop + 3 * sizeof(char), p, len * sizeof(char) ); // copy the value 
+  *(gps_hdop+2+len+1) = '\0'; // terminate the string
 	
 	// altitude
 	p = strchr(p, ',')+1; // 126.8,M,42.5,M,,0000*5F
-  memcpy( gps_altitude + ( 4*sizeof(char) ), p, strcspn (p, ".") * sizeof(char) ); // copy the numbers...
-  *(p+7) = 'm'; // at this position, put the meter symbol
-  *(p+8) = '\0'; // at the next position, terminate the string
+	len = strcspn (p, ".,");
+  memcpy( gps_altitude + ( 4*sizeof(char) ), p, len * sizeof(char) ); // copy the numbers...
+  *(p+3+len) = 'm'; // at this position, put the meter symbol
+  *(p+3+len+1) = '\0'; // at the next position, terminate the string
 }
 
 void get_nmea_sentences() {
