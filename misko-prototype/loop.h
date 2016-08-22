@@ -34,10 +34,15 @@
 	if (adxl345_int1) // if the ADXL345 INT1 flag is set
 		handle_adx_intl(); // execute the function
 	
-
+// serial redirection for GSM modem testing
 	if(Serial2.available()) //read SIM800 output (if available) and print it in arduino IDE serial monitor
 		Serial.write(Serial2.read()); // NL & CR need to be enabled
 
-
 	if(Serial.available()) //read arduino IDE serial monitor inputs (if available) and send them to SIM800   
-			Serial2.write(Serial.read()); // NL & CR need to be enabled 
+		Serial2.write(Serial.read()); // NL & CR need to be enabled 
+
+// GSM modem power control		
+	if (flag_cb_gsm_power && !flag_gsm_on)
+		gsm_power(1);
+	if (!flag_cb_gsm_power && flag_gsm_on)
+		gsm_power(0);
