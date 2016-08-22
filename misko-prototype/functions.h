@@ -128,26 +128,26 @@ const char *fn_cb_get_Vcc(m2_rom_void_p element)
 const char *fn_cb_get_bat_pct(m2_rom_void_p element)
 {
 	/* the percentage calculation
-		union battery datasheet: charge cutoff voltage: Vbat 4.20V, discharge cutoff voltage: Vbat 2.75V
-			over the voltage divider this gives 2.10V and 1.375V
+		union battery datasheet: charge cutoff voltage: Vbat 4.20V, discharge cutoff voltage: Vbat 2.70V
+			over the voltage divider this gives 2.10V and 1.3V
 			our voltage divider gives 0.5 Vbat
 	
 	 percentage calculation see https://racelogic.support/02VBOX_Motorsport/Video_Data_Loggers/Video_VBOX_Range/Video_VBOX_-_User_manual/24_-_Calculating_Scale_and_Offset
 	
-		dX is 2.1 - 1.375 = 0.725
+		dX is 2.1 - 1.35 = 0.75
 		dY is 100 - 0 = 100
-	 the gradient is dX/dY = 137.93
+	 the gradient is dX/dY = 133
 	
-	 Y = percent = 0, X = Voltage = 1.375V
+	 Y = percent = 0, X = Voltage = 1.35V
 	 	0 = ((dX/dY)* voltage) + c
-		0 = (137.93 * 1.375) + c <=> 0 = 189.66 + c <=> c = -189.66
-		our equation is: y = 137.93 * x - 189.66
+		0 = (133 * 1.35) + c <=> 0 = 180 + c <=> c = -180
+		our equation is: y = 133 * x - 180
 	
 	elementary, dr. watson!
  	*/
-	dtostrf((138 * calculate_voltage(bat_A_pin)) - 190, 3, 0, bat_a_pct + 4*sizeof(char)); // instead, this works
+	dtostrf((133 * calculate_voltage(bat_A_pin)) - 180, 3, 0, bat_a_pct + 4*sizeof(char)); // instead, this works
 		// http://www.atmel.com/webdoc/AVRLibcReferenceManual/group__avr__stdlib_1ga060c998e77fb5fc0d3168b3ce8771d42.html
-	strcat(bat_a_pct, "%");
+	strcat(bat_a_pct, "% ");
 	return bat_a_pct;
 } 
 
@@ -259,10 +259,118 @@ void handle_lcd_sleep(void)
 	}
 }
 
-// TODO
-void gps_adjust_log_freq(uint8_t in_val) // adjusts the NMEA frequency by sending the EM406A module an appropriate config sentence
+// calculates NMEA checksum
+uint8_t getCheckSum(char *string)
+{
+  int XOR = 0;	
+	
+  for (int i = 1; i < strlen(string); i++) 
+    XOR = XOR ^ *(string+i);
+
+  return XOR;
+}
+
+// NMEA checksum calculator
+int16_t parseHex(char g) 
+{
+  if (g >= '0' && g <= '9') 
+    return (g - '0');
+  else 
+    if (g >= 'A' && g <= 'F') 
+      return (g + 10 - 'A');
+    else 
+      if (g >= 'a' && g <= 'f') 
+        return (g + 10 - 'a');
+        
+  return (-1);
+}
+
+// sets the RMC/GGA sentence frequency by sending the EM406A module an appropriate NMEA config sentence
+void gps_adjust_log_freq(uint8_t in_val) 
 { 
-	Serial.print(in_val); Serial.println(" TODO GPS LOG FREQ");
+      /* EXAMPLE
+      
+      $PSRF103,<msg>,<mode>,<rate>,<cksumEnable>*CKSUM<CR><LF>
+			$PSRF103,04,02
+
+
+      <msg> 00=GGA,01=GLL,02=GSA,03=GSV,04=RMC,05=VTG
+      <mode> 00=SetRate,01=Query
+      <rate> Output every <rate>seconds, off=00,max=255
+      <cksumEnable> 00=disable Checksum,01=Enable checksum for specified message
+      Note: checksum is required
+      
+      Example 1: Query the GGA message with checksum enabled
+      $PSRF103,00,01,00,01*25
+      
+      Example 2: Enable VTG message for a 1Hz constant output with checksum enabled
+      $PSRF103,05,00,01,01*20
+      
+      Example 3: Disable VTG message
+      $PSRF103,05,00,00,01*21
+      
+      NMEA checksum:
+      http://www.hhhh.org/wiml/proj/nmeaxor.html
+      */
+			
+/* 			//char RMC[22] = "$PSRF103,04,00,xx*hh";
+			char GGA[20] = "$PSRF103,00,00,xx*hh";
+			
+			//sprintf(RMC + 15 * sizeof(char), "%.2d", in_val); // 
+			sprintf(GGA + 15 * sizeof(char), "%.2d", in_val); // 
+
+			// sprintf(RMC + 18 * sizeof(char), "%02X", getCheckSum(RMC));
+			sprintf(GGA + 18 * sizeof(char), "%02X", getCheckSum(GGA));
+			
+			// *(RMC+17) = '*';
+			*(GGA+17) = '*';
+			
+			// *(RMC+20) = '\r';
+			// *(GGA+20) = '\r';
+			
+			// *(RMC+21) = '\n';
+			// *(GGA+21) = '\n';
+			
+			// Serial3.write(RMC, 22);
+			Serial3.write(GGA, 22);
+			// Serial.println("rmc:");Serial.print(RMC);
+			Serial.println("gga:");Serial.print(GGA);
+			
+			Serial.println("GGA");
+			for (uint8_t i=0; i<24; i++)
+			{
+				Serial.print(i); Serial.print("-");Serial.print(*(GGA+i), DEC);Serial.print(" ");		
+			}				
+			Serial.println("GGA\r\n"); */
+			
+	return;
+/* 			uint8_t i = 10;
+			switch (in_val)
+			{
+				case 2:
+				do
+				{
+					Serial3.write("$PSRF103,00,00,01,02*26\r"); // GGA
+					Serial3.write("$PSRF103,04,00,01,02*22\r"); // RMC
+				} while (i--);
+				break;
+				
+				case 3:
+				do
+				{
+					Serial3.write("$PSRF103,00,00,01,03*27\r"); // GGA
+					Serial3.write("$PSRF103,04,00,01,03*23\r"); // RMC
+					} while (i--);
+				break;
+				
+				case 5:
+				do
+				{
+					Serial3.write("$PSRF103,00,00,01,05*21\r"); // GGA
+					Serial3.write("$PSRF103,04,00,01,05*25\r"); // RMC
+					} while (i--);
+				break;
+			} */
 }
 
 // callback for ok button
@@ -316,7 +424,7 @@ const char *fn_cb_bluetooth_power_setting(m2_rom_void_p element, uint8_t msg, ui
   return NULL;
 }
 
-// callback for lcd power setting
+// callback for OLED power setting
 const char *fn_cb_lcd_power_setting(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
 {
 	// see fn_cb_bluetooth_power_setting for comments
@@ -333,13 +441,40 @@ const char *fn_cb_lcd_power_setting(m2_rom_void_p element, uint8_t msg, uint8_t 
     case M2_COMBOFN_MSG_GET_STRING:
       if (*valptr == 0)
 			{
-				//digitalWrite(bluetooth_mosfet_gate_pin, LOW);
         return "auto";
 			}
 			
       if (*valptr == 1)
 			{
-				//digitalWrite(bluetooth_mosfet_gate_pin, HIGH);
+        return "on";
+			}
+  }
+				
+  return NULL;
+}
+
+// callback for OLED power setting
+const char *fn_cb_gsm_power(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
+{
+	// see fn_cb_bluetooth_power_setting for comments
+	switch(msg)
+  {
+		case M2_COMBOFN_MSG_GET_VALUE:
+			*valptr = flag_cb_gsm_power;
+			break;
+			
+    case M2_COMBOFN_MSG_SET_VALUE:
+			flag_cb_gsm_power = *valptr;
+			break;
+			
+    case M2_COMBOFN_MSG_GET_STRING:
+      if (*valptr == 0)
+			{
+        return "off";
+			}
+			
+      if (*valptr == 1)
+			{
         return "on";
 			}
   }
@@ -370,7 +505,7 @@ uint8_t fn_cb_set_eerpom_bluetooth_timeout(m2_rom_void_p element, uint8_t msg, u
     eeprom_set(val, EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX); // set the EEPROM value at that index to val
 }
 
-// callback for lcd timeout
+// callback for OLED timeout
 uint8_t fn_cb_set_eerpom_lcd_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val)
 {
   if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
@@ -404,9 +539,9 @@ const char *fn_cb_get_batt_charge_status(m2_rom_void_p element)
 			return "charged ";
 	}
 	
-	if (digitalRead(MCP73871_power_good_indicator_pin) == LOW)
+	if (digitalRead(MCP73871_power_good_indicator_pin) == HIGH)
 	{
-		if (digitalRead(MCP73871_charge_status_1_pin) == HIGH || digitalRead(MCP73871_charge_status_2_pin) == LOW)
+		if (digitalRead(MCP73871_charge_status_1_pin) == LOW || digitalRead(MCP73871_charge_status_2_pin) == HIGH)
 			return "BATT LOW";
 	}		
 }
@@ -418,6 +553,31 @@ const char *fn_cb_get_power_good_status(m2_rom_void_p element)
 		return "ExtPw ok ";
 	
 		return "ExtPw off ";
+}
+
+// switched GSM on / off, inits on "on"
+void gsm_power(bool in_val)
+{
+	if (in_val)
+	{
+		digitalWrite(SIM800L_mosfet_gate_pin, HIGH);
+		flag_gsm_on = 1;
+		
+		Serial.println(F("gsm on"));
+
+		Serial2.begin(SERIALRATE); // set up the terminal for the SIM800L
+		Serial.println(F("serial2 set"));
+		delay(10);
+		Serial.print(F("AT")); // 1st AT
+		Serial.print(F("ATE0")); // turn off command echo
+	}
+	else 
+	{
+		digitalWrite(SIM800L_mosfet_gate_pin, LOW);
+		flag_gsm_on = 0;
+		Serial.println(F("gsm off"));
+		Serial2.end();
+	}
 }
 
 // interrupt handler for ADXL345
