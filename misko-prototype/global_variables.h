@@ -3,12 +3,12 @@
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
 
 #define AREF_VOLTAGE 4.27
-#define NMEA_DEBUG_PRINT 0
+#define NMEA_DEBUG_PRINT 1
 #define TEMPERATURE_SAMPLE_PERIOD 10 // temperature measure interval in seconds
 #define GPSRATE 4800
 #define SERIALRATE 9600
 #define NMEA_BUFFERSIZE 80 // plenty big
-#define SD_BUFFERSIZE 4096 // huge buffer for NMEA sentences to be written to SD card
+#define SD_BUFFERSIZE 512 // huge buffer for NMEA sentences to be written to SD card
 
 // EERPOM indices
 #define EERPOM_LCD_POWER_INDEX 1
@@ -31,9 +31,9 @@ char gps_utc[7] = "UTC+2"; // timezone string
 char gps_logfile[13] = "";
 char gps_latitude[16] = "lat hhmm.ssss  "; // N or S, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
 char gps_longtitude[17] = "lon hhhmm.ssss  "; // W or E, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
-char gps_altitude[10] = "alt "; // GPS altitude: "alt xxxxm" or "alt -xxxm", populated in gps_functions.h:gps_parse_gpgga()
-char gps_hdop[6] = "D"; // GPS horizontal dilution of position: "D12.5" , populated in gps_functions.h:gps_parse_gprmc()
-char gps_satellites_in_view[4] = "S"; // GPS satellites in view
+char gps_altitude[9] = "alt ___m"; // GPS altitude: "altxxxxm" or "alt-xxxm", populated in gps_functions.h:gps_parse_gpgga()
+char gps_hdop[8] = "dop___"; // GPS horizontal dilution of position: "dop12.5" , populated in gps_functions.h:gps_parse_gprmc()
+char gps_satellites_in_view[6] = "sat__"; // GPS satellites in view
 int8_t timezone;
 
 // device variables
@@ -42,7 +42,8 @@ char temp[6] = "T+xxC";
 uint16_t avg_temp = 0;
 char vcc[9] = "Vccx.xxV";
 char bat_a_pct[9] = "batAxxx%";
-char sd_buffer[SD_BUFFERSIZE];
+char sd_buffer1[SD_BUFFERSIZE];
+char sd_buffer2[SD_BUFFERSIZE];
 
 // bluetooth flags
 uint32_t bluetooth_button_press_time = millis(); // time of button press
@@ -66,4 +67,7 @@ Sd2Card card;
 SdVolume volume;
 SdFile root;
 
+uint16_t scheduler_run_count = 0;
 volatile bool adxl345_int1 = 0;
+bool flag_gsm_on = 0;
+uint8_t flag_cb_gsm_power = 0; // used in gsm power callback
