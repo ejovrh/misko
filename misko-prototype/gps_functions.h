@@ -1,6 +1,6 @@
-//#include "gps_config.h"
 
-void gps_parse_gprmc() // determines fix or not, parses coordinates, datetime
+// determines fix or not, parses coordinates, datetime
+void gps_parse_gprmc() 
 { 
   // sample NMEA GPRMC sentence
   //    $GPRMC,170942.000,A,4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
@@ -59,7 +59,8 @@ void gps_parse_gprmc() // determines fix or not, parses coordinates, datetime
     //Serial.print("gps_time: ");  Serial.println(gps_time);
 }
 
-void gps_parse_gpgga() // parses out sattelites used and HDOP 
+// parses out sattelites used and HDOP 
+void gps_parse_gpgga() 
 {
 	if (!gps_fix)
 		return;
@@ -95,6 +96,7 @@ void gps_parse_gpgga() // parses out sattelites used and HDOP
   *(p+3+len) = 'm'; // at this position, put the meter symbol
   *(p+3+len+1) = '\0'; // at the next position, terminate the string
 }
+
 
 void get_nmea_sentences() {
 // reads one char at a time from the gps device; 
