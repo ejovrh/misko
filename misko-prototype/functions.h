@@ -287,7 +287,7 @@ int16_t parseHex(char g)
 }
 
 // sets the RMC/GGA sentence frequency by sending the EM406A module an appropriate NMEA config sentence
-void gps_adjust_log_freq(uint8_t in_val) 
+void gps_adjust_log_freq(uint8_t in_msg, uint8_t in_val) 
 { 
       /* EXAMPLE
       
@@ -314,18 +314,10 @@ void gps_adjust_log_freq(uint8_t in_val)
 			if (in_val > 10) // some bug in the menu
 				in_val -= 10;
 			
-			char gps_command_buffer[24];
-			
-			sprintf(gps_command_buffer, "$PSRF103,04,00,%.2d,01*", in_val);
+			sprintf(gps_command_buffer, "$PSRF103,%.2d,00,%.2d,01*", in_msg, in_val);
 			sprintf(gps_command_buffer + strlen(gps_command_buffer), "%02X\r\n", getCheckSum(gps_command_buffer));
 			
 			Serial3.write(gps_command_buffer);
-
-			sprintf(gps_command_buffer, "$PSRF103,00,00,%.2d,01*", in_val);
-			sprintf(gps_command_buffer + strlen(gps_command_buffer), "%02X\r\n", getCheckSum(gps_command_buffer));
-			
-			Serial3.write(gps_command_buffer);
-			
 	return;
 }
 
@@ -480,7 +472,8 @@ uint8_t fn_cb_set_eerpom_gps_log_freq(m2_rom_void_p element, uint8_t msg, uint8_
   if ( msg == M2_U8_MSG_SET_VALUE ) // if we get a SET message
 	{
     eeprom_set(val, EEPROM_GPS_GPRMC_GGA_FREQ_INDEX); // set the EEPROM value at that index to val
-		gps_adjust_log_freq(val);
+		gps_adjust_log_freq(00, val); // GPGGA
+		gps_adjust_log_freq(04, val); // GPRMC
 	}
 }
 
