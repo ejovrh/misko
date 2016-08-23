@@ -107,7 +107,7 @@ void get_nmea_sentences() {
  
   if (Serial3.available()) // if serial3 is availiable
   {  
-    *(NMEA_buffer+bufferid) = Serial3.read();      // put that char into the array "buffer"
+    *(NMEA_buffer+bufferid) = Serial3.read();      // put byte by byte into the array "buffer"
 
     if ( *(NMEA_buffer+bufferid) == '\n' )           // if we have recieved a newline -- read  http://www.gammon.com.au/forum/?id=11425
                //it means we are at the end of the NMEA sentence and we can start to parse it (the GPS reciever will terminate each NMEA sentece with at '\n' )
@@ -148,15 +148,14 @@ void get_nmea_sentences() {
 			
       //debug print
       #if NMEA_DEBUG_PRINT
-			Serial.println("debug print of buffer:");
-			Serial.print(NMEA_buffer);
+				Serial.print(NMEA_buffer);
 			#endif
 			
       // check for GPRMC sentence
-      if (strcmp(NMEA_buffer, "$GPRMC" ) != 0) // if we have a GPRMC sentence (compare the NMEA buffer with its sentence to gprmc[])
-      { 
-        gps_parse_gprmc();
-
+      if (strcmp(NMEA_buffer, "$GPRMC" ) > 0) // if we have a GPRMC sentence (compare the NMEA buffer with its sentence to gprmc[])      
+			{ 
+        gps_parse_gprmc(); // parse the GPRMC sentence and get datetime and other values
+				
         if (gps_fix) // valid fix - indicate it by lighting up the reed LED
           digitalWrite(gps_green_led_pin, HIGH);
         else 
@@ -164,30 +163,35 @@ void get_nmea_sentences() {
       }
 
       // check for GPGGA sentence
-      if (strcmp(NMEA_buffer, "$GPGGA" ) != 0) // if we have a GPRMC sentence
-      { 
-        if (gps_fix) // if we dont have a fix we get garbage (leads to too compliated code)
-          gps_parse_gpgga(); // get HDOP and satellites used
-      }
+      if (strcmp(NMEA_buffer, "$GPGGA" ) > 0) // if we have a GPRMC sentence
+          gps_parse_gpgga(); // get HDOP, altitude and satellites in view
       
+			if (! strstr(gps_logfile, gps_date) )
         strcat(strcpy(gps_logfile,gps_date), ".gps"); 
 
-        bufferid++; // ?!? needed??
+      bufferid++; // ?!? needed??
+        
+			// start the write cycle
+      if (sd_write_enable)
+      {
+				digitalWrite(gps_red_led_pin, HIGH);      // Turn on red LED, indicates begin of write to SD
+				
+				gpslogfile = SD.open(gps_logfile, FILE_WRITE);
 
-        digitalWrite(gps_red_led_pin, HIGH);      // Turn on red LED, indicates begin of write to SD
-        File gpslogfile = SD.open(gps_logfile, FILE_WRITE);
-              
-        if (! strstr(gps_logfile, "XXX") )
-        {
-          //Serial.print("debug write into outfile: "); Serial.println(gps_logfile);
+				Serial.print("debug write into outfile: "); Serial.println(gps_logfile);
+				
+        //uint8_t len = gpslogfile.write(NMEA_buffer);
+				//Serial.println(len);
+							
+        gpslogfile.close();
+				digitalWrite(gps_red_led_pin, LOW);    //turn off red LED, indicates write to SD is finished
+      } 
 
-            gpslogfile.write(NMEA_buffer);
-            gpslogfile.close();
-        } 
-
-        digitalWrite(gps_red_led_pin, LOW);    //turn off red LED, indicates write to SD is finished
-        bufferid = 0;    //reset buffer pointer
-        return;
+			if (*(gps_logfile+2) != '.') // check if the gps_logfile has proper values
+				sd_write_enable = 1; // flag the sd card as writeable because now we have a valid datetime set (needed for logfile name)
+			
+      bufferid = 0;    //reset buffer pointer
+      return;
     } // if (c == '\n')
     
     bufferid++;
