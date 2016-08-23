@@ -7,7 +7,7 @@
 #define TEMPERATURE_SAMPLE_PERIOD 10 // temperature measure interval in seconds
 #define GPSRATE 4800
 #define SERIALRATE 9600
-#define NMEA_BUFFERSIZE 80 // plenty big
+#define NMEA_BUFFERSIZE 82 // officially, NMEA sentences are at maximum 82 characters long (80 readable characters + \r\n)
 #define SD_BUFFERSIZE 512 // huge buffer for NMEA sentences to be written to SD card
 
 // EERPOM indices
@@ -66,9 +66,8 @@ M2_EXTERN_ALIGN(top_el_expandable_menu); // Forward declaration of the toplevel 
 U8GLIB_SH1106_128X64_2X OLED(SPI_SS_OLED_pin,  SPI_OLED_a0_pin,  SPI_OLED_reset_pin); // HW SPI - look in the library source for precise info
 
 // set up variables using the SD utility library functions:
-Sd2Card card;
-SdVolume volume;
-SdFile root;
+File gpslogfile;
+bool sd_write_enable = 0;
 
 uint16_t scheduler_run_count = 0;
 volatile bool adxl345_int1 = 0;
