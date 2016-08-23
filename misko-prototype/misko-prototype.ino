@@ -12,7 +12,6 @@
 
 // local files
 #include "adxl345.h" // definition of ADXL345 register addresses
-#include "gps_config.h" // gps stuff
 #include "pin_definitions.h" // pin layout
 #include "global_variables.h" // global variables et al.
 #include "functions.h" // useful functions
