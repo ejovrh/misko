@@ -84,7 +84,7 @@
 // ADXL345 config end
 
 // SD card init
-	if (!card.init(SPI_HALF_SPEED, SPI_SS_SD_card_pin)) 
+	if (!SD.begin(SPI_SS_SD_card_pin)) // will fail if the card is not present
 	{
 		Serial.println(F("SD card initialization failed"));
 	}
