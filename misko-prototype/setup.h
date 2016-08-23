@@ -35,13 +35,24 @@
 	Serial.println(F("serial3 set")); // set gps serial comm. baud rate
 
 	if (EEPROM[EEPROM_GPS_USE_WAAS_INDEX] == 1)
-		Serial3.print(WAAS_ON); // turn on WAAS
+		Serial3.write("$PSRF151,01*0F\r\n"); // turn on WAAS
 	else
-		Serial3.print(WAAS_OFF); // turn off  WAAS
+		Serial3.write("$PSRF151,00*0E\r\n"); // turn off WAAS
 
-	Serial3.write(DDM_ON); // will become obsolete via EEPROM and setup
-	Serial3.print(RMC_ON); // will become obsolete via EEPROM and setup
-	Serial3.print(GGA_ON); // will become obsolete via EEPROM and setup
+	Serial3.write("$PSRF105,01*3E\r\n"); // gps debug messages on
+	//Serial3.write("$PSRF105,00*3F\r\n"); // gps debug messages off
+	
+	//Serial3.write("$PSRF109,137*36\r\n"); // SBAS
+	Serial3.write("$PSRF109,136*37\r\n"); // SBAS - Astra 4B
+	Serial3.write("$PSRF109,120*30\r\n"); // SBAS - Inmarsat 3-F2
+	
+	
+	gps_adjust_log_freq(00, EEPROM[EEPROM_GPS_GPRMC_GGA_FREQ_INDEX]); // GPGGA
+	gps_adjust_log_freq(01, 0); // GPGLL
+	gps_adjust_log_freq(02, 0); // GPGSA
+	gps_adjust_log_freq(03, 0); // GPGSV
+	gps_adjust_log_freq(04, EEPROM[EEPROM_GPS_GPRMC_GGA_FREQ_INDEX]); // GPRMC
+	gps_adjust_log_freq(05, 0); // GPVTG
 	delay(50);
 
 // set up display elements
