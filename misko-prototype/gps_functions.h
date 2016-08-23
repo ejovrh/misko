@@ -131,14 +131,29 @@ void get_nmea_sentences() {
         bufferid = 0; // set pointer back to the beginning
         return;
       }
-
+			
+			// extract GPS time of week, runs only once (if vara is not set)
+			if ( *gps_tow == 'x' && (strcmp(NMEA_buffer, "$PSRFTXT,TOW:") > 0)) // if gps_tow is not set and we have the TOW string
+			{
+				sscanf(NMEA_buffer, "$PSRFTXT,TOW:%6s", gps_tow);	// set the value
+				flag_gps_tow_set = 1;
+			}
+			
+			// extract GPS week, runs only once (if vara is not set)
+			if ( *gps_wk == 'x' && (strcmp(NMEA_buffer, "$PSRFTXT,WK:") > 0)) // if gps_wk is not set and we have the WK string
+			{
+				sscanf(NMEA_buffer, "$PSRFTXT,WK:%4s", gps_wk);	// set the value
+				flag_gps_wk_set = 1;
+			}
+			
       //debug print
-      //Serial.println("debug print of buffer:");      
       #if NMEA_DEBUG_PRINT
+			Serial.println("debug print of buffer:");
 			Serial.print(NMEA_buffer);
 			#endif
+			
       // check for GPRMC sentence
-      if (memcmp(NMEA_buffer, gprmc, 6*sizeof(char)) == 0) // if we have a GPRMC sentence (compare the NMEA buffer with its sentence to gprmc[])
+      if (strcmp(NMEA_buffer, "$GPRMC" ) != 0) // if we have a GPRMC sentence (compare the NMEA buffer with its sentence to gprmc[])
       { 
         gps_parse_gprmc();
 
@@ -149,7 +164,7 @@ void get_nmea_sentences() {
       }
 
       // check for GPGGA sentence
-      if (memcmp(NMEA_buffer, gpgga, 6*sizeof(char)) == 0) // if we have a GPRMC sentence
+      if (strcmp(NMEA_buffer, "$GPGGA" ) != 0) // if we have a GPRMC sentence
       { 
         if (gps_fix) // if we dont have a fix we get garbage (leads to too compliated code)
           gps_parse_gpgga(); // get HDOP and satellites used
