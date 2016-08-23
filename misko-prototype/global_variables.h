@@ -23,8 +23,6 @@
 char NMEA_buffer[NMEA_BUFFERSIZE] = "";        // string buffer for the NMEA sentence
 uint8_t bufferid = 0; // holds the current position in the NMEA_buffer array, used fo walk through the buffer
 char gps_command_buffer[24];
-const char gprmc[] = "$GPRMC"; // beginning of GPRMC sentence, used to fish out datetime via memcmp in gps_functions.h
-const char gpgga[] = "$GPGGA"; // beginning of GPGGA sentence, used to fish out datetime via memcmp in gps_functions.h 
 bool gps_fix = 0;
 char gps_date[9] = "20XXXXXX"; // 0-7 + 1 for '\0' -- YEAR 2100-BUG, HERE WE COME!!!
 char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
@@ -35,6 +33,10 @@ char gps_longtitude[17] = "lon hhhmm.ssss  "; // W or E, memcpy needs to start t
 char gps_altitude[9] = "alt    m"; // GPS altitude: "altxxxxm" or "alt-xxxm", populated in gps_functions.h:gps_parse_gpgga()
 char gps_hdop[8] = "dop____"; // GPS horizontal dilution of position: "dop12.5" , populated in gps_functions.h:gps_parse_gprmc()
 char gps_satellites_in_view[6] = "sat__"; // GPS satellites in view
+char gps_wk[5] = "xxxx";
+bool flag_gps_wk_set = 0;
+char gps_tow[7] = "xxxxxx";
+bool flag_gps_tow_set = 0;
 int8_t timezone;
 
 // device variables
