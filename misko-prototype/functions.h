@@ -17,14 +17,11 @@ int eeprom_timer(unsigned int in_button_press_time, unsigned int in_eeprom_index
 // ready a byte from the ADXL345
 byte adxl345_readByte(byte registerAddress) // reads one byte at registerAddress
 {
-			//Serial.print("registerAddress -");Serial.print(registerAddress, BIN); Serial.println("- registerAddress");
-			//Serial.print("0x80 registerAddress -");Serial.print(0x80 | registerAddress, BIN); Serial.println("- 0x80 registerAddress");
 		digitalWrite(SPI_SS_ADXL345_pin, LOW); // reserve the slave
     
 		SPI.transfer(0x80 | registerAddress); // set the MSB to 1 (the read command), then send address to read from
 		
 		byte retval = SPI.transfer(0x00); // send one byte (0xff) into the circular fifo buffer, get one byte back
-			//Serial.print("retval -");Serial.print(retval, BIN); Serial.println("- retval");
 		
 		digitalWrite(SPI_SS_ADXL345_pin, HIGH); // release the slave
     return retval;  // return value
@@ -160,17 +157,17 @@ void poor_mans_debugging(void)
 		Serial.println("EERPOM fields");
     for (uint8_t i=0; i< 7; i++)
     {
-      Serial.print(i); Serial.print(" - ");Serial.println(EEPROM[i]);
+      Serial.print(i); Serial.print(F(" - "));Serial.println(EEPROM[i]);
     }
 		Serial.println("EERPOM fields");
 
 		//SPI voodoo
 		SPI.beginTransaction(SPISettings(20000000, MSBFIRST, SPI_MODE3));
 		adxl345_readByte(0x00);
-		Serial.print("INT_SOURCE -");Serial.print(adxl345_readByte(0x30), BIN);Serial.println("-");
-		Serial.print("INT_MAP -");Serial.print(adxl345_readByte(0x2F), BIN);Serial.println("-");
-		Serial.print("INT_ENABLE -");Serial.print(adxl345_readByte(0x2E), BIN);Serial.println("-");
-		Serial.print("vbatt -");Serial.print(calculate_voltage(bat_A_pin));Serial.println("-");
+		Serial.print(F("INT_SOURCE -"));Serial.print(adxl345_readByte(0x30), BIN);Serial.println("-");
+		Serial.print(F("INT_MAP -"));Serial.print(adxl345_readByte(0x2F), BIN);Serial.println("-");
+		Serial.print(F("INT_ENABLE -"));Serial.print(adxl345_readByte(0x2E), BIN);Serial.println("-");
+		Serial.print(F("vbatt -"));Serial.print(calculate_voltage(bat_A_pin));Serial.println("-");
 		SPI.endTransaction(); 
 		
 		
@@ -249,12 +246,12 @@ void handle_bluetooth_button(void)
 // puts the oled to sleep accrding to the eeprom setting
 void handle_lcd_sleep(void)
 {
-	if (oled_sleep || EEPROM[EERPOM_LCD_POWER_INDEX] == 1) // dont do anything on "on" setting or in sleep mode
+	if (flag_oled_sleep || EEPROM[EERPOM_LCD_POWER_INDEX] == 1) // dont do anything on "on" setting or in sleep mode
 		return;
 	
 	if (eeprom_timer(lcd_button_press_time, EEPROM[EERPOM_LCD_AUTO_TIMEOUT_INDEX])) // true if tiem is up
 	{
-		oled_sleep = 1;
+		flag_oled_sleep = 1;
 		OLED.sleepOn();
 	}
 }
@@ -563,5 +560,5 @@ void handle_adx_intl(void)
       byte bwRate = adxl345_readByte(BW_RATE);
       adxl345_writeByte(BW_RATE, (BW_RATE & 0x08) );
     }
-    adxl345_int1 = 0;
+    flag_adxl345_int1 = 0;
 }
