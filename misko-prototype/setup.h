@@ -24,7 +24,7 @@
 	analogReference(EXTERNAL); 
 
 // ADXL345 INT1 pin connects to here, fires IRQ on act/inact
-	attachInterrupt(digitalPinToInterrupt(interrupt_adxl345_int1_pin), isr_adxl345_int1, CHANGE); 
+	attachInterrupt(digitalPinToInterrupt(interrupt_adxl345_int1_pin), isr_flag_adxl345_int1, CHANGE); 
 
 // connect to the serial terminal
 	Serial.begin(SERIALRATE);
