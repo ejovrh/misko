@@ -31,9 +31,9 @@ void loop()
 } 
 
 //ISR for the ADXL345 accelerometer
-void isr_adxl345_int1(void) 
+void isr_flag_adxl345_int1(void) 
 {
-	adxl345_int1 = 1; // simply (for now) set a flag to true (is false by default)
+	flag_adxl345_int1 = 1; // simply (for now) set a flag to true (is false by default)
 }
 
 void sleep_led(void)
