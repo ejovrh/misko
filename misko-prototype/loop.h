@@ -6,9 +6,9 @@
 	 lcd_button_press_time = millis(); // save the button press time
 	 
 	 // oled wakeup control
-	 if (oled_sleep) // if the sleep flag is set
+	 if (flag_oled_sleep) // if the sleep flag is set
 	 {
-			oled_sleep = !oled_sleep; // unset the sleep flag
+			flag_oled_sleep = !flag_oled_sleep; // unset the sleep flag
 			OLED.sleepOff(); // wake up the oled
 	 }
 		
@@ -31,7 +31,7 @@
 	get_nmea_sentences(); // gets NMEA sentences out of the GPS and deals with them
 	//Serial.println(millis());
   
-	if (adxl345_int1) // if the ADXL345 INT1 flag is set
+	if (flag_adxl345_int1) // if the ADXL345 INT1 flag is set
 		handle_adx_intl(); // execute the function
 	
 // serial redirection for GSM modem testing
