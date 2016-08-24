@@ -23,7 +23,6 @@
 char NMEA_buffer[NMEA_BUFFERSIZE] = "";        // string buffer for the NMEA sentence
 uint8_t bufferid = 0; // holds the current position in the NMEA_buffer array, used fo walk through the buffer
 char gps_command_buffer[24];
-bool gps_fix = 0;
 char gps_date[9] = "20XXXXXX"; // 0-7 + 1 for '\0' -- YEAR 2100-BUG, HERE WE COME!!!
 char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
 char gps_utc[7] = "UTC+2"; // timezone string
@@ -33,10 +32,11 @@ char gps_longtitude[17] = "lon hhhmm.ssss  "; // W or E, memcpy needs to start t
 char gps_altitude[9] = "alt    m"; // GPS altitude: "altxxxxm" or "alt-xxxm", populated in gps_functions.h:gps_parse_gpgga()
 char gps_hdop[8] = "dop____"; // GPS horizontal dilution of position: "dop12.5" , populated in gps_functions.h:gps_parse_gprmc()
 char gps_satellites_in_view[6] = "sat__"; // GPS satellites in view
-char gps_wk[5] = "xxxx";
-bool flag_gps_wk_set = 0;
-char gps_tow[7] = "xxxxxx";
-bool flag_gps_tow_set = 0;
+char gps_week[5] = "xxxx";
+char gps_time_of_week[7] = "xxxxxx";
+bool flag_gps_fix = 0;
+bool flag_gps_time_of_week_set = 0;
+bool flag_gps_week_set = 0;
 int8_t timezone;
 
 // device variables
@@ -58,7 +58,7 @@ bool flag_bluetooth_power_keep_on = 0;
 // display variables
 uint32_t lcd_button_press_time = millis(); // time of button press
 bool flag_lcd_is_on = 0; // flag is BT device is powered on or off
-bool oled_sleep = 0;
+bool flag_oled_sleep = 0;
 M2_EXTERN_ALIGN(top_el_expandable_menu); // Forward declaration of the toplevel element
 
 // display device initializations
@@ -67,9 +67,9 @@ U8GLIB_SH1106_128X64_2X OLED(SPI_SS_OLED_pin,  SPI_OLED_a0_pin,  SPI_OLED_reset_
 
 // set up variables using the SD utility library functions:
 File gpslogfile;
-bool sd_write_enable = 0;
+bool flag_sd_write_enable = 0;
 
 uint16_t scheduler_run_count = 0;
-volatile bool adxl345_int1 = 0;
+volatile bool flag_adxl345_int1 = 0;
 bool flag_gsm_on = 0;
 uint8_t flag_cb_gsm_power = 0; // used in gsm power callback
