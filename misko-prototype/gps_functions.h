@@ -176,7 +176,20 @@ void get_nmea_sentences() {
       {
 				digitalWrite(gps_red_led_pin, HIGH);      // Turn on red LED, indicates begin of write to SD
 				
-				gpslogfile = SD.open(gps_logfile, FILE_WRITE);
+				if (SD.exists(gps_logfile))
+				{
+					gpslogfile = SD.open(gps_logfile, FILE_APPEND);
+					
+					if (!gpslogfile)
+						Serial.print(F("error FILE_APPEND "));Serial.println(gps_logfile);
+				}
+				else
+				{
+					gpslogfile = SD.open(gps_logfile, FILE_WRITE);
+					
+					if (!gpslogfile)
+						Serial.print(F("error FILE_WRITE "));Serial.println(gps_logfile);
+				}
 
 				Serial.print("debug write into outfile: "); Serial.println(gps_logfile);
 				
@@ -187,7 +200,7 @@ void get_nmea_sentences() {
 				digitalWrite(gps_red_led_pin, LOW);    //turn off red LED, indicates write to SD is finished
       } 
 
-			if (*(gps_logfile+2) != '.') // check if the gps_logfile has proper values
+			if (strlen(gps_logfile) == 12) // check if the gps_logfile has proper values
 				sd_write_enable = 1; // flag the sd card as writeable because now we have a valid datetime set (needed for logfile name)
 			
       bufferid = 0;    //reset buffer pointer
