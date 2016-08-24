@@ -1,6 +1,6 @@
 
 // determines fix or not, parses coordinates, datetime
-void gps_parse_gprmc() 
+void gps_parse_gprmc() // kludge alert!
 { 
   // sample NMEA GPRMC sentence
   //    $GPRMC,170942.000,A,4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
@@ -18,26 +18,26 @@ void gps_parse_gprmc()
   // field 3 - fix indicator: A,4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
   p = strchr(p, ',')+1; // finds position of next comma and puts the cursor one position further
 	
-	gps_fix = ( *p == 'A' ? 1 : 0 ); // sets gps_fix to 1 if there is a fix
+	flag_gps_fix = ( *p == 'A' ? 1 : 0 ); // sets flag_gps_fix to 1 if there is a fix
 	
   // field 4 - latitude: 4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
   p = strchr(p, ',')+1; 
-  if (gps_fix)
+  if (flag_gps_fix)
     memcpy(gps_latitude+(4*sizeof(char)), p, 9 * sizeof(char)); // fill up gps_latitude[] , part 1
 
   // field 5 - latitude indicator: N,01555.1254,E,0.13,142.38,050816,,,A*63
   p = strchr(p, ',')+1;
-  if (gps_fix)
+  if (flag_gps_fix)
     memcpy(gps_latitude+(13*sizeof(char)), p, sizeof(char)); // fill up gps_latitude[] , part 2
 
   // field 6 - longtitude: 01555.1254,E,0.13,142.38,050816,,,A*63
   p = strchr(p, ',')+1;
-  if (gps_fix)
+  if (flag_gps_fix)
     memcpy(gps_longtitude+(4*sizeof(char)), p, 10 * sizeof(char)); // fill up gps_longtitude[] , part 1
 
   // field 7 - longtitude indicator: E,0.13,142.38,050816,,,A*63
   p = strchr(p, ',')+1;
-  if (gps_fix)
+  if (flag_gps_fix)
     memcpy(gps_longtitude+(14*sizeof(char)), p, sizeof(char)); // fill up gps_longtitude[] , part 2, appends letter
 
   // [not needed] field 8 - speed over ground: 0.13,142.38,050816,,,A*63
@@ -60,9 +60,9 @@ void gps_parse_gprmc()
 }
 
 // parses out sattelites used and HDOP 
-void gps_parse_gpgga() 
+void gps_parse_gpgga() // kludge alert!
 {
-	if (!gps_fix)
+	if (!flag_gps_fix)
 		return;
 	
 	uint8_t len = 0;
@@ -133,17 +133,17 @@ void get_nmea_sentences() {
       }
 			
 			// extract GPS time of week, runs only once (if vara is not set)
-			if ( *gps_tow == 'x' && (strcmp(NMEA_buffer, "$PSRFTXT,TOW:") > 0)) // if gps_tow is not set and we have the TOW string
+			if ( *gps_time_of_week == 'x' && (strcmp(NMEA_buffer, "$PSRFTXT,TOW:") > 0)) // if gps_time_of_week is not set and we have the TOW string
 			{
-				sscanf(NMEA_buffer, "$PSRFTXT,TOW:%6s", gps_tow);	// set the value
-				flag_gps_tow_set = 1;
+				sscanf(NMEA_buffer, "$PSRFTXT,TOW:%6s", gps_time_of_week);	// set the value
+				flag_gps_time_of_week_set = 1;
 			}
 			
 			// extract GPS week, runs only once (if vara is not set)
-			if ( *gps_wk == 'x' && (strcmp(NMEA_buffer, "$PSRFTXT,WK:") > 0)) // if gps_wk is not set and we have the WK string
+			if ( *gps_week == 'x' && (strcmp(NMEA_buffer, "$PSRFTXT,WK:") > 0)) // if gps_week is not set and we have the WK string
 			{
-				sscanf(NMEA_buffer, "$PSRFTXT,WK:%4s", gps_wk);	// set the value
-				flag_gps_wk_set = 1;
+				sscanf(NMEA_buffer, "$PSRFTXT,WK:%4s", gps_week);	// set the value
+				flag_gps_week_set = 1;
 			}
 			
       //debug print
@@ -156,7 +156,7 @@ void get_nmea_sentences() {
 			{ 
         gps_parse_gprmc(); // parse the GPRMC sentence and get datetime and other values
 				
-        if (gps_fix) // valid fix - indicate it by lighting up the reed LED
+        if (flag_gps_fix) // valid fix - indicate it by lighting up the reed LED
           digitalWrite(gps_green_led_pin, HIGH);
         else 
           digitalWrite(gps_green_led_pin, LOW);
@@ -166,42 +166,40 @@ void get_nmea_sentences() {
       if (strcmp(NMEA_buffer, "$GPGGA" ) > 0) // if we have a GPRMC sentence
           gps_parse_gpgga(); // get HDOP, altitude and satellites in view
       
-			if (! strstr(gps_logfile, gps_date) )
-        strcat(strcpy(gps_logfile,gps_date), ".gps"); 
+			// logfile name generation - should run only once a day
+			if (! strstr(gps_logfile, gps_date) ) // if current gps_date is not in gps_logfile
+        strcat(strcpy(gps_logfile,gps_date), ".gps"); // copy it there
 
       bufferid++; // ?!? needed??
         
 			// start the write cycle
-      if (sd_write_enable)
+      if (flag_sd_write_enable && flag_gps_fix) // if we are set up to write - i.e. the logfile name is set
       {
 				digitalWrite(gps_red_led_pin, HIGH);      // Turn on red LED, indicates begin of write to SD
 				
-				if (SD.exists(gps_logfile))
+				// open file in proper mode - once! (not on every iteration)
+				if (SD.exists(gps_logfile)) // if exists - append mode 
 				{
-					gpslogfile = SD.open(gps_logfile, FILE_APPEND);
-					
-					if (!gpslogfile)
-						Serial.print(F("error FILE_APPEND "));Serial.println(gps_logfile);
+					if (!gpslogfile) // run only on initialization, not on every loop iteration
+						gpslogfile = SD.open(gps_logfile, FILE_APPEND);
 				}
-				else
+				else // if not exists - write mode  (will create new file)
 				{
 					gpslogfile = SD.open(gps_logfile, FILE_WRITE);
-					
-					if (!gpslogfile)
-						Serial.print(F("error FILE_WRITE "));Serial.println(gps_logfile);
 				}
-
-				Serial.print("debug write into outfile: "); Serial.println(gps_logfile);
+				
+				Serial.print(F("debug write into outfile: ")); Serial.println(gps_logfile);
 				
         //uint8_t len = gpslogfile.write(NMEA_buffer);
 				//Serial.println(len);
 							
-        gpslogfile.close();
+        // gpslogfile.close(); -- this shall be not needed since a sync call shall be used on each write of a 512byte block
+				
 				digitalWrite(gps_red_led_pin, LOW);    //turn off red LED, indicates write to SD is finished
       } 
 
-			if (strlen(gps_logfile) == 12) // check if the gps_logfile has proper values
-				sd_write_enable = 1; // flag the sd card as writeable because now we have a valid datetime set (needed for logfile name)
+			if (strlen(gps_logfile) == 12) // check if the gps_logfile is of proper lenght (== likely to be initialized)
+				flag_sd_write_enable = 1; // flag the sd card as writeable because now we have a valid datetime set (needed for logfile name)
 			
       bufferid = 0;    //reset buffer pointer
       return;
