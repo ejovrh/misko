@@ -173,10 +173,12 @@ void get_nmea_sentences() {
       bufferid++; // ?!? needed??
         
 			// start the write cycle
-//      if (flag_sd_write_enable && flag_gps_fix) // if we are set up to write - i.e. the logfile name is set
-      if (flag_sd_write_enable) // if we are set up to write - i.e. the logfile name is set
+      #if BUFFER_DEBUG_PRINT
+			if (flag_sd_write_enable) // if we are set up to write - i.e. the logfile name is set
+			#else
+			if (flag_sd_write_enable && flag_gps_fix) // if we are set up to write - i.e. the logfile name is set
+			#endif
       {
-				
 				// open file in proper mode - once! (not on every iteration)
 				if (SD.exists(gps_logfile)) // if exists - append mode 
 				{
