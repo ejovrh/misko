@@ -37,6 +37,7 @@
 #define MCP73871_power_good_indicator_pin 38 // supply power indicator
 #define TMP36_shutdown_pin 39 // not yet implemented
 #define bluetooth_power_toggle_pin 40 // user menu - bluetooth power toggle
+#define SD_card_detect_pin 43 // detects card inserted or not
 #define SIM800L_mosfet_gate_pin 44 // SIM800L power control via mosfet
 #define SPI_SS_SD_card_pin 45 // SD card SPI SS pin
 #define SPI_SS_ADXL345_pin 46 // slave select for ADXL345(CS)
