@@ -3,7 +3,7 @@
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
 
 #define NMEA_DEBUG_PRINT 0 // define not 0 to have NMEA printout
-
+#define BUFFER_DEBUG_PRINT 0
 
 #define AREF_VOLTAGE 4.27
 #define TEMPERATURE_SAMPLE_PERIOD 10 // temperature measure interval in seconds
