@@ -41,10 +41,16 @@
 
 	Serial3.write("$PSRF105,01*3E\r\n"); // gps debug messages on
 	//Serial3.write("$PSRF105,00*3F\r\n"); // gps debug messages off
-	
-	//Serial3.write("$PSRF109,137*36\r\n"); // SBAS
+	Serial3.write("$PSRF109,137*36\r\n"); // use SBAS
+	Serial3.write("$PSRF109,120*30\r\n"); // SBAS Channel PRN120 #33(EGNOS) Inmarsat 3-F2
+	Serial3.write("$PSRF109,122*32\r\n"); // SBAS Channel PRN122 #35(WAAS)
+	Serial3.write("$PSRF109,124*34\r\n"); // SBAS Channel PRN124 #37(EGNOS)
+	Serial3.write("$PSRF109,126*36\r\n"); // SBAS Channel PRN126 #39(EGNOS)
+	Serial3.write("$PSRF109,129*39\r\n"); // SBAS Channel PRN129 #42(MTSAT-1)
+	Serial3.write("$PSRF109,131*30\r\n"); // SBAS Channel PRN131 #44(EGNOS)
+	Serial3.write("$PSRF109,134*35\r\n"); // SBAS Channel PRN134 #47(WAAS)
 	Serial3.write("$PSRF109,136*37\r\n"); // SBAS - Astra 4B
-	Serial3.write("$PSRF109,120*30\r\n"); // SBAS - Inmarsat 3-F2
+	Serial3.write("$PSRF109,137*36\r\n"); // SBAS Channel PRN137 #50(MTSAT-2)
 	
 	
 	gps_adjust_log_freq(00, EEPROM[EEPROM_GPS_GPRMC_GGA_FREQ_INDEX]); // GPGGA
