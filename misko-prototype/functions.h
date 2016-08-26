@@ -562,3 +562,94 @@ void handle_adx_intl(void)
     }
     flag_adxl345_int1 = 0;
 }
+
+void sd_buffer_write(char *in_string, uint8_t in_size)
+{
+	// pointer arithmetrics, beware!
+	static char *end = sd_buffer + SD_BUFFERSIZE; // end address of buffer
+	static char *target = sd_buffer; // at init time is start address of sd_buffer, otherwise is current of next free write dst. addr
+	static bool flag_flush_1st = 0; // flag 1st half of buffer for flushing
+	static bool flag_flush_2nd = 0; // flag 2nd half of buffer for flushing
+	uint8_t len = 0;
+	uint8_t rest = 0;
+	
+	Serial.print("buffer start:");Serial.println((uint16_t)sd_buffer);
+	Serial.print("buffer end:");Serial.println((uint16_t) end);
+	Serial.print("target:");Serial.println((uint16_t) target - (uint16_t)sd_buffer );
+	Serial.print("in_size");Serial.println(in_size);
+	Serial.print("space left:");Serial.println((uint16_t) end - (uint16_t)target );
+	
+	/* we need to cyclically write into the buffer and make sure we dont write past the buffer end address:
+			if we have a sring that would go past buffer end address, we truncate it, fill up the buffer until 
+			the end addr with as much string that fits and then write the rest of the string at the beginning of
+			the buffer.
+			
+		every time we do this, we need to check if the 1st half (or the 2nd half) of the buffer are filled
+			with fresh data; if so, we need to flush it onto the SD card.
+			
+		*in_string points to the global variable NMEA_buffer, in_size bytes in lenght.
+			per NMEA standard, the NMEA sentence can be maximally 82 characters long (80 + \r\n)
+	*/
+	if (target < sd_buffer + 942 * sizeof(char)) // if one NMEA sentence will fit
+	// simply write into the buffer
+	{
+		Serial.println("if");
+		target = (char *) memcpy(target, in_string, in_size); // copy onto location of c and return position of destination
+		target += in_size*sizeof(char); // advance target by ammount of bytes copied to the next free space
+		
+		if (!flag_flush_1st && target >= sd_buffer + 512* sizeof(char)) // if we have filled 1st 512 byte buffer
+		{
+			Serial.println("MARK 1st 512 full");
+			flag_flush_1st = 1; // mark the 1st buffer for flushing
+		}
+		
+		if (!flag_flush_2nd && target < sd_buffer + 512* sizeof(char)) // if we have filled 1st 512 byte buffer
+		{
+			flag_flush_2nd = 1; // mark the 2nd buffer for flushing
+		}
+		
+	}
+	else // the incoming sentence will not fully fit
+	// write what fits until the end of sd_buffer and the rest from beginning of sd_buffer
+	{
+		Serial.println("else");
+		
+		len = SD_BUFFERSIZE - (uint16_t)target; // how much free space is left? [difference in addresses]
+		rest = in_size-len; // how much will not fit? [difference in number of bytes]
+		
+		Serial.print("rest:");Serial.println(rest );
+		Serial.print("len:");Serial.println(len);
+
+		// first, flush the 1st half of the buffer
+		if (flag_flush_1st)
+		{
+			digitalWrite(gps_red_led_pin, HIGH);
+			Serial.println("flushing 1st half");
+			//SD.write(sd_buffer+512*sizeof(char), 512*sizeof(char));
+			flag_flush_1st = 0; // unmark it
+			digitalWrite(gps_red_led_pin, LOW);
+		}
+		
+		memcpy(target, in_string, len); // write that much into buffer
+		target = sd_buffer; // set pointer back to start
+		
+		target = (char *) memcpy(target, in_string+len*sizeof(char), rest*sizeof(char)); // write the rest
+		target += rest*sizeof(char); // advance target by ammount of bytes copied to the next free space
+
+		// now we can flush the 2nd half of the buffer 
+		if (flag_flush_2nd)
+		{
+			digitalWrite(gps_red_led_pin, HIGH);
+			Serial.println("flushing 2nd half");
+			//SD.write(sd_buffer+512*sizeof(char), 512*sizeof(char));
+			flag_flush_2nd = 0; // unmark it
+			digitalWrite(gps_red_led_pin, LOW);
+		}
+	}
+	
+/* 	Serial.println("sd buffer contents");
+	for (int i=0; i<SD_BUFFERSIZE; i++)
+		Serial.print(sd_buffer[i]);
+	Serial.println("sd buffer contents"); 
+	*/
+}
