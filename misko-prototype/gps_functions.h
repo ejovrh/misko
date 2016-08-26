@@ -152,7 +152,7 @@ void get_nmea_sentences() {
 			#endif
 			
       // check for GPRMC sentence
-      if (strcmp(NMEA_buffer, "$GPRMC" ) > 0) // if we have a GPRMC sentence (compare the NMEA buffer with its sentence to gprmc[])      
+      if (strncmp(NMEA_buffer, "$GPRMC", 6) == 0) // if we have a GPRMC sentence (compare the NMEA buffer with its sentence to gprmc[])      
 			{ 
         gps_parse_gprmc(); // parse the GPRMC sentence and get datetime and other values
 				
@@ -163,7 +163,7 @@ void get_nmea_sentences() {
       }
 
       // check for GPGGA sentence
-      if (strcmp(NMEA_buffer, "$GPGGA" ) > 0) // if we have a GPRMC sentence
+      if (strncmp(NMEA_buffer, "$GPGGA",  6) == 0) // if we have a GPRMC sentence
           gps_parse_gpgga(); // get HDOP, altitude and satellites in view
       
 			// logfile name generation - should run only once a day
@@ -173,9 +173,9 @@ void get_nmea_sentences() {
       bufferid++; // ?!? needed??
         
 			// start the write cycle
-      if (flag_sd_write_enable && flag_gps_fix) // if we are set up to write - i.e. the logfile name is set
+//      if (flag_sd_write_enable && flag_gps_fix) // if we are set up to write - i.e. the logfile name is set
+      if (flag_sd_write_enable) // if we are set up to write - i.e. the logfile name is set
       {
-				digitalWrite(gps_red_led_pin, HIGH);      // Turn on red LED, indicates begin of write to SD
 				
 				// open file in proper mode - once! (not on every iteration)
 				if (SD.exists(gps_logfile)) // if exists - append mode 
@@ -188,14 +188,7 @@ void get_nmea_sentences() {
 					gpslogfile = SD.open(gps_logfile, FILE_WRITE);
 				}
 				
-				Serial.print(F("debug write into outfile: ")); Serial.println(gps_logfile);
-				
-        //uint8_t len = gpslogfile.write(NMEA_buffer);
-				//Serial.println(len);
-							
-        // gpslogfile.close(); -- this shall be not needed since a sync call shall be used on each write of a 512byte block
-				
-				digitalWrite(gps_red_led_pin, LOW);    //turn off red LED, indicates write to SD is finished
+				sd_buffer_write(NMEA_buffer, bufferid); // write NMEA data into buffer
       } 
 
 			if (strlen(gps_logfile) == 12) // check if the gps_logfile is of proper lenght (== likely to be initialized)
