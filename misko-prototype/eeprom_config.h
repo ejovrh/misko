@@ -27,5 +27,6 @@ if (EEPROM[0] != CONFIG_VERSION) // only if the version did change we will write
 	EEPROM[EERPOM_TIMEZONE_INDEX] = 2; // UTC timezone, -12, ..., +12, default +2
 	EEPROM[EEPROM_GPS_GPRMC_GGA_FREQ_INDEX] = 1; // frequency of RMC and GGA messages from the em406 module, 1 - 20
 	EEPROM[EEPROM_GPS_USE_WAAS_INDEX] = 1; // USE_WAAS - default on
-	EEPROM[EERPOM_SD_WRITE_ENABLE_INDEX] = 0;
+	EEPROM[EERPOM_SD_WRITE_ENABLE_INDEX] = 0; // enable write to SD card or not
+	EEPROM[EERPOM_NMEA_PRINTOUT_INDEX] = 0; // enable write to SD card or not
 }
