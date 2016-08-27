@@ -146,10 +146,9 @@ void get_nmea_sentences() {
 				flag_gps_week_set = 1;
 			}
 			
-      //debug print
-      #if NMEA_DEBUG_PRINT
+      //NMEA sentence printout
+      if (EEPROM[EERPOM_NMEA_PRINTOUT_INDEX])
 				Serial.print(NMEA_buffer);
-			#endif
 			
       // check for GPRMC sentence
       if (strncmp(NMEA_buffer, "$GPRMC", 6) == 0) // if we have a GPRMC sentence (compare the NMEA buffer with its sentence to gprmc[])      
