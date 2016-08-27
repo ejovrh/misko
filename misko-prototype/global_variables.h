@@ -71,6 +71,8 @@ U8GLIB_SH1106_128X64_2X OLED(SPI_SS_OLED_pin,  SPI_OLED_a0_pin,  SPI_OLED_reset_
 // set up variables using the SD utility library functions:
 File gpslogfile; // file object for the logfile
 bool flag_sd_write_enable = 0; // flag if a write shall be allowed or not - is controlled by log file name initialization
+uint8_t fs_m2tk_first = 0; // helper variable for the strlist element
+uint8_t fs_m2tk_cnt = 0; // helper variable for the strlist element
 
 uint16_t scheduler_run_count = 0; // counts how many times the scheduler has run
 volatile bool flag_adxl345_int1 = 0; // flag for active interrupt
