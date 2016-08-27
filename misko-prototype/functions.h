@@ -536,6 +536,82 @@ const char *fn_cb_get_power_good_status(m2_rom_void_p element)
 		return "ExtPw off ";
 }
 
+// send contents of file over serial to host PC
+void print_to_serial(const char *in_string)
+{
+	Serial.println(in_string);
+}
+
+//M2tk function for FAT directory content retrieval
+const char *fs_strlist_getstr(uint8_t idx, uint8_t msg)  
+{
+  if (msg == M2_STRLIST_MSG_GET_STR)  
+	{
+    /* Check for the extra button: Return string for this extra button */
+    if ( idx == 0 )
+      return "..";
+    
+		/* Not the extra button: Return file/directory name */
+    mas_GetDirEntry(idx - 1);
+    return mas_GetFilename();
+  } 
+	else 
+	{	
+		if ( msg == M2_STRLIST_MSG_GET_EXTENDED_STR ) 
+		{
+			/* Check for the extra button: Return icon for this extra button */
+			if ( idx == 0 )
+				return "a";       /* arrow left of the m2icon font */
+			
+			/* Not the extra button: Return file or directory icon */
+			mas_GetDirEntry(idx - 1);
+			
+			if ( mas_IsDir() )
+				return "A";       /* folder icon of the m2icon font */
+			return "B";         /* file icon of the m2icon font */
+		} 
+		
+		if ( msg == M2_STRLIST_MSG_SELECT ) // button right
+		{
+			/* Check for the extra button: Execute button action */
+			if ( idx == 0 ) 
+			{
+				if ( mas_GetPath()[0] == '\0' )
+					m2_SetRoot(&top_el_expandable_menu);      
+				else 
+				{
+					mas_ChDirUp();
+					m2_SetRoot(m2_GetRoot());  /* reset menu to first element, send NEW_DIALOG and force recount */
+				}
+					/* Not the extra button: Goto subdir or return (with selected file) */
+			} 
+			else 
+			{
+				mas_GetDirEntry(idx - 1);
+				if ( mas_IsDir() ) 
+				{
+					mas_ChDir(mas_GetFilename());
+					m2_SetRoot(m2_GetRoot());  /* reset menu to first element, send NEW_DIALOG and force recount */
+				} 
+				else 
+				{
+						print_to_serial(mas_GetFilename()); // send the filename to print_to_serial() for TX over serial to e.g. putty
+				}
+			}
+		} 
+		
+		if ( msg == M2_STRLIST_MSG_NEW_DIALOG ) 
+		{
+			/* (re-) calculate number of entries, limit no of entries to 250 */
+			if ( mas_GetDirEntryCnt() < 250-1 )
+				fs_m2tk_cnt = mas_GetDirEntryCnt()+1;
+			else
+				fs_m2tk_cnt = 250;
+		}
+  }
+	return NULL;
+}
+
 // switched GSM on / off, inits on "on"
 void gsm_power(bool in_val)
 {
@@ -598,6 +674,7 @@ void handle_adx_intl(void)
     flag_adxl345_int1 = 0;
 }
 
+// buffered write onto SD card utilizing a circular buffer
 void sd_buffer_write(char *in_string, uint8_t in_size)
 {
 	// pointer arithmetrics, beware!
