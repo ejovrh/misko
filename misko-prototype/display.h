@@ -88,10 +88,12 @@ M2_ALIGN(el_top_lcd_menu, "-1|1W64H64", &el_lcd_grid);
 // lcd end
 
 // gps start
+M2_LABEL(el_nmea_printout, "rf0", "NMEA printout");
+M2_COMBOFN(el_nmea_printout_value, "rf0", 2, fn_cb_nmea_printout_setting);
 M2_LABEL(el_gps_freq, "rf0", "Frequency");
 M2_S8NUMFN(el_gps_freq_value, "+0c1f0", 1, 20, fn_cb_set_eerpom_gps_log_freq);
 M2_ROOT(el_gps_ok, "f0", "OK", &top_el_expandable_menu);
-M2_LIST(el_gps_list) = { &el_gps_freq, &el_gps_freq_value, &el_gps_ok };
+M2_LIST(el_gps_list) = { &el_nmea_printout, &el_nmea_printout_value, &el_gps_freq, &el_gps_freq_value, &el_gps_ok };
 M2_GRIDLIST(el_gps_grid, "c2", el_gps_list);
 M2_ALIGN(el_top_gps_menu, "-1|1W64H64", &el_gps_grid);
 // gps end
