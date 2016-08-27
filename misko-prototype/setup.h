@@ -98,3 +98,4 @@
 	{
 			Serial.println(F("Wiring is correct and a card is present."));
 	}
+	mas_Init(mas_device_sd, NULL);
