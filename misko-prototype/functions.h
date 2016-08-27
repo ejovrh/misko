@@ -155,7 +155,7 @@ void poor_mans_debugging(void)
 			
 		// EEPROM fields
 		Serial.println("EERPOM fields");
-    for (uint8_t i=0; i< 7; i++)
+    for (uint8_t i=0; i< 9; i++)
     {
       Serial.print(i); Serial.print(F(" - "));Serial.println(EEPROM[i]);
     }
@@ -427,6 +427,35 @@ const char *fn_cb_gsm_power(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
   return NULL;
 }
 
+// callback for SD write setting
+const char *fn_cb_sd_write(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
+{
+	// see fn_cb_bluetooth_power_setting for comments
+	switch(msg)
+  {
+		case M2_COMBOFN_MSG_GET_VALUE:
+			*valptr = EEPROM[EERPOM_SD_WRITE_ENABLE_INDEX];
+      break;
+			
+    case M2_COMBOFN_MSG_SET_VALUE:
+			EEPROM[EERPOM_SD_WRITE_ENABLE_INDEX] = *valptr;
+      break;
+			
+    case M2_COMBOFN_MSG_GET_STRING:
+      if (*valptr == 0)
+			{
+        return "off";
+			}
+			
+      if (*valptr == 1)
+			{
+        return "on";
+			}
+  }
+				
+  return NULL;
+}
+
 // callback for EEPROM timezone setting
 int8_t fn_cb_set_eerpom_tz(m2_rom_void_p element, uint8_t msg, int8_t val)
 {
@@ -625,15 +654,16 @@ void sd_buffer_write(char *in_string, uint8_t in_size)
 		// first, flush the 1st half of the buffer
 		if (flag_flush_1st)
 		{
-			digitalWrite(gps_red_led_pin, HIGH);
+			digitalWrite(gps_red_led_pin, HIGH); // turn on led to make write cycle start visible
 			
 			#if BUFFER_DEBUG_PRINT
 				Serial.println("flushing 1st half");
+			#else			
+				gpslogfile.write(sd_buffer, 512*sizeof(char)); // write 1st half of the buffer
+				gpslogfile.flush(); // flush all to card
 			#endif
 			
-			gpslogfile.write(sd_buffer, 512*sizeof(char));
 			flag_flush_1st = 0; // unmark it
-			//digitalWrite(gps_red_led_pin, LOW);
 		}
 		
 		memcpy(target, in_string, len); // write that much into buffer
@@ -649,11 +679,13 @@ void sd_buffer_write(char *in_string, uint8_t in_size)
 			
 			#if BUFFER_DEBUG_PRINT
 				Serial.println("flushing 2nd half");
+			#else 
+				gpslogfile.write(sd_buffer+512*sizeof(char), 512*sizeof(char)); // write 2nd half of the buffer
+				gpslogfile.flush(); // flush all to card
 			#endif
 	
-			gpslogfile.write(sd_buffer+512*sizeof(char), 512*sizeof(char));
 			flag_flush_2nd = 0; // unmark it
-			digitalWrite(gps_red_led_pin, LOW);
+			digitalWrite(gps_red_led_pin, LOW); // turn on led to make write cycle end visible
 		}
 	}
 	
