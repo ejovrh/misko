@@ -540,6 +540,19 @@ const char *fn_cb_get_power_good_status(m2_rom_void_p element)
 void print_to_serial(const char *in_string)
 {
 	Serial.println(in_string);
+	 File dataFile = SD.open(in_string);
+
+  if (dataFile) 
+	{
+		Serial.print(in_string);Serial.println(F(" START ----------------------------"));
+    while (dataFile.available()) 
+		{
+      Serial.write(dataFile.read());
+    }
+		
+    dataFile.close();
+		Serial.print(in_string);Serial.println(F(" END  -----------------------------"));
+}
 }
 
 //M2tk function for FAT directory content retrieval
