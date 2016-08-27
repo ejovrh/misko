@@ -2,8 +2,7 @@
 #define CONFIG_VERSION 4 // protection against excessive EEPROM writes
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
 
-#define NMEA_DEBUG_PRINT 0 // define not 0 to have NMEA printout
-#define BUFFER_DEBUG_PRINT 0
+#define BUFFER_DEBUG_PRINT 0 // sd write debug printout
 
 #define AREF_VOLTAGE 4.27
 #define TEMPERATURE_SAMPLE_PERIOD 10 // temperature measure interval in seconds
@@ -21,6 +20,7 @@
 #define EEPROM_GPS_GPRMC_GGA_FREQ_INDEX 6
 #define EEPROM_GPS_USE_WAAS_INDEX 7
 #define EERPOM_SD_WRITE_ENABLE_INDEX 8
+#define EERPOM_NMEA_PRINTOUT_INDEX 9
 
 // GPS variuables
 char NMEA_buffer[NMEA_BUFFERSIZE] = "";        // string buffer for the NMEA sentence
@@ -35,11 +35,12 @@ char gps_longtitude[17] = "lon hhhmm.ssss  "; // W or E, memcpy needs to start t
 char gps_altitude[9] = "alt    m"; // GPS altitude: "altxxxxm" or "alt-xxxm", populated in gps_functions.h:gps_parse_gpgga()
 char gps_hdop[8] = "dop____"; // GPS horizontal dilution of position: "dop12.5" , populated in gps_functions.h:gps_parse_gprmc()
 char gps_satellites_in_view[6] = "sat__"; // GPS satellites in view
-char gps_week[5] = "xxxx";
-char gps_time_of_week[7] = "xxxxxx";
-bool flag_gps_fix = 0;
-bool flag_gps_time_of_week_set = 0;
-bool flag_gps_week_set = 0;
+char gps_week[5] = "xxxx"; // string holding the GPS WeeK 
+char gps_time_of_week[7] = "xxxxxx"; // string holding the GPS Time Of Week
+bool flag_gps_fix = 0; // do we have a fix or not?
+bool flag_gps_time_of_week_set = 0; // is the GPS time of week set or not?
+bool flag_gps_week_set = 0; // is the GPS week set or not?
+bool flag_nmea_sentence_printout = 0; // shall incoming NMEA sentences (regardless of fix) be printed out or not?
 int8_t timezone;
 
 // device variables
