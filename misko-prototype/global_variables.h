@@ -20,12 +20,13 @@
 #define EERPOM_TIMEZONE_INDEX 5
 #define EEPROM_GPS_GPRMC_GGA_FREQ_INDEX 6
 #define EEPROM_GPS_USE_WAAS_INDEX 7
+#define EERPOM_SD_WRITE_ENABLE_INDEX 8
 
 // GPS variuables
 char NMEA_buffer[NMEA_BUFFERSIZE] = "";        // string buffer for the NMEA sentence
 uint8_t bufferid = 0; // holds the current position in the NMEA_buffer array, used fo walk through the buffer
 char gps_command_buffer[24];
-char gps_date[9] = "20XXXXXX"; // 0-7 + 1 for '\0' -- YEAR 2100-BUG, HERE WE COME!!!
+char gps_date[9] = "20"; // 0-7 + 1 for '\0' -- YEAR 2100-BUG, HERE WE COME!!!
 char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
 char gps_utc[7] = "UTC+2"; // timezone string
 char gps_logfile[13] = "";
@@ -47,7 +48,7 @@ char temp[6] = "T+xxC";
 uint16_t avg_temp = 0;
 char vcc[9] = "Vccx.xxV";
 char bat_a_pct[9] = "batAxxx%";
-char sd_buffer[SD_BUFFERSIZE];
+char sd_buffer[SD_BUFFERSIZE]; // buffer holding 2x 512byte blocks of NMEA sentences for buffered write of 512byte blocks
 
 // bluetooth flags
 uint32_t bluetooth_button_press_time = millis(); // time of button press
@@ -70,7 +71,7 @@ U8GLIB_SH1106_128X64_2X OLED(SPI_SS_OLED_pin,  SPI_OLED_a0_pin,  SPI_OLED_reset_
 File gpslogfile; // file object for the logfile
 bool flag_sd_write_enable = 0; // flag if a write shall be allowed or not - is controlled by log file name initialization
 
-uint16_t scheduler_run_count = 0;
-volatile bool flag_adxl345_int1 = 0;
+uint16_t scheduler_run_count = 0; // counts how many times the scheduler has run
+volatile bool flag_adxl345_int1 = 0; // flag for active interrupt
 bool flag_gsm_on = 0; // flag if the gsm modem shall be powered on or not, controlled via menu combo, inspected in loop()
 uint8_t flag_cb_gsm_power = 0; // used in gsm power callback
