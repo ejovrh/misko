@@ -14,7 +14,7 @@
 #include "pin_definitions.h" // pin layout
 #include "global_variables.h" // global variables et al.
 #include "functions.h" // useful functions
-#include "display.h"
+#include "display.h" // display code
 
 void setup() 
 {
