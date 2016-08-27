@@ -52,6 +52,14 @@ M2_ALIGN(el_top_device_misc_menu, "-1|1W64H64", &el_device_misc_grid);
 
 // data output end
 
+// sd card start el_top_sd_menu
+M2_LABEL(el_sd_write, "rf0", "SD card write");
+M2_COMBOFN(el_sd_write_setting, "rf0", 2, fn_cb_sd_write);
+M2_LIST(el_sd_list) = { &el_sd_write, &el_sd_write_setting, &el_ok };
+M2_GRIDLIST(el_sd_grid, "c2", el_sd_list);
+M2_ALIGN(el_top_sd_menu, "-1|1W64H64", &el_sd_grid);
+// sd card end
+
 // timezone start 
 M2_LABEL(el_timezone_utc, "rf0", "UTC");
 M2_S8NUMFN(el_timezone_utc_value, "+1c2", -12, 12, fn_cb_set_eerpom_tz);
@@ -104,6 +112,7 @@ m2_menu_entry m2_2lmenu_data[] =
   { ". Position", &el_top_position_menu },
   { ". Device Status", &el_top_device_misc_menu}, 
   { "Settings", NULL },
+	{ ". SD card", &el_top_sd_menu},
   { ". Timezone", &el_top_timezone_menu },
   { ". Bluetooth", &el_top_bluetooth_menu },
   { ". Display", &el_top_lcd_menu },
