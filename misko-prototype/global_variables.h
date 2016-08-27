@@ -1,13 +1,16 @@
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
-#define CONFIG_VERSION 3 // protection against excessive EEPROM writes
+#define CONFIG_VERSION 4 // protection against excessive EEPROM writes
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
 
+#define NMEA_DEBUG_PRINT 0 // define not 0 to have NMEA printout
+#define BUFFER_DEBUG_PRINT 0
+
+#define AREF_VOLTAGE 4.27
 #define TEMPERATURE_SAMPLE_PERIOD 10 // temperature measure interval in seconds
 #define GPSRATE 4800
 #define SERIALRATE 9600
-//BLUETOOTHSERIALRATE is hardcoded in device
-#define NMEA_BUFFERSIZE 80 // plenty big
-#define SD_BUFFERSIZE 4096 // huge buffer for NMEA sentences to be written to SD card
+#define NMEA_BUFFERSIZE 82 // officially, NMEA sentences are at maximum 82 characters long (80 readable characters + \r\n)
+#define SD_BUFFERSIZE 1024 // huge buffer for NMEA sentences to be written to SD card
 
 // EERPOM indices
 #define EERPOM_LCD_POWER_INDEX 1
@@ -17,49 +20,58 @@
 #define EERPOM_TIMEZONE_INDEX 5
 #define EEPROM_GPS_GPRMC_GGA_FREQ_INDEX 6
 #define EEPROM_GPS_USE_WAAS_INDEX 7
+#define EERPOM_SD_WRITE_ENABLE_INDEX 8
 
 // GPS variuables
 char NMEA_buffer[NMEA_BUFFERSIZE] = "";        // string buffer for the NMEA sentence
 uint8_t bufferid = 0; // holds the current position in the NMEA_buffer array, used fo walk through the buffer
-const char gprmc[] = "$GPRMC"; // beginning of GPRMC sentence, used to fish out datetime via memcmp in gps_functions.h
-const char gpgga[] = "$GPGGA"; // beginning of GPGGA sentence, used to fish out datetime via memcmp in gps_functions.h 
-bool gps_fix = 0;
-char gps_date[9] = "20XXXXXX"; // 0-7 + 1 for '\0' -- YEAR 2100-BUG, HERE WE COME!!!
+char gps_command_buffer[24];
+char gps_date[9] = "20"; // 0-7 + 1 for '\0' -- YEAR 2100-BUG, HERE WE COME!!!
 char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
 char gps_utc[7] = "UTC+2"; // timezone string
 char gps_logfile[13] = "";
 char gps_latitude[16] = "lat hhmm.ssss  "; // N or S, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
 char gps_longtitude[17] = "lon hhhmm.ssss  "; // W or E, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
-char gps_altitude[10] = "alt "; // GPS altitude: "alt xxxxm" or "alt -xxxm", populated in gps_functions.h:gps_parse_gpgga()
-char gps_hdop[6] = "D"; // GPS horizontal dilution of position: "D12.5" , populated in gps_functions.h:gps_parse_gprmc()
-char gps_satellites_in_view[4] = "S"; // GPS satellites in view
-char temperature[6] = "T+xxC"; // temperature, "T-12C" or "T+56C"
+char gps_altitude[9] = "alt    m"; // GPS altitude: "altxxxxm" or "alt-xxxm", populated in gps_functions.h:gps_parse_gpgga()
+char gps_hdop[8] = "dop____"; // GPS horizontal dilution of position: "dop12.5" , populated in gps_functions.h:gps_parse_gprmc()
+char gps_satellites_in_view[6] = "sat__"; // GPS satellites in view
+char gps_week[5] = "xxxx";
+char gps_time_of_week[7] = "xxxxxx";
+bool flag_gps_fix = 0;
+bool flag_gps_time_of_week_set = 0;
+bool flag_gps_week_set = 0;
 int8_t timezone;
-char sd_buffer[SD_BUFFERSIZE];
+
+// device variables
+int8_t temperature = 0; // temperature in degrees Celsius
+char temp[6] = "T+xxC";
+uint16_t avg_temp = 0;
+char vcc[9] = "Vccx.xxV";
+char bat_a_pct[9] = "batAxxx%";
+char sd_buffer[SD_BUFFERSIZE]; // buffer holding 2x 512byte blocks of NMEA sentences for buffered write of 512byte blocks
 
 // bluetooth flags
 uint32_t bluetooth_button_press_time = millis(); // time of button press
 uint32_t bluetooth_button_release_time = 0; // time of button release
 bool flag_bluetooth_is_on = 0; // flag is BT device is powered on or off
 bool flag_bluetooth_power_toggle_pressed = 0; // flag marks bluetooth button pressed or not - used to recognize button state change for proper high/low handling
-bool flag_bluetooth_power_keep_on = 0;
+bool flag_bluetooth_power_keep_on = 0; // flag if the BT device shall be kept on and not power off on timeout
 
-// LCD flags
+// display variables
 uint32_t lcd_button_press_time = millis(); // time of button press
 bool flag_lcd_is_on = 0; // flag is BT device is powered on or off
-bool flag_lcd_button_down_pressed = 0; // flag marks button pressed or not
-bool flag_lcd_button_up_pressed = 0; // flag marks button pressed or not
-bool flag_lcd_button_left_pressed = 0; // flag marks button pressed or not
-bool flag_lcd_button_right_pressed = 0; // flag marks button pressed or not
+bool flag_oled_sleep = 0; // flag if the OLED shall sleep or not
+M2_EXTERN_ALIGN(top_el_expandable_menu); // Forward declaration of the toplevel element
 
-// device initializations
-U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_FAST);
-//U8GLIB_SH1106_128X64_2X OLED(SPI_SS_OLED_pin,  SPI_OLED_a0_pin,  SPI_OLED_reset_pin); // HW SPI - look in the library source for precise info
+// display device initializations
+//U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_FAST);
+U8GLIB_SH1106_128X64_2X OLED(SPI_SS_OLED_pin,  SPI_OLED_a0_pin,  SPI_OLED_reset_pin); // HW SPI - look in the library source for precise info
 
 // set up variables using the SD utility library functions:
-Sd2Card card;
-SdVolume volume;
-SdFile root;
+File gpslogfile; // file object for the logfile
+bool flag_sd_write_enable = 0; // flag if a write shall be allowed or not - is controlled by log file name initialization
 
-uint32_t temperature_last_reading = 0;
-bool adxl345_int1 = 0;
+uint16_t scheduler_run_count = 0; // counts how many times the scheduler has run
+volatile bool flag_adxl345_int1 = 0; // flag for active interrupt
+bool flag_gsm_on = 0; // flag if the gsm modem shall be powered on or not, controlled via menu combo, inspected in loop()
+uint8_t flag_cb_gsm_power = 0; // used in gsm power callback

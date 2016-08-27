@@ -1,20 +1,6 @@
-//#include "gps_config.h"
 
-int16_t parseHex(char g) // NMEA checksum calculator
-{
-  if (g >= '0' && g <= '9') 
-    return (g - '0');
-  else 
-    if (g >= 'A' && g <= 'F') 
-      return (g + 10 - 'A');
-    else 
-      if (g >= 'a' && g <= 'f') 
-        return (g + 10 - 'a');
-        
-  return (-1);
-}
-
-void gps_parse_gprmc() // determines fix or not, parses coordinates, datetime
+// determines fix or not, parses coordinates, datetime
+void gps_parse_gprmc() // kludge alert!
 { 
   // sample NMEA GPRMC sentence
   //    $GPRMC,170942.000,A,4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
@@ -31,30 +17,27 @@ void gps_parse_gprmc() // determines fix or not, parses coordinates, datetime
 
   // field 3 - fix indicator: A,4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
   p = strchr(p, ',')+1; // finds position of next comma and puts the cursor one position further
-    if (*p == 'A') // good fix
-      gps_fix = 1; // flag good fix
-            
-    if (*p == 'V') // invaid fix
-      gps_fix = 0; // flag bad fix
-     
+	
+	flag_gps_fix = ( *p == 'A' ? 1 : 0 ); // sets flag_gps_fix to 1 if there is a fix
+	
   // field 4 - latitude: 4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
   p = strchr(p, ',')+1; 
-  if (gps_fix)
-     memcpy(gps_latitude+(4*sizeof(char)), p, 9 * sizeof(char)); // fill up gps_latitude[] , part 1
+  if (flag_gps_fix)
+    memcpy(gps_latitude+(4*sizeof(char)), p, 9 * sizeof(char)); // fill up gps_latitude[] , part 1
 
   // field 5 - latitude indicator: N,01555.1254,E,0.13,142.38,050816,,,A*63
   p = strchr(p, ',')+1;
-  if (gps_fix)
+  if (flag_gps_fix)
     memcpy(gps_latitude+(13*sizeof(char)), p, sizeof(char)); // fill up gps_latitude[] , part 2
 
   // field 6 - longtitude: 01555.1254,E,0.13,142.38,050816,,,A*63
   p = strchr(p, ',')+1;
-  if (gps_fix)
+  if (flag_gps_fix)
     memcpy(gps_longtitude+(4*sizeof(char)), p, 10 * sizeof(char)); // fill up gps_longtitude[] , part 1
 
   // field 7 - longtitude indicator: E,0.13,142.38,050816,,,A*63
   p = strchr(p, ',')+1;
-  if (gps_fix)
+  if (flag_gps_fix)
     memcpy(gps_longtitude+(14*sizeof(char)), p, sizeof(char)); // fill up gps_longtitude[] , part 2, appends letter
 
   // [not needed] field 8 - speed over ground: 0.13,142.38,050816,,,A*63
@@ -76,42 +59,44 @@ void gps_parse_gprmc() // determines fix or not, parses coordinates, datetime
     //Serial.print("gps_time: ");  Serial.println(gps_time);
 }
 
-void gps_parse_gpgga() // parses out sattelites used and HDOP 
+// parses out sattelites used and HDOP 
+void gps_parse_gpgga() // kludge alert!
 {
-  // FIXME: still some overrun somewhere: 3rd line gets garbled
-  char *p; // char pointer for string tokenizer
-  p = strtok(NMEA_buffer, ","); // set up the tokenizer for string seperation on comma
-  uint8_t i = 0; // counter for substrings
+	if (!flag_gps_fix)
+		return;
+	
+	uint8_t len = 0;
+	
+  char *p; // char pointer for string search
+	// $GPGGA,185447.258,4547.8986,N,01555.1525,E,1,04,4.3,126.8,M,42.5,M,,0000*5F
 
-  while (p != NULL) // while there are tokenizable substrings in string
-  {
-     i++; // increment by one
-
-     if (i == 8) // the 8th field is the satellite in view
-     {
-        memcpy( gps_satellites_in_view + sizeof(char), p, strlen(p)*sizeof(char) ); // copy the value 
-        strcat(gps_satellites_in_view, '\0'); // terminate the string
-     }
-
-     if (i == 9) // the 9th field is the HDOP - a dimensionless value
-     {
-        memcpy( gps_hdop + sizeof(char), p, strlen(p)*sizeof(char) ); // copy the value 
-        strcat(gps_hdop, '\0'); // terminate the string
-     }
-
-     if (i == 10) // the 10th field is the altitude above MSL in meters
-     {
-        memcpy( gps_altitude + ( 4*sizeof(char) ), p, strlen(p) * sizeof(char) ); // copy the numbers...
-        char *p = (char *) memchr(gps_altitude, '.', strlen(gps_altitude)); // find position of decimal symbol
-        *p = 'm'; // at this position, put the meter symbol
-        *(p+1) = '\0'; // at the next position, terminate the string
-        
-        return; // finish the loop because we do not need anything else here
-     }
-	 
-     p = strtok(NULL, ","); // tokenize further
-  }
+  p = NMEA_buffer+7; // set the pointer to position 185447.258,4547.8986,N,01555.1525,E,1,04,4.3,126.8,M,42.5,M,,0000*5F
+	p = strchr(p, ',')+1; // 4547.8986,N,01555.1525,E,1,04,4.3,126.8,M,42.5,M,,0000*5F
+	p = strchr(p, ',')+1; // N,01555.1525,E,1,04,4.3,126.8,M,42.5,M,,0000*5F
+	p = strchr(p, ',')+1; // 01555.1525,E,1,04,4.3,126.8,M,42.5,M,,0000*5F
+	p = strchr(p, ',')+1; // E,1,04,4.3,126.8,M,42.5,M,,0000*5F
+	p = strchr(p, ',')+1; // 1,04,4.3,126.8,M,42.5,M,,0000*5F
+	
+	// satellites in view
+	p = strchr(p, ',')+1; // 04,4.3,126.8,M,42.5,M,,0000*5F
+	len = strcspn (p, ",");
+	memcpy( gps_satellites_in_view + 3 * sizeof(char), p, len * sizeof(char) ); // copy the value 
+  *(gps_satellites_in_view+2+len+1) = '\0'; // terminate the string
+	
+	// HDOP
+	p = strchr(p, ',')+1; // 4.3,126.8,M,42.5,M,,0000*5F
+	len = strcspn (p, ",");
+  memcpy( gps_hdop + 3 * sizeof(char), p, len * sizeof(char) ); // copy the value 
+  *(gps_hdop+2+len+1) = '\0'; // terminate the string
+	
+	// altitude
+	p = strchr(p, ',')+1; // 126.8,M,42.5,M,,0000*5F
+	len = strcspn (p, ".,");
+  memcpy( gps_altitude + ( 4*sizeof(char) ), p, len * sizeof(char) ); // copy the numbers...
+  *(p+3+len) = 'm'; // at this position, put the meter symbol
+  *(p+3+len+1) = '\0'; // at the next position, terminate the string
 }
+
 
 void get_nmea_sentences() {
 // reads one char at a time from the gps device; 
@@ -122,7 +107,7 @@ void get_nmea_sentences() {
  
   if (Serial3.available()) // if serial3 is availiable
   {  
-    *(NMEA_buffer+bufferid) = Serial3.read();      // put that char into the array "buffer"
+    *(NMEA_buffer+bufferid) = Serial3.read();      // put byte by byte into the array "buffer"
 
     if ( *(NMEA_buffer+bufferid) == '\n' )           // if we have recieved a newline -- read  http://www.gammon.com.au/forum/?id=11425
                //it means we are at the end of the NMEA sentence and we can start to parse it (the GPS reciever will terminate each NMEA sentece with at '\n' )
@@ -146,47 +131,66 @@ void get_nmea_sentences() {
         bufferid = 0; // set pointer back to the beginning
         return;
       }
-
+			
+			// extract GPS time of week, runs only once (if vara is not set)
+			if ( *gps_time_of_week == 'x' && (strcmp(NMEA_buffer, "$PSRFTXT,TOW:") > 0)) // if gps_time_of_week is not set and we have the TOW string
+			{
+				sscanf(NMEA_buffer, "$PSRFTXT,TOW:%6s", gps_time_of_week);	// set the value
+				flag_gps_time_of_week_set = 1;
+			}
+			
+			// extract GPS week, runs only once (if vara is not set)
+			if ( *gps_week == 'x' && (strcmp(NMEA_buffer, "$PSRFTXT,WK:") > 0)) // if gps_week is not set and we have the WK string
+			{
+				sscanf(NMEA_buffer, "$PSRFTXT,WK:%4s", gps_week);	// set the value
+				flag_gps_week_set = 1;
+			}
+			
       //debug print
-      //Serial.println("debug print of buffer:");      
-      Serial.print(NMEA_buffer);
-
+      #if NMEA_DEBUG_PRINT
+				Serial.print(NMEA_buffer);
+			#endif
+			
       // check for GPRMC sentence
-      if (memcmp(NMEA_buffer, gprmc, 6*sizeof(char)) == 0) // if we have a GPRMC sentence (compare the NMEA buffer with its sentence to gprmc[])
-      { 
-        gps_parse_gprmc();
-
-        if (gps_fix) // valid fix - indicate it by lighting up the reed LED
+      if (strncmp(NMEA_buffer, "$GPRMC", 6) == 0) // if we have a GPRMC sentence (compare the NMEA buffer with its sentence to gprmc[])      
+			{ 
+        gps_parse_gprmc(); // parse the GPRMC sentence and get datetime and other values
+				
+        if (flag_gps_fix) // valid fix - indicate it by lighting up the reed LED
           digitalWrite(gps_green_led_pin, HIGH);
         else 
           digitalWrite(gps_green_led_pin, LOW);
       }
 
       // check for GPGGA sentence
-      if (memcmp(NMEA_buffer, gpgga, 6*sizeof(char)) == 0) // if we have a GPRMC sentence
-      { 
-        if (gps_fix) // if we dont have a fix we get garbage (leads to too compliated code)
-          gps_parse_gpgga(); // get HDOP and satellites used
-      }
-      
-        strcat(strcpy(gps_logfile,gps_date), ".gps"); 
+      if (strncmp(NMEA_buffer, "$GPGGA",  6) == 0) // if we have a GPRMC sentence
+          gps_parse_gpgga(); // get HDOP, altitude and satellites in view
 
-        bufferid++; // ?!? needed??
+			// logfile name generation - should run only once a day
+			if (strlen(gps_date) != 2 ) // if gps_date is set (== of proper lenght)
+        strcat(strcpy(gps_logfile,gps_date), ".gps"); // constrcut the logfile
 
-        digitalWrite(gps_red_led_pin, HIGH);      // Turn on red LED, indicates begin of write to SD
-        File gpslogfile = SD.open(gps_logfile, FILE_WRITE);
-              
-        if (! strstr(gps_logfile, "XXX") )
-        {
-          //Serial.print("debug write into outfile: "); Serial.println(gps_logfile);
+			bufferid++; // ?!? needed??
+        
+			// start the write cycle
+      #if BUFFER_DEBUG_PRINT
+			if (EEPROM[EERPOM_SD_WRITE_ENABLE_INDEX] && flag_sd_write_enable) // if we are set up to write - i.e. the logfile name is set
+			#else
+			if (EEPROM[EERPOM_SD_WRITE_ENABLE_INDEX] && flag_sd_write_enable && flag_gps_fix) // if we are set up to write - i.e. the logfile name is set
+			#endif
+      {
+				// open file in write mode - once! (not on every iteration)
+				if (!gpslogfile) // run only on initialization, not on every loop iteration
+						gpslogfile = SD.open(gps_logfile, FILE_WRITE);
 
-            gpslogfile.write(NMEA_buffer);
-            gpslogfile.close();
-        } 
+				sd_buffer_write(NMEA_buffer, bufferid); // write NMEA data into buffer
+      } 
 
-        digitalWrite(gps_red_led_pin, LOW);    //turn off red LED, indicates write to SD is finished
-        bufferid = 0;    //reset buffer pointer
-        return;
+			if (strlen(gps_logfile) == 12) // check if the gps_logfile is of proper lenght (== likely to be initialized)
+				flag_sd_write_enable = 1; // flag the sd card as writeable because now we have a valid datetime set (needed for logfile name)
+			
+      bufferid = 0;    //reset buffer pointer
+      return;
     } // if (c == '\n')
     
     bufferid++;
@@ -197,5 +201,5 @@ void get_nmea_sentences() {
       return;
     }
     
-  } // if (gSerial3.available())
+  } // if (Serial3.available())
 } // void get_nmea_sentence()
