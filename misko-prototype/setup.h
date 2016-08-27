@@ -27,7 +27,7 @@
 	attachInterrupt(digitalPinToInterrupt(interrupt_adxl345_int1_pin), isr_flag_adxl345_int1, CHANGE); 
 
 // connect to the serial terminal
-	Serial.begin(SERIALRATE);
+	Serial.begin(230400); // 230400 == 28.125 kB/s, as large as possible since we will be trasnferring files of up to 20 MB
 	Serial.println(F("serial set"));
 
 // initialize GPS
