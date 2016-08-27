@@ -165,31 +165,24 @@ void get_nmea_sentences() {
       // check for GPGGA sentence
       if (strncmp(NMEA_buffer, "$GPGGA",  6) == 0) // if we have a GPRMC sentence
           gps_parse_gpgga(); // get HDOP, altitude and satellites in view
-      
-			// logfile name generation - should run only once a day
-			if (! strstr(gps_logfile, gps_date) ) // if current gps_date is not in gps_logfile
-        strcat(strcpy(gps_logfile,gps_date), ".gps"); // copy it there
 
-      bufferid++; // ?!? needed??
+			// logfile name generation - should run only once a day
+			if (strlen(gps_date) != 2 ) // if gps_date is set (== of proper lenght)
+        strcat(strcpy(gps_logfile,gps_date), ".gps"); // constrcut the logfile
+
+			bufferid++; // ?!? needed??
         
 			// start the write cycle
       #if BUFFER_DEBUG_PRINT
-			if (flag_sd_write_enable) // if we are set up to write - i.e. the logfile name is set
+			if (EEPROM[EERPOM_SD_WRITE_ENABLE_INDEX] && flag_sd_write_enable) // if we are set up to write - i.e. the logfile name is set
 			#else
-			if (flag_sd_write_enable && flag_gps_fix) // if we are set up to write - i.e. the logfile name is set
+			if (EEPROM[EERPOM_SD_WRITE_ENABLE_INDEX] && flag_sd_write_enable && flag_gps_fix) // if we are set up to write - i.e. the logfile name is set
 			#endif
       {
-				// open file in proper mode - once! (not on every iteration)
-				if (SD.exists(gps_logfile)) // if exists - append mode 
-				{
-					if (!gpslogfile) // run only on initialization, not on every loop iteration
-						gpslogfile = SD.open(gps_logfile, FILE_APPEND);
-				}
-				else // if not exists - write mode  (will create new file)
-				{
-					gpslogfile = SD.open(gps_logfile, FILE_WRITE);
-				}
-				
+				// open file in write mode - once! (not on every iteration)
+				if (!gpslogfile) // run only on initialization, not on every loop iteration
+						gpslogfile = SD.open(gps_logfile, FILE_WRITE);
+
 				sd_buffer_write(NMEA_buffer, bufferid); // write NMEA data into buffer
       } 
 
@@ -208,5 +201,5 @@ void get_nmea_sentences() {
       return;
     }
     
-  } // if (gSerial3.available())
+  } // if (Serial3.available())
 } // void get_nmea_sentence()
