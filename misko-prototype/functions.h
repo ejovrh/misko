@@ -1,3 +1,6 @@
+// forward declaration of this shitty function (its at the very end of this file)
+void poor_mans_debugging(void);
+
 /* eeprom_timer() - returns 1 if enough time has passed
  *  returns: 
  *    1 if time is up
@@ -147,32 +150,6 @@ const char *fn_cb_get_bat_pct(m2_rom_void_p element)
 	strcat(bat_a_pct, "% ");
 	return bat_a_pct;
 } 
-
-// primitive BT button-activated printout
-void poor_mans_debugging(void)
-{
- 	  // poor man's debugging
-			
-		// EEPROM fields
-		Serial.println("EERPOM fields");
-    for (uint8_t i=0; i< 9; i++)
-    {
-      Serial.print(i); Serial.print(F(" - "));Serial.println(EEPROM[i]);
-    }
-		Serial.println("EERPOM fields");
-
-		//SPI voodoo
-		SPI.beginTransaction(SPISettings(20000000, MSBFIRST, SPI_MODE3));
-		adxl345_readByte(0x00);
-		Serial.print(F("INT_SOURCE -"));Serial.print(adxl345_readByte(0x30), BIN);Serial.println("-");
-		Serial.print(F("INT_MAP -"));Serial.print(adxl345_readByte(0x2F), BIN);Serial.println("-");
-		Serial.print(F("INT_ENABLE -"));Serial.print(adxl345_readByte(0x2E), BIN);Serial.println("-");
-		Serial.print(F("vbatt -"));Serial.print(calculate_voltage(bat_A_pin));Serial.println("-");
-		SPI.endTransaction(); 
-		
-		
-		
-}
 
 // handler for the bluetooth power toggle button
 void handle_bluetooth_button(void)
@@ -387,6 +364,35 @@ const char *fn_cb_lcd_power_setting(m2_rom_void_p element, uint8_t msg, uint8_t 
       if (*valptr == 0)
 			{
         return "auto";
+			}
+			
+      if (*valptr == 1)
+			{
+        return "on";
+			}
+  }
+				
+  return NULL;
+}
+
+// callback for NMEA sentence printout setting
+const char *fn_cb_nmea_printout_setting(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
+{
+	// see fn_cb_bluetooth_power_setting for comments
+	switch(msg)
+  {
+		case M2_COMBOFN_MSG_GET_VALUE:
+			*valptr = EEPROM[EERPOM_NMEA_PRINTOUT_INDEX];
+      break;
+			
+    case M2_COMBOFN_MSG_SET_VALUE:
+			EEPROM[EERPOM_NMEA_PRINTOUT_INDEX] = *valptr;
+      break;
+			
+    case M2_COMBOFN_MSG_GET_STRING:
+      if (*valptr == 0)
+			{
+        return "off";
 			}
 			
       if (*valptr == 1)
@@ -694,4 +700,30 @@ void sd_buffer_write(char *in_string, uint8_t in_size)
 		Serial.print(sd_buffer[i]);
 	Serial.println("sd buffer contents"); 
 	*/
+}
+
+// primitive BT button-activated printout
+void poor_mans_debugging(void)
+{
+ 	  // poor man's debugging
+			
+		// EEPROM fields
+		Serial.println("EERPOM fields");
+    for (uint8_t i=0; i< 10; i++)
+    {
+      Serial.print(i); Serial.print(F(" - "));Serial.println(EEPROM[i]);
+    }
+		Serial.println("EERPOM fields");
+
+		//SPI voodoo
+		SPI.beginTransaction(SPISettings(20000000, MSBFIRST, SPI_MODE3));
+		adxl345_readByte(0x00);
+		Serial.print(F("INT_SOURCE -"));Serial.print(adxl345_readByte(0x30), BIN);Serial.println("-");
+		Serial.print(F("INT_MAP -"));Serial.print(adxl345_readByte(0x2F), BIN);Serial.println("-");
+		Serial.print(F("INT_ENABLE -"));Serial.print(adxl345_readByte(0x2E), BIN);Serial.println("-");
+		Serial.print(F("vbatt -"));Serial.print(calculate_voltage(bat_A_pin));Serial.println("-");
+		SPI.endTransaction(); 
+		
+		
+		
 }
