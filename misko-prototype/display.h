@@ -51,12 +51,13 @@ M2_GRIDLIST(el_device_misc_grid, "c1", el_device_misc_list);
 M2_ALIGN(el_top_device_misc_menu, "-1|1W64H64", &el_device_misc_grid);
 
 // SD card contents
-M2_STRLIST(el_fs_strlist, "l5F3e15W49", &fs_m2tk_first, &fs_m2tk_cnt, fs_strlist_getstr);
-M2_SPACE(el_fs_space, "W1h1");
-M2_VSB(el_fs_strlist_vsb, "l5W4r1", &fs_m2tk_first, &fs_m2tk_cnt);
-M2_LIST(list_fs_strlist) = { &el_fs_strlist, &el_fs_space, &el_fs_strlist_vsb };
-M2_HLIST(el_fs_hlist, NULL, list_fs_strlist);
-M2_ALIGN(el_top_sd_content_menu, "-1|1W64H64", &el_fs_hlist);
+M2_STRLIST(el_fs_strlist, "l5f0W55", &fs_m2tk_first, &fs_m2tk_cnt, fs_strlist_getstr);
+// M2_SPACE(el_fs_space, "W1h1");
+// M2_VSB(el_fs_strlist_vsb, "l5W4r1", &fs_m2tk_first, &fs_m2tk_cnt);
+M2_LIST(list_fs_strlist) = { &el_fs_strlist};
+// M2_HLIST(el_fs_hlist, "rf0", list_fs_strlist);
+M2_GRIDLIST(el_fs_grid, "c2", list_fs_strlist);
+M2_ALIGN(el_top_sd_content_menu, "-1|1W64H64", &el_fs_grid);
 
 // data output end
 
