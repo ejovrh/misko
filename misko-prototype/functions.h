@@ -565,30 +565,30 @@ const char *fs_strlist_getstr(uint8_t idx, uint8_t msg)
       return "..";
     
 		/* Not the extra button: Return file/directory name */
+
     mas_GetDirEntry(idx - 1);
     return mas_GetFilename();
   } 
-	else 
-	{	
-		if ( msg == M2_STRLIST_MSG_GET_EXTENDED_STR ) 
-		{
-			/* Check for the extra button: Return icon for this extra button */
-			if ( idx == 0 )
-				return "a";       /* arrow left of the m2icon font */
-			
-			/* Not the extra button: Return file or directory icon */
-			mas_GetDirEntry(idx - 1);
-			
-			if ( mas_IsDir() )
-				return "A";       /* folder icon of the m2icon font */
-			return "B";         /* file icon of the m2icon font */
-		} 
 		
-		if ( msg == M2_STRLIST_MSG_SELECT ) // button right
+	if ( msg == M2_STRLIST_MSG_GET_EXTENDED_STR ) 
+	{
+		/* Check for the extra button: Return icon for this extra button */
+		if ( idx == 0 )
+			return "a";       /* arrow left of the m2icon font */
+		
+		/* Not the extra button: Return file or directory icon */
+		mas_GetDirEntry(idx - 1);
+		
+		if ( mas_IsDir() )
+			return "A";       /* folder icon of the m2icon font */
+		return "B";         /* file icon of the m2icon font */
+	} 
+		
+	if ( msg == M2_STRLIST_MSG_SELECT ) // button right
+	{
+		/* Check for the extra button: Execute button action */
+		if ( idx == 0 ) 
 		{
-			/* Check for the extra button: Execute button action */
-			if ( idx == 0 ) 
-			{
 				if ( mas_GetPath()[0] == '\0' )
 					m2_SetRoot(&top_el_expandable_menu);      
 				else 
@@ -597,9 +597,9 @@ const char *fs_strlist_getstr(uint8_t idx, uint8_t msg)
 					m2_SetRoot(m2_GetRoot());  /* reset menu to first element, send NEW_DIALOG and force recount */
 				}
 					/* Not the extra button: Goto subdir or return (with selected file) */
-			} 
-			else 
-			{
+		} 
+		else 
+		{
 				mas_GetDirEntry(idx - 1);
 				if ( mas_IsDir() ) 
 				{
@@ -611,17 +611,17 @@ const char *fs_strlist_getstr(uint8_t idx, uint8_t msg)
 						print_to_serial(mas_GetFilename()); // send the filename to print_to_serial() for TX over serial to e.g. putty
 				}
 			}
-		} 
+	} 
 		
-		if ( msg == M2_STRLIST_MSG_NEW_DIALOG ) 
-		{
-			/* (re-) calculate number of entries, limit no of entries to 250 */
-			if ( mas_GetDirEntryCnt() < 250-1 )
-				fs_m2tk_cnt = mas_GetDirEntryCnt()+1;
-			else
-				fs_m2tk_cnt = 250;
-		}
-  }
+	if ( msg == M2_STRLIST_MSG_NEW_DIALOG ) 
+	{Serial.println(mas_GetDirEntryCnt());
+		/* (re-) calculate number of entries, limit no of entries to 250 */
+		if ( mas_GetDirEntryCnt() < 250-1 )
+			fs_m2tk_cnt = mas_GetDirEntryCnt()+1;
+		else
+			fs_m2tk_cnt = 250;
+	}
+	
 	return NULL;
 }
 
@@ -771,8 +771,6 @@ void sd_buffer_write(char *in_string, uint8_t in_size)
 		// now we can flush the 2nd half of the buffer 
 		if (flag_flush_2nd)
 		{			
-			//digitalWrite(gps_red_led_pin, HIGH);
-			
 			#if BUFFER_DEBUG_PRINT
 				Serial.println("flushing 2nd half");
 			#else 
@@ -784,8 +782,6 @@ void sd_buffer_write(char *in_string, uint8_t in_size)
 			digitalWrite(gps_red_led_pin, LOW); // turn on led to make write cycle end visible
 		}
 	}
-	
-/* 	Serial.println("sd buffer contents");
 	for (int i=0; i<SD_BUFFERSIZE; i++)
 		Serial.print(sd_buffer[i]);
 	Serial.println("sd buffer contents"); 
