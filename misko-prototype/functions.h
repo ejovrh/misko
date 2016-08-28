@@ -544,14 +544,17 @@ void print_to_serial(const char *in_string)
 
   if (dataFile) 
 	{
-		Serial.print(in_string);Serial.println(F(" START ----------------------------"));
+		Serial.println(F("START ---"));
+		Serial.print(in_string);Serial.print(F(" size "));Serial.print(dataFile.size()/1024);Serial.println(F("kB"));
+		
     while (dataFile.available()) 
 		{
       Serial.write(dataFile.read());
     }
 		
     dataFile.close();
-		Serial.print(in_string);Serial.println(F(" END  -----------------------------"));
+		Serial.print(in_string);Serial.println(F(" END ---"));
+		Serial.println();
 }
 }
 
@@ -782,10 +785,6 @@ void sd_buffer_write(char *in_string, uint8_t in_size)
 			digitalWrite(gps_red_led_pin, LOW); // turn on led to make write cycle end visible
 		}
 	}
-	for (int i=0; i<SD_BUFFERSIZE; i++)
-		Serial.print(sd_buffer[i]);
-	Serial.println("sd buffer contents"); 
-	*/
 }
 
 // primitive BT button-activated printout
@@ -810,6 +809,15 @@ void poor_mans_debugging(void)
 		Serial.print(F("vbatt -"));Serial.print(calculate_voltage(bat_A_pin));Serial.println("-");
 		SPI.endTransaction(); 
 		
+		// PSRF104,37.3875111,-121.97232,0,96000,237759,922,12,3
+		//$PSRF104,<Lat>,<Lon>,<Alt>,<ClkOffset>,<TimeOfWeek>,<WeekNo>,<ChannelCount>, <ResetCfg>*CKSUM<CR><LF>
+		//$PSRF104,4547.9088,01555.1489,110,75000,<TimeOfWeek>,<WeekNo>,12,1
+		Serial.println(gps_time_of_week);
+		Serial.println(gps_week);
 		
+		char buffer[82];
+		sprintf(buffer, "$PSRF104,%s,%s,%s,75000,%s,%s,12,1", gps_latitude, gps_longtitude, gps_altitude, gps_time_of_week, gps_week);
+		Serial.println(buffer);
+		//Serial3.write("$PSRF109,124*34\r\n");
 		
 }
