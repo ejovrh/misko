@@ -10,6 +10,7 @@
 #define SERIALRATE 9600
 #define NMEA_BUFFERSIZE 82 // officially, NMEA sentences are at maximum 82 characters long (80 readable characters + \r\n)
 #define SD_BUFFERSIZE 1024 // huge buffer for NMEA sentences to be written to SD card
+#define FS_EXTRA_MENUES 1
 
 // EERPOM indices
 #define EERPOM_LCD_POWER_INDEX 1
@@ -29,7 +30,7 @@ char gps_command_buffer[24];
 char gps_date[9] = "20"; // 0-7 + 1 for '\0' -- YEAR 2100-BUG, HERE WE COME!!!
 char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
 char gps_utc[7] = "UTC+2"; // timezone string
-char gps_logfile[13] = "";
+char gps_logfile[22] = "";
 char gps_latitude[16] = "lat hhmm.ssss  "; // N or S, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
 char gps_longtitude[17] = "lon hhhmm.ssss  "; // W or E, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
 char gps_altitude[9] = "alt    m"; // GPS altitude: "altxxxxm" or "alt-xxxm", populated in gps_functions.h:gps_parse_gpgga()
@@ -63,6 +64,7 @@ uint32_t lcd_button_press_time = millis(); // time of button press
 bool flag_lcd_is_on = 0; // flag is BT device is powered on or off
 bool flag_oled_sleep = 0; // flag if the OLED shall sleep or not
 M2_EXTERN_ALIGN(top_el_expandable_menu); // Forward declaration of the toplevel element
+M2_EXTERN_ALIGN(el_top_sd_content_menu); // Forward declaration of the toplevel element
 
 // display device initializations
 //U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_FAST);
