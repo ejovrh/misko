@@ -301,6 +301,15 @@ void fn_ok(m2_el_fnarg_p fnarg)
   m2_SetRoot(&top_el_expandable_menu);
 }
 
+
+// callback for temperature 
+const char *fn_cb_utc(m2_rom_void_p element)
+{
+	static const char retval[4] = ""; // e.g. -12 or +3
+	itoa(eeprom_get(EERPOM_TIMEZONE_INDEX), retval, 10);
+	return retval;
+}
+
 // callback for temperature 
 const char *fn_cb_get_temperature(m2_rom_void_p element)
 {
@@ -534,6 +543,36 @@ const char *fn_cb_get_power_good_status(m2_rom_void_p element)
 		return "ExtPw ok ";
 	
 		return "ExtPw off ";
+}
+
+// callback for gps latitude
+const char *fn_cb_gps_latitude(m2_rom_void_p element)
+{
+		return gps_latitude;
+}
+
+// callback for gps longtitude
+const char *fn_cb_gps_longtitude(m2_rom_void_p element)
+{
+		return gps_longtitude;
+}
+
+// callback for gps altitude
+const char *fn_cb_gps_altitude(m2_rom_void_p element)
+{
+		return gps_altitude;
+}
+
+// callback for gps satellites in view
+const char *fn_cb_gps_satellites_in_view(m2_rom_void_p element)
+{
+		return gps_satellites_in_view;
+}
+
+// callback for gps HDOP
+const char *fn_cb_gps_hdop(m2_rom_void_p element)
+{
+		return gps_hdop;
 }
 
 // send contents of file over serial to host PC
@@ -800,24 +839,33 @@ void poor_mans_debugging(void)
     }
 		Serial.println("EERPOM fields");
 
-		//SPI voodoo
+/* 		//SPI voodoo
 		SPI.beginTransaction(SPISettings(20000000, MSBFIRST, SPI_MODE3));
 		adxl345_readByte(0x00);
 		Serial.print(F("INT_SOURCE -"));Serial.print(adxl345_readByte(0x30), BIN);Serial.println("-");
 		Serial.print(F("INT_MAP -"));Serial.print(adxl345_readByte(0x2F), BIN);Serial.println("-");
 		Serial.print(F("INT_ENABLE -"));Serial.print(adxl345_readByte(0x2E), BIN);Serial.println("-");
 		Serial.print(F("vbatt -"));Serial.print(calculate_voltage(bat_A_pin));Serial.println("-");
-		SPI.endTransaction(); 
+		SPI.endTransaction();  */
 		
 		// PSRF104,37.3875111,-121.97232,0,96000,237759,922,12,3
 		//$PSRF104,<Lat>,<Lon>,<Alt>,<ClkOffset>,<TimeOfWeek>,<WeekNo>,<ChannelCount>, <ResetCfg>*CKSUM<CR><LF>
-		//$PSRF104,4547.9088,01555.1489,110,75000,<TimeOfWeek>,<WeekNo>,12,1
-		Serial.println(gps_time_of_week);
-		Serial.println(gps_week);
 		
-		char buffer[82];
+		//$PSRF104,4547.9088,01555.1489,110,75000,<TimeOfWeek>,<WeekNo>,12,1
+		
+		if (flag_gps_time_of_week_set)
+		{
+			Serial.print(F("TOW:"));Serial.println(gps_time_of_week);
+		}
+		
+		if (flag_gps_week_set)
+		{
+			Serial.print(F("WK:"));Serial.println(gps_week);
+		}
+		
+/* 		char buffer[82];
 		sprintf(buffer, "$PSRF104,%s,%s,%s,75000,%s,%s,12,1", gps_latitude, gps_longtitude, gps_altitude, gps_time_of_week, gps_week);
 		Serial.println(buffer);
-		//Serial3.write("$PSRF109,124*34\r\n");
+		//Serial3.write("$PSRF109,124*34\r\n"); */
 		
 }
