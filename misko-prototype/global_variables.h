@@ -29,7 +29,6 @@ uint8_t bufferid = 0; // holds the current position in the NMEA_buffer array, us
 char gps_command_buffer[24];
 char gps_date[9] = "20"; // 0-7 + 1 for '\0' -- YEAR 2100-BUG, HERE WE COME!!!
 char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
-char gps_utc[7] = "UTC+2"; // timezone string
 char gps_logfile[22] = "";
 char gps_latitude[16] = "lat hhmm.ssss  "; // N or S, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
 char gps_longtitude[17] = "lon hhhmm.ssss  "; // W or E, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
