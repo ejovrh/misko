@@ -13,28 +13,33 @@
 // display construction start
 
 M2_BUTTON(el_ok, "f4", "ok", fn_ok); // an ok button
-M2_SPACE(el_whitespace, "W6h10");
+M2_SPACE(el_whitespace, "W6h8");
 // data output start
 
 // datetime and timezone
 M2_LABEL(el_gps_date, "rf0", gps_date); // label for gps_date
 M2_LABEL(el_gps_time, "rf0", gps_time); // label for gps_time
-M2_LABEL(el_gps_utc, "rf0", (int8_t) eeprom_get(EERPOM_TIMEZONE_INDEX)); // timezone string
-M2_LIST(el_datetime_list) { &el_gps_date, &el_gps_time, &el_gps_utc, &el_ok} ; // create a list of gps date, time, timezone
+M2_LIST(el_list_datetime) = {&el_gps_date, &el_whitespace, &el_gps_time};
+M2_HLIST(el_hlist_datetime, "rf0", el_list_datetime);
+M2_LABEL(el_utc, "rf0", "UTC");
+M2_LABELFN(el_gps_utc, "rf0", fn_cb_utc); // timezone string
+M2_LIST(el_list_utc) = {&el_utc, &el_whitespace, &el_gps_utc};
+M2_HLIST(el_hlist_utc, "rf0", el_list_utc);
+M2_LIST(el_datetime_list) { &el_hlist_datetime, &el_hlist_utc, &el_ok} ; // create a list of gps date, time, timezone
 M2_GRIDLIST(el_datetime_grid, "c1", el_datetime_list);
-M2_ALIGN(el_top_datetime_menu, "-1|1W64H64", &el_datetime_grid);
+M2_ALIGN(el_top_datetime_menu, "-0|1W64H64", &el_datetime_grid);
 
 // GPS position
-M2_LABEL(el_gps_latitude, "rf0", gps_latitude); 
-M2_LABEL(el_gps_longtitude, "rf0", gps_longtitude);
-M2_LABEL(el_altitude, "rf0", gps_altitude);
-M2_LABEL(el_gps_sat_in_view, "rf0", gps_satellites_in_view);
-M2_LABEL(el_gps_hdop, "rf0", gps_hdop);
+M2_LABELFN(el_gps_latitude, "rf0", fn_cb_gps_latitude); 
+M2_LABELFN(el_gps_longtitude, "rf0", fn_cb_gps_longtitude);
+M2_LABELFN(el_altitude, "rf0", fn_cb_gps_altitude);
+M2_LABELFN(el_gps_sat_in_view, "rf0", fn_cb_gps_satellites_in_view);
+M2_LABELFN(el_gps_hdop, "rf0", fn_cb_gps_hdop);
 M2_LIST(el_sat_dop_list) = {&el_gps_sat_in_view, &el_whitespace, & el_gps_hdop};
 M2_HLIST(el_hlist_sat_dop, "rf0", el_sat_dop_list);
 M2_LIST(el_position_list) = {&el_gps_latitude, &el_gps_longtitude, &el_altitude, &el_hlist_sat_dop, &el_ok};
 M2_GRIDLIST(el_position_grid, "c1", el_position_list);
-M2_ALIGN(el_top_position_menu, "-1|1W64H64", &el_position_grid);
+M2_ALIGN(el_top_position_menu, "-0|1W64H64", &el_position_grid);
 
 // misc
 M2_LABELFN(el_power_good, "fr0", fn_cb_get_power_good_status);
@@ -48,7 +53,16 @@ M2_HLIST(el_batta_hlist, "rf0", el_bat_a);
 M2_LABELFN(el_temperature, "rf0", fn_cb_get_temperature);
 M2_LIST(el_device_misc_list) = {&el_batt_hlist, &el_batta_hlist, &el_temperature, &el_ok};
 M2_GRIDLIST(el_device_misc_grid, "c1", el_device_misc_list);
-M2_ALIGN(el_top_device_misc_menu, "-1|1W64H64", &el_device_misc_grid);
+M2_ALIGN(el_top_device_misc_menu, "-0|1W64H64", &el_device_misc_grid);
+
+// SD card contents
+M2_STRLIST(el_fs_strlist, "l5f0W55", &fs_m2tk_first, &fs_m2tk_cnt, fs_strlist_getstr);
+// M2_SPACE(el_fs_space, "W1h1");
+// M2_VSB(el_fs_strlist_vsb, "l5W4r1", &fs_m2tk_first, &fs_m2tk_cnt);
+M2_LIST(list_fs_strlist) = { &el_fs_strlist};
+// M2_HLIST(el_fs_hlist, "rf0", list_fs_strlist);
+M2_GRIDLIST(el_fs_grid, "c2", list_fs_strlist);
+M2_ALIGN(el_top_sd_content_menu, "-1|1W64H64", &el_fs_grid);
 
 // data output end
 
@@ -88,10 +102,12 @@ M2_ALIGN(el_top_lcd_menu, "-1|1W64H64", &el_lcd_grid);
 // lcd end
 
 // gps start
+M2_LABEL(el_nmea_printout, "rf0", "NMEA printout");
+M2_COMBOFN(el_nmea_printout_value, "rf0", 2, fn_cb_nmea_printout_setting);
 M2_LABEL(el_gps_freq, "rf0", "Frequency");
 M2_S8NUMFN(el_gps_freq_value, "+0c1f0", 1, 20, fn_cb_set_eerpom_gps_log_freq);
 M2_ROOT(el_gps_ok, "f0", "OK", &top_el_expandable_menu);
-M2_LIST(el_gps_list) = { &el_gps_freq, &el_gps_freq_value, &el_gps_ok };
+M2_LIST(el_gps_list) = { &el_nmea_printout, &el_nmea_printout_value, &el_gps_freq, &el_gps_freq_value, &el_gps_ok };
 M2_GRIDLIST(el_gps_grid, "c2", el_gps_list);
 M2_ALIGN(el_top_gps_menu, "-1|1W64H64", &el_gps_grid);
 // gps end
@@ -111,6 +127,7 @@ m2_menu_entry m2_2lmenu_data[] =
   { ". Datetime", &el_top_datetime_menu },
   { ". Position", &el_top_position_menu },
   { ". Device Status", &el_top_device_misc_menu}, 
+	{ ". SD card", &el_top_sd_content_menu}, 
   { "Settings", NULL },
 	{ ". SD card", &el_top_sd_menu},
   { ". Timezone", &el_top_timezone_menu },

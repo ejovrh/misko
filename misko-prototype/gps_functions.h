@@ -146,10 +146,9 @@ void get_nmea_sentences() {
 				flag_gps_week_set = 1;
 			}
 			
-      //debug print
-      #if NMEA_DEBUG_PRINT
+      //NMEA sentence printout
+      if (EEPROM[EERPOM_NMEA_PRINTOUT_INDEX])
 				Serial.print(NMEA_buffer);
-			#endif
 			
       // check for GPRMC sentence
       if (strncmp(NMEA_buffer, "$GPRMC", 6) == 0) // if we have a GPRMC sentence (compare the NMEA buffer with its sentence to gprmc[])      
@@ -165,11 +164,35 @@ void get_nmea_sentences() {
       // check for GPGGA sentence
       if (strncmp(NMEA_buffer, "$GPGGA",  6) == 0) // if we have a GPRMC sentence
           gps_parse_gpgga(); // get HDOP, altitude and satellites in view
-
+			
 			// logfile name generation - should run only once a day
-			if (strlen(gps_date) != 2 ) // if gps_date is set (== of proper lenght)
-        strcat(strcpy(gps_logfile,gps_date), ".gps"); // constrcut the logfile
-
+			if (strlen(gps_date) != 2 && strstr(gps_logfile, gps_date) == NULL ) // if "gps_date is initialized" and "gps_logfile does not contain the current datetime (e.g. on startup or on date change)" 
+			{	
+				//some weird behavious - bug?
+/* 				
+				strncat(gps_logfile, gps_date, 4*sizeof(char));//Serial.println(gps_logfile);
+				strcat(gps_logfile, "/");//Serial.println(gps_logfile);
+				strncat(gps_logfile, gps_date+4*sizeof(char), 2*sizeof(char));//Serial.println(gps_logfile);
+				
+				if (!SD.exists(gps_logfile))
+					SD.mkdir(gps_logfile); 
+	
+				strcat(gps_logfile, "/");//Serial.println(gps_logfile);
+	
+        strcat(gps_logfile,gps_date); // constrcut the logfile
+				strcat(gps_logfile, ".log");
+*/				
+				strcat(gps_logfile,gps_date);
+				strcat(gps_logfile, ".log");
+				
+				Serial.println(gps_logfile);
+				
+		/* 		for (int i; i<22; i++)
+				{
+					Serial.print(i);Serial.print("-");Serial.print(gps_logfile[i], DEC);Serial.print(" ");
+				} */
+			}
+			
 			bufferid++; // ?!? needed??
         
 			// start the write cycle
@@ -186,7 +209,7 @@ void get_nmea_sentences() {
 				sd_buffer_write(NMEA_buffer, bufferid); // write NMEA data into buffer
       } 
 
-			if (strlen(gps_logfile) == 12) // check if the gps_logfile is of proper lenght (== likely to be initialized)
+			if (strlen(gps_logfile) != 1) // check if the gps_logfile is of proper lenght (== likely to be initialized)
 				flag_sd_write_enable = 1; // flag the sd card as writeable because now we have a valid datetime set (needed for logfile name)
 			
       bufferid = 0;    //reset buffer pointer

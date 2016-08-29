@@ -1,3 +1,6 @@
+// forward declaration of this shitty function (its at the very end of this file)
+void poor_mans_debugging(void);
+
 /* eeprom_timer() - returns 1 if enough time has passed
  *  returns: 
  *    1 if time is up
@@ -147,32 +150,6 @@ const char *fn_cb_get_bat_pct(m2_rom_void_p element)
 	strcat(bat_a_pct, "% ");
 	return bat_a_pct;
 } 
-
-// primitive BT button-activated printout
-void poor_mans_debugging(void)
-{
- 	  // poor man's debugging
-			
-		// EEPROM fields
-		Serial.println("EERPOM fields");
-    for (uint8_t i=0; i< 9; i++)
-    {
-      Serial.print(i); Serial.print(F(" - "));Serial.println(EEPROM[i]);
-    }
-		Serial.println("EERPOM fields");
-
-		//SPI voodoo
-		SPI.beginTransaction(SPISettings(20000000, MSBFIRST, SPI_MODE3));
-		adxl345_readByte(0x00);
-		Serial.print(F("INT_SOURCE -"));Serial.print(adxl345_readByte(0x30), BIN);Serial.println("-");
-		Serial.print(F("INT_MAP -"));Serial.print(adxl345_readByte(0x2F), BIN);Serial.println("-");
-		Serial.print(F("INT_ENABLE -"));Serial.print(adxl345_readByte(0x2E), BIN);Serial.println("-");
-		Serial.print(F("vbatt -"));Serial.print(calculate_voltage(bat_A_pin));Serial.println("-");
-		SPI.endTransaction(); 
-		
-		
-		
-}
 
 // handler for the bluetooth power toggle button
 void handle_bluetooth_button(void)
@@ -324,6 +301,22 @@ void fn_ok(m2_el_fnarg_p fnarg)
   m2_SetRoot(&top_el_expandable_menu);
 }
 
+// callback for UTC display 
+const char *fn_cb_utc(m2_rom_void_p element)
+{
+	static char retval[4] = ""; // e.g. -12 or  +3
+	
+	if (eeprom_get(EERPOM_TIMEZONE_INDEX) < 0 )
+		itoa(eeprom_get(EERPOM_TIMEZONE_INDEX), retval, 10);
+	else
+	{
+		retval[0] = '+';
+		retval[1] = '\0';
+		itoa(eeprom_get(EERPOM_TIMEZONE_INDEX), retval+sizeof(char), 10);
+	}
+	return retval;
+}
+
 // callback for temperature 
 const char *fn_cb_get_temperature(m2_rom_void_p element)
 {
@@ -387,6 +380,35 @@ const char *fn_cb_lcd_power_setting(m2_rom_void_p element, uint8_t msg, uint8_t 
       if (*valptr == 0)
 			{
         return "auto";
+			}
+			
+      if (*valptr == 1)
+			{
+        return "on";
+			}
+  }
+				
+  return NULL;
+}
+
+// callback for NMEA sentence printout setting
+const char *fn_cb_nmea_printout_setting(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
+{
+	// see fn_cb_bluetooth_power_setting for comments
+	switch(msg)
+  {
+		case M2_COMBOFN_MSG_GET_VALUE:
+			*valptr = EEPROM[EERPOM_NMEA_PRINTOUT_INDEX];
+      break;
+			
+    case M2_COMBOFN_MSG_SET_VALUE:
+			EEPROM[EERPOM_NMEA_PRINTOUT_INDEX] = *valptr;
+      break;
+			
+    case M2_COMBOFN_MSG_GET_STRING:
+      if (*valptr == 0)
+			{
+        return "off";
 			}
 			
       if (*valptr == 1)
@@ -530,6 +552,129 @@ const char *fn_cb_get_power_good_status(m2_rom_void_p element)
 		return "ExtPw off ";
 }
 
+// callback for gps latitude
+const char *fn_cb_gps_latitude(m2_rom_void_p element)
+{
+		return gps_latitude;
+}
+
+// callback for gps longtitude
+const char *fn_cb_gps_longtitude(m2_rom_void_p element)
+{
+		return gps_longtitude;
+}
+
+// callback for gps altitude
+const char *fn_cb_gps_altitude(m2_rom_void_p element)
+{
+		return gps_altitude;
+}
+
+// callback for gps satellites in view
+const char *fn_cb_gps_satellites_in_view(m2_rom_void_p element)
+{
+		return gps_satellites_in_view;
+}
+
+// callback for gps HDOP
+const char *fn_cb_gps_hdop(m2_rom_void_p element)
+{
+		return gps_hdop;
+}
+
+// send contents of file over serial to host PC
+void print_to_serial(const char *in_string)
+{
+	Serial.println(in_string);
+	 File dataFile = SD.open(in_string);
+
+  if (dataFile) 
+	{
+		Serial.println(F("START ---"));
+		Serial.print(in_string);Serial.print(F(" size "));Serial.print(dataFile.size()/1024);Serial.println(F("kB"));
+		
+    while (dataFile.available()) 
+		{
+      Serial.write(dataFile.read());
+    }
+		
+    dataFile.close();
+		Serial.println();
+		Serial.print(in_string);Serial.println(F(" END ---"));
+		Serial.println();
+}
+}
+
+//M2tk function for FAT directory content retrieval
+const char *fs_strlist_getstr(uint8_t idx, uint8_t msg)  
+{
+  if (msg == M2_STRLIST_MSG_GET_STR)  
+	{
+    /* Check for the extra button: Return string for this extra button */
+    if ( idx == 0 )
+      return "..";
+    
+		/* Not the extra button: Return file/directory name */
+
+    mas_GetDirEntry(idx - 1);
+    return mas_GetFilename();
+  } 
+		
+	if ( msg == M2_STRLIST_MSG_GET_EXTENDED_STR ) 
+	{
+		/* Check for the extra button: Return icon for this extra button */
+		if ( idx == 0 )
+			return "a";       /* arrow left of the m2icon font */
+		
+		/* Not the extra button: Return file or directory icon */
+		mas_GetDirEntry(idx - 1);
+		
+		if ( mas_IsDir() )
+			return "A";       /* folder icon of the m2icon font */
+		return "B";         /* file icon of the m2icon font */
+	} 
+		
+	if ( msg == M2_STRLIST_MSG_SELECT ) // button right
+	{
+		/* Check for the extra button: Execute button action */
+		if ( idx == 0 ) 
+		{
+				if ( mas_GetPath()[0] == '\0' )
+					m2_SetRoot(&top_el_expandable_menu);      
+				else 
+				{
+					mas_ChDirUp();
+					m2_SetRoot(m2_GetRoot());  /* reset menu to first element, send NEW_DIALOG and force recount */
+				}
+					/* Not the extra button: Goto subdir or return (with selected file) */
+		} 
+		else 
+		{
+				mas_GetDirEntry(idx - 1);
+				if ( mas_IsDir() ) 
+				{
+					mas_ChDir(mas_GetFilename());
+					m2_SetRoot(m2_GetRoot());  /* reset menu to first element, send NEW_DIALOG and force recount */
+				} 
+				else 
+				{
+						print_to_serial(mas_GetFilename()); // send the filename to print_to_serial() for TX over serial to e.g. putty
+				}
+			}
+	} 
+		
+	if ( msg == M2_STRLIST_MSG_NEW_DIALOG ) 
+	{Serial.println(mas_GetDirEntryCnt());
+		/* (re-) calculate number of entries, limit no of entries to 250 */
+		if ( mas_GetDirEntryCnt() < 250-1 )
+			fs_m2tk_cnt = mas_GetDirEntryCnt()+1;
+		else
+			fs_m2tk_cnt = 250;
+	}
+	
+	return NULL;
+}
+
 // switched GSM on / off, inits on "on"
 void gsm_power(bool in_val)
 {
@@ -540,7 +685,7 @@ void gsm_power(bool in_val)
 		
 		Serial.println(F("gsm on"));
 
-		Serial2.begin(SERIALRATE); // set up the terminal for the SIM800L
+		Serial2.begin(115200); // set up the terminal for the SIM800L
 		Serial.println(F("serial2 set"));
 		delay(10);
 		Serial.print(F("AT")); // 1st AT
@@ -592,6 +737,7 @@ void handle_adx_intl(void)
     flag_adxl345_int1 = 0;
 }
 
+// buffered write onto SD card utilizing a circular buffer
 void sd_buffer_write(char *in_string, uint8_t in_size)
 {
 	// pointer arithmetrics, beware!
@@ -675,8 +821,6 @@ void sd_buffer_write(char *in_string, uint8_t in_size)
 		// now we can flush the 2nd half of the buffer 
 		if (flag_flush_2nd)
 		{			
-			//digitalWrite(gps_red_led_pin, HIGH);
-			
 			#if BUFFER_DEBUG_PRINT
 				Serial.println("flushing 2nd half");
 			#else 
@@ -688,10 +832,48 @@ void sd_buffer_write(char *in_string, uint8_t in_size)
 			digitalWrite(gps_red_led_pin, LOW); // turn on led to make write cycle end visible
 		}
 	}
-	
-/* 	Serial.println("sd buffer contents");
-	for (int i=0; i<SD_BUFFERSIZE; i++)
-		Serial.print(sd_buffer[i]);
-	Serial.println("sd buffer contents"); 
-	*/
+}
+
+// primitive BT button-activated printout
+void poor_mans_debugging(void)
+{
+ 	  // poor man's debugging
+			
+		// EEPROM fields
+		Serial.println("EERPOM fields");
+    for (uint8_t i=0; i< 10; i++)
+    {
+      Serial.print(i); Serial.print(F(" - "));Serial.println(EEPROM[i]);
+    }
+		Serial.println("EERPOM fields");
+
+/* 		//SPI voodoo
+		SPI.beginTransaction(SPISettings(20000000, MSBFIRST, SPI_MODE3));
+		adxl345_readByte(0x00);
+		Serial.print(F("INT_SOURCE -"));Serial.print(adxl345_readByte(0x30), BIN);Serial.println("-");
+		Serial.print(F("INT_MAP -"));Serial.print(adxl345_readByte(0x2F), BIN);Serial.println("-");
+		Serial.print(F("INT_ENABLE -"));Serial.print(adxl345_readByte(0x2E), BIN);Serial.println("-");
+		Serial.print(F("vbatt -"));Serial.print(calculate_voltage(bat_A_pin));Serial.println("-");
+		SPI.endTransaction();  */
+		
+		// PSRF104,37.3875111,-121.97232,0,96000,237759,922,12,3
+		//$PSRF104,<Lat>,<Lon>,<Alt>,<ClkOffset>,<TimeOfWeek>,<WeekNo>,<ChannelCount>, <ResetCfg>*CKSUM<CR><LF>
+		
+		//$PSRF104,4547.9088,01555.1489,110,75000,<TimeOfWeek>,<WeekNo>,12,1
+		
+		if (flag_gps_time_of_week_set)
+		{
+			Serial.print(F("TOW:"));Serial.println(gps_time_of_week);
+		}
+		
+		if (flag_gps_week_set)
+		{
+			Serial.print(F("WK:"));Serial.println(gps_week);
+		}
+		
+/* 		char buffer[82];
+		sprintf(buffer, "$PSRF104,%s,%s,%s,75000,%s,%s,12,1", gps_latitude, gps_longtitude, gps_altitude, gps_time_of_week, gps_week);
+		Serial.println(buffer);
+		//Serial3.write("$PSRF109,124*34\r\n"); */
+		
 }
