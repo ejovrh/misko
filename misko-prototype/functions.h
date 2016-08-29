@@ -685,7 +685,7 @@ void gsm_power(bool in_val)
 		
 		Serial.println(F("gsm on"));
 
-		Serial2.begin(SERIALRATE); // set up the terminal for the SIM800L
+		Serial2.begin(115200); // set up the terminal for the SIM800L
 		Serial.println(F("serial2 set"));
 		delay(10);
 		Serial.print(F("AT")); // 1st AT
