@@ -301,12 +301,19 @@ void fn_ok(m2_el_fnarg_p fnarg)
   m2_SetRoot(&top_el_expandable_menu);
 }
 
-
-// callback for temperature 
+// callback for UTC display 
 const char *fn_cb_utc(m2_rom_void_p element)
 {
-	static const char retval[4] = ""; // e.g. -12 or +3
-	itoa(eeprom_get(EERPOM_TIMEZONE_INDEX), retval, 10);
+	static char retval[4] = ""; // e.g. -12 or  +3
+	
+	if (eeprom_get(EERPOM_TIMEZONE_INDEX) < 0 )
+		itoa(eeprom_get(EERPOM_TIMEZONE_INDEX), retval, 10);
+	else
+	{
+		retval[0] = '+';
+		retval[1] = '\0';
+		itoa(eeprom_get(EERPOM_TIMEZONE_INDEX), retval+sizeof(char), 10);
+	}
 	return retval;
 }
 
@@ -592,6 +599,7 @@ void print_to_serial(const char *in_string)
     }
 		
     dataFile.close();
+		Serial.println();
 		Serial.print(in_string);Serial.println(F(" END ---"));
 		Serial.println();
 }
