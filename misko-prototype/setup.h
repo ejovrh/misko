@@ -27,7 +27,8 @@
 	attachInterrupt(digitalPinToInterrupt(interrupt_adxl345_int1_pin), isr_flag_adxl345_int1, CHANGE); 
 
 // connect to the serial terminal
-	Serial.begin(230400); // 230400 == 28.125 kB/s, as large as possible since we will be trasnferring files of up to 20 MB
+	// 115200 == 14.0625 kB/s, as large as possible since we will be trasnferring files of up to 20 MB
+	Serial.begin(115200); // NOTE: the baud rate must be compatible with the SIM800L max baud rate
 	Serial.println(F("serial set"));
 
 // initialize GPS
