@@ -4,19 +4,19 @@
 
 // port A
 // PA0 - FREE (digital 22)
-// PA1 - FREE (digital 23)
-// PA2 - FREE (digital 24)
+// PA1 - FREE (digital 23)	is now SPI_OLED_a0_pin !!!
+// PA2 - FREE (digital 24)		// !!! 
 #define TMP36_shutdown_pin	25					// PA3 - shutdown pin on TMP36
-#define SIM800L_sw_serial_tx 26					// PA4 - software serial TX for SIM800L
-#define SIM800L_sw_serial_rx 27					// PA5 - software serial RX for SIM800L
+#define SIM800L_sw_serial_tx 11 // !!! 	// (was 26) NEW PIN  - software serial TX for SIM800L
+#define SIM800L_sw_serial_rx 10 // !!!		// (was 27 ) NEW PIN - software serial RX for SIM800L
 #define gps_power_pin 28 								// PA6 - supplies power via PWM (100% duty cycle) to em406a
 #define SIM800L_mosfet_gate_pin 29 			// PA7 - SIM800L power control via mosfet
 
 // port B
 #define SPI_SS_SD_card_pin 13 					// PB7 - SPI - SS - SD card
 #define SPI_SS_OLED_pin 12 							// PB6 - SPI - SS - white - connected are: OLED(CS)
-#define SPI_OLED_a0_pin 11 							// PB5 - OLED a0 (D/C) pin (white) 
-#define SPI_OLED_reset_pin 10 					// PB4 - OLED reset pin (yellow)
+#define SPI_OLED_a0_pin 23 	 // !!!			// (was 11) PB5 - OLED a0 (D/C) pin (white) 
+#define SPI_OLED_reset_pin 4 // !!!			// (was 10) PB4 - OLED reset pin (yellow)
 #define SPI_MISO_pin 50 								// PB3 - SPI - MISO - blue - connected are: ADXL345(SDO)
 #define SPI_MOSI_pin 51 								// PB2 - SPI - MOSI - orange - connected are: OLED, ADXL345(SDA)
 #define SPI_SCK_pin 52 									// PB1 - SPI - SCK - green - connected are: OLED, ADXL345(SCL)
@@ -68,4 +68,4 @@
 #define bluetooth_mosfet_gate_pin 39 		// PG2 - bluetooth power control via mosfet
 // PG3 - FREE (!mega)
 // PG4 - FREE (!mega)
-// PG5 - FREE digital 4
+// PG5 - FREE digital 4 				// !!!	IS NOW SPI_OLED_reset_pin !!!
