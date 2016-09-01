@@ -686,7 +686,7 @@ void gsm_power(bool in_val)
 		// TODO - software serial via SIM800L_sw_serial_tx and SIM800L_sw_serial_rx
 		Serial.println(F("gsm on"));
 
-		sim800l.begin(9600); // set up the terminal for the SIM800L
+		sim800l.begin(57600); // set up the terminal for the SIM800L
 		Serial.println(F("sim800l SW set"));
 		delay(10);
 		sim800l.print(F("AT")); // 1st AT
