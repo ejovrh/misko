@@ -1,10 +1,11 @@
 // libraries
-#include <SD.h> // sd card library
+#include <SoftwareSerial.h> // software serial library for SIM800L
+#include <SD.h> // SD card library
 #include <SPI.h> // SPI library
 #include <EEPROM.h> // EEPROM library
-#include <U8glib.h> // https://github.com/olikraus/u8glib/wiki/userreference
-#include <M2tk.h> // https://code.google.com/archive/p/m2tklib/
-#include "utility/m2ghu8g.h" // the u8g graphics handler
+#include <U8glib.h> // OLED chip driver - https://github.com/olikraus/u8glib/wiki/userreference
+#include <M2tk.h> // menu library -  https://code.google.com/archive/p/m2tklib/
+#include "utility/m2ghu8g.h" // graphics handler (one of many)
 #include "utility/mas.h" // mass storage handler for the SD card
 #include <gprs.h> // GPRS libarary for the SIM800L
 #include <avr/sleep.h> // AVR sleep management
@@ -15,7 +16,7 @@
 #include "pin_definitions.h" // pin layout
 #include "global_variables.h" // global variables et al.
 #include "functions.h" // useful functions
-#include "display.h" // display code
+#include "display.h" // display (menu) code
 
 void setup() 
 {
@@ -24,7 +25,7 @@ void setup()
   #include "setup.h" // the actual setup [ without () ]
 }
 
-#include "gps_functions.h" // gps functions
+#include "gps_functions.h" // gps functions - kludge alert!
 
 void loop() 
 {
