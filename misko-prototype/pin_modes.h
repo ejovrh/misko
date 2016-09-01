@@ -2,7 +2,7 @@
 
 // PIN MODES
 pinMode(bat_A_pin, INPUT);
-pinMode(DO_NOT_USE_pin_10, OUTPUT); // SPI SD SS
+// pinMode(DO_NOT_USE_pin_10, OUTPUT); // SPI SD SS
 pinMode(SPI_SS_ADXL345_pin, OUTPUT); // SPI SS for ADXL345
 pinMode(SPI_SS_SD_card_pin, OUTPUT); // SPI SS for the SD card
 pinMode(bluetooth_mosfet_gate_pin, OUTPUT); // bluetooth power control, bluetooth module draws ~40mA when not connected, 20-30 in connected state
@@ -11,10 +11,9 @@ pinMode(gps_green_led_pin, OUTPUT); // GPS fix indiator: on - has fix, off - has
 pinMode(gps_power_pin, OUTPUT); // powers the gps (PWM) -- FIXME: direct power through the atmega2560; better is using a mosfet, draws ~4mA regardless of fix
 pinMode(GPS_PPS_pin, INPUT);
 pinMode(gps_red_led_pin, OUTPUT); // write cycle to SD card indicator (blinks on write), on by default until GPS gets fix, then off
-pinMode(MCP73871_battery_low_pin, INPUT); // MCP73871 battery low indicator
 pinMode(MCP73871_charge_status_1_pin, INPUT); // MCP73871 charge status indicator 1
 pinMode(MCP73871_charge_status_2_pin, INPUT); // MCP73871 charge status indicator 2
-pinMode(MCP73871_power_good_indicator_pin, INPUT); // MCP73871 power good indicator
+pinMode(MCP73871_power_good_pin, INPUT); // MCP73871 power good indicator
 pinMode(menu_down_buttton, INPUT); // user buttons - down
 pinMode(menu_left_buttton, INPUT); // user buttons - left
 pinMode(menu_left_buttton, INPUT); // user buttons - left 
@@ -25,7 +24,7 @@ pinMode(sleep_indicator_pin, OUTPUT);
 pinMode(TMP36_shutdown_pin, OUTPUT); // TMP36 shutdown control
 
 // PIN STATES
-digitalWrite(DO_NOT_USE_pin_10, HIGH); // SD card SS pin - have the SD card inactive by default
+// digitalWrite(DO_NOT_USE_pin_10, HIGH); // SD card SS pin - have the SD card inactive by default
 digitalWrite(SPI_SS_ADXL345_pin, HIGH); // have the ADXL released by default
 digitalWrite(SPI_SS_OLED_pin, HIGH); // have the OLED released by default
 digitalWrite(bluetooth_mosfet_gate_pin, LOW); // mosfet gate for bluetooth module, on(high), off(low)
@@ -34,10 +33,9 @@ digitalWrite(gps_green_led_pin, LOW); // off(low) by befault until GPS gets fix
 digitalWrite(gps_power_pin, LOW); // low(on), high(off) 
 digitalWrite(GPS_PPS_pin, HIGH);
 digitalWrite(gps_red_led_pin, HIGH); // on(high) by default until gps gets fix, then off, blinks on SD card write
-digitalWrite(MCP73871_battery_low_pin, HIGH); // high impedance state
 digitalWrite(MCP73871_charge_status_1_pin, HIGH); // high impedance state
 digitalWrite(MCP73871_charge_status_2_pin, HIGH); // high impedance state
-digitalWrite(MCP73871_power_good_indicator_pin, HIGH); // high impedance state
+digitalWrite(MCP73871_power_good_pin, HIGH); // high impedance state
 digitalWrite(menu_down_buttton, LOW); // on(high), low(off)
 digitalWrite(menu_left_buttton, LOW); // on(high), low(off)
 digitalWrite(menu_right_buttton, LOW); // on(high), low(off)

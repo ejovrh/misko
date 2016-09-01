@@ -26,32 +26,32 @@
 // ADXL345 INT1 pin connects to here, fires IRQ on act/inact
 	attachInterrupt(digitalPinToInterrupt(interrupt_adxl345_int1_pin), isr_flag_adxl345_int1, CHANGE); 
 
-// connect to the serial terminal
+// connect to the PDI serial terminal
 	// 115200 == 14.0625 kB/s, as large as possible since we will be trasnferring files of up to 20 MB
-	Serial.begin(115200); // NOTE: the baud rate must be compatible with the SIM800L max baud rate
+	Serial.begin(57600); // NOTE: the baud rate must be compatible with the SIM800L max baud rate
 	Serial.println(F("serial set"));
 
 // initialize GPS
-	Serial3.begin(GPSRATE);   // connect to the GPS at the desired rate
-	Serial.println(F("serial3 set")); // set gps serial comm. baud rate
+	Serial1.begin(GPSRATE);   // connect to the GPS at the desired rate
+	Serial.println(F("Serial1 set")); // set gps serial comm. baud rate
 
 	if (EEPROM[EEPROM_GPS_USE_WAAS_INDEX] == 1)
-		Serial3.write("$PSRF151,01*0F\r\n"); // turn on WAAS
+		Serial1.write("$PSRF151,01*0F\r\n"); // turn on WAAS
 	else
-		Serial3.write("$PSRF151,00*0E\r\n"); // turn off WAAS
+		Serial1.write("$PSRF151,00*0E\r\n"); // turn off WAAS
 
-	Serial3.write("$PSRF105,01*3E\r\n"); // gps debug messages on
-	//Serial3.write("$PSRF105,00*3F\r\n"); // gps debug messages off
-	Serial3.write("$PSRF109,137*36\r\n"); // use SBAS
-	Serial3.write("$PSRF109,120*30\r\n"); // SBAS Channel PRN120 #33(EGNOS) Inmarsat 3-F2
-	Serial3.write("$PSRF109,122*32\r\n"); // SBAS Channel PRN122 #35(WAAS)
-	Serial3.write("$PSRF109,124*34\r\n"); // SBAS Channel PRN124 #37(EGNOS)
-	Serial3.write("$PSRF109,126*36\r\n"); // SBAS Channel PRN126 #39(EGNOS)
-	Serial3.write("$PSRF109,129*39\r\n"); // SBAS Channel PRN129 #42(MTSAT-1)
-	Serial3.write("$PSRF109,131*30\r\n"); // SBAS Channel PRN131 #44(EGNOS)
-	Serial3.write("$PSRF109,134*35\r\n"); // SBAS Channel PRN134 #47(WAAS)
-	Serial3.write("$PSRF109,136*37\r\n"); // SBAS - Astra 4B
-	Serial3.write("$PSRF109,137*36\r\n"); // SBAS Channel PRN137 #50(MTSAT-2)
+	Serial1.write("$PSRF105,01*3E\r\n"); // gps debug messages on
+	//Serial1.write("$PSRF105,00*3F\r\n"); // gps debug messages off
+	Serial1.write("$PSRF109,137*36\r\n"); // use SBAS
+	Serial1.write("$PSRF109,120*30\r\n"); // SBAS Channel PRN120 #33(EGNOS) Inmarsat 3-F2
+	Serial1.write("$PSRF109,122*32\r\n"); // SBAS Channel PRN122 #35(WAAS)
+	Serial1.write("$PSRF109,124*34\r\n"); // SBAS Channel PRN124 #37(EGNOS)
+	Serial1.write("$PSRF109,126*36\r\n"); // SBAS Channel PRN126 #39(EGNOS)
+	Serial1.write("$PSRF109,129*39\r\n"); // SBAS Channel PRN129 #42(MTSAT-1)
+	Serial1.write("$PSRF109,131*30\r\n"); // SBAS Channel PRN131 #44(EGNOS)
+	Serial1.write("$PSRF109,134*35\r\n"); // SBAS Channel PRN134 #47(WAAS)
+	Serial1.write("$PSRF109,136*37\r\n"); // SBAS - Astra 4B
+	Serial1.write("$PSRF109,137*36\r\n"); // SBAS Channel PRN137 #50(MTSAT-2)
 	
 	
 	gps_adjust_log_freq(00, EEPROM[EEPROM_GPS_GPRMC_GGA_FREQ_INDEX]); // GPGGA
@@ -61,7 +61,7 @@
 	gps_adjust_log_freq(04, EEPROM[EEPROM_GPS_GPRMC_GGA_FREQ_INDEX]); // GPRMC
 	gps_adjust_log_freq(05, 0); // GPVTG
 	delay(50);
-
+	
 // set up display elements
 	m2_SetU8g(OLED.getU8g(), m2_u8g_box_icon); // connect u8glib with m2tklib
 	m2.setFont(0, u8g_font_6x10); // assign u8g_font_6x10 font to index 0

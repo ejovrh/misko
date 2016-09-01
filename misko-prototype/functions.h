@@ -291,7 +291,7 @@ void gps_adjust_log_freq(uint8_t in_msg, uint8_t in_val)
 			sprintf(gps_command_buffer, "$PSRF103,%.2d,00,%.2d,01*", in_msg, in_val);
 			sprintf(gps_command_buffer + strlen(gps_command_buffer), "%02X\r\n", getCheckSum(gps_command_buffer));
 			
-			Serial3.write(gps_command_buffer);
+			Serial1.write(gps_command_buffer);
 	return;
 }
 
@@ -528,7 +528,7 @@ uint8_t fn_cb_set_eerpom_gps_log_freq(m2_rom_void_p element, uint8_t msg, uint8_
 // callback for MCP73871 battery charge status
 const char *fn_cb_get_batt_charge_status(m2_rom_void_p element)
 {
-	if (digitalRead(MCP73871_power_good_indicator_pin) == LOW)
+	if (digitalRead(MCP73871_power_good_pin) == LOW)
 	{
 		if (digitalRead(MCP73871_charge_status_1_pin) == HIGH || digitalRead(MCP73871_charge_status_2_pin) == LOW)
 			return "charging ";
@@ -536,7 +536,7 @@ const char *fn_cb_get_batt_charge_status(m2_rom_void_p element)
 			return "charged ";
 	}
 	
-	if (digitalRead(MCP73871_power_good_indicator_pin) == HIGH)
+	if (digitalRead(MCP73871_power_good_pin) == HIGH)
 	{
 		if (digitalRead(MCP73871_charge_status_1_pin) == LOW || digitalRead(MCP73871_charge_status_2_pin) == HIGH)
 			return "BATT LOW";
@@ -546,7 +546,7 @@ const char *fn_cb_get_batt_charge_status(m2_rom_void_p element)
 // callback for MCP73871 input power status
 const char *fn_cb_get_power_good_status(m2_rom_void_p element)
 {
-	if (digitalRead(MCP73871_power_good_indicator_pin) == LOW)
+	if (digitalRead(MCP73871_power_good_pin) == LOW)
 		return "ExtPw ok ";
 	
 		return "ExtPw off ";
@@ -683,20 +683,21 @@ void gsm_power(bool in_val)
 		digitalWrite(SIM800L_mosfet_gate_pin, HIGH);
 		flag_gsm_on = 1;
 		
+		// TODO - software serial via SIM800L_sw_serial_tx and SIM800L_sw_serial_rx
 		Serial.println(F("gsm on"));
 
-		Serial2.begin(115200); // set up the terminal for the SIM800L
-		Serial.println(F("serial2 set"));
+		sim800l.begin(57600); // set up the terminal for the SIM800L
+		Serial.println(F("sim800l SW set"));
 		delay(10);
-		Serial.print(F("AT")); // 1st AT
-		Serial.print(F("ATE0")); // turn off command echo
+		sim800l.print(F("AT")); // 1st AT
+		sim800l.print(F("ATE0")); // turn off command echo
 	}
 	else 
 	{
 		digitalWrite(SIM800L_mosfet_gate_pin, LOW);
 		flag_gsm_on = 0;
 		Serial.println(F("gsm off"));
-		Serial2.end();
+		// sim800l.end();
 	}
 }
 
@@ -847,14 +848,14 @@ void poor_mans_debugging(void)
     }
 		Serial.println("EERPOM fields");
 
-/* 		//SPI voodoo
+ 		//SPI voodoo
 		SPI.beginTransaction(SPISettings(20000000, MSBFIRST, SPI_MODE3));
 		adxl345_readByte(0x00);
 		Serial.print(F("INT_SOURCE -"));Serial.print(adxl345_readByte(0x30), BIN);Serial.println("-");
 		Serial.print(F("INT_MAP -"));Serial.print(adxl345_readByte(0x2F), BIN);Serial.println("-");
 		Serial.print(F("INT_ENABLE -"));Serial.print(adxl345_readByte(0x2E), BIN);Serial.println("-");
 		Serial.print(F("vbatt -"));Serial.print(calculate_voltage(bat_A_pin));Serial.println("-");
-		SPI.endTransaction();  */
+		SPI.endTransaction();  
 		
 		// PSRF104,37.3875111,-121.97232,0,96000,237759,922,12,3
 		//$PSRF104,<Lat>,<Lon>,<Alt>,<ClkOffset>,<TimeOfWeek>,<WeekNo>,<ChannelCount>, <ResetCfg>*CKSUM<CR><LF>
@@ -874,6 +875,6 @@ void poor_mans_debugging(void)
 /* 		char buffer[82];
 		sprintf(buffer, "$PSRF104,%s,%s,%s,75000,%s,%s,12,1", gps_latitude, gps_longtitude, gps_altitude, gps_time_of_week, gps_week);
 		Serial.println(buffer);
-		//Serial3.write("$PSRF109,124*34\r\n"); */
+		//Serial1.write("$PSRF109,124*34\r\n"); */
 		
 }

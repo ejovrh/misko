@@ -69,6 +69,9 @@ M2_EXTERN_ALIGN(el_top_sd_content_menu); // Forward declaration of the toplevel 
 //U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_FAST);
 U8GLIB_SH1106_128X64_2X OLED(SPI_SS_OLED_pin,  SPI_OLED_a0_pin,  SPI_OLED_reset_pin); // HW SPI - look in the library source for precise info
 
+// software serial for SIM800L
+	SoftwareSerial sim800l(SIM800L_sw_serial_rx, SIM800L_sw_serial_tx);
+
 // set up variables using the SD utility library functions:
 File gpslogfile; // file object for the logfile
 bool flag_sd_write_enable = 0; // flag if a write shall be allowed or not - is controlled by log file name initialization
