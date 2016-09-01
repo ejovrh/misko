@@ -28,7 +28,7 @@
 
 // connect to the PDI serial terminal
 	// 115200 == 14.0625 kB/s, as large as possible since we will be trasnferring files of up to 20 MB
-	Serial.begin(115200); // NOTE: the baud rate must be compatible with the SIM800L max baud rate
+	Serial.begin(57600); // NOTE: the baud rate must be compatible with the SIM800L max baud rate
 	Serial.println(F("serial set"));
 
 // initialize GPS
