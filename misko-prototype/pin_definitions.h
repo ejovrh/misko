@@ -35,7 +35,7 @@
 #define TWI_SDA_pin	20									// PD1 - TWI SDA
 #define USART1_RX 19  									// PD2 - Serial1 RX
 #define USART1_TX 18  									// PD3 - Serial1 TX
-#define GPS_power_ctl_pin								// PD4 - FREE (!mega)
+#define GPS_power_ctl_pin	45						// PL4 AS A STANDIN ON ATMEGA2560// PD4 - FREE (!mega)
 #define GPS_reset_pin										// PD5 - GPS reset pin (!mega)
 #define MCP73871_power_good_pin 47 			// PL2 AS A STANDIN ON ATMEGA2560 // PD6 - supply power indicator
 #define MCP73871_charge_status_2_pin 38 // PL3 AS A STANDIN ON ATMEGA2560 // PD7 - charge status indicator 1 (charged)
