@@ -238,8 +238,8 @@ uint8_t getCheckSum(char *string)
 {
   int XOR = 0;	
 	
-  for (int i = 1; i < 20; i++) 
-  // for (int i = 1; i < strlen(string); i++) 
+  // for (int i = 1; i < 20; i++) 
+  for (int i = 1; i < strlen(string) -1; i++) 
     XOR = XOR ^ *(string+i);
 
   return XOR;
@@ -261,9 +261,9 @@ int16_t parseHex(char g)
 }
 
 // sets the RMC/GGA sentence frequency by sending the EM406A module an appropriate NMEA config sentence
-void gps_adjust_log_freq(uint8_t in_msg, uint8_t in_val) 
+void gps_adjust_log_freq(uint8_t in_msg, uint8_t in_val) // example call for GPGGA: gps_adjust_log_freq(04, val) for GPRMC
 { 
-      /* EXAMPLE
+      /* EXAMPLE EM406A
       
       $PSRF103,<msg>,<mode>,<rate>,<cksumEnable>*CKSUM<CR><LF>
       <msg> 00=GGA,01=GLL,02=GSA,03=GSV,04=RMC,05=VTG
@@ -285,12 +285,23 @@ void gps_adjust_log_freq(uint8_t in_msg, uint8_t in_val)
       http://www.hhhh.org/wiml/proj/nmeaxor.html
       */
 			
+			/* EXAMPLE MTK3339
+			$PMTK220,1000*1F<CR><LF> -- adjust log frequency
+
+			*/
 			if (in_val > 10) // some bug in the menu
 				in_val -= 10;
-			
+
+			#ifdef GPS_EM406A_CHIP
 			sprintf(gps_command_buffer, "$PSRF103,%.2d,00,%.2d,01*", in_msg, in_val);
-			sprintf(gps_command_buffer + strlen(gps_command_buffer), "%02X\r\n", getCheckSum(gps_command_buffer));
+			#endif
 			
+			#ifdef GPS_MTK3339_CHIP
+			// here we can set the lof freq globally for all NMEA sentences - a nice feature!
+			sprintf(gps_command_buffer, "$PMTK220,%.d000*", in_val); // adjust log freq
+			#endif
+
+			sprintf(gps_command_buffer + strlen(gps_command_buffer), "%02X\r\n", getCheckSum(gps_command_buffer));
 			Serial1.write(gps_command_buffer);
 	return;
 }
