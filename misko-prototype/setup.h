@@ -32,9 +32,16 @@
 	Serial.println(F("serial set"));
 
 // initialize GPS
+	#ifdef GPS_MTK3339_CHIP // pre-init for the MTK3339 - it has 9600 as default
+	Serial1.begin(9600);	// connect with 9600
+	Serial1.write("$PMTK251,4800*14"); // set to 4800
+	Serial1.end(); // terminate and continue below regularly...
+	#endif
+
 	Serial1.begin(GPSRATE);   // connect to the GPS at the desired rate
 	Serial.println(F("Serial1 set")); // set gps serial comm. baud rate
 
+	#ifdef GPS_EM406A_CHIP
 	if (EEPROM[EEPROM_GPS_USE_WAAS_INDEX] == 1)
 		Serial1.write("$PSRF151,01*0F\r\n"); // turn on WAAS
 	else
@@ -52,14 +59,24 @@
 	Serial1.write("$PSRF109,134*35\r\n"); // SBAS Channel PRN134 #47(WAAS)
 	Serial1.write("$PSRF109,136*37\r\n"); // SBAS - Astra 4B
 	Serial1.write("$PSRF109,137*36\r\n"); // SBAS Channel PRN137 #50(MTSAT-2)
+	#endif
 	
-	
+	#ifdef GPS_MTK3339_CHIP
+	Serial1.write("$PMTK330,0*2E"); // set WGS84 as the datum
+	Serial1.write("$PMTK301,1*2D"); // set DGPS mode to WAAS
+	Serial1.write("$PMTK313,1*2E"); // enable SBAS satellite search
+	Serial1.write("$PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*28");  // report only GPRMC and GPGGA sentences
+	Serial1.write("$PMTK286,1*23"); // enable interference cancellation
+	Serial1.write("$PMTK869,1,1*35"); // enable EASY
+	Serial1.write("$PGCMD,33,0*6D"); // disable antenna messages
+	#endif
+
 	gps_adjust_log_freq(00, EEPROM[EEPROM_GPS_GPRMC_GGA_FREQ_INDEX]); // GPGGA
-	gps_adjust_log_freq(01, 0); // GPGLL
-	gps_adjust_log_freq(02, 0); // GPGSA
-	gps_adjust_log_freq(03, 0); // GPGSV
+	// gps_adjust_log_freq(01, 0); // GPGLL
+	// gps_adjust_log_freq(02, 0); // GPGSA
+	// gps_adjust_log_freq(03, 0); // GPGSV
 	gps_adjust_log_freq(04, EEPROM[EEPROM_GPS_GPRMC_GGA_FREQ_INDEX]); // GPRMC
-	gps_adjust_log_freq(05, 0); // GPVTG
+	// gps_adjust_log_freq(05, 0); // GPVTG
 	delay(50);
 	
 // set up display elements
