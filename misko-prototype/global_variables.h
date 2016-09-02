@@ -2,7 +2,11 @@
 #define CONFIG_VERSION 4 // protection against excessive EEPROM writes
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
 
+#define GPS_EM406A_CHIP 0	// the EM406A reciever
+#define GPS_MTK3339_CHIP 1 // the MTK3339  reciever
+
 #define BUFFER_DEBUG_PRINT 0 // sd write debug printout
+
 
 #define AREF_VOLTAGE 4.27
 #define TEMPERATURE_SAMPLE_PERIOD 10 // temperature measure interval in seconds
