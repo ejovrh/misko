@@ -169,7 +169,7 @@ void get_nmea_sentences() {
 			if (strlen(gps_date) != 2 && strstr(gps_logfile, gps_date) == NULL ) // if "gps_date is initialized" and "gps_logfile does not contain the current datetime (e.g. on startup or on date change)" 
 			{	
 				//some weird behavious - bug?
-/* 				
+				
 				strncat(gps_logfile, gps_date, 4*sizeof(char));//Serial.println(gps_logfile);
 				strcat(gps_logfile, "/");//Serial.println(gps_logfile);
 				strncat(gps_logfile, gps_date+4*sizeof(char), 2*sizeof(char));//Serial.println(gps_logfile);
@@ -181,11 +181,11 @@ void get_nmea_sentences() {
 	
         strcat(gps_logfile,gps_date); // constrcut the logfile
 				strcat(gps_logfile, ".log");
-*/				
-				strcat(gps_logfile,gps_date);
+				
+/* 				strcat(gps_logfile,gps_date);
 				strcat(gps_logfile, ".log");
 				
-				Serial.println(gps_logfile);
+				Serial.println(gps_logfile); */
 				
 		/* 		for (int i; i<22; i++)
 				{
