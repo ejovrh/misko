@@ -841,7 +841,7 @@ void sd_buffer_write(char *in_string, uint8_t in_size)
 			#endif
 	
 			flag_flush_2nd = 0; // unmark it
-			digitalWrite(gps_red_led_pin, LOW); // turn on led to make write cycle end visible
+			digitalWrite(gps_red_led_pin, LOW); // turn off led to make write cycle end visible
 		}
 	}
 }

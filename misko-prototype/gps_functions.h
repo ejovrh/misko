@@ -165,34 +165,6 @@ void get_nmea_sentences() {
       if (strncmp(NMEA_buffer, "$GPGGA",  6) == 0) // if we have a GPRMC sentence
           gps_parse_gpgga(); // get HDOP, altitude and satellites in view
 			
-			// logfile name generation - should run only once a day
-			if (strlen(gps_date) != 2 && strstr(gps_logfile, gps_date) == NULL ) // if "gps_date is initialized" and "gps_logfile does not contain the current datetime (e.g. on startup or on date change)" 
-			{	
-				//some weird behavious - bug?
-				
-				strncat(gps_logfile, gps_date, 4*sizeof(char));//Serial.println(gps_logfile);
-				strcat(gps_logfile, "/");//Serial.println(gps_logfile);
-				strncat(gps_logfile, gps_date+4*sizeof(char), 2*sizeof(char));//Serial.println(gps_logfile);
-				
-				if (!SD.exists(gps_logfile))
-					SD.mkdir(gps_logfile); 
-	
-				strcat(gps_logfile, "/");//Serial.println(gps_logfile);
-	
-        strcat(gps_logfile,gps_date); // constrcut the logfile
-				strcat(gps_logfile, ".log");
-				
-/* 				strcat(gps_logfile,gps_date);
-				strcat(gps_logfile, ".log");
-				
-				Serial.println(gps_logfile); */
-				
-		/* 		for (int i; i<22; i++)
-				{
-					Serial.print(i);Serial.print("-");Serial.print(gps_logfile[i], DEC);Serial.print(" ");
-				} */
-			}
-			
 			bufferid++; // ?!? needed??
         
 			// start the write cycle
@@ -202,6 +174,26 @@ void get_nmea_sentences() {
 			if (EEPROM[EERPOM_SD_WRITE_ENABLE_INDEX] && flag_sd_write_enable && flag_gps_fix) // if we are set up to write - i.e. the logfile name is set
 			#endif
       {
+				
+				// logfile name generation - should run only once a day
+				if (strlen(gps_date) != 2 && strstr(gps_logfile, gps_date) == NULL ) // if "gps_date is initialized" and "gps_logfile does not contain the current datetime (e.g. on startup or on date change)" 
+				{	
+					//some weird behavious - bug?
+/* 					
+					strncat(gps_logfile, gps_date, 4*sizeof(char));//Serial.println(gps_logfile);
+					strcat(gps_logfile, "/");//Serial.println(gps_logfile);
+					strncat(gps_logfile, gps_date+4*sizeof(char), 2*sizeof(char));//Serial.println(gps_logfile);
+					
+					if (!SD.exists(gps_logfile))
+						SD.mkdir(gps_logfile); 
+		
+					strcat(gps_logfile, "/");//Serial.println(gps_logfile);
+		 */
+					strcat(gps_logfile,gps_date); // constrcut the logfile
+					strcat(gps_logfile, ".log");
+
+					Serial.println(gps_logfile); 
+				}	
 				// open file in write mode - once! (not on every iteration)
 				if (!gpslogfile) // run only on initialization, not on every loop iteration
 						gpslogfile = SD.open(gps_logfile, FILE_WRITE);
