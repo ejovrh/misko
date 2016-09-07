@@ -11,14 +11,13 @@
 #define SIM800L_mosfet_gate_pin 29 			// PA7 - SIM800L power control via mosfet
 
 // port B
-#define SPI_SS_SD_card_pin 13 					// PB7 - SPI - SS - SD card
-#define SPI_SS_OLED_pin 12 							// PB6 - SPI - SS - white - connected are: OLED(CS)
-#define SIM800L_sw_serial_tx 11 			 	// PB5 - software serial TX for SIM800L
-#define SIM800L_sw_serial_rx 10 				// PB4 - software serial RX for SIM800L
-#define SPI_MISO_pin 50 								// PB3 - SPI - MISO - blue - connected are: ADXL345(SDO)
-#define SPI_MOSI_pin 51 								// PB2 - SPI - MOSI - orange - connected are: OLED, ADXL345(SDA)
+#define SPI_FRAM_SS_pin  								// PB0 - slave select for FRAM(CS)
 #define SPI_SCK_pin 52 									// PB1 - SPI - SCK - green - connected are: OLED, ADXL345(SCL)
-#define SPI_SS_ADXL345_pin 53						// PB0 - slave select for ADXL345(CS)
+#define SPI_MOSI_pin 51 								// PB2 - SPI - MOSI - orange - connected are: OLED, ADXL345(SDA)
+#define SPI_MISO_pin 50 								// PB3 - SPI - MISO - blue - connected are: ADXL345(SDO)
+#define gps_sw_serial_rx 10 				// PB4 - software serial RX for GPS
+#define gps_sw_serial_tx 11 			 	// PB5 - software serial TX for GPS
+#define Bluetooth_wakeup_pin						// PB6 - wkaeup signal for Bluetooth device
 
 // port C
 #define bluetooth_power_toggle_pin 37 	// PC0 - user menu - bluetooth power toggle
@@ -43,18 +42,17 @@
 // port E
 #define PDI_USART0_RX										// PE0 - Programming Data Interface - Serial RX
 #define PDI_USART0_TX										// PE1 - Programming Data Interface - Serial TX
-																				// PE2 - ? (!mega)
-																				// PE3 - FREE (digital 5)
-#define SD_card_detect_pin 2 						// PE4 - SD card detect
-#define FRAM_hold_pin	3									// PE5 - FRAM hold
-#define FRAM_write_protect_pin					// PE6 - FRAM write protect
-#define SPI_SS_FRAM_pin									// PE7 - SPI - SS - FRAM chip
+#define SPI_SS_ADXL345_pin 44						// PL5 AS A STANDIN ON ATMEGA2560 // PE2 - ADXL345 Slave Select
+#define SPI_OLED_reset_pin 49 					// PL0 AS A STANDIN ON ATMEGA2560	// PE3 (not routed on mega2560 !! ) - OLED reset pin (yellow)
+#define SPI_OLED_a0_pin 48 	 						// PL1 AS A STANDIN ON ATMEGA2560	// PE4 (not routed on mega2560 !! ) - OLED a0 (D/C) pin (white) 
+#define SPI_SS_OLED_pin 13 							// PE5 - SPI - SS - white - connected are: OLED(CS)
+#define SPI_SS_SD_card_pin 46 					// PL6 AS A STANDIN ON ATMEGA2560 // PE6 - SPI - SS - SD card
+#define SD_card_detect_pin 							// PE7 - SD card detect
 
 // port F
 #define TMP36_Vsense_pin A0 						// PF0 - TMP36 temoerature sensor 97
 #define bat_A_pin A1 										// PF1 - battery A voltage
-#define interrupt_adxl345_int1_pin 2 		// PF2 - ADXL345 INT1 pin
-																				// PF3 - FREE (analog 3)
+#define interrupt_adxl345_int1_pin A3 	// PF3 - ADXL345 INT1 pin // FIXME !!!
 #define JTAG_TCL_pin 4									// PF4 - JTAG TCL
 #define JTAG_TMS_pin 5									// PF5 - JTAG TMS
 #define JTAG_TDO_pin 6									// PF6 - JTAG TDO
@@ -64,6 +62,6 @@
 #define MCP73871_charge_status_1_pin 41 // PG0 - charge status indicator 1 (charging / LBO)
 																				// PG1 - FREE (digital 40)
 #define bluetooth_mosfet_gate_pin 39 		// PG2 - bluetooth power control via mosfet
-#define SPI_OLED_reset_pin 49 					// PL0 AS A STANDIN ON ATMEGA2560			// PG3 (not routed on mega2560 !! ) - OLED reset pin (yellow)
-#define SPI_OLED_a0_pin 48 	 						// PL1 AS A STANDIN ON ATMEGA2560			// PG4 (not routed on mega2560 !! ) - OLED a0 (D/C) pin (white) 
+
+
 // PG5 - FREE digital 4
