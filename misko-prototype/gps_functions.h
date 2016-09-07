@@ -105,9 +105,9 @@ void get_nmea_sentences() {
   uint8_t sum; // variable for the NMEA checksum of each sentence
   bool gotGPRMC = false;    // flag that indicates GPRMC or GPGGA strings
  
-  if (Serial1.available()) // if Serial1 is availiable
+  if (gps.available()) // if gps is availiable
   {  
-    *(NMEA_buffer+bufferid) = Serial1.read();      // put byte by byte into the array "buffer"
+    *(NMEA_buffer+bufferid) = gps.read();      // put byte by byte into the array "buffer"
 
     if ( *(NMEA_buffer+bufferid) == '\n' )           // if we have recieved a newline -- read  http://www.gammon.com.au/forum/?id=11425
                //it means we are at the end of the NMEA sentence and we can start to parse it (the GPS reciever will terminate each NMEA sentece with at '\n' )
@@ -216,5 +216,5 @@ void get_nmea_sentences() {
       return;
     }
     
-  } // if (Serial1.available())
+  } // if (gps.available())
 } // void get_nmea_sentence()
