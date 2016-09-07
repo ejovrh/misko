@@ -30,6 +30,9 @@
 	// 230400 == 28.125 kB/s, as large as possible since we will be trasnferring files of up to 20 MB
 	Serial.begin(230400); // NOTE: the baud rate must be compatible with the SIM800L max baud rate
 	Serial.println(F("serial set"));
+	
+	Serial1.begin(9600); // set up the terminal for the SIM800L
+	Serial.println(F("sim800l SW set"));
 
 // initialize GPS
 	#ifdef GPS_MTK3339_CHIP // pre-init for the MTK3339 - it has 9600 as default
@@ -38,8 +41,8 @@
 	Serial1.end(); // terminate and continue below regularly...
 	#endif
 
-	Serial1.begin(GPSRATE);   // connect to the GPS at the desired rate
-	Serial.println(F("Serial1 set")); // set gps serial comm. baud rate
+	gps.begin(GPSRATE);   // connect to the GPS at the desired rate
+	Serial.println(F("gps serial set")); // set gps serial comm. baud rate
 
 	#ifdef GPS_EM406A_CHIP
 	if (EEPROM[EEPROM_GPS_USE_WAAS_INDEX] == 1)
@@ -62,13 +65,13 @@
 	#endif
 	
 	#ifdef GPS_MTK3339_CHIP
-	Serial1.write("$PMTK330,0*2E"); // set WGS84 as the datum
-	Serial1.write("$PMTK301,1*2D"); // set DGPS mode to WAAS
-	Serial1.write("$PMTK313,1*2E"); // enable SBAS satellite search
-	Serial1.write("$PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*28");  // report only GPRMC and GPGGA sentences
-	Serial1.write("$PMTK286,1*23"); // enable interference cancellation
-	Serial1.write("$PMTK869,1,1*35"); // enable EASY
-	Serial1.write("$PGCMD,33,0*6D"); // disable antenna messages
+	gps.write("$PMTK330,0*2E"); // set WGS84 as the datum
+	gps.write("$PMTK301,1*2D"); // set DGPS mode to WAAS
+	gps.write("$PMTK313,1*2E"); // enable SBAS satellite search
+	gps.write("$PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*28");  // report only GPRMC and GPGGA sentences
+	gps.write("$PMTK286,1*23"); // enable interference cancellation
+	gps.write("$PMTK869,1,1*35"); // enable EASY
+	gps.write("$PGCMD,33,0*6D"); // disable antenna messages
 	#endif
 
 	gps_adjust_log_freq(00, EEPROM[EEPROM_GPS_GPRMC_GGA_FREQ_INDEX]); // GPGGA
