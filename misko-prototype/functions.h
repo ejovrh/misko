@@ -302,7 +302,7 @@ void gps_adjust_log_freq(uint8_t in_msg, uint8_t in_val) // example call for GPG
 			#endif
 
 			sprintf(gps_command_buffer + strlen(gps_command_buffer), "%02X\r\n", getCheckSum(gps_command_buffer));
-			Serial1.write(gps_command_buffer);
+			gps.write(gps_command_buffer);
 	return;
 }
 
@@ -697,18 +697,16 @@ void gsm_power(bool in_val)
 		// TODO - software serial via SIM800L_sw_serial_tx and SIM800L_sw_serial_rx
 		Serial.println(F("gsm on"));
 
-		sim800l.begin(57600); // set up the terminal for the SIM800L
-		Serial.println(F("sim800l SW set"));
 		delay(10);
-		sim800l.print(F("AT")); // 1st AT
-		sim800l.print(F("ATE0")); // turn off command echo
+		Serial1.print(F("AT")); // 1st AT
+		Serial1.print(F("ATE0")); // turn off command echo
 	}
 	else 
 	{
 		digitalWrite(SIM800L_mosfet_gate_pin, LOW);
 		flag_gsm_on = 0;
 		Serial.println(F("gsm off"));
-		// sim800l.end();
+		//Serial1.end();
 	}
 }
 
