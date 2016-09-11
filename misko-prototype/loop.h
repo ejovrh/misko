@@ -33,6 +33,11 @@
   
 	if (flag_adxl345_int1) // if the ADXL345 INT1 flag is set
 		handle_adx_intl(); // execute the function
+		
+	if(eeprom_get(EERPOM_GPS_POWER_INDEX))
+		digitalWrite(GPS_power_ctl_pin, HIGH);
+	else
+		digitalWrite(GPS_power_ctl_pin, LOW);
 	
 // serial redirection for GSM modem testing
 	if(Serial1.available()) //read SIM800 output (if available) and print it in arduino IDE serial monitor
