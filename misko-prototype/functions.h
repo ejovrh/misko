@@ -722,7 +722,7 @@ void gsm_power(bool in_val)
 {
 	if (in_val)
 	{
-		digitalWrite(SIM800L_mosfet_gate_pin, HIGH);
+		digitalWrite(SIM800C_power_pin, HIGH);
 		flag_gsm_on = 1;
 		
 		// TODO - software serial via SIM800L_sw_serial_tx and SIM800L_sw_serial_rx
@@ -734,7 +734,7 @@ void gsm_power(bool in_val)
 	}
 	else 
 	{
-		digitalWrite(SIM800L_mosfet_gate_pin, LOW);
+		digitalWrite(SIM800C_power_pin, LOW);
 		flag_gsm_on = 0;
 		Serial.println(F("gsm off"));
 		//Serial1.end();
