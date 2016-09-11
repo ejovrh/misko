@@ -33,7 +33,7 @@ void loop()
 } 
 
 //ISR for the ADXL345 accelerometer
-void isr_flag_adxl345_int1(void) 
+ISR(__vectorPCINT6_vect)
 {
 	flag_adxl345_int1 = 1; // simply (for now) set a flag to true (is false by default)
 }
