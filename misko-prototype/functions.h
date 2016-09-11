@@ -175,7 +175,7 @@ void handle_bluetooth_button(void)
 	
 	if (!flag_bluetooth_power_toggle_pressed) // if the button is not flagged as pressed
 	{
-		if(digitalRead(bluetooth_power_toggle_pin) == HIGH) // if the button gets pressed
+		if(digitalRead(menu_bluetooth_power_toggle_pin) == HIGH) // if the button gets pressed
 		{
 			flag_bluetooth_power_toggle_pressed = 1; // flag the button as pressed, prevents multiple calls
 			poor_mans_debugging(); // execute poor mans debugging
@@ -196,7 +196,7 @@ void handle_bluetooth_button(void)
 		if (EEPROM[EERPOM_BLUETOOTH_POWER_INDEX] != 2) // if bt setting is auto
 			return;
 				
-		if ( digitalRead(bluetooth_power_toggle_pin) == LOW) // the button is released
+		if ( digitalRead(menu_bluetooth_power_toggle_pin) == LOW) // the button is released
 		{ 
 			bluetooth_button_release_time = millis(); // record time of button release
 			flag_bluetooth_power_toggle_pressed = 0; // mark button as released
