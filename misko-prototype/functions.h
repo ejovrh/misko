@@ -102,7 +102,7 @@ inline int8_t calculate_temperature(void) // executed from loop()
 // calculates the average temperature after in_count readings
 void avg_temperature(int8_t in_temp, uint8_t in_count)
 {
-	if (scheduler_run_count < 10) // if its the 1st iteration
+	if (scheduler_run_count < in_count) // if its below in_count 
 		temperature = calculate_temperature(); // at least have some value displayed
 	
 	avg_temp += in_temp; // sum up the vaules
@@ -331,8 +331,10 @@ const char *fn_cb_utc(m2_rom_void_p element)
 // callback for temperature 
 const char *fn_cb_get_temperature(m2_rom_void_p element)
 {
-	sprintf(temp + sizeof(char), "%+.2d", temperature); // THE way to print
-	strncat( temp + 4*sizeof(char), "C", sizeof(char)); // append C and a null terminator
+	sprintf(temp + sizeof(char), "%+.2d", (uint8_t) temperature); // THE way to print // FIXME
+	strcat( temp + 4*sizeof(char), "C"); // append C and a null terminator
+	Serial.println(temperature);
+	temp[6] = '\0';
 	return temp;
 }
 
@@ -864,8 +866,9 @@ void poor_mans_debugging(void)
 		Serial.print(F("INT_MAP -"));Serial.print(adxl345_readByte(0x2F), BIN);Serial.println("-");
 		Serial.print(F("INT_ENABLE -"));Serial.print(adxl345_readByte(0x2E), BIN);Serial.println("-");
 		Serial.print(F("vbatt -"));Serial.print(calculate_voltage(bat_A_pin));Serial.println("-");
-		SPI.endTransaction();  
+		SPI.endTransaction(); 
 		
+		// Serial.print("temp: ");Serial.println(temp);
 		// PSRF104,37.3875111,-121.97232,0,96000,237759,922,12,3
 		//$PSRF104,<Lat>,<Lon>,<Alt>,<ClkOffset>,<TimeOfWeek>,<WeekNo>,<ChannelCount>, <ResetCfg>*CKSUM<CR><LF>
 		
@@ -880,6 +883,8 @@ void poor_mans_debugging(void)
 		{
 			Serial.print(F("WK:"));Serial.println(gps_week);
 		}
+		
+		
 		
 /* 		char buffer[82];
 		sprintf(buffer, "$PSRF104,%s,%s,%s,75000,%s,%s,12,1", gps_latitude, gps_longtitude, gps_altitude, gps_time_of_week, gps_week);
