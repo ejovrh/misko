@@ -24,7 +24,13 @@
 	analogReference(EXTERNAL); 
 
 // ADXL345 INT1 pin connects to here, fires IRQ on act/inact
-	attachInterrupt(digitalPinToInterrupt(interrupt_adxl345_int1_pin), isr_flag_adxl345_int1, CHANGE); 
+	// attachInterrupt(digitalPinToInterrupt(interrupt_adxl345_int1_pin), isr_flag_adxl345_int1, CHANGE); 
+	cli();
+	SREG |= 0b1000000;
+	PCICR |= 0b00000001;
+	PCMSK0 |= 0b01000000; // PCINT6
+	sei();
+
 
 // connect to the PDI serial terminal
 	// 230400 == 28.125 kB/s, as large as possible since we will be trasnferring files of up to 20 MB
