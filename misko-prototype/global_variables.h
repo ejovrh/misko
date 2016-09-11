@@ -26,6 +26,7 @@
 #define EEPROM_GPS_USE_WAAS_INDEX 7
 #define EERPOM_SD_WRITE_ENABLE_INDEX 8
 #define EERPOM_NMEA_PRINTOUT_INDEX 9
+#define EERPOM_GPS_POWER_INDEX 10
 
 // GPS variuables
 char NMEA_buffer[NMEA_BUFFERSIZE] = "";        // string buffer for the NMEA sentence
