@@ -404,6 +404,35 @@ const char *fn_cb_lcd_power_setting(m2_rom_void_p element, uint8_t msg, uint8_t 
   return NULL;
 }
 
+// callback for GPS power setting
+const char *fn_cb_gps_power_setting(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
+{
+	// see fn_cb_bluetooth_power_setting for comments
+	switch(msg)
+  {
+		case M2_COMBOFN_MSG_GET_VALUE:
+			*valptr = EEPROM[EERPOM_GPS_POWER_INDEX];
+      break;
+			
+    case M2_COMBOFN_MSG_SET_VALUE:
+			EEPROM[EERPOM_GPS_POWER_INDEX] = *valptr;
+      break;
+			
+    case M2_COMBOFN_MSG_GET_STRING:
+      if (*valptr == 0)
+			{
+        return "off";
+			}
+			
+      if (*valptr == 1)
+			{
+        return "on";
+			}
+  }
+				
+  return NULL;
+}
+
 // callback for NMEA sentence printout setting
 const char *fn_cb_nmea_printout_setting(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
 {
@@ -853,7 +882,7 @@ void poor_mans_debugging(void)
 			
 		// EEPROM fields
 		Serial.println("EERPOM fields");
-    for (uint8_t i=0; i< 10; i++)
+    for (uint8_t i=0; i< 11; i++)
     {
       Serial.print(i); Serial.print(F(" - "));Serial.println(EEPROM[i]);
     }
