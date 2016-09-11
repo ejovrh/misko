@@ -187,7 +187,7 @@ void handle_bluetooth_button(void)
 				return; // do nothing
 			
 			bluetooth_button_press_time = millis(); // record time of button press; this is used in a bit down to keep bt on on auto
-			digitalWrite(bluetooth_mosfet_gate_pin, HIGH); // turn on the device
+			digitalWrite(Bluetooth_wakeup_pin, HIGH); // turn on the device
 			flag_bluetooth_is_on = 1; // set flag to on
 		}
 	}
@@ -214,7 +214,7 @@ void handle_bluetooth_button(void)
 			
 	if ( flag_bluetooth_is_on && eeprom_timer(bluetooth_button_press_time, EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX)) // if the device is on and enough time has passed
 	{ 
-			digitalWrite(bluetooth_mosfet_gate_pin, LOW); // turn off the device
+			digitalWrite(Bluetooth_wakeup_pin, LOW); // turn off the device
 			flag_bluetooth_is_on = 0; // set flag to off
 			// flag_bluetooth_power_keep_on = 0; 
 	}
@@ -355,19 +355,19 @@ const char *fn_cb_bluetooth_power_setting(m2_rom_void_p element, uint8_t msg, ui
     case M2_COMBOFN_MSG_GET_STRING: // we get the string _and_ set it (implicitly via M2_COMBOFN_MSG_SET_VALUE) via *valptr
       if (*valptr == 0) // values are coded in eeprom.h
 			{
-				digitalWrite(bluetooth_mosfet_gate_pin, LOW);
+				digitalWrite(Bluetooth_wakeup_pin, LOW);
         return "off";
 			}
 			
       if (*valptr == 1)
 			{
-				digitalWrite(bluetooth_mosfet_gate_pin, HIGH);
+				digitalWrite(Bluetooth_wakeup_pin, HIGH);
         return "on";
 			}
 			
       if (*valptr == 2)
 			{
-				digitalWrite(bluetooth_mosfet_gate_pin, LOW);
+				digitalWrite(Bluetooth_wakeup_pin, LOW);
         return "auto";
 			}
   }
