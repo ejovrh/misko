@@ -175,7 +175,7 @@ void handle_bluetooth_button(void)
 	
 	if (!flag_bluetooth_power_toggle_pressed) // if the button is not flagged as pressed
 	{
-		if(digitalRead(bluetooth_power_toggle_pin) == HIGH) // if the button gets pressed
+		if(digitalRead(menu_bluetooth_power_toggle_pin) == HIGH) // if the button gets pressed
 		{
 			flag_bluetooth_power_toggle_pressed = 1; // flag the button as pressed, prevents multiple calls
 			poor_mans_debugging(); // execute poor mans debugging
@@ -187,7 +187,7 @@ void handle_bluetooth_button(void)
 				return; // do nothing
 			
 			bluetooth_button_press_time = millis(); // record time of button press; this is used in a bit down to keep bt on on auto
-			digitalWrite(bluetooth_mosfet_gate_pin, HIGH); // turn on the device
+			digitalWrite(Bluetooth_wakeup_pin, HIGH); // turn on the device
 			flag_bluetooth_is_on = 1; // set flag to on
 		}
 	}
@@ -196,7 +196,7 @@ void handle_bluetooth_button(void)
 		if (EEPROM[EERPOM_BLUETOOTH_POWER_INDEX] != 2) // if bt setting is auto
 			return;
 				
-		if ( digitalRead(bluetooth_power_toggle_pin) == LOW) // the button is released
+		if ( digitalRead(menu_bluetooth_power_toggle_pin) == LOW) // the button is released
 		{ 
 			bluetooth_button_release_time = millis(); // record time of button release
 			flag_bluetooth_power_toggle_pressed = 0; // mark button as released
@@ -214,7 +214,7 @@ void handle_bluetooth_button(void)
 			
 	if ( flag_bluetooth_is_on && eeprom_timer(bluetooth_button_press_time, EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX)) // if the device is on and enough time has passed
 	{ 
-			digitalWrite(bluetooth_mosfet_gate_pin, LOW); // turn off the device
+			digitalWrite(Bluetooth_wakeup_pin, LOW); // turn off the device
 			flag_bluetooth_is_on = 0; // set flag to off
 			// flag_bluetooth_power_keep_on = 0; 
 	}
@@ -355,19 +355,19 @@ const char *fn_cb_bluetooth_power_setting(m2_rom_void_p element, uint8_t msg, ui
     case M2_COMBOFN_MSG_GET_STRING: // we get the string _and_ set it (implicitly via M2_COMBOFN_MSG_SET_VALUE) via *valptr
       if (*valptr == 0) // values are coded in eeprom.h
 			{
-				digitalWrite(bluetooth_mosfet_gate_pin, LOW);
+				digitalWrite(Bluetooth_wakeup_pin, LOW);
         return "off";
 			}
 			
       if (*valptr == 1)
 			{
-				digitalWrite(bluetooth_mosfet_gate_pin, HIGH);
+				digitalWrite(Bluetooth_wakeup_pin, HIGH);
         return "on";
 			}
 			
       if (*valptr == 2)
 			{
-				digitalWrite(bluetooth_mosfet_gate_pin, LOW);
+				digitalWrite(Bluetooth_wakeup_pin, LOW);
         return "auto";
 			}
   }
@@ -393,6 +393,35 @@ const char *fn_cb_lcd_power_setting(m2_rom_void_p element, uint8_t msg, uint8_t 
       if (*valptr == 0)
 			{
         return "auto";
+			}
+			
+      if (*valptr == 1)
+			{
+        return "on";
+			}
+  }
+				
+  return NULL;
+}
+
+// callback for GPS power setting
+const char *fn_cb_gps_power_setting(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
+{
+	// see fn_cb_bluetooth_power_setting for comments
+	switch(msg)
+  {
+		case M2_COMBOFN_MSG_GET_VALUE:
+			*valptr = EEPROM[EERPOM_GPS_POWER_INDEX];
+      break;
+			
+    case M2_COMBOFN_MSG_SET_VALUE:
+			EEPROM[EERPOM_GPS_POWER_INDEX] = *valptr;
+      break;
+			
+    case M2_COMBOFN_MSG_GET_STRING:
+      if (*valptr == 0)
+			{
+        return "off";
 			}
 			
       if (*valptr == 1)
@@ -693,7 +722,7 @@ void gsm_power(bool in_val)
 {
 	if (in_val)
 	{
-		digitalWrite(SIM800L_mosfet_gate_pin, HIGH);
+		digitalWrite(SIM800C_power_pin, HIGH);
 		flag_gsm_on = 1;
 		
 		// TODO - software serial via SIM800L_sw_serial_tx and SIM800L_sw_serial_rx
@@ -705,7 +734,7 @@ void gsm_power(bool in_val)
 	}
 	else 
 	{
-		digitalWrite(SIM800L_mosfet_gate_pin, LOW);
+		digitalWrite(SIM800C_power_pin, LOW);
 		flag_gsm_on = 0;
 		Serial.println(F("gsm off"));
 		//Serial1.end();
@@ -853,7 +882,7 @@ void poor_mans_debugging(void)
 			
 		// EEPROM fields
 		Serial.println("EERPOM fields");
-    for (uint8_t i=0; i< 10; i++)
+    for (uint8_t i=0; i< 11; i++)
     {
       Serial.print(i); Serial.print(F(" - "));Serial.println(EEPROM[i]);
     }
