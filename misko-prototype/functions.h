@@ -462,6 +462,35 @@ const char *fn_cb_nmea_printout_setting(m2_rom_void_p element, uint8_t msg, uint
   return NULL;
 }
 
+// callback for serial port setting
+const char *fn_cb_serial_setting(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
+{
+	// see fn_cb_bluetooth_power_setting for comments
+	switch(msg)
+  {
+		case M2_COMBOFN_MSG_GET_VALUE:
+			*valptr = EEPROM[EERPOM_SERIAL_SETTING_INDEX];
+      break;
+			
+    case M2_COMBOFN_MSG_SET_VALUE:
+			EEPROM[EERPOM_SERIAL_SETTING_INDEX] = *valptr;
+      break;
+			
+    case M2_COMBOFN_MSG_GET_STRING:
+      if (*valptr == 0)
+        return "GPS";
+			
+      if (*valptr == 1)
+        return "GSM";
+
+			if (*valptr == 2)
+        return "system";
+
+	}
+				
+  return NULL;
+}
+
 // callback for OLED power setting
 const char *fn_cb_gsm_power(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
 {
@@ -874,6 +903,41 @@ void sd_buffer_write(char *in_string, uint8_t in_size)
 		}
 	}
 }
+
+long detRate(int recpin)  // function to return valid received baud rate
+                         // Note that the serial monitor has no 600 baud option and 300 baud
+                         // doesn't seem to work with version 22 hardware serial library
+ {
+ long baud, rate = 10000, x;
+ for (int i = 0; i < 10; i++) {
+     x = pulseIn(recpin,LOW);   // measure the next zero bit width
+     rate = x < rate ? x : rate;
+ }
+  
+ if (rate < 12)
+     baud = 115200;
+     else if (rate < 20)
+     baud = 57600;
+     else if (rate < 29)
+     baud = 38400;
+     else if (rate < 40)
+     baud = 28800;
+     else if (rate < 60)
+     baud = 19200;
+     else if (rate < 80)
+     baud = 14400;
+     else if (rate < 150)
+     baud = 9600;
+     else if (rate < 300)
+     baud = 4800;
+     else if (rate < 600)
+     baud = 2400;
+     else if (rate < 1200)
+     baud = 1200;
+     else
+     baud = 0;  
+  return baud;
+ } 
 
 // primitive BT button-activated printout
 void poor_mans_debugging(void)
