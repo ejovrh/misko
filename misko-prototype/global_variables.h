@@ -1,5 +1,5 @@
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
-#define CONFIG_VERSION 4 // protection against excessive EEPROM writes
+#define CONFIG_VERSION 5 // protection against excessive EEPROM writes
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
 
 #define GPS_EM406A_CHIP 0	// the EM406A reciever
@@ -27,6 +27,7 @@
 #define EERPOM_SD_WRITE_ENABLE_INDEX 8
 #define EERPOM_NMEA_PRINTOUT_INDEX 9
 #define EERPOM_GPS_POWER_INDEX 10
+#define EERPOM_SERIAL_SETTING_INDEX 11
 
 // GPS variuables
 char NMEA_buffer[NMEA_BUFFERSIZE] = "";        // string buffer for the NMEA sentence
