@@ -102,7 +102,7 @@ inline int8_t calculate_temperature(void) // executed from loop()
 // calculates the average temperature after in_count readings
 void avg_temperature(int8_t in_temp, uint8_t in_count)
 {
-	if (scheduler_run_count < 10) // if its the 1st iteration
+	if (scheduler_run_count < in_count) // if its below in_count 
 		temperature = calculate_temperature(); // at least have some value displayed
 	
 	avg_temp += in_temp; // sum up the vaules
@@ -175,7 +175,7 @@ void handle_bluetooth_button(void)
 	
 	if (!flag_bluetooth_power_toggle_pressed) // if the button is not flagged as pressed
 	{
-		if(digitalRead(bluetooth_power_toggle_pin) == HIGH) // if the button gets pressed
+		if(digitalRead(menu_bluetooth_power_toggle_pin) == HIGH) // if the button gets pressed
 		{
 			flag_bluetooth_power_toggle_pressed = 1; // flag the button as pressed, prevents multiple calls
 			poor_mans_debugging(); // execute poor mans debugging
@@ -187,7 +187,7 @@ void handle_bluetooth_button(void)
 				return; // do nothing
 			
 			bluetooth_button_press_time = millis(); // record time of button press; this is used in a bit down to keep bt on on auto
-			digitalWrite(bluetooth_mosfet_gate_pin, HIGH); // turn on the device
+			digitalWrite(Bluetooth_wakeup_pin, HIGH); // turn on the device
 			flag_bluetooth_is_on = 1; // set flag to on
 		}
 	}
@@ -196,7 +196,7 @@ void handle_bluetooth_button(void)
 		if (EEPROM[EERPOM_BLUETOOTH_POWER_INDEX] != 2) // if bt setting is auto
 			return;
 				
-		if ( digitalRead(bluetooth_power_toggle_pin) == LOW) // the button is released
+		if ( digitalRead(menu_bluetooth_power_toggle_pin) == LOW) // the button is released
 		{ 
 			bluetooth_button_release_time = millis(); // record time of button release
 			flag_bluetooth_power_toggle_pressed = 0; // mark button as released
@@ -214,7 +214,7 @@ void handle_bluetooth_button(void)
 			
 	if ( flag_bluetooth_is_on && eeprom_timer(bluetooth_button_press_time, EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX)) // if the device is on and enough time has passed
 	{ 
-			digitalWrite(bluetooth_mosfet_gate_pin, LOW); // turn off the device
+			digitalWrite(Bluetooth_wakeup_pin, LOW); // turn off the device
 			flag_bluetooth_is_on = 0; // set flag to off
 			// flag_bluetooth_power_keep_on = 0; 
 	}
@@ -238,8 +238,8 @@ uint8_t getCheckSum(char *string)
 {
   int XOR = 0;	
 	
-  for (int i = 1; i < 20; i++) 
-  // for (int i = 1; i < strlen(string); i++) 
+  // for (int i = 1; i < 20; i++) 
+  for (int i = 1; i < strlen(string) -1; i++) 
     XOR = XOR ^ *(string+i);
 
   return XOR;
@@ -261,9 +261,9 @@ int16_t parseHex(char g)
 }
 
 // sets the RMC/GGA sentence frequency by sending the EM406A module an appropriate NMEA config sentence
-void gps_adjust_log_freq(uint8_t in_msg, uint8_t in_val) 
+void gps_adjust_log_freq(uint8_t in_msg, uint8_t in_val) // example call for GPGGA: gps_adjust_log_freq(04, val) for GPRMC
 { 
-      /* EXAMPLE
+      /* EXAMPLE EM406A
       
       $PSRF103,<msg>,<mode>,<rate>,<cksumEnable>*CKSUM<CR><LF>
       <msg> 00=GGA,01=GLL,02=GSA,03=GSV,04=RMC,05=VTG
@@ -285,13 +285,24 @@ void gps_adjust_log_freq(uint8_t in_msg, uint8_t in_val)
       http://www.hhhh.org/wiml/proj/nmeaxor.html
       */
 			
+			/* EXAMPLE MTK3339
+			$PMTK220,1000*1F<CR><LF> -- adjust log frequency
+
+			*/
 			if (in_val > 10) // some bug in the menu
 				in_val -= 10;
-			
+
+			#ifdef GPS_EM406A_CHIP
 			sprintf(gps_command_buffer, "$PSRF103,%.2d,00,%.2d,01*", in_msg, in_val);
-			sprintf(gps_command_buffer + strlen(gps_command_buffer), "%02X\r\n", getCheckSum(gps_command_buffer));
+			#endif
 			
-			Serial1.write(gps_command_buffer);
+			#ifdef GPS_MTK3339_CHIP
+			// here we can set the lof freq globally for all NMEA sentences - a nice feature!
+			sprintf(gps_command_buffer, "$PMTK220,%.d000*", in_val); // adjust log freq
+			#endif
+
+			sprintf(gps_command_buffer + strlen(gps_command_buffer), "%02X\r\n", getCheckSum(gps_command_buffer));
+			gps.write(gps_command_buffer);
 	return;
 }
 
@@ -320,8 +331,10 @@ const char *fn_cb_utc(m2_rom_void_p element)
 // callback for temperature 
 const char *fn_cb_get_temperature(m2_rom_void_p element)
 {
-	sprintf(temp + sizeof(char), "%+.2d", temperature); // THE way to print
-	strncat( temp + 4*sizeof(char), "C", sizeof(char)); // append C and a null terminator
+	sprintf(temp + sizeof(char), "%+.2d", (uint8_t) temperature); // THE way to print // FIXME
+	strcat( temp + 4*sizeof(char), "C"); // append C and a null terminator
+	Serial.println(temperature);
+	temp[6] = '\0';
 	return temp;
 }
 
@@ -342,19 +355,19 @@ const char *fn_cb_bluetooth_power_setting(m2_rom_void_p element, uint8_t msg, ui
     case M2_COMBOFN_MSG_GET_STRING: // we get the string _and_ set it (implicitly via M2_COMBOFN_MSG_SET_VALUE) via *valptr
       if (*valptr == 0) // values are coded in eeprom.h
 			{
-				digitalWrite(bluetooth_mosfet_gate_pin, LOW);
+				digitalWrite(Bluetooth_wakeup_pin, LOW);
         return "off";
 			}
 			
       if (*valptr == 1)
 			{
-				digitalWrite(bluetooth_mosfet_gate_pin, HIGH);
+				digitalWrite(Bluetooth_wakeup_pin, HIGH);
         return "on";
 			}
 			
       if (*valptr == 2)
 			{
-				digitalWrite(bluetooth_mosfet_gate_pin, LOW);
+				digitalWrite(Bluetooth_wakeup_pin, LOW);
         return "auto";
 			}
   }
@@ -391,6 +404,35 @@ const char *fn_cb_lcd_power_setting(m2_rom_void_p element, uint8_t msg, uint8_t 
   return NULL;
 }
 
+// callback for GPS power setting
+const char *fn_cb_gps_power_setting(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
+{
+	// see fn_cb_bluetooth_power_setting for comments
+	switch(msg)
+  {
+		case M2_COMBOFN_MSG_GET_VALUE:
+			*valptr = EEPROM[EERPOM_GPS_POWER_INDEX];
+      break;
+			
+    case M2_COMBOFN_MSG_SET_VALUE:
+			EEPROM[EERPOM_GPS_POWER_INDEX] = *valptr;
+      break;
+			
+    case M2_COMBOFN_MSG_GET_STRING:
+      if (*valptr == 0)
+			{
+        return "off";
+			}
+			
+      if (*valptr == 1)
+			{
+        return "on";
+			}
+  }
+				
+  return NULL;
+}
+
 // callback for NMEA sentence printout setting
 const char *fn_cb_nmea_printout_setting(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
 {
@@ -416,6 +458,35 @@ const char *fn_cb_nmea_printout_setting(m2_rom_void_p element, uint8_t msg, uint
         return "on";
 			}
   }
+				
+  return NULL;
+}
+
+// callback for serial port setting
+const char *fn_cb_serial_setting(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
+{
+	// see fn_cb_bluetooth_power_setting for comments
+	switch(msg)
+  {
+		case M2_COMBOFN_MSG_GET_VALUE:
+			*valptr = EEPROM[EERPOM_SERIAL_SETTING_INDEX];
+      break;
+			
+    case M2_COMBOFN_MSG_SET_VALUE:
+			EEPROM[EERPOM_SERIAL_SETTING_INDEX] = *valptr;
+      break;
+			
+    case M2_COMBOFN_MSG_GET_STRING:
+      if (*valptr == 0)
+        return "GPS";
+			
+      if (*valptr == 1)
+        return "GSM";
+
+			if (*valptr == 2)
+        return "system";
+
+	}
 				
   return NULL;
 }
@@ -680,24 +751,22 @@ void gsm_power(bool in_val)
 {
 	if (in_val)
 	{
-		digitalWrite(SIM800L_mosfet_gate_pin, HIGH);
+		digitalWrite(SIM800C_power_pin, HIGH);
 		flag_gsm_on = 1;
 		
 		// TODO - software serial via SIM800L_sw_serial_tx and SIM800L_sw_serial_rx
 		Serial.println(F("gsm on"));
 
-		sim800l.begin(57600); // set up the terminal for the SIM800L
-		Serial.println(F("sim800l SW set"));
 		delay(10);
-		sim800l.print(F("AT")); // 1st AT
-		sim800l.print(F("ATE0")); // turn off command echo
+		Serial1.print(F("AT")); // 1st AT
+		Serial1.print(F("ATE0")); // turn off command echo
 	}
 	else 
 	{
-		digitalWrite(SIM800L_mosfet_gate_pin, LOW);
+		digitalWrite(SIM800C_power_pin, LOW);
 		flag_gsm_on = 0;
 		Serial.println(F("gsm off"));
-		// sim800l.end();
+		//Serial1.end();
 	}
 }
 
@@ -830,10 +899,45 @@ void sd_buffer_write(char *in_string, uint8_t in_size)
 			#endif
 	
 			flag_flush_2nd = 0; // unmark it
-			digitalWrite(gps_red_led_pin, LOW); // turn on led to make write cycle end visible
+			digitalWrite(gps_red_led_pin, LOW); // turn off led to make write cycle end visible
 		}
 	}
 }
+
+long detRate(int recpin)  // function to return valid received baud rate
+                         // Note that the serial monitor has no 600 baud option and 300 baud
+                         // doesn't seem to work with version 22 hardware serial library
+ {
+ long baud, rate = 10000, x;
+ for (int i = 0; i < 10; i++) {
+     x = pulseIn(recpin,LOW);   // measure the next zero bit width
+     rate = x < rate ? x : rate;
+ }
+  
+ if (rate < 12)
+     baud = 115200;
+     else if (rate < 20)
+     baud = 57600;
+     else if (rate < 29)
+     baud = 38400;
+     else if (rate < 40)
+     baud = 28800;
+     else if (rate < 60)
+     baud = 19200;
+     else if (rate < 80)
+     baud = 14400;
+     else if (rate < 150)
+     baud = 9600;
+     else if (rate < 300)
+     baud = 4800;
+     else if (rate < 600)
+     baud = 2400;
+     else if (rate < 1200)
+     baud = 1200;
+     else
+     baud = 0;  
+  return baud;
+ } 
 
 // primitive BT button-activated printout
 void poor_mans_debugging(void)
@@ -842,7 +946,7 @@ void poor_mans_debugging(void)
 			
 		// EEPROM fields
 		Serial.println("EERPOM fields");
-    for (uint8_t i=0; i< 10; i++)
+    for (uint8_t i=0; i< 11; i++)
     {
       Serial.print(i); Serial.print(F(" - "));Serial.println(EEPROM[i]);
     }
@@ -855,8 +959,9 @@ void poor_mans_debugging(void)
 		Serial.print(F("INT_MAP -"));Serial.print(adxl345_readByte(0x2F), BIN);Serial.println("-");
 		Serial.print(F("INT_ENABLE -"));Serial.print(adxl345_readByte(0x2E), BIN);Serial.println("-");
 		Serial.print(F("vbatt -"));Serial.print(calculate_voltage(bat_A_pin));Serial.println("-");
-		SPI.endTransaction();  
+		SPI.endTransaction(); 
 		
+		// Serial.print("temp: ");Serial.println(temp);
 		// PSRF104,37.3875111,-121.97232,0,96000,237759,922,12,3
 		//$PSRF104,<Lat>,<Lon>,<Alt>,<ClkOffset>,<TimeOfWeek>,<WeekNo>,<ChannelCount>, <ResetCfg>*CKSUM<CR><LF>
 		
@@ -871,6 +976,8 @@ void poor_mans_debugging(void)
 		{
 			Serial.print(F("WK:"));Serial.println(gps_week);
 		}
+		
+		
 		
 /* 		char buffer[82];
 		sprintf(buffer, "$PSRF104,%s,%s,%s,75000,%s,%s,12,1", gps_latitude, gps_longtitude, gps_altitude, gps_time_of_week, gps_week);

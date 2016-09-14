@@ -33,13 +33,33 @@
   
 	if (flag_adxl345_int1) // if the ADXL345 INT1 flag is set
 		handle_adx_intl(); // execute the function
+		
+	if(eeprom_get(EERPOM_GPS_POWER_INDEX))
+		digitalWrite(GPS_power_ctl_pin, HIGH);
+	else
+		digitalWrite(GPS_power_ctl_pin, LOW);
 	
-// serial redirection for GSM modem testing
-	if(sim800l.available()) //read SIM800 output (if available) and print it in arduino IDE serial monitor
-		Serial.write(sim800l.read()); // NL & CR need to be enabled
+	if (eeprom_get(EERPOM_SERIAL_SETTING_INDEX) == 0)
+	{	
+		// gps.end();
+		gps.begin(detRate(GPS_sw_serial_rx));
+		// serial redirection for GPS testing
+		if(gps.available()) //read GPS output (if available) and print it in arduino IDE serial monitor
+			Serial.write(gps.read()); // NL & CR need to be enabled
+
+		if(Serial.available()) //read arduino IDE serial monitor inputs (if available) and send them to GPS   
+			gps.write(Serial.read()); // NL & CR need to be enabled 
+	}
+	
+if (eeprom_get(EERPOM_SERIAL_SETTING_INDEX) == 1)
+{	
+	// serial redirection for GSM modem testing
+	if(Serial1.available()) //read SIM800 output (if available) and print it in arduino IDE serial monitor
+		Serial.write(Serial1.read()); // NL & CR need to be enabled
 
 	if(Serial.available()) //read arduino IDE serial monitor inputs (if available) and send them to SIM800   
-		sim800l.write(Serial.read()); // NL & CR need to be enabled 
+		Serial1.write(Serial.read()); // NL & CR need to be enabled 
+}
 
 // GSM modem power control		
 	if (flag_cb_gsm_power && !flag_gsm_on)

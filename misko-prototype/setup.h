@@ -24,17 +24,33 @@
 	analogReference(EXTERNAL); 
 
 // ADXL345 INT1 pin connects to here, fires IRQ on act/inact
-	attachInterrupt(digitalPinToInterrupt(interrupt_adxl345_int1_pin), isr_flag_adxl345_int1, CHANGE); 
+	// attachInterrupt(digitalPinToInterrupt(interrupt_adxl345_int1_pin), isr_flag_adxl345_int1, CHANGE); 
+	cli();
+	SREG |= 0b1000000;
+	PCICR |= 0b00000001;
+	PCMSK0 |= 0b01000000; // PCINT6
+	sei();
+
 
 // connect to the PDI serial terminal
-	// 115200 == 14.0625 kB/s, as large as possible since we will be trasnferring files of up to 20 MB
-	Serial.begin(57600); // NOTE: the baud rate must be compatible with the SIM800L max baud rate
+	// 230400 == 28.125 kB/s, as large as possible since we will be trasnferring files of up to 20 MB
+	Serial.begin(230400); // NOTE: the baud rate must be compatible with the SIM800L max baud rate
 	Serial.println(F("serial set"));
+	
+	Serial1.begin(9600); // set up the terminal for the SIM800L
+	Serial.println(F("sim800l SW set"));
 
 // initialize GPS
-	Serial1.begin(GPSRATE);   // connect to the GPS at the desired rate
-	Serial.println(F("Serial1 set")); // set gps serial comm. baud rate
+	#ifdef GPS_MTK3339_CHIP // pre-init for the MTK3339 - it has 9600 as default
+	Serial1.begin(9600);	// connect with 9600
+	Serial1.write("$PMTK251,4800*14"); // set to 4800
+	Serial1.end(); // terminate and continue below regularly...
+	#endif
 
+	gps.begin(GPSRATE);   // connect to the GPS at the desired rate
+	Serial.println(F("gps serial set")); // set gps serial comm. baud rate
+
+	#ifdef GPS_EM406A_CHIP
 	if (EEPROM[EEPROM_GPS_USE_WAAS_INDEX] == 1)
 		Serial1.write("$PSRF151,01*0F\r\n"); // turn on WAAS
 	else
@@ -52,23 +68,33 @@
 	Serial1.write("$PSRF109,134*35\r\n"); // SBAS Channel PRN134 #47(WAAS)
 	Serial1.write("$PSRF109,136*37\r\n"); // SBAS - Astra 4B
 	Serial1.write("$PSRF109,137*36\r\n"); // SBAS Channel PRN137 #50(MTSAT-2)
+	#endif
 	
-	
+	#ifdef GPS_MTK3339_CHIP
+	gps.write("$PMTK330,0*2E"); // set WGS84 as the datum
+	gps.write("$PMTK301,1*2D"); // set DGPS mode to WAAS
+	gps.write("$PMTK313,1*2E"); // enable SBAS satellite search
+	gps.write("$PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*28");  // report only GPRMC and GPGGA sentences
+	gps.write("$PMTK286,1*23"); // enable interference cancellation
+	gps.write("$PMTK869,1,1*35"); // enable EASY
+	gps.write("$PGCMD,33,0*6D"); // disable antenna messages
+	#endif
+
 	gps_adjust_log_freq(00, EEPROM[EEPROM_GPS_GPRMC_GGA_FREQ_INDEX]); // GPGGA
-	gps_adjust_log_freq(01, 0); // GPGLL
-	gps_adjust_log_freq(02, 0); // GPGSA
-	gps_adjust_log_freq(03, 0); // GPGSV
+	// gps_adjust_log_freq(01, 0); // GPGLL
+	// gps_adjust_log_freq(02, 0); // GPGSA
+	// gps_adjust_log_freq(03, 0); // GPGSV
 	gps_adjust_log_freq(04, EEPROM[EEPROM_GPS_GPRMC_GGA_FREQ_INDEX]); // GPRMC
-	gps_adjust_log_freq(05, 0); // GPVTG
+	// gps_adjust_log_freq(05, 0); // GPVTG
 	delay(50);
 	
 // set up display elements
 	m2_SetU8g(OLED.getU8g(), m2_u8g_box_icon); // connect u8glib with m2tklib
 	m2.setFont(0, u8g_font_6x10); // assign u8g_font_6x10 font to index 0
-	m2.setPin(M2_KEY_SELECT, menu_right_buttton); // 33
-	m2.setPin(M2_KEY_PREV, menu_up_buttton); // 32
-	m2.setPin(M2_KEY_NEXT, menu_down_buttton); // 31
-	m2.setPin(M2_KEY_EXIT, menu_left_buttton); // 30
+	m2.setPin(M2_KEY_SELECT, menu_right_button_pin); // 33
+	m2.setPin(M2_KEY_PREV, menu_up_button_pin); // 32
+	m2.setPin(M2_KEY_NEXT, menu_down_button_pin); // 31
+	m2.setPin(M2_KEY_EXIT, menu_left_button_pin); // 30
 
 // ADXL345 config start
 	SPI.beginTransaction(SPISettings(20000000, MSBFIRST, SPI_MODE3));
