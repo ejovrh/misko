@@ -30,4 +30,5 @@ if (EEPROM[0] != CONFIG_VERSION) // only if the version did change we will write
 	EEPROM[EERPOM_SD_WRITE_ENABLE_INDEX] = 0; // enable write to SD card or not
 	EEPROM[EERPOM_NMEA_PRINTOUT_INDEX] = 0; // enable write to SD card or not
 	EEPROM[EERPOM_GPS_POWER_INDEX] = 1; // gps power - on(1), off(0), default on 
+	EEPROM[EERPOM_SERIAL_SETTING_INDEX] = 2; // serial line setting: 0 - GPS, 1 - GSM, 2 - system
 }
