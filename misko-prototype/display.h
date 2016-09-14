@@ -77,6 +77,14 @@ M2_GRIDLIST(el_sd_grid, "c2", el_sd_list);
 M2_ALIGN(el_top_sd_menu, "-1|1W64H64", &el_sd_grid);
 // sd card end
 
+// serial setup
+M2_LABEL(el_serial, "rf0", "serial port");
+M2_COMBOFN(el_serial_setting, "rf0", 3, fn_cb_serial_setting);
+M2_LIST(el_serial_list) = { &el_serial, &el_serial_setting, &el_ok };
+M2_GRIDLIST(el_serial_grid, "c2", el_serial_list);
+M2_ALIGN(el_top_serial_menu, "-1|1W64H64", &el_serial_grid);
+// serial setup
+
 // timezone start 
 M2_LABEL(el_timezone_utc, "rf0", "UTC");
 M2_S8NUMFN(el_timezone_utc_value, "+1c2", -12, 12, fn_cb_set_eerpom_tz);
@@ -135,6 +143,7 @@ m2_menu_entry m2_2lmenu_data[] =
 	{ ". SD card", &el_top_sd_content_menu}, 
   { "Settings", NULL },
 	{ ". SD card", &el_top_sd_menu},
+	{ ". Serial port", &el_top_serial_menu}, 
   { ". Timezone", &el_top_timezone_menu },
   { ". Bluetooth", &el_top_bluetooth_menu },
   { ". Display", &el_top_lcd_menu },
