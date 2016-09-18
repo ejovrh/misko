@@ -34,15 +34,23 @@
 	if (flag_adxl345_int1) // if the ADXL345 INT1 flag is set
 		handle_adx_intl(); // execute the function
 		
-	if(eeprom_get(EERPOM_GPS_POWER_INDEX))
+	if(!flag_gps_on && eeprom_get(EERPOM_GPS_POWER_INDEX)) // user powers GPS on
+	{
 		digitalWrite(GPS_power_ctl_pin, HIGH);
-	else
-		digitalWrite(GPS_power_ctl_pin, LOW);
+		flag_gps_on = 1;
+	}
 	
-	if (eeprom_get(EERPOM_SERIAL_SETTING_INDEX) == 0)
+	if(flag_gps_on && !eeprom_get(EERPOM_GPS_POWER_INDEX)) // user powers GPS off
+	{
+		digitalWrite(GPS_power_ctl_pin, LOW);
+		flag_gps_on = 0;
+	}
+	
+	if (eeprom_get(EERPOM_SERIAL_SETTING_INDEX) == 0) // user selects GPS in serial menu
 	{	
 		// gps.end();
-		gps.begin(detRate(GPS_sw_serial_rx));
+		//gps.begin(detRate(GPS_sw_serial_rx));
+		gps.begin(9600);
 		// serial redirection for GPS testing
 		if(gps.available()) //read GPS output (if available) and print it in arduino IDE serial monitor
 			Serial.write(gps.read()); // NL & CR need to be enabled
@@ -51,15 +59,15 @@
 			gps.write(Serial.read()); // NL & CR need to be enabled 
 	}
 	
-if (eeprom_get(EERPOM_SERIAL_SETTING_INDEX) == 1)
-{	
-	// serial redirection for GSM modem testing
-	if(Serial1.available()) //read SIM800 output (if available) and print it in arduino IDE serial monitor
-		Serial.write(Serial1.read()); // NL & CR need to be enabled
+	if (eeprom_get(EERPOM_SERIAL_SETTING_INDEX) == 1) // user selects GSM in user menu
+	{	
+		// serial redirection for GSM modem testing
+		if(Serial1.available()) //read SIM800 output (if available) and print it in arduino IDE serial monitor
+			Serial.write(Serial1.read()); // NL & CR need to be enabled
 
-	if(Serial.available()) //read arduino IDE serial monitor inputs (if available) and send them to SIM800   
-		Serial1.write(Serial.read()); // NL & CR need to be enabled 
-}
+		if(Serial.available()) //read arduino IDE serial monitor inputs (if available) and send them to SIM800   
+			Serial1.write(Serial.read()); // NL & CR need to be enabled 
+	}
 
 // GSM modem power control		
 	if (flag_cb_gsm_power && !flag_gsm_on)

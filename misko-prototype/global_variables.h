@@ -47,6 +47,7 @@ bool flag_gps_fix = 0; // do we have a fix or not?
 bool flag_gps_time_of_week_set = 0; // is the GPS time of week set or not?
 bool flag_gps_week_set = 0; // is the GPS week set or not?
 bool flag_nmea_sentence_printout = 0; // shall incoming NMEA sentences (regardless of fix) be printed out or not?
+bool flag_gps_on = 1; // is the gps powered on or off?
 int8_t timezone;
 
 // device variables
