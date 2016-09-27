@@ -3,29 +3,28 @@
 
 	if (m2.handleKey() != 0) // if there are key events in the queue
 	{
-	 lcd_button_press_time = millis(); // save the button press time
+		lcd_button_press_time = millis(); // save the button press time
 	 
-	 // oled wakeup control
-	 if (flag_oled_sleep) // if the sleep flag is set
-	 {
+		// oled wakeup control
+		if (flag_oled_sleep) // if the sleep flag is set
+		{
 			flag_oled_sleep = !flag_oled_sleep; // unset the sleep flag
 			OLED.sleepOff(); // wake up the oled
-	 }
+		}
 		
-	 // picture loop - https://github.com/olikraus/u8glib/wiki/tpictureloop
-		 OLED.firstPage();  // https://github.com/olikraus/u8glib/wiki/userreference#firstpage
+		// picture loop - https://github.com/olikraus/u8glib/wiki/tpictureloop
+			OLED.firstPage();  // https://github.com/olikraus/u8glib/wiki/userreference#firstpage
 		 
-		 do 
-		 {
+			do 
+			{
 				m2.draw(); // draw the display
-		 }
-		 while( OLED.nextPage() ); // https://github.com/olikraus/u8glib/wiki/userreference#nextpage
+			}
+			while( OLED.nextPage() ); // https://github.com/olikraus/u8glib/wiki/userreference#nextpage
 	} 
 	//Serial.println(millis());
 			
 	handle_bluetooth_button(); // handles the bluetooth power button
- 
-	handle_lcd_sleep(); // checks if it is time for the display to go to sleep
+ 	handle_lcd_sleep(); // checks if it is time for the display to go to sleep
   
 	//Serial.println(millis());
 	get_nmea_sentences(); // gets NMEA sentences out of the GPS and deals with them
@@ -49,7 +48,7 @@
 	if (eeprom_get(EERPOM_SERIAL_SETTING_INDEX) == 0) // user selects GPS in serial menu
 	{	
 		// gps.end();
-		//gps.begin(detRate(GPS_sw_serial_rx));
+		//gps.begin(detectBaud(GPS_sw_serial_rx));
 		gps.begin(9600);
 		// serial redirection for GPS testing
 		if(gps.available()) //read GPS output (if available) and print it in arduino IDE serial monitor

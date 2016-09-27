@@ -39,11 +39,6 @@ ISR(__vectorPCINT6_vect)
 	flag_adxl345_int1 = 1; // simply (for now) set a flag to true (is false by default)
 }
 
-/* void sleep_led(void)
-{
-	digitalWrite(sleep_indicator_pin, !digitalRead(sleep_indicator_pin) );
-} */
-
 // ISR for timer5 events - generated every second
 //	stuff that needs to run periodically goes here
 ISR(TIMER5_COMPA_vect)

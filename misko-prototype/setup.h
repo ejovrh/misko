@@ -10,7 +10,7 @@
 		OC4: 6, 7, 8 - 16bit
 		OC5: 44, 45, 46 - 16bit, i dont need PWM, this is a 16bit counter which means i'll use this one
 */
-	noInterrupts(); // gobally disable interrupts
+	noInterrupts(); // globally disable interrupts
 	TCCR5A  = 0; // clear the register (A and B)
 	TCCR5B  = 0;
 	OCR5A = 15624; // set compare match register to desired timer count
@@ -20,7 +20,6 @@
 	TIMSK5 |= (1 << OCIE5A); // enable timer compare interrupt
 	interrupts(); // globally enable interrupts
 
-// AREF_VOLTAGE - 4.30 via zener diode
 	analogReference(EXTERNAL); 
 
 // ADXL345 INT1 pin connects to here, fires IRQ on act/inact
@@ -33,8 +32,8 @@
 
 
 // connect to the PDI serial terminal
-	// 230400 == 28.125 kB/s, as large as possible since we will be trasnferring files of up to 20 MB
-	Serial.begin(230400); // NOTE: the baud rate must be compatible with the SIM800L max baud rate
+	// 230400 == 28.125 kB/s, as large as possible since we will be transferring files of up to 20 MB
+	Serial.begin(9600); // NOTE: the baud rate must be compatible with the SIM800L max baud rate
 	Serial.println(F("serial set"));
 	
 	Serial1.begin(9600); // set up the terminal for the SIM800L

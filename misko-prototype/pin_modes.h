@@ -2,7 +2,6 @@
 
 // PIN MODES
 pinMode(bat_A_pin, INPUT);
-// pinMode(DO_NOT_USE_pin_10, OUTPUT); // SPI SD SS
 pinMode(SPI_SS_ADXL345_pin, OUTPUT); // SPI SS for ADXL345
 pinMode(SPI_SS_SD_card_pin, OUTPUT); // SPI SS for the SD card
 pinMode(Bluetooth_wakeup_pin, OUTPUT); // bluetooth power control, bluetooth module draws ~40mA when not connected, 20-30 in connected state
@@ -24,7 +23,6 @@ pinMode(GPS_power_ctl_pin, OUTPUT); // GPS power control pin
 pinMode(interrupt_adxl345_int1_pin, INPUT);
 
 // PIN STATES
-// digitalWrite(DO_NOT_USE_pin_10, HIGH); // SD card SS pin - have the SD card inactive by default
 digitalWrite(SPI_SS_ADXL345_pin, HIGH); // have the ADXL released by default
 digitalWrite(SPI_SS_OLED_pin, HIGH); // have the OLED released by default
 digitalWrite(Bluetooth_wakeup_pin, LOW); // mosfet gate for bluetooth module, on(high), off(low)
