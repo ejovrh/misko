@@ -1,4 +1,4 @@
-// forward declaration of this shitty function (its at the very end of this file)
+// forward declaration of this shitty function (it's at the very end of this file)
 void poor_mans_debugging(void);
 
 /* eeprom_timer() - returns 1 if enough time has passed
@@ -21,11 +21,8 @@ int eeprom_timer(unsigned int in_button_press_time, unsigned int in_eeprom_index
 byte adxl345_readByte(byte registerAddress) // reads one byte at registerAddress
 {
 		digitalWrite(SPI_SS_ADXL345_pin, LOW); // reserve the slave
-    
-		SPI.transfer(0x80 | registerAddress); // set the MSB to 1 (the read command), then send address to read from
-		
+    	SPI.transfer(0x80 | registerAddress); // set the MSB to 1 (the read command), then send address to read from
 		byte retval = SPI.transfer(0x00); // send one byte (0xff) into the circular fifo buffer, get one byte back
-		
 		digitalWrite(SPI_SS_ADXL345_pin, HIGH); // release the slave
     return retval;  // return value
 }
@@ -904,38 +901,47 @@ void sd_buffer_write(char *in_string, uint8_t in_size)
 	}
 }
 
-long detRate(int recpin)  // function to return valid received baud rate
-                         // Note that the serial monitor has no 600 baud option and 300 baud
-                         // doesn't seem to work with version 22 hardware serial library
- {
- long baud, rate = 10000, x;
- for (int i = 0; i < 10; i++) {
-     x = pulseIn(recpin,LOW);   // measure the next zero bit width
-     rate = x < rate ? x : rate;
- }
+// determines baud rate
+long detectBaud(int recpin)
+{
+	long baud, rate = 10000, x;
+	for (int i = 0; i < 10; i++) 
+	{
+		x = pulseIn(recpin,LOW);   // measure the next zero bit width
+    rate = x < rate ? x : rate;
+	}
   
- if (rate < 12)
-     baud = 115200;
-     else if (rate < 20)
-     baud = 57600;
-     else if (rate < 29)
-     baud = 38400;
-     else if (rate < 40)
-     baud = 28800;
-     else if (rate < 60)
-     baud = 19200;
-     else if (rate < 80)
-     baud = 14400;
-     else if (rate < 150)
-     baud = 9600;
-     else if (rate < 300)
-     baud = 4800;
-     else if (rate < 600)
-     baud = 2400;
-     else if (rate < 1200)
-     baud = 1200;
-     else
-     baud = 0;  
+	if (rate < 12)
+		baud = 115200;
+  else 
+		if (rate < 20)
+			baud = 57600;
+    else 
+			if (rate < 29)
+				baud = 38400;
+			else 
+			if (rate < 40)
+				baud = 28800;
+			else
+			if (rate < 60)
+				baud = 19200;
+			else 
+			if (rate < 80)
+				baud = 14400;
+			else 
+				if (rate < 150)
+					baud = 9600;
+				else 
+				if (rate < 300)
+					baud = 4800;
+				else 
+				if (rate < 600)
+					baud = 2400;
+				else 
+				if (rate < 1200)
+					baud = 1200;
+				else
+					baud = 0;  
   return baud;
  } 
 

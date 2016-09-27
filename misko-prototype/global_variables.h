@@ -2,19 +2,18 @@
 #define CONFIG_VERSION 5 // protection against excessive EEPROM writes
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
 
-#define GPS_EM406A_CHIP 0	// the EM406A reciever
-#define GPS_MTK3339_CHIP 1 // the MTK3339  reciever
+#define GPS_EM406A_CHIP 0	// the EM406A receiver
+#define GPS_MTK3339_CHIP 1 // the MTK3339  receiver
 
-#define BUFFER_DEBUG_PRINT 0 // sd write debug printout
+#define BUFFER_DEBUG_PRINT 0 // SD write debug printout
 
 
-#define AREF_VOLTAGE 4.27
+#define AREF_VOLTAGE 2.50
 #define TEMPERATURE_SAMPLE_PERIOD 10 // temperature measure interval in seconds
 #define GPSRATE 4800
 #define SERIALRATE 9600
 #define NMEA_BUFFERSIZE 82 // officially, NMEA sentences are at maximum 82 characters long (80 readable characters + \r\n)
-#define SD_BUFFERSIZE 1024 // huge buffer for NMEA sentences to be written to SD card
-#define FS_EXTRA_MENUES 1
+#define SD_BUFFERSIZE 1024 // cyclical buffer for NMEA sentences to be written to SD card
 
 // EERPOM indices
 #define EERPOM_LCD_POWER_INDEX 1
@@ -29,9 +28,9 @@
 #define EERPOM_GPS_POWER_INDEX 10
 #define EERPOM_SERIAL_SETTING_INDEX 11
 
-// GPS variuables
+// GPS variables
 char NMEA_buffer[NMEA_BUFFERSIZE] = "";        // string buffer for the NMEA sentence
-uint8_t bufferid = 0; // holds the current position in the NMEA_buffer array, used fo walk through the buffer
+uint8_t bufferid = 0; // holds the current position in the NMEA_buffer array, used for walk through the buffer
 char gps_command_buffer[24];
 char gps_date[9] = "20"; // 0-7 + 1 for '\0' -- YEAR 2100-BUG, HERE WE COME!!!
 char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
@@ -47,6 +46,7 @@ bool flag_gps_fix = 0; // do we have a fix or not?
 bool flag_gps_time_of_week_set = 0; // is the GPS time of week set or not?
 bool flag_gps_week_set = 0; // is the GPS week set or not?
 bool flag_nmea_sentence_printout = 0; // shall incoming NMEA sentences (regardless of fix) be printed out or not?
+bool flag_gps_on = 1; // is the gps powered on or off?
 int8_t timezone;
 
 // device variables
@@ -57,29 +57,29 @@ char vcc[9] = "Vccx.xxV";
 char bat_a_pct[9] = "batAxxx%";
 char sd_buffer[SD_BUFFERSIZE]; // buffer holding 2x 512byte blocks of NMEA sentences for buffered write of 512byte blocks
 
-// bluetooth flags
+// Bluetooth flags
 uint32_t bluetooth_button_press_time = millis(); // time of button press
 uint32_t bluetooth_button_release_time = 0; // time of button release
 bool flag_bluetooth_is_on = 0; // flag is BT device is powered on or off
-bool flag_bluetooth_power_toggle_pressed = 0; // flag marks bluetooth button pressed or not - used to recognize button state change for proper high/low handling
+bool flag_bluetooth_power_toggle_pressed = 0; // flag marks Bluetooth button pressed or not - used to recognize button state change for proper high/low handling
 bool flag_bluetooth_power_keep_on = 0; // flag if the BT device shall be kept on and not power off on timeout
 
 // display variables
 uint32_t lcd_button_press_time = millis(); // time of button press
 bool flag_lcd_is_on = 0; // flag is BT device is powered on or off
 bool flag_oled_sleep = 0; // flag if the OLED shall sleep or not
-M2_EXTERN_ALIGN(top_el_expandable_menu); // Forward declaration of the toplevel element
-M2_EXTERN_ALIGN(el_top_sd_content_menu); // Forward declaration of the toplevel element
+M2_EXTERN_ALIGN(top_el_expandable_menu); // Forward declaration of the top level element
+M2_EXTERN_ALIGN(el_top_sd_content_menu); // Forward declaration of the top level element
 
 // display device initializations
 //U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_FAST);
 U8GLIB_SH1106_128X64_2X OLED(SPI_SS_OLED_pin,  SPI_OLED_a0_pin,  SPI_OLED_reset_pin); // HW SPI - look in the library source for precise info
 
-// software serial for SIM800L
-	SoftwareSerial gps(GPS_sw_serial_rx, GPS_sw_serial_tx);
+// software serial for the GPS device
+SoftwareSerial gps(GPS_sw_serial_rx, GPS_sw_serial_tx);
 
 // set up variables using the SD utility library functions:
-File gpslogfile; // file object for the logfile
+File gpslogfile; // file object for the log file
 bool flag_sd_write_enable = 0; // flag if a write shall be allowed or not - is controlled by log file name initialization
 uint8_t fs_m2tk_first = 0; // helper variable for the strlist element
 uint8_t fs_m2tk_cnt = 0; // helper variable for the strlist element
@@ -87,4 +87,4 @@ uint8_t fs_m2tk_cnt = 0; // helper variable for the strlist element
 uint16_t scheduler_run_count = 0; // counts how many times the scheduler has run
 volatile bool flag_adxl345_int1 = 0; // flag for active interrupt
 bool flag_gsm_on = 0; // flag if the gsm modem shall be powered on or not, controlled via menu combo, inspected in loop()
-uint8_t flag_cb_gsm_power = 0; // used in gsm power callback
+uint8_t flag_cb_gsm_power = 0; // used in GSM power callback

@@ -1,0 +1,1613 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="14.0">
+  <PropertyGroup>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>7.0</ProjectVersion>
+    <ToolchainName>com.Atmel.AVRGCC8.CPP</ToolchainName>
+    <ProjectGuid>{e06790a0-2f7d-44db-98e5-7f89238be451}</ProjectGuid>
+    <avrdevice>atmega1281</avrdevice>
+    <avrdeviceseries>none</avrdeviceseries>
+    <OutputType>Executable</OutputType>
+    <Language>CPP</Language>
+    <OutputFileName>$(MSBuildProjectName)</OutputFileName>
+    <OutputFileExtension>.elf</OutputFileExtension>
+    <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
+    <AssemblyName>misko-prototype</AssemblyName>
+    <Name>misko-prototype</Name>
+    <RootNamespace>misko-prototype</RootNamespace>
+    <ToolchainFlavour>Native</ToolchainFlavour>
+    <KeepTimersRunning>true</KeepTimersRunning>
+    <OverrideVtor>false</OverrideVtor>
+    <OverrideVtorValue>
+    </OverrideVtorValue>
+    <eraseonlaunchrule>0</eraseonlaunchrule>
+    <ProgFlashFromRam>true</ProgFlashFromRam>
+    <RamSnippetAddress>0x20000000</RamSnippetAddress>
+    <CacheFlash>true</CacheFlash>
+    <UncachedRange />
+    <BootSegment>0</BootSegment>
+    <AsfFrameworkConfig>
+      <framework-data>
+        <options />
+        <configurations />
+        <files />
+        <documentation help="" />
+        <offline-documentation help="" />
+        <dependencies>
+          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.23.1" />
+        </dependencies>
+      </framework-data>
+    </AsfFrameworkConfig>
+    <preserveEEPROM>true</preserveEEPROM>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <ToolchainSettings>
+      <AvrGccCpp>
+  <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
+  <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
+  <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
+  <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
+  <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
+  <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
+  <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
+  <avrgcc.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>__AVR_ATmega1281__</Value>
+      <Value>ARDUINO=106010</Value>
+      <Value>ARDUINO_MAIN</Value>
+      <Value>F_CPU=8000000L</Value>
+      <Value>__AVR__</Value>
+      <Value>ARDUINO_AVR_MEGA</Value>
+      <Value>ARDUINO_ARCH_AVR</Value>
+    </ListValues>
+  </avrgcc.compiler.symbols.DefSymbols>
+  <avrgcc.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SoftwareSerial/src</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/SD/src</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SPI/src</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/EEPROM/src</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/U8glib/src</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/M2tklib</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/Seeeduino_GPRS-master</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/EEPROM/src/utility</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/M2tklib/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/SD/src/utility</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/Seeeduino_GPRS-master/utility</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SoftwareSerial/src/utility</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SPI/src/utility</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/U8glib/src/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/cores/arduino</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/variants/mega</Value>
+      <Value>../../../misko-prototype</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2/avr/include/</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2//avr/include/avr/</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2/lib/gcc/avr/4.8.1/include</Value>
+    </ListValues>
+  </avrgcc.compiler.directories.IncludePaths>
+  <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
+  <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
+  <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
+  <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
+  <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
+  <avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>
+  <avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>
+  <avrgcccpp.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>__AVR_ATmega1281__</Value>
+      <Value>ARDUINO=106010</Value>
+      <Value>ARDUINO_MAIN</Value>
+      <Value>F_CPU=8000000L</Value>
+      <Value>__AVR__</Value>
+      <Value>ARDUINO_AVR_MEGA</Value>
+      <Value>ARDUINO_ARCH_AVR</Value>
+    </ListValues>
+  </avrgcccpp.compiler.symbols.DefSymbols>
+  <avrgcccpp.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SoftwareSerial/src</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/SD/src</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SPI/src</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/EEPROM/src</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/U8glib/src</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/M2tklib</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/Seeeduino_GPRS-master</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/EEPROM/src/utility</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/M2tklib/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/SD/src/utility</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/Seeeduino_GPRS-master/utility</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SoftwareSerial/src/utility</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SPI/src/utility</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/U8glib/src/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/cores/arduino</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/variants/mega</Value>
+      <Value>../../../misko-prototype</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2/avr/include/</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2//avr/include/avr/</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2/lib/gcc/avr/4.8.1/include</Value>
+    </ListValues>
+  </avrgcccpp.compiler.directories.IncludePaths>
+  <avrgcccpp.compiler.optimization.level>Optimize (-O1)</avrgcccpp.compiler.optimization.level>
+  <avrgcccpp.compiler.optimization.PackStructureMembers>True</avrgcccpp.compiler.optimization.PackStructureMembers>
+  <avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>
+  <avrgcccpp.compiler.optimization.DebugLevel>Default (-g2)</avrgcccpp.compiler.optimization.DebugLevel>
+  <avrgcccpp.compiler.warnings.AllWarnings>True</avrgcccpp.compiler.warnings.AllWarnings>
+  <avrgcccpp.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcccpp.assembler.debugging.DebugLevel>
+</AvrGccCpp>
+    </ToolchainSettings>
+    <VMSETTING_IncludePaths>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/EEPROM/src;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/EEPROM/src/utility;C:/Users/hivanic/Documents/Arduino/libraries/M2tklib;C:/Users/hivanic/Documents/Arduino/libraries/M2tklib/utility;C:/Program Files (x86)/Arduino/libraries/SD/src;C:/Program Files (x86)/Arduino/libraries/SD/src/utility;C:/Users/hivanic/Documents/Arduino/libraries/Seeeduino_GPRS-master;C:/Users/hivanic/Documents/Arduino/libraries/Seeeduino_GPRS-master/utility;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SoftwareSerial/src;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SoftwareSerial/src/utility;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SPI/src;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SPI/src/utility;C:/Users/hivanic/Documents/Arduino/libraries/U8glib/src;C:/Users/hivanic/Documents/Arduino/libraries/U8glib/src/utility;C:/Program Files (x86)/Arduino/libraries;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries;C:/Users/hivanic/Documents/Arduino/libraries;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/cores/arduino;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/variants/mega;../../../misko-prototype;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2/avr/include/;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2//avr/include/avr/;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2/lib/gcc/avr/4.8.1/include;C:/Program Files (x86)/Atmel/Studio/7.0/Extensions/hzfqvhnk.b20/Micro Platforms/default/debuggers;</VMSETTING_IncludePaths>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <ToolchainSettings>
+      <AvrGccCpp>
+  <avrgcc.common.outputfiles.hex>True</avrgcc.common.outputfiles.hex>
+  <avrgcc.common.outputfiles.lss>True</avrgcc.common.outputfiles.lss>
+  <avrgcc.common.outputfiles.eep>True</avrgcc.common.outputfiles.eep>
+  <avrgcc.common.outputfiles.srec>True</avrgcc.common.outputfiles.srec>
+  <avrgcc.common.outputfiles.usersignatures>False</avrgcc.common.outputfiles.usersignatures>
+  <avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcc.compiler.general.ChangeDefaultCharTypeUnsigned>
+  <avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcc.compiler.general.ChangeDefaultBitFieldUnsigned>
+  <avrgcc.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>__AVR_ATmega1281__</Value>
+      <Value>ARDUINO=106010</Value>
+      <Value>ARDUINO_MAIN</Value>
+      <Value>F_CPU=8000000L</Value>
+      <Value>__AVR__</Value>
+      <Value>ARDUINO_AVR_MEGA</Value>
+      <Value>ARDUINO_ARCH_AVR</Value>
+    </ListValues>
+  </avrgcc.compiler.symbols.DefSymbols>
+  <avrgcc.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SoftwareSerial/src</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/SD/src</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SPI/src</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/EEPROM/src</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/U8glib/src</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/M2tklib</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/Seeeduino_GPRS-master</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/EEPROM/src/utility</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/M2tklib/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/SD/src/utility</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/Seeeduino_GPRS-master/utility</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SoftwareSerial/src/utility</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SPI/src/utility</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/U8glib/src/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/cores/arduino</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/variants/mega</Value>
+      <Value>../../../misko-prototype</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2/avr/include/</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2//avr/include/avr/</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2/lib/gcc/avr/4.8.1/include</Value>
+    </ListValues>
+  </avrgcc.compiler.directories.IncludePaths>
+  <avrgcc.compiler.optimization.level>Optimize (-O1)</avrgcc.compiler.optimization.level>
+  <avrgcc.compiler.optimization.PackStructureMembers>True</avrgcc.compiler.optimization.PackStructureMembers>
+  <avrgcc.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcc.compiler.optimization.AllocateBytesNeededForEnum>
+  <avrgcc.compiler.optimization.DebugLevel>Default (-g2)</avrgcc.compiler.optimization.DebugLevel>
+  <avrgcc.compiler.warnings.AllWarnings>True</avrgcc.compiler.warnings.AllWarnings>
+  <avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultCharTypeUnsigned>
+  <avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>True</avrgcccpp.compiler.general.ChangeDefaultBitFieldUnsigned>
+  <avrgcccpp.compiler.symbols.DefSymbols>
+    <ListValues>
+      <Value>__AVR_ATmega1281__</Value>
+      <Value>ARDUINO=106010</Value>
+      <Value>ARDUINO_MAIN</Value>
+      <Value>F_CPU=8000000L</Value>
+      <Value>__AVR__</Value>
+      <Value>ARDUINO_AVR_MEGA</Value>
+      <Value>ARDUINO_ARCH_AVR</Value>
+    </ListValues>
+  </avrgcccpp.compiler.symbols.DefSymbols>
+  <avrgcccpp.compiler.directories.IncludePaths>
+    <ListValues>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SoftwareSerial/src</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/SD/src</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SPI/src</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/EEPROM/src</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/U8glib/src</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/M2tklib</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/Seeeduino_GPRS-master</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/EEPROM/src/utility</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/M2tklib/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries/SD/src/utility</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/Seeeduino_GPRS-master/utility</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SoftwareSerial/src/utility</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SPI/src/utility</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries/U8glib/src/utility</Value>
+      <Value>C:/Program Files (x86)/Arduino/libraries</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries</Value>
+      <Value>C:/Users/hivanic/Documents/Arduino/libraries</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/cores/arduino</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/variants/mega</Value>
+      <Value>../../../misko-prototype</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2/avr/include/</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2//avr/include/avr/</Value>
+      <Value>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2/lib/gcc/avr/4.8.1/include</Value>
+    </ListValues>
+  </avrgcccpp.compiler.directories.IncludePaths>
+  <avrgcccpp.compiler.optimization.level>Optimize (-O1)</avrgcccpp.compiler.optimization.level>
+  <avrgcccpp.compiler.optimization.PackStructureMembers>True</avrgcccpp.compiler.optimization.PackStructureMembers>
+  <avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>True</avrgcccpp.compiler.optimization.AllocateBytesNeededForEnum>
+  <avrgcccpp.compiler.optimization.DebugLevel>Default (-g2)</avrgcccpp.compiler.optimization.DebugLevel>
+  <avrgcccpp.compiler.warnings.AllWarnings>True</avrgcccpp.compiler.warnings.AllWarnings>
+  <avrgcccpp.assembler.debugging.DebugLevel>Default (-Wa,-g)</avrgcccpp.assembler.debugging.DebugLevel>
+</AvrGccCpp>
+    </ToolchainSettings>
+    <VMSETTING_IncludePaths>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/EEPROM/src;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/EEPROM/src/utility;C:/Users/hivanic/Documents/Arduino/libraries/M2tklib;C:/Users/hivanic/Documents/Arduino/libraries/M2tklib/utility;C:/Program Files (x86)/Arduino/libraries/SD/src;C:/Program Files (x86)/Arduino/libraries/SD/src/utility;C:/Users/hivanic/Documents/Arduino/libraries/Seeeduino_GPRS-master;C:/Users/hivanic/Documents/Arduino/libraries/Seeeduino_GPRS-master/utility;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SoftwareSerial/src;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SoftwareSerial/src/utility;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SPI/src;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SPI/src/utility;C:/Users/hivanic/Documents/Arduino/libraries/U8glib/src;C:/Users/hivanic/Documents/Arduino/libraries/U8glib/src/utility;C:/Program Files (x86)/Arduino/libraries;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries;C:/Users/hivanic/Documents/Arduino/libraries;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/cores/arduino;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/variants/mega;../../../misko-prototype;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2/avr/include/;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2//avr/include/avr/;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2/lib/gcc/avr/4.8.1/include;C:/Program Files (x86)/Atmel/Studio/7.0/Extensions/hzfqvhnk.b20/Micro Platforms/default/debuggers;</VMSETTING_IncludePaths>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\..\..\..\..\..\Program%2520Files%2520%28x86%29\Arduino\libraries\SD\keywords.txt">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SD\keywords.txt</Link>
+    </None>
+    <None Include="..\..\..\..\..\..\Program%2520Files%2520%28x86%29\Arduino\libraries\SD\library.properties">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SD\library.properties</Link>
+    </None>
+    <None Include="..\..\..\..\..\..\Program%2520Files%2520%28x86%29\Arduino\libraries\SD\src\README.txt">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SD\src\README.txt</Link>
+    </None>
+    <None Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\libraries\EEPROM\keywords.txt">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\EEPROM\keywords.txt</Link>
+    </None>
+    <None Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\libraries\EEPROM\library.properties">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\EEPROM\library.properties</Link>
+    </None>
+    <None Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\libraries\SoftwareSerial\keywords.txt">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SoftwareSerial\keywords.txt</Link>
+    </None>
+    <None Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\libraries\SoftwareSerial\library.properties">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SoftwareSerial\library.properties</Link>
+    </None>
+    <None Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\libraries\SPI\keywords.txt">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SPI\keywords.txt</Link>
+    </None>
+    <None Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\libraries\SPI\library.properties">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SPI\library.properties</Link>
+    </None>
+    <None Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\variants\mega\pins_arduino.h2560">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\variants\mega\pins_arduino.h2560</Link>
+    </None>
+    <None Include="..\..\..\Arduino\libraries\M2tklib\gpl-3.0.txt">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\gpl-3.0.txt</Link>
+    </None>
+    <None Include="..\..\..\Arduino\libraries\M2tklib\INSTALL.TXT">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\INSTALL.TXT</Link>
+    </None>
+    <None Include="..\..\..\Arduino\libraries\M2tklib\license.txt">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\license.txt</Link>
+    </None>
+    <None Include="..\..\..\Arduino\libraries\Seeeduino_GPRS-master\License.txt">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\Seeeduino_GPRS-master\License.txt</Link>
+    </None>
+    <None Include="..\..\..\Arduino\libraries\U8glib\extras\INSTALL.TXT">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\extras\INSTALL.TXT</Link>
+    </None>
+    <None Include="..\..\..\Arduino\libraries\U8glib\library.properties">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\library.properties</Link>
+    </None>
+    <None Include="..\..\..\Arduino\libraries\U8glib\license.txt">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\license.txt</Link>
+    </None>
+    <None Include="misko-prototype.ino">
+      <SubType>compile</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="misko-prototype\" />
+    <Folder Include="misko-prototype\src\" />
+    <Folder Include="misko-prototype\src\_micro-api-readonly\" />
+    <Folder Include="misko-prototype\src\_micro-api-readonly\core\" />
+    <Folder Include="misko-prototype\src\_micro-api-readonly\libraries\" />
+    <Folder Include="misko-prototype\src\_micro-api-readonly\libraries\EEPROM\" />
+    <Folder Include="misko-prototype\src\_micro-api-readonly\libraries\EEPROM\src\" />
+    <Folder Include="misko-prototype\src\_micro-api-readonly\libraries\M2tklib\" />
+    <Folder Include="misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\" />
+    <Folder Include="misko-prototype\src\_micro-api-readonly\libraries\SD\" />
+    <Folder Include="misko-prototype\src\_micro-api-readonly\libraries\SD\src\" />
+    <Folder Include="misko-prototype\src\_micro-api-readonly\libraries\SD\src\utility\" />
+    <Folder Include="misko-prototype\src\_micro-api-readonly\libraries\Seeeduino_GPRS-master\" />
+    <Folder Include="misko-prototype\src\_micro-api-readonly\libraries\SoftwareSerial\" />
+    <Folder Include="misko-prototype\src\_micro-api-readonly\libraries\SoftwareSerial\src\" />
+    <Folder Include="misko-prototype\src\_micro-api-readonly\libraries\SPI\" />
+    <Folder Include="misko-prototype\src\_micro-api-readonly\libraries\SPI\src\" />
+    <Folder Include="misko-prototype\src\_micro-api-readonly\libraries\U8glib\" />
+    <Folder Include="misko-prototype\src\_micro-api-readonly\libraries\U8glib\extras\" />
+    <Folder Include="misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\" />
+    <Folder Include="misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\" />
+    <Folder Include="misko-prototype\src\_micro-api-readonly\variants\" />
+    <Folder Include="misko-prototype\src\_micro-api-readonly\variants\mega\" />
+    <Folder Include="src\" />
+    <Folder Include="src\_micro-api-readonly\" />
+    <Folder Include="src\_micro-api-readonly\core\" />
+    <Folder Include="src\_micro-api-readonly\libraries\" />
+    <Folder Include="src\_micro-api-readonly\libraries\EEPROM\" />
+    <Folder Include="src\_micro-api-readonly\libraries\EEPROM\src\" />
+    <Folder Include="src\_micro-api-readonly\libraries\M2tklib\" />
+    <Folder Include="src\_micro-api-readonly\libraries\M2tklib\utility\" />
+    <Folder Include="src\_micro-api-readonly\libraries\SD\" />
+    <Folder Include="src\_micro-api-readonly\libraries\SD\src\" />
+    <Folder Include="src\_micro-api-readonly\libraries\SD\src\utility\" />
+    <Folder Include="src\_micro-api-readonly\libraries\Seeeduino_GPRS-master\" />
+    <Folder Include="src\_micro-api-readonly\libraries\SoftwareSerial\" />
+    <Folder Include="src\_micro-api-readonly\libraries\SoftwareSerial\src\" />
+    <Folder Include="src\_micro-api-readonly\libraries\SPI\" />
+    <Folder Include="src\_micro-api-readonly\libraries\SPI\src\" />
+    <Folder Include="src\_micro-api-readonly\libraries\U8glib\" />
+    <Folder Include="src\_micro-api-readonly\libraries\U8glib\extras\" />
+    <Folder Include="src\_micro-api-readonly\libraries\U8glib\src\" />
+    <Folder Include="src\_micro-api-readonly\libraries\U8glib\src\clib\" />
+    <Folder Include="src\_micro-api-readonly\variants\" />
+    <Folder Include="src\_micro-api-readonly\variants\mega\" />
+    <Folder Include="__vm\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\..\..\..\Program%2520Files%2520%28x86%29\Arduino\libraries\SD\src\File.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SD\src\File.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\..\..\Program%2520Files%2520%28x86%29\Arduino\libraries\SD\src\SD.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SD\src\SD.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\..\..\Program%2520Files%2520%28x86%29\Arduino\libraries\SD\src\SD.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SD\src\SD.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\..\..\Program%2520Files%2520%28x86%29\Arduino\libraries\SD\src\utility\FatStructs.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SD\src\utility\FatStructs.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\..\..\Program%2520Files%2520%28x86%29\Arduino\libraries\SD\src\utility\Sd2Card.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SD\src\utility\Sd2Card.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\..\..\Program%2520Files%2520%28x86%29\Arduino\libraries\SD\src\utility\Sd2Card.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SD\src\utility\Sd2Card.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\..\..\Program%2520Files%2520%28x86%29\Arduino\libraries\SD\src\utility\Sd2PinMap.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SD\src\utility\Sd2PinMap.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\..\..\Program%2520Files%2520%28x86%29\Arduino\libraries\SD\src\utility\SdFat.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SD\src\utility\SdFat.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\..\..\Program%2520Files%2520%28x86%29\Arduino\libraries\SD\src\utility\SdFatmainpage.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SD\src\utility\SdFatmainpage.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\..\..\Program%2520Files%2520%28x86%29\Arduino\libraries\SD\src\utility\SdFatUtil.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SD\src\utility\SdFatUtil.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\..\..\Program%2520Files%2520%28x86%29\Arduino\libraries\SD\src\utility\SdFile.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SD\src\utility\SdFile.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\..\..\Program%2520Files%2520%28x86%29\Arduino\libraries\SD\src\utility\SdInfo.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SD\src\utility\SdInfo.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\..\..\Program%2520Files%2520%28x86%29\Arduino\libraries\SD\src\utility\SdVolume.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SD\src\utility\SdVolume.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\abi.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\abi.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\Arduino.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\Arduino.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\binary.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\binary.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\CDC.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\CDC.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\Client.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\Client.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\HardwareSerial.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\HardwareSerial.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\HardwareSerial.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\HardwareSerial.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\HardwareSerial0.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\HardwareSerial0.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\HardwareSerial1.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\HardwareSerial1.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\HardwareSerial2.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\HardwareSerial2.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\HardwareSerial3.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\HardwareSerial3.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\HardwareSerial_private.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\HardwareSerial_private.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\hooks.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\hooks.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\IPAddress.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\IPAddress.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\IPAddress.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\IPAddress.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\main.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\main.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\new.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\new.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\new.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\new.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\PluggableUSB.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\PluggableUSB.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\PluggableUSB.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\PluggableUSB.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\Print.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\Print.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\Print.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\Print.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\Printable.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\Printable.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\Server.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\Server.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\Stream.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\Stream.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\Stream.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\Stream.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\Tone.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\Tone.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\Udp.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\Udp.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\USBAPI.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\USBAPI.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\USBCore.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\USBCore.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\USBCore.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\USBCore.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\USBDesc.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\USBDesc.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\WCharacter.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\WCharacter.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\WInterrupts.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\WInterrupts.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\wiring.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\wiring.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\wiring_analog.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\wiring_analog.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\wiring_digital.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\wiring_digital.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\wiring_private.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\wiring_private.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\wiring_pulse.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\wiring_pulse.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\wiring_shift.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\wiring_shift.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\WMath.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\WMath.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\WString.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\WString.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\cores\arduino\WString.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\core\WString.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\libraries\EEPROM\src\EEPROM.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\EEPROM\src\EEPROM.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\libraries\SoftwareSerial\src\SoftwareSerial.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SoftwareSerial\src\SoftwareSerial.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\libraries\SoftwareSerial\src\SoftwareSerial.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SoftwareSerial\src\SoftwareSerial.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\libraries\SPI\src\SPI.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SPI\src\SPI.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\libraries\SPI\src\SPI.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\SPI\src\SPI.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\..\AppData\Local\arduino15\packages\arduino\hardware\avr\1.6.12\variants\mega\pins_arduino.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\variants\mega\pins_arduino.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\M2tk.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\M2tk.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\M2tk.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\M2tk.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2align.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2align.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2dfs.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2dfs.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2draw.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2draw.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2eh2bd.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2eh2bd.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2eh2bs.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2eh2bs.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2eh4bd.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2eh4bd.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2eh4bs.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2eh4bs.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2eh6bs.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2eh6bs.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2ehts.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2ehts.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2el2lmenu.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2el2lmenu.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elalign.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elalign.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elbutton.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elbutton.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elbuttonptr.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elbuttonptr.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elcombo.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elcombo.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elcombofn.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elcombofn.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elcomboptr.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elcomboptr.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elfnfmt.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elfnfmt.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elhide.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elhide.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elinfo.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elinfo.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2ellabel.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2ellabel.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2ellabelfn.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2ellabelfn.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2ellabelp.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2ellabelp.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2ellabelptr.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2ellabelptr.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2ellistbase.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2ellistbase.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2ellistcalc.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2ellistcalc.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2ellistgrid.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2ellistgrid.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2ellisth.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2ellisth.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2ellistv.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2ellistv.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2ellistxy.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2ellistxy.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elradio.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elradio.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elroot.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elroot.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2els8base.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2els8base.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2els8num.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2els8num.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elsb.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elsb.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elsetval.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elsetval.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elslbase.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elslbase.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elspace.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elspace.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elstr.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elstr.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elstrlist.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elstrlist.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elstrptr.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elstrptr.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elstrup.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elstrup.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elsubutl.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elsubutl.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2eltext.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2eltext.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2eltoggle.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2eltoggle.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2eltsk.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2eltsk.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elu32.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elu32.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elu8base.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elu8base.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elu8hs.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elu8hs.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elu8num.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elu8num.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2elxbm.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2elxbm.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2esarduino.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2esarduino.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2esserial.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2esserial.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2fnarg.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2fnarg.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2gfx.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2gfx.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2gfxutl.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2gfxutl.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2ghdummy.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2ghdummy.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2ghserial.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2ghserial.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2ghu8g.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2ghu8g.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2ghu8gbf.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2ghu8gbf.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2ghu8gbfs.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2ghu8gbfs.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2ghu8gcffs.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2ghu8gcffs.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2ghu8gfb.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2ghu8gfb.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2ghu8gffs.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2ghu8gffs.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2ghu8gicon.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2ghu8gicon.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2ghu8gutl.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2ghu8gutl.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2key.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2key.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2msg.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2msg.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2navdatadn.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2navdatadn.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2navdataup.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2navdataup.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2navfirst.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2navfirst.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2navinit.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2navinit.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2navlast.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2navlast.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2navnext.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2navnext.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2navprev.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2navprev.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2navroot.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2navroot.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2navupdn.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2navupdn.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2navutl.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2navutl.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2null.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2null.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2obj.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2obj.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2opt.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2opt.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2pin.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2pin.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2qk.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2qk.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2rom.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2rom.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2usrnext.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2usrnext.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2usrprev.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2usrprev.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2usrupdn.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2usrupdn.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2utl.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2utl.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2utls8d.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2utls8d.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2utlstrdat.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2utlstrdat.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\m2utlu8d.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\m2utlu8d.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\mas.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\mas.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\mas.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\mas.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\mas_arduino_sd.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\mas_arduino_sd.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\mas_pff.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\mas_pff.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\mas_sim.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\mas_sim.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\pff.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\pff.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\pff.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\pff.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\pff_arduino_io.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\pff_arduino_io.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\pff_diskio.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\pff_diskio.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\pff_diskio.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\pff_diskio.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\pff_integer.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\pff_integer.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\pff_io.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\pff_io.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\M2tklib\utility\u8g.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\M2tklib\utility\u8g.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\Seeeduino_GPRS-master\bluetooth.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\Seeeduino_GPRS-master\bluetooth.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\Seeeduino_GPRS-master\bluetooth.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\Seeeduino_GPRS-master\bluetooth.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\Seeeduino_GPRS-master\fm.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\Seeeduino_GPRS-master\fm.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\Seeeduino_GPRS-master\fm.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\Seeeduino_GPRS-master\fm.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\Seeeduino_GPRS-master\gprs.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\Seeeduino_GPRS-master\gprs.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\Seeeduino_GPRS-master\gprs.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\Seeeduino_GPRS-master\gprs.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\Seeeduino_GPRS-master\sim800.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\Seeeduino_GPRS-master\sim800.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\Seeeduino_GPRS-master\sim800.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\Seeeduino_GPRS-master\sim800.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\chessengine.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\chessengine.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g.h</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_bitmap.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_bitmap.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_circle.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_circle.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_clip.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_clip.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_api.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_api.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_api_16gr.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_api_16gr.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_arduino_attiny85_hw_spi.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_arduino_attiny85_hw_spi.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_arduino_common.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_arduino_common.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_arduino_fast_parallel.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_arduino_fast_parallel.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_arduino_hw_spi.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_arduino_hw_spi.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_arduino_hw_usart_spi.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_arduino_hw_usart_spi.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_arduino_no_en_parallel.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_arduino_no_en_parallel.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_arduino_parallel.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_arduino_parallel.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_arduino_port_d_wr.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_arduino_port_d_wr.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_arduino_ssd_i2c.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_arduino_ssd_i2c.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_arduino_st7920_custom.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_arduino_st7920_custom.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_arduino_st7920_hw_spi.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_arduino_st7920_hw_spi.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_arduino_st7920_spi.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_arduino_st7920_spi.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_arduino_std_sw_spi.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_arduino_std_sw_spi.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_arduino_sw_spi.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_arduino_sw_spi.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_arduino_t6963.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_arduino_t6963.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_arduino_uc_i2c.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_arduino_uc_i2c.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_atmega_hw_spi.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_atmega_hw_spi.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_atmega_parallel.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_atmega_parallel.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_atmega_st7920_hw_spi.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_atmega_st7920_hw_spi.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_atmega_st7920_spi.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_atmega_st7920_spi.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_atmega_sw_spi.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_atmega_sw_spi.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_atxmega_hw_spi.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_atxmega_hw_spi.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_atxmega_st7920_hw_spi.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_atxmega_st7920_hw_spi.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_i2c.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_i2c.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_io.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_io.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_linux_ssd_i2c.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_linux_ssd_i2c.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_msp430_hw_spi.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_msp430_hw_spi.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_null.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_null.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_psoc5_ssd_hw_parallel.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_psoc5_ssd_hw_parallel.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_raspberrypi_hw_spi.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_raspberrypi_hw_spi.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_raspberrypi_ssd_i2c.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_raspberrypi_ssd_i2c.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_com_std_sw_spi.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_com_std_sw_spi.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_cursor.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_cursor.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_delay.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_delay.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_a2_micro_printer.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_a2_micro_printer.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_flipdisc_2x7.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_flipdisc_2x7.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_gprof.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_gprof.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_ht1632.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_ht1632.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_ili9325d_320x240.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_ili9325d_320x240.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_ks0108_128x64.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_ks0108_128x64.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_lc7981_160x80.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_lc7981_160x80.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_lc7981_240x128.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_lc7981_240x128.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_lc7981_240x64.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_lc7981_240x64.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_lc7981_320x64.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_lc7981_320x64.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_ld7032_60x32.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_ld7032_60x32.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_null.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_null.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_pcd8544_84x48.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_pcd8544_84x48.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_pcf8812_96x65.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_pcf8812_96x65.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_sbn1661_122x32.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_sbn1661_122x32.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_ssd1306_128x32.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_ssd1306_128x32.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_ssd1306_128x64.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_ssd1306_128x64.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_ssd1306_64x48.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_ssd1306_64x48.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_ssd1309_128x64.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_ssd1309_128x64.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_ssd1322_nhd31oled_bw.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_ssd1322_nhd31oled_bw.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_ssd1322_nhd31oled_gr.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_ssd1322_nhd31oled_gr.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_ssd1325_nhd27oled_bw.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_ssd1325_nhd27oled_bw.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_ssd1325_nhd27oled_bw_new.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_ssd1325_nhd27oled_bw_new.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_ssd1325_nhd27oled_gr.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_ssd1325_nhd27oled_gr.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_ssd1325_nhd27oled_gr_new.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_ssd1325_nhd27oled_gr_new.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_ssd1327_96x96_gr.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_ssd1327_96x96_gr.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_ssd1351_128x128.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_ssd1351_128x128.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_ssd1353_160x128.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_ssd1353_160x128.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_st7565_64128n.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_st7565_64128n.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_st7565_dogm128.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_st7565_dogm128.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_st7565_dogm132.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_st7565_dogm132.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_st7565_lm6059.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_st7565_lm6059.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_st7565_lm6063.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_st7565_lm6063.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_st7565_nhd_c12832.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_st7565_nhd_c12832.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_st7565_nhd_c12864.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_st7565_nhd_c12864.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_st7687_c144mvgd.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_st7687_c144mvgd.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_st7920_128x64.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_st7920_128x64.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_st7920_192x32.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_st7920_192x32.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_st7920_202x32.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_st7920_202x32.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_t6963_128x128.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_t6963_128x128.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_t6963_128x64.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_t6963_128x64.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_t6963_240x128.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_t6963_240x128.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_t6963_240x64.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_t6963_240x64.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_tls8204_84x48.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_tls8204_84x48.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_uc1601_c128032.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_uc1601_c128032.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_uc1608_240x128.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_uc1608_240x128.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_uc1608_240x64.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_uc1608_240x64.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_uc1610_dogxl160.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_uc1610_dogxl160.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_uc1611_dogm240.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_uc1611_dogm240.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_uc1611_dogxl240.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_uc1611_dogxl240.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_uc1701_dogs102.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_uc1701_dogs102.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_dev_uc1701_mini12864.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_dev_uc1701_mini12864.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_ellipse.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_ellipse.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_font.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_font.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_font_data.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_font_data.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_line.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_line.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_ll_api.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_ll_api.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_page.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_page.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_pb.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_pb.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_pb14v1.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_pb14v1.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_pb16h1.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_pb16h1.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_pb16h2.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_pb16h2.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_pb16v1.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_pb16v1.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_pb16v2.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_pb16v2.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_pb32h1.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_pb32h1.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_pb8h1.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_pb8h1.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_pb8h1f.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_pb8h1f.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_pb8h2.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_pb8h2.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_pb8h8.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_pb8h8.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_pb8v1.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_pb8v1.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_pb8v2.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_pb8v2.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_pbxh16.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_pbxh16.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_pbxh24.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_pbxh24.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_polygon.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_polygon.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_rect.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_rect.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_rot.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_rot.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_scale.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_scale.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_state.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_state.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_u16toa.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_u16toa.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_u8toa.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_u8toa.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\clib\u8g_virtual_screen.c">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\u8g_virtual_screen.c</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\U8glib.cpp">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\U8glib.cpp</Link>
+    </Compile>
+    <Compile Include="..\..\..\Arduino\libraries\U8glib\src\U8glib.h">
+      <SubType>compile</SubType>
+      <Link>misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\U8glib.h</Link>
+    </Compile>
+    <Compile Include="adxl345.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="display.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="eeprom_config.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="fram.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="functions.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="global_variables.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="gps_functions.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="loop.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="pin_definitions.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="pin_modes.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="setup.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="__vm\.misko-prototype.vsarduino.h">
+      <SubType>compile</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
+</Project>

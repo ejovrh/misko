@@ -1,6 +1,6 @@
 
 // determines fix or not, parses coordinates, datetime
-void gps_parse_gprmc() // kludge alert!
+void gps_parse_gprmc() // KLUDGE
 { 
   // sample NMEA GPRMC sentence
   //    $GPRMC,170942.000,A,4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
@@ -60,7 +60,7 @@ void gps_parse_gprmc() // kludge alert!
 }
 
 // parses out sattelites used and HDOP 
-void gps_parse_gpgga() // kludge alert!
+void gps_parse_gpgga() // KLUDGE
 {
 	if (!flag_gps_fix)
 		return;
@@ -178,7 +178,7 @@ void get_nmea_sentences() {
 				// logfile name generation - should run only once a day
 				if (strlen(gps_date) != 2 && strstr(gps_logfile, gps_date) == NULL ) // if "gps_date is initialized" and "gps_logfile does not contain the current datetime (e.g. on startup or on date change)" 
 				{	
-					//some weird behavious - bug?
+					//FIXME some weird behavious
 /* 					
 					strncat(gps_logfile, gps_date, 4*sizeof(char));//Serial.println(gps_logfile);
 					strcat(gps_logfile, "/");//Serial.println(gps_logfile);

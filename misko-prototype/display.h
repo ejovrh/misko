@@ -5,10 +5,7 @@
  * https://github.com/olikraus/u8glib/wiki
  * https://github.com/olikraus/m2tklib/wiki/ghref
  * https://github.com/olikraus/m2tklib/wiki
- * 
- * 
  */
-
 
 // display construction start
 
@@ -25,9 +22,10 @@ M2_LABEL(el_utc, "rf0", "UTC");
 M2_LABELFN(el_gps_utc, "rf0", fn_cb_utc); // timezone string
 M2_LIST(el_list_utc) = {&el_utc, &el_whitespace, &el_gps_utc};
 M2_HLIST(el_hlist_utc, "rf0", el_list_utc);
-M2_LIST(el_datetime_list) { &el_hlist_datetime, &el_hlist_utc, &el_ok} ; // create a list of gps date, time, timezone
+M2_LIST(el_datetime_list) { &el_hlist_datetime, &el_hlist_utc, &el_ok} ;
 M2_GRIDLIST(el_datetime_grid, "c1", el_datetime_list);
 M2_ALIGN(el_top_datetime_menu, "-0|1W64H64", &el_datetime_grid);
+// datetime and timezone
 
 // GPS position
 M2_LABELFN(el_gps_latitude, "rf0", fn_cb_gps_latitude); 
@@ -40,8 +38,9 @@ M2_HLIST(el_hlist_sat_dop, "rf0", el_sat_dop_list);
 M2_LIST(el_position_list) = {&el_gps_latitude, &el_gps_longtitude, &el_altitude, &el_hlist_sat_dop, &el_ok};
 M2_GRIDLIST(el_position_grid, "c1", el_position_list);
 M2_ALIGN(el_top_position_menu, "-0|1W64H64", &el_position_grid);
+// GPS position
 
-// misc
+// device status
 M2_LABELFN(el_power_good, "fr0", fn_cb_get_power_good_status);
 M2_LABELFN(el_batt_charge, "rf0", fn_cb_get_batt_charge_status);
 M2_LIST(el_power_list) = {&el_power_good, &el_whitespace, &el_batt_charge};
@@ -57,6 +56,7 @@ M2_HLIST(el_hlist_vcc_temp, "rf0", el_list_vcc_temp);
 M2_LIST(el_device_misc_list) = {&el_power_hlist, &el_hlist_batt, &el_hlist_vcc_temp, &el_ok};
 M2_GRIDLIST(el_device_misc_grid, "c1", el_device_misc_list);
 M2_ALIGN(el_top_device_misc_menu, "-0|1W64H64", &el_device_misc_grid);
+// device status
 
 // SD card contents
 M2_STRLIST(el_fs_strlist, "l5f0W55", &fs_m2tk_first, &fs_m2tk_cnt, fs_strlist_getstr);
@@ -66,16 +66,17 @@ M2_LIST(list_fs_strlist) = { &el_fs_strlist};
 // M2_HLIST(el_fs_hlist, "rf0", list_fs_strlist);
 M2_GRIDLIST(el_fs_grid, "c2", list_fs_strlist);
 M2_ALIGN(el_top_sd_content_menu, "-1|1W64H64", &el_fs_grid);
+// SD card contents
 
 // data output end
 
-// sd card start el_top_sd_menu
+// SD card start el_top_sd_menu
 M2_LABEL(el_sd_write, "rf0", "SD card write");
 M2_COMBOFN(el_sd_write_setting, "rf0", 2, fn_cb_sd_write);
 M2_LIST(el_sd_list) = { &el_sd_write, &el_sd_write_setting, &el_ok };
 M2_GRIDLIST(el_sd_grid, "c2", el_sd_list);
 M2_ALIGN(el_top_sd_menu, "-1|1W64H64", &el_sd_grid);
-// sd card end
+// SD card end
 
 // serial setup
 M2_LABEL(el_serial, "rf0", "serial port");
@@ -94,25 +95,25 @@ M2_GRIDLIST(el_timezone_grid, "c2", el_timezone_list);
 M2_ALIGN(el_top_timezone_menu, "-1|1W64H64", &el_timezone_grid);
 // timezone end
 
-// bluetooth start
+// Bluetooth start
 M2_LABEL(el_bluetooth_power, "rf0", "Power");
 M2_COMBOFN(el_bluetooth_power_value, "rf0", 3, fn_cb_bluetooth_power_setting);
 M2_S8NUMFN(el_bluetooth_power_timeout, "+0c1f0", 1, 5, fn_cb_set_eerpom_bluetooth_timeout);
 M2_LIST(el_bluetooth_list) = { &el_bluetooth_power, &el_bluetooth_power_value, &el_bluetooth_power_timeout, &el_ok };
 M2_GRIDLIST(el_bluetooth_grid, "c2", el_bluetooth_list);
 M2_ALIGN(el_top_bluetooth_menu, "-1|1W64H64", &el_bluetooth_grid);
-// bluetooth end
+// Bluetooth end
 
-// lcd start
+// OLED start
 M2_LABEL(el_lcd_power, "rf0", "Power");
 M2_COMBOFN(el_lcd_power_value, "rf0", 2, fn_cb_lcd_power_setting);
 M2_S8NUMFN(el_lcd_power_timeout, "+0c1f0", 1, 5, fn_cb_set_eerpom_lcd_timeout);
 M2_LIST(el_lcd_list) = { &el_lcd_power, &el_lcd_power_value, &el_lcd_power_timeout, &el_ok };
 M2_GRIDLIST(el_lcd_grid, "c2", el_lcd_list);
 M2_ALIGN(el_top_lcd_menu, "-1|1W64H64", &el_lcd_grid);
-// lcd end
+// OLED end
 
-// gps start
+// GPS start
 M2_LABEL(el_gps_power, "rf0", "Power");
 M2_COMBOFN(el_gps_power_value, "rf0", 2, fn_cb_gps_power_setting);
 M2_LABEL(el_nmea_printout, "rf0", "NMEA printout");
@@ -123,16 +124,16 @@ M2_ROOT(el_gps_ok, "f0", "OK", &top_el_expandable_menu);
 M2_LIST(el_gps_list) = { &el_gps_power, &el_gps_power_value, &el_nmea_printout, &el_nmea_printout_value, &el_gps_freq, &el_gps_freq_value, &el_gps_ok };
 M2_GRIDLIST(el_gps_grid, "c2", el_gps_list);
 M2_ALIGN(el_top_gps_menu, "-1|1W64H64", &el_gps_grid);
-// gps end
+// GPS end
 
-// gsm start
+// GSM start
 M2_COMBOFN(el_gsm_power, "rf0", 2, fn_cb_gsm_power);
 M2_ROOT(el_gsm_ok, "f0", "OK", &top_el_expandable_menu);
 
 M2_LIST(el_gsm_list) = { &el_gsm_power, &el_gsm_ok };
 M2_GRIDLIST(el_gsm_grid, "c2", el_gsm_list);
 M2_ALIGN(el_top_gsm_menu, "-1|1W64H64", &el_gsm_grid);
-// gsm end
+// GSM end
 
 m2_menu_entry m2_2lmenu_data[] = 
 {
