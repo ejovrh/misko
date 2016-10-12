@@ -78,7 +78,7 @@ float readVcc() // http://provideyourown.com/2012/secret-arduino-voltmeter-measu
 }
  
  // returns the external voltage reference in volts
-inline float read_Varef() // the external reference voltage is set to 4.30V via a zener diode
+inline float read_Varef() // the external reference voltage is set to 2.50V via a zener diode
 {
 	return AREF_VOLTAGE;
 }
@@ -901,48 +901,50 @@ void sd_buffer_write(char *in_string, uint8_t in_size)
 	}
 }
 
-// determines baud rate
-long detectBaud(int recpin)
+// determines baud rate (approximately)
+uint16_t detectBaud(int pin)
 {
-	long baud, rate = 10000, x;
-	for (int i = 0; i < 10; i++) 
+	uint16_t baud;
+	uint16_t rate = 10000;
+	uint16_t x;
+
+	for (uint8_t i = 0; i < 10; i++) 
 	{
-		x = pulseIn(recpin,LOW);   // measure the next zero bit width
+		x = pulseIn(pin,LOW);   // measure the next zero bit width
     rate = x < rate ? x : rate;
 	}
   
 	if (rate < 12)
-		baud = 115200;
-  else 
-		if (rate < 20)
-			baud = 57600;
-    else 
-			if (rate < 29)
-				baud = 38400;
-			else 
-			if (rate < 40)
-				baud = 28800;
-			else
-			if (rate < 60)
-				baud = 19200;
-			else 
-			if (rate < 80)
-				baud = 14400;
-			else 
-				if (rate < 150)
-					baud = 9600;
-				else 
-				if (rate < 300)
-					baud = 4800;
-				else 
-				if (rate < 600)
-					baud = 2400;
-				else 
-				if (rate < 1200)
-					baud = 1200;
-				else
-					baud = 0;  
-  return baud;
+		return 115200;
+
+  if (rate < 20)
+		return 57600;
+
+	if (rate < 29)
+		return 38400;
+
+	if (rate < 40)
+		return 28800;
+
+	if (rate < 60)
+		return 19200; 
+
+	if (rate < 80)
+		return 14400;
+
+	if (rate < 150)
+		return 9600;
+
+	if (rate < 300)
+		return 4800;
+
+	if (rate < 600)
+		return 2400;
+				 
+	if (rate < 1200)
+		return 1200;
+				
+  return 0;
  } 
 
 // primitive BT button-activated printout
