@@ -18,8 +18,7 @@
     <ToolchainFlavour>Native</ToolchainFlavour>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
-    <OverrideVtorValue>
-    </OverrideVtorValue>
+    <OverrideVtorValue>exception_table</OverrideVtorValue>
     <eraseonlaunchrule>0</eraseonlaunchrule>
     <ProgFlashFromRam>true</ProgFlashFromRam>
     <RamSnippetAddress>0x20000000</RamSnippetAddress>
@@ -34,11 +33,27 @@
         <documentation help="" />
         <offline-documentation help="" />
         <dependencies>
-          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.23.1" />
+          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.28.1" />
         </dependencies>
       </framework-data>
     </AsfFrameworkConfig>
     <preserveEEPROM>true</preserveEEPROM>
+    <avrtool>com.atmel.avrdbg.tool.atmelice</avrtool>
+    <avrtoolserialnumber>J41800046703</avrtoolserialnumber>
+    <avrdeviceexpectedsignature>0x1E9704</avrdeviceexpectedsignature>
+    <com_atmel_avrdbg_tool_atmelice>
+      <ToolOptions>
+        <InterfaceProperties>
+          <JtagDbgClock>200000</JtagDbgClock>
+        </InterfaceProperties>
+        <InterfaceName>JTAG</InterfaceName>
+      </ToolOptions>
+      <ToolType>com.atmel.avrdbg.tool.atmelice</ToolType>
+      <ToolNumber>J41800046703</ToolNumber>
+      <ToolName>Atmel-ICE</ToolName>
+    </com_atmel_avrdbg_tool_atmelice>
+    <avrtoolinterface>JTAG</avrtoolinterface>
+    <avrtoolinterfaceclock>200000</avrtoolinterfaceclock>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <ToolchainSettings>
@@ -53,11 +68,12 @@
   <avrgcc.compiler.symbols.DefSymbols>
     <ListValues>
       <Value>__AVR_ATmega1281__</Value>
+      <Value>_VMDEBUG=1</Value>
       <Value>ARDUINO=106010</Value>
       <Value>ARDUINO_MAIN</Value>
       <Value>F_CPU=8000000L</Value>
       <Value>__AVR__</Value>
-      <Value>ARDUINO_AVR_MEGA</Value>
+      <Value>ARDUINO_AVR_MEGA1281</Value>
       <Value>ARDUINO_ARCH_AVR</Value>
     </ListValues>
   </avrgcc.compiler.symbols.DefSymbols>
@@ -98,11 +114,12 @@
   <avrgcccpp.compiler.symbols.DefSymbols>
     <ListValues>
       <Value>__AVR_ATmega1281__</Value>
+      <Value>_VMDEBUG=1</Value>
       <Value>ARDUINO=106010</Value>
       <Value>ARDUINO_MAIN</Value>
       <Value>F_CPU=8000000L</Value>
       <Value>__AVR__</Value>
-      <Value>ARDUINO_AVR_MEGA</Value>
+      <Value>ARDUINO_AVR_MEGA1281</Value>
       <Value>ARDUINO_ARCH_AVR</Value>
     </ListValues>
   </avrgcccpp.compiler.symbols.DefSymbols>
@@ -142,6 +159,11 @@
 </AvrGccCpp>
     </ToolchainSettings>
     <VMSETTING_IncludePaths>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/EEPROM/src;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/EEPROM/src/utility;C:/Users/hivanic/Documents/Arduino/libraries/M2tklib;C:/Users/hivanic/Documents/Arduino/libraries/M2tklib/utility;C:/Program Files (x86)/Arduino/libraries/SD/src;C:/Program Files (x86)/Arduino/libraries/SD/src/utility;C:/Users/hivanic/Documents/Arduino/libraries/Seeeduino_GPRS-master;C:/Users/hivanic/Documents/Arduino/libraries/Seeeduino_GPRS-master/utility;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SoftwareSerial/src;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SoftwareSerial/src/utility;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SPI/src;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SPI/src/utility;C:/Users/hivanic/Documents/Arduino/libraries/U8glib/src;C:/Users/hivanic/Documents/Arduino/libraries/U8glib/src/utility;C:/Program Files (x86)/Arduino/libraries;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries;C:/Users/hivanic/Documents/Arduino/libraries;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/cores/arduino;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/variants/mega;../../../misko-prototype;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2/avr/include/;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2//avr/include/avr/;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2/lib/gcc/avr/4.8.1/include;C:/Program Files (x86)/Atmel/Studio/7.0/Extensions/hzfqvhnk.b20/Micro Platforms/default/debuggers;</VMSETTING_IncludePaths>
+    <VisualMicroSettings>
+      <VisualMicroSettings xmlns="">
+        <vm.upload.useprogrammer>1</vm.upload.useprogrammer>
+      </VisualMicroSettings>
+    </VisualMicroSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <ToolchainSettings>
@@ -156,11 +178,12 @@
   <avrgcc.compiler.symbols.DefSymbols>
     <ListValues>
       <Value>__AVR_ATmega1281__</Value>
+      <Value>_VMDEBUG=1</Value>
       <Value>ARDUINO=106010</Value>
       <Value>ARDUINO_MAIN</Value>
       <Value>F_CPU=8000000L</Value>
       <Value>__AVR__</Value>
-      <Value>ARDUINO_AVR_MEGA</Value>
+      <Value>ARDUINO_AVR_MEGA1281</Value>
       <Value>ARDUINO_ARCH_AVR</Value>
     </ListValues>
   </avrgcc.compiler.symbols.DefSymbols>
@@ -201,11 +224,12 @@
   <avrgcccpp.compiler.symbols.DefSymbols>
     <ListValues>
       <Value>__AVR_ATmega1281__</Value>
+      <Value>_VMDEBUG=1</Value>
       <Value>ARDUINO=106010</Value>
       <Value>ARDUINO_MAIN</Value>
       <Value>F_CPU=8000000L</Value>
       <Value>__AVR__</Value>
-      <Value>ARDUINO_AVR_MEGA</Value>
+      <Value>ARDUINO_AVR_MEGA1281</Value>
       <Value>ARDUINO_ARCH_AVR</Value>
     </ListValues>
   </avrgcccpp.compiler.symbols.DefSymbols>
@@ -245,6 +269,11 @@
 </AvrGccCpp>
     </ToolchainSettings>
     <VMSETTING_IncludePaths>C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/EEPROM/src;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/EEPROM/src/utility;C:/Users/hivanic/Documents/Arduino/libraries/M2tklib;C:/Users/hivanic/Documents/Arduino/libraries/M2tklib/utility;C:/Program Files (x86)/Arduino/libraries/SD/src;C:/Program Files (x86)/Arduino/libraries/SD/src/utility;C:/Users/hivanic/Documents/Arduino/libraries/Seeeduino_GPRS-master;C:/Users/hivanic/Documents/Arduino/libraries/Seeeduino_GPRS-master/utility;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SoftwareSerial/src;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SoftwareSerial/src/utility;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SPI/src;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries/SPI/src/utility;C:/Users/hivanic/Documents/Arduino/libraries/U8glib/src;C:/Users/hivanic/Documents/Arduino/libraries/U8glib/src/utility;C:/Program Files (x86)/Arduino/libraries;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/libraries;C:/Users/hivanic/Documents/Arduino/libraries;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/cores/arduino;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/hardware/avr/1.6.12/variants/mega;../../../misko-prototype;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2/avr/include/;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2//avr/include/avr/;C:/Users/hivanic/AppData/Local/arduino15/packages/arduino/tools/avr-gcc/4.9.2-atmel3.5.3-arduino2/lib/gcc/avr/4.8.1/include;C:/Program Files (x86)/Atmel/Studio/7.0/Extensions/hzfqvhnk.b20/Micro Platforms/default/debuggers;</VMSETTING_IncludePaths>
+    <VisualMicroSettings>
+      <VisualMicroSettings xmlns="">
+        <vm.upload.useprogrammer>1</vm.upload.useprogrammer>
+      </VisualMicroSettings>
+    </VisualMicroSettings>
   </PropertyGroup>
   <ItemGroup>
     <None Include="..\..\..\..\..\..\Program%2520Files%2520%28x86%29\Arduino\libraries\SD\keywords.txt">
