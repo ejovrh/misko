@@ -19,7 +19,7 @@
 #include "functions.h" // useful functions
 #include "display.h" // display (menu) code
 
-void setup() 
+void setup()
 {
 	#include "eeprom_config.h" // definition of EEPROM fields
 	#include "pin_modes.h" // definiton of pin modes
@@ -28,10 +28,10 @@ void setup()
 
 #include "gps_functions.h" // gps functions - kludge alert!
 
-void loop() 
+void loop()
 {
-  #include "loop.h" // the actual loop [ without () ] 
-} 
+  #include "loop.h" // the actual loop [ without () ]
+}
 
 //ISR for the ADXL345 accelerometer
 ISR(__vectorPCINT6_vect)
