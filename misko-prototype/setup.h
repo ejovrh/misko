@@ -1,7 +1,7 @@
 // timer setup
 /*
 	a good read: http://www.engblaze.com/microcontroller-tutorial-avr-and-arduino-timer-interrupts/
-	
+
 	according to the arduino schematic, the following timers are available and tied to the following pins:
 		OC0: 4, 13 - 8bit
 		OC1: 11, 12 - 16bit
@@ -20,73 +20,60 @@
 	TIMSK5 |= (1 << OCIE5A); // enable timer compare interrupt
 	interrupts(); // globally enable interrupts
 
-	analogReference(EXTERNAL); 
+	analogReference(EXTERNAL);
 
 // ADXL345 INT1 pin connects to here, fires IRQ on act/inact
-	// attachInterrupt(digitalPinToInterrupt(interrupt_adxl345_int1_pin), isr_flag_adxl345_int1, CHANGE); 
-	cli();
-	SREG |= 0b1000000;
-	PCICR |= 0b00000001;
-	PCMSK0 |= 0b01000000; // PCINT6
-	sei();
+	attachInterrupt(ADXL345_INT1_interrupt_pin, ISR_ADXL345, CHANGE);
+	//cli();
+	//SREG |= 0b1000000;
+	//PCICR |= 0b00000001;
+	//PCMSK0 |= 0b01000000; // PCINT6
+	//sei();
 
 
 // connect to the PDI serial terminal
 	// 230400 == 28.125 kB/s, as large as possible since we will be transferring files of up to 20 MB
-	Serial.begin(9600); // NOTE: the baud rate must be compatible with the SIM800L max baud rate
-	Serial.println(F("serial set"));
-	
+	Serial.begin(SERIALRATE); // NOTE: the baud rate must be compatible with the SIM800L max baud rate
+	Serial.println(F("PDI/PDO HW serial set"));
+
 	Serial1.begin(9600); // set up the terminal for the SIM800L
-	Serial.println(F("sim800l SW set"));
+	Serial.println(F("SIM800C HW serial set"));
 
-// initialize GPS
-	#ifdef GPS_MTK3339_CHIP // pre-init for the MTK3339 - it has 9600 as default
-	Serial1.begin(9600);	// connect with 9600
-	Serial1.write("$PMTK251,4800*14"); // set to 4800
-	Serial1.end(); // terminate and continue below regularly...
-	#endif
+// GPS device initialization start
+	/* two step approach:
+			1. connet via 9600 baud to set to 4800 baud
+			2. configure settings
 
-	gps.begin(GPSRATE);   // connect to the GPS at the desired rate
-	Serial.println(F("gps serial set")); // set gps serial comm. baud rate
+			if the GPS receiver power-cycles, it loses all its configuration settings
+				and reverts to factory defautls (9600 baud)
+	*/
+	gps.begin(9600);   // connect to the GPS at the default rate
+	Serial.println(F("GPS SW serial set")); // set gps serial comm. baud rate
+	gps.println("$PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*28");
+	gps.println("$PMTK250,3,3,4800*15"); // set in/out data format to NMEA over 4600 baud
+	gps.println("$PMTK251,4800*14"); // set baud rate to 4600
+	gps.end();
 
-	#ifdef GPS_EM406A_CHIP
-	if (EEPROM[EEPROM_GPS_USE_WAAS_INDEX] == 1)
-		Serial1.write("$PSRF151,01*0F\r\n"); // turn on WAAS
-	else
-		Serial1.write("$PSRF151,00*0E\r\n"); // turn off WAAS
+	gps.begin(4800);
+	gps.println("$PMTK185,1*23"); // disable locus logging
+	gps.println("$PMTK353,1,1,1,0,0*2A"); // look for GPS, GLASNOSS and GALILEO satellites
+	//gps.println("$PMTK299,1*2D"); // output debug messages
+	gps.println("$PMTK301,2*2E"); // set DGPS mode to SBAS
+	gps.println("$PMTK313,1*2E"); // enable SBAS
+	gps.println("$PMTK386,0.5*38"); // static nav. threshold 0.5m/s
+	gps.println("$PMTK257,1*2F"); // tunnel/garage high accurancy function
+	gps.println("$PMTK308,3*26"); // ouput 3 fixes after entering tunnel/garage
+	gps.println("$PMTK286,1*23"); // enable active interface cancellation
+	gps.println("$PMTK869,1,1*35"); // enable EASY
+	// $PMTK220 - what does it do?
+	// $PMTK262 - fitness mode?
+	// $PMTK306 - minimum satellite SNR
+	// $PMTK311 - mimimum elevation mask
 
-	Serial1.write("$PSRF105,01*3E\r\n"); // gps debug messages on
-	//Serial1.write("$PSRF105,00*3F\r\n"); // gps debug messages off
-	Serial1.write("$PSRF109,137*36\r\n"); // use SBAS
-	Serial1.write("$PSRF109,120*30\r\n"); // SBAS Channel PRN120 #33(EGNOS) Inmarsat 3-F2
-	Serial1.write("$PSRF109,122*32\r\n"); // SBAS Channel PRN122 #35(WAAS)
-	Serial1.write("$PSRF109,124*34\r\n"); // SBAS Channel PRN124 #37(EGNOS)
-	Serial1.write("$PSRF109,126*36\r\n"); // SBAS Channel PRN126 #39(EGNOS)
-	Serial1.write("$PSRF109,129*39\r\n"); // SBAS Channel PRN129 #42(MTSAT-1)
-	Serial1.write("$PSRF109,131*30\r\n"); // SBAS Channel PRN131 #44(EGNOS)
-	Serial1.write("$PSRF109,134*35\r\n"); // SBAS Channel PRN134 #47(WAAS)
-	Serial1.write("$PSRF109,136*37\r\n"); // SBAS - Astra 4B
-	Serial1.write("$PSRF109,137*36\r\n"); // SBAS Channel PRN137 #50(MTSAT-2)
-	#endif
-	
-	#ifdef GPS_MTK3339_CHIP
-	gps.write("$PMTK330,0*2E"); // set WGS84 as the datum
-	gps.write("$PMTK301,1*2D"); // set DGPS mode to WAAS
-	gps.write("$PMTK313,1*2E"); // enable SBAS satellite search
-	gps.write("$PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*28");  // report only GPRMC and GPGGA sentences
-	gps.write("$PMTK286,1*23"); // enable interference cancellation
-	gps.write("$PMTK869,1,1*35"); // enable EASY
-	gps.write("$PGCMD,33,0*6D"); // disable antenna messages
-	#endif
+// GPS device initialization end
 
-	gps_adjust_log_freq(00, EEPROM[EEPROM_GPS_GPRMC_GGA_FREQ_INDEX]); // GPGGA
-	// gps_adjust_log_freq(01, 0); // GPGLL
-	// gps_adjust_log_freq(02, 0); // GPGSA
-	// gps_adjust_log_freq(03, 0); // GPGSV
-	gps_adjust_log_freq(04, EEPROM[EEPROM_GPS_GPRMC_GGA_FREQ_INDEX]); // GPRMC
-	// gps_adjust_log_freq(05, 0); // GPVTG
-	delay(50);
-	
+	gps.begin(GPSRATE); // from here onwards the GPS is initialized and ready to use
+
 // set up display elements
 	m2_SetU8g(OLED.getU8g(), m2_u8g_box_icon); // connect u8glib with m2tklib
 	m2.setFont(0, u8g_font_6x10); // assign u8g_font_6x10 font to index 0
@@ -112,6 +99,7 @@
 	adxl345_writeByte(POWER_CTL, POWER_CTL_CFG);
 	adxl345_writeByte(BW_RATE, BW_RATE_CFG);
 
+	adxl345_readByte(0x00);
 	SPI.endTransaction();
 // ADXL345 config end
 
@@ -120,7 +108,7 @@
 	{
 		Serial.println(F("SD card initialization failed"));
 	}
-	else 
+	else
 	{
 			Serial.println(F("Wiring is correct and a card is present."));
 	}
