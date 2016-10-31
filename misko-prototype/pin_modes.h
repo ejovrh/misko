@@ -54,9 +54,9 @@
 //PC6
 	pinMode(gps_red_led_pin, OUTPUT);									// write cycle to SD card indicator (blinks on write), on by default until GPS gets fix, then off
 	digitalWrite(gps_red_led_pin, HIGH);							// on(high) by default until gps gets fix, then off, blinks on SD card write
-//PC7
-	pinMode(gps_green_led_pin, OUTPUT);								// GPS fix indiator: on - has fix, off - has no fix
-	digitalWrite(gps_green_led_pin, LOW);							// off(low) by befault until GPS gets fix
+//PC7 - GPS fix indiator: on - has fix, off - has no fix
+	pinMode(gps_green_led_pin, OUTPUT);								// off by befault until GPS gets fix
+	digitalWrite(gps_green_led_pin, HIGH);							// high - off; low - on
 
 //portD
 //PD0 - I2C_SCL_pin
@@ -108,9 +108,9 @@
 //PG0 - not used
 //PG1 - not used
 //PG2 - not used
-//PG3 - not used
+//PG3 - low - position B1 ( Bluetooth programming mode), high - position B2 (normal operation)
 	pinMode(analog_sw_ctrl_pin, OUTPUT);
-	digitalWrite(analog_sw_ctrl_pin, HIGH); // low - position B1 ( BLuetooth programming mode), high - position B2 (normal operation)
+	digitalWrite(analog_sw_ctrl_pin, HIGH);						//
 //PG4 - GPS power state indicator
 	pinMode(GPS_wakeup_pin, INPUT);										//
 	digitalWrite(GPS_wakeup_pin, HIGH);								//
