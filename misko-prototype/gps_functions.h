@@ -3,7 +3,9 @@
 void gps_parse_gprmc() // KLUDGE
 {
   // sample NMEA GPRMC sentence
+  //		$GNRMC,180536.000,A,4547.8467,N,01555.1699,E,2.79,213.57,311016,,,A*7F
   //    $GPRMC,170942.000,A,4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
+  //    $GNRMC,180538.000,V,,,,,2.79,213.57,311016,,,E*55
   //    $GPRMC,221939.869,V,,,,,,,060816,,,N*41
 
   // real programmers would probably do this in a more elegant way..
@@ -69,6 +71,7 @@ void gps_parse_gpgga() // KLUDGE
 
   char *p; // char pointer for string search
 	// $GPGGA,185447.258,4547.8986,N,01555.1525,E,1,04,4.3,126.8,M,42.5,M,,0000*5F
+	// $GNGGA,180539.000,4547.8448,N,01555.1665,E,6,2,99.99,196.9,M,42.5,M,,*77
 
   p = NMEA_buffer+7; // set the pointer to position 185447.258,4547.8986,N,01555.1525,E,1,04,4.3,126.8,M,42.5,M,,0000*5F
 	p = strchr(p, ',')+1; // 4547.8986,N,01555.1525,E,1,04,4.3,126.8,M,42.5,M,,0000*5F
@@ -130,37 +133,37 @@ void get_nmea_sentences() {
         bufferid = 0; // set pointer back to the beginning
         return;
       }
-			// extract GPS time of week, runs only once (if vara is not set)
-			if ( *gps_time_of_week == 'x' && (strcmp(NMEA_buffer, "$PSRFTXT,TOW:") > 0)) // if gps_time_of_week is not set and we have the TOW string
-			{
-				sscanf(NMEA_buffer, "$PSRFTXT,TOW:%6s", gps_time_of_week);	// set the value
-				flag_gps_time_of_week_set = 1;
-			}
+			//// extract GPS time of week, runs only once (if vara is not set)
+			//if ( *gps_time_of_week == 'x' && (strcmp(NMEA_buffer, "$PSRFTXT,TOW:") > 0)) // if gps_time_of_week is not set and we have the TOW string
+			//{
+				//sscanf(NMEA_buffer, "$PSRFTXT,TOW:%6s", gps_time_of_week);	// set the value
+				//flag_gps_time_of_week_set = 1;
+			//}
 
-			// extract GPS week, runs only once (if vara is not set)
-			if ( *gps_week == 'x' && (strcmp(NMEA_buffer, "$PSRFTXT,WK:") > 0)) // if gps_week is not set and we have the WK string
-			{
-				sscanf(NMEA_buffer, "$PSRFTXT,WK:%4s", gps_week);	// set the value
-				flag_gps_week_set = 1;
-			}
+			//// extract GPS week, runs only once (if vara is not set)
+			//if ( *gps_week == 'x' && (strcmp(NMEA_buffer, "$PSRFTXT,WK:") > 0)) // if gps_week is not set and we have the WK string
+			//{
+				//sscanf(NMEA_buffer, "$PSRFTXT,WK:%4s", gps_week);	// set the value
+				//flag_gps_week_set = 1;
+			//}
 
       //NMEA sentence printout
       if (EEPROM[EERPOM_NMEA_PRINTOUT_INDEX])
 				Serial.print(NMEA_buffer);
 
       // check for GPRMC sentence
-      if (strncmp(NMEA_buffer+3*sizeof(char), "RMC", 3) == 0) // if we have a GPRMC sentence (compare the NMEA buffer with its sentence to gprmc[])
+      if (strncmp(NMEA_buffer, "$GNRMC", 6) == 0) // if we have a GPRMC sentence (compare the NMEA buffer with its sentence to gprmc[])
 			{
         gps_parse_gprmc(); // parse the GPRMC sentence and get datetime and other values
 
-        if (flag_gps_fix) // valid fix - indicate it by lighting up the reed LED
-          digitalWrite(gps_green_led_pin, HIGH);
-        else
+        if (flag_gps_fix) // valid fix - indicate it by lighting up the red LED
           digitalWrite(gps_green_led_pin, LOW);
+        else
+          digitalWrite(gps_green_led_pin, HIGH);
       }
 
       // check for GPGGA sentence
-      if (strncmp(NMEA_buffer+3*sizeof(char), "GGA",  6) == 0) // if we have a GPRMC sentence
+      if (strncmp(NMEA_buffer, "$GNGGA",  6) == 0) // if we have a GPRMC sentence
           gps_parse_gpgga(); // get HDOP, altitude and satellites in view
 
 			bufferid++; // ?!? needed??
@@ -176,7 +179,7 @@ void get_nmea_sentences() {
 				// logfile name generation - should run only once a day
 				if (strlen(gps_date) != 2 && strstr(gps_logfile, gps_date) == NULL ) // if "gps_date is initialized" and "gps_logfile does not contain the current datetime (e.g. on startup or on date change)"
 				{
-					//FIXME some weird behavious
+					//FIXME some weird behaviour
 /*
 					strncat(gps_logfile, gps_date, 4*sizeof(char));//Serial.println(gps_logfile);
 					strcat(gps_logfile, "/");//Serial.println(gps_logfile);
