@@ -2,16 +2,11 @@
 #define CONFIG_VERSION 5 // protection against excessive EEPROM writes
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
 
-#define GPS_EM406A_CHIP 0	// the EM406A receiver
-#define GPS_MTK3339_CHIP 1 // the MTK3339  receiver
-
 #define BUFFER_DEBUG_PRINT 0 // SD write debug printout
-
-
 #define AREF_VOLTAGE 2.50
 #define TEMPERATURE_SAMPLE_PERIOD 10 // temperature measure interval in seconds
 #define GPSRATE 4800
-#define SERIALRATE 9600
+#define SERIALRATE 115200
 #define NMEA_BUFFERSIZE 82 // officially, NMEA sentences are at maximum 82 characters long (80 readable characters + \r\n)
 #define SD_BUFFERSIZE 1024 // cyclical buffer for NMEA sentences to be written to SD card
 
@@ -40,7 +35,7 @@ char gps_longtitude[17] = "lon hhhmm.ssss  "; // W or E, memcpy needs to start t
 char gps_altitude[9] = "alt    m"; // GPS altitude: "altxxxxm" or "alt-xxxm", populated in gps_functions.h:gps_parse_gpgga()
 char gps_hdop[8] = "dop____"; // GPS horizontal dilution of position: "dop12.5" , populated in gps_functions.h:gps_parse_gprmc()
 char gps_satellites_in_view[6] = "sat__"; // GPS satellites in view
-char gps_week[5] = "xxxx"; // string holding the GPS WeeK 
+char gps_week[5] = "xxxx"; // string holding the GPS Week
 char gps_time_of_week[7] = "xxxxxx"; // string holding the GPS Time Of Week
 bool flag_gps_fix = 0; // do we have a fix or not?
 bool flag_gps_time_of_week_set = 0; // is the GPS time of week set or not?
