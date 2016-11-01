@@ -51,8 +51,8 @@
 //PC5 - user buttons - right, on(high), low(off)
 	pinMode(menu_right_button_pin, INPUT);						//
 	digitalWrite(menu_right_button_pin, LOW);					//
-//PC6
-	pinMode(gps_red_led_pin, OUTPUT);									// write cycle to SD card indicator (blinks on write), on by default until GPS gets fix, then off
+//PC6  -write cycle to SD card indicator (blinks on write), on by default until GPS gets fix, then off
+	pinMode(gps_red_led_pin, OUTPUT);									//
 	digitalWrite(gps_red_led_pin, HIGH);							// on(high) by default until gps gets fix, then off, blinks on SD card write
 //PC7 - GPS fix indiator: on - has fix, off - has no fix
 	pinMode(gps_green_led_pin, OUTPUT);								// off by befault until GPS gets fix
@@ -65,12 +65,14 @@
 //PD3 - Serial1 - SIM800C_tx_pin
 //PD4 - SIM800C_cts_pin
 //PD5 - SIM800C_status_pin
+	pinMode(SIM800C_status_pin, INPUT);
+	digitalWrite(SIM800C_status_pin, HIGH);
 //PD6 - SIM800C_power_pin
 	pinMode(SIM800C_power_pin, OUTPUT);								// SIM800L power control, connected directly to battery ( due to up 2A current )
 	digitalWrite(SIM800C_power_pin, LOW);							// mosfet gate for SIM800L module, on(high), off(low)
-//PD7 - GPS power control pin
+//PD7 - GPS power control pin, high(on), low(off)
 	pinMode(GPS_power_ctl_pin, OUTPUT);								//
-	digitalWrite(GPS_power_ctl_pin, LOW);							// low(on), high(off)
+	digitalWrite(GPS_power_ctl_pin, LOW);							//
 
 //port E
 //PE0 - PDI_UART0_RX_pin
@@ -79,7 +81,11 @@
 	pinMode(SPI_SS_ADXL345_pin, OUTPUT);							// SPI SS for ADXL345
 	digitalWrite(SPI_SS_ADXL345_pin, HIGH);						// have the ADXL released by default
 //PE3 - SPI_OLED_reset_pin
+	pinMode(SPI_OLED_reset_pin, OUTPUT);
+	digitalWrite(SPI_OLED_a0_pin, HIGH);
 //PE4 - SPI_OLED_a0_pin
+	pinMode(SPI_OLED_a0_pin, OUTPUT);
+	digitalWrite(SPI_OLED_a0_pin, HIGH);
 //PE5 - SPI_SS_OLED_pin
 	pinMode(SPI_SS_OLED_pin, OUTPUT);
 	digitalWrite(SPI_SS_OLED_pin, HIGH);							// have the OLED released by default
