@@ -23,7 +23,7 @@
 	analogReference(EXTERNAL);
 
 // ADXL345 INT1 pin connects to here, fires IRQ on act/inact
-	attachInterrupt(ADXL345_INT1_interrupt_pin, ISR_ADXL345, CHANGE);
+	//attachInterrupt(ADXL345_INT1_interrupt_pin, ISR_ADXL345, CHANGE);
 	//cli();
 	//SREG |= 0b1000000;
 	//PCICR |= 0b00000001;
@@ -64,6 +64,7 @@
 	gps.println("$PMTK257,1*2F"); // tunnel/garage high accurancy function
 	gps.println("$PMTK308,3*26"); // ouput 3 fixes after entering tunnel/garage
 	gps.println("$PMTK286,1*23"); // enable active interface cancellation
+	gps.println("$PMTK225,0*2B"); // no power saving, i.e. normal mode
 	gps.println("$PMTK869,1,1*35"); // enable EASY
 	// $PMTK220 - what does it do?
 	// $PMTK262 - fitness mode?
