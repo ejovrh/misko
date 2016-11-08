@@ -13,7 +13,7 @@
 
 // local files
 #include "adxl345.h" // definition of ADXL345 register addresses
-#include "fram.h" // definition of FRAM register addresses
+#include "fram.h" // definition of FRAM register addresses & addressing scheme for config settins
 #include "pin_definitions.h" // pin layout
 #include "global_variables.h" // global variables et al.
 #include "functions.h" // useful functions
@@ -43,6 +43,6 @@ ISR(__vectorPCINT6_vect)
 //	stuff that needs to run periodically goes here
 ISR(TIMER5_COMPA_vect)
 {
-	avg_temperature(calculate_temperature(), 10); // calculates the temperature via a TMP36 sensor over 10 iterations
+	//avg_temperature(calculate_temperature(), 10); // calculates the temperature via a TMP36 sensor over 10 iterations
 	scheduler_run_count++;
 }
