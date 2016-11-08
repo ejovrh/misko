@@ -47,12 +47,12 @@
  #define FERAM_DEVICE_TIMEZONE											0x01	// byte (-12 ... +12) -- hours
 
 /*
- *	FERAM_LCD_AUTO_TIMEOUT 0x01
+ *	FERAM_OLED_AUTO_TIMEOUT
  *		full byte, unsigned integer from 1 to 255
  *
  *		OLED device power timeout in seconds
  */
-#define FERAM_LCD_AUTO_TIMEOUT											0x02 // byte (1 ... 255) -- seconds
+#define FERAM_OLED_AUTO_TIMEOUT											0x02 // byte (1 ... 255) -- seconds
 
 /*
  *	FERAM_BLUETOOTH_AUTO_TIMEOUT
