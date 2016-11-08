@@ -12,17 +12,17 @@ void poor_mans_debugging(void);
  *
  * times are in milliseconds !!
  */
-int eeprom_timer(unsigned int in_button_press_time, unsigned int in_eeprom_index)
+int eeprom_timer(uint32_t in_button_press_time, uint8_t timeout_val)
 {
-  return (abs( in_button_press_time - millis()) / 1000 > EEPROM[in_eeprom_index] ?  1 :  0);
+  return (abs( in_button_press_time - millis()) / 1000 > timeout_val ?  1 :  0);
 }
 
-// ready a byte from the ADXL345
+// reads a byte from the ADXL345
 byte adxl345_readByte(byte registerAddress) // reads one byte at registerAddress
 {
 		digitalWrite(SPI_SS_ADXL345_pin, LOW); // reserve the slave
     	SPI.transfer(0x80 | registerAddress); // set the MSB to 1 (the read command), then send address to read from
-		byte retval = SPI.transfer(0x00); // send one byte (0xff) into the circular fifo buffer, get one byte back
+		byte retval = SPI.transfer(0x00); // send one byte (0x00) into the circular FIFO buffer, get one byte back
 		digitalWrite(SPI_SS_ADXL345_pin, HIGH); // release the slave
     return retval;  // return value
 }
@@ -42,6 +42,55 @@ bool adxl345_writeByte(byte registerAddress, byte value)
 	}
 
 	return 0;
+}
+
+// writes one byte data into the FeRAM at address addr
+uint8_t FeRAMWriteByte(uint16_t addr, byte data)
+{
+	if (addr > 0x7FFF) // if we try to go past the max. RAM address
+		return 1;	// return something
+
+	uint8_t addr_msb = (addr >> 8) & 0xFF;
+	uint8_t addr_lsb = addr & 0xFF;
+
+	// put the FeRAM module into RW mode
+	digitalWrite(SPI_FRAM_SS_pin, LOW); // select the FeRAM module
+	SPI.transfer(CMD_WREN);	// issue WREN command
+	digitalWrite(SPI_FRAM_SS_pin, HIGH); // de-select the FeRAM module
+
+	// put into write mode, send address, then write data
+	digitalWrite(SPI_FRAM_SS_pin, LOW); // select the FeRAM module
+	SPI.transfer(CMD_WRITE);	// issue WRITE command
+	SPI.transfer(addr_msb); // send address most significant byte
+	SPI.transfer(addr_lsb); // send address least significant byte
+
+	SPI.transfer(data); // write data into module
+
+	digitalWrite(SPI_FRAM_SS_pin, HIGH); // de-select the FeRAM module
+
+	return 0;
+}
+
+// returns one one byte from the FeRAM at addr
+byte FeRAMReadByte(uint16_t addr)
+{
+	byte retval;
+	if (addr > 0x7FFF) // if we try to go past the max. RAM address
+	return -1;	// return something
+
+	uint8_t addr_msb = (addr >> 8) & 0xFF;
+	uint8_t addr_lsb = addr & 0xFF;
+
+	digitalWrite(SPI_FRAM_SS_pin, LOW); // select the FeRAM module
+	SPI.transfer(CMD_READ); // send READ command
+	SPI.transfer(addr_msb);	// send address most significant byte
+	SPI.transfer(addr_lsb); // send address least significant byte
+
+	retval = SPI.transfer(0xFF); // send on byte of crap into the circular buffer, get one byte back
+
+	digitalWrite(SPI_FRAM_SS_pin, HIGH); // de-select the FeRAM module
+
+	return retval; // returns read out data
 }
 
 // sets an eeprom value at a certain index
@@ -94,21 +143,6 @@ float calculate_voltage(int pin) // calculates the voltage on a given pin by con
 inline int8_t calculate_temperature(void) // executed from loop()
 {
 	return (calculate_voltage(TMP36_Vsense_pin) - 0.5) * 100.0 ;  // 10 mv per C, 500 mV offset
-}
-
-// calculates the average temperature after in_count readings
-void avg_temperature(int8_t in_temp, uint8_t in_count)
-{
-	if (scheduler_run_count < in_count) // if its below in_count
-		temperature = calculate_temperature(); // at least have some value displayed
-
-	avg_temp += in_temp; // sum up the vaules
-
-	if (scheduler_run_count % in_count == 0) // if we have 10 complete iterations
-	{
-		temperature = avg_temp / in_count; // divide sum and store in the global variable
-		avg_temp = 0; // reset the sum
-	}
 }
 
 // callback for Vcc
@@ -223,7 +257,7 @@ void handle_lcd_sleep(void)
 	if (flag_oled_sleep || EEPROM[EERPOM_LCD_POWER_INDEX] == 1) // dont do anything on "on" setting or in sleep mode
 		return;
 
-	if (eeprom_timer(lcd_button_press_time, EEPROM[EERPOM_LCD_AUTO_TIMEOUT_INDEX])) // true if tiem is up
+	if (eeprom_timer(lcd_button_press_time, FeRAMReadByte(FERAM_OLED_AUTO_TIMEOUT) )) // true if tiem is up
 	{
 		flag_oled_sleep = 1;
 		OLED.sleepOn();
@@ -236,7 +270,7 @@ uint8_t getCheckSum(char *string)
   int XOR = 0;
 
   // for (int i = 1; i < 20; i++)
-  for (int i = 1; i < strlen(string) -1; i++)
+  for (uint8_t i = 1; i < strlen(string) -1; i++)
     XOR = XOR ^ *(string+i);
 
   return XOR;
@@ -306,17 +340,18 @@ void fn_ok(m2_el_fnarg_p fnarg)
 }
 
 // callback for UTC display
-const char *fn_cb_utc(m2_rom_void_p element)
+const char *fn_cb_get_utc(m2_rom_void_p element)
 {
 	static char retval[4] = ""; // e.g. -12 or  +3
+	int8_t tz = (int8_t) FeRAMReadByte(FERAM_DEVICE_TIMEZONE); // fetch the setting from FeRAM
 
-	if (eeprom_get(EERPOM_TIMEZONE_INDEX) < 0 )
-		itoa(eeprom_get(EERPOM_TIMEZONE_INDEX), retval, 10);
+	if (tz < 0 )
+		itoa(tz, retval, 10); // will have the "-" automatically
 	else
 	{
-		retval[0] = '+';
-		retval[1] = '\0';
-		itoa(eeprom_get(EERPOM_TIMEZONE_INDEX), retval+sizeof(char), 10);
+		retval[0] = '+';	// manually set the "+" sign
+		retval[1] = '\0'; // terminate
+		itoa(tz, retval+sizeof(char), 10);
 	}
 	return retval;
 }
@@ -324,11 +359,11 @@ const char *fn_cb_utc(m2_rom_void_p element)
 // callback for temperature
 const char *fn_cb_get_temperature(m2_rom_void_p element)
 {
-	sprintf(temp + sizeof(char), "%+.2d", (uint8_t) temperature); // THE way to print // FIXME
-	strcat( temp + 4*sizeof(char), "C"); // append C and a null terminator
-	Serial.print("temp:");Serial.println(temp);
-	temp[6] = '\0';
-	return temp;
+Serial.println(temp);
+		dtostrf(calculate_temperature(), 3, 0, temp+3*sizeof(char)); // instead, this works
+		// http://www.atmel.com/webdoc/AVRLibcReferenceManual/group__avr__stdlib_1ga060c998e77fb5fc0d3168b3ce8771d42.html
+		strcat(temp, "C");
+		return temp;
 }
 
 // callback for bluetooth power setting
@@ -538,17 +573,16 @@ const char *fn_cb_sd_write(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
   return NULL;
 }
 
-// callback for EEPROM timezone setting
-int8_t fn_cb_set_eerpom_tz(m2_rom_void_p element, uint8_t msg, int8_t val)
+// callback for timezone setting
+int8_t fn_cb_set_tz(m2_rom_void_p element, uint8_t msg, int8_t val)
 {
   if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
-  {
-	timezone = eeprom_get(EERPOM_TIMEZONE_INDEX);
-    return timezone;
-  }
+    return (uint8_t) FeRAMReadByte(FERAM_DEVICE_TIMEZONE);
 
   if ( msg == M2_U8_MSG_SET_VALUE ) // if we get a SET message
-    eeprom_set(val, EERPOM_TIMEZONE_INDEX);
+		FeRAMWriteByte(FERAM_DEVICE_TIMEZONE, val);
+
+	return FeRAMReadByte(FERAM_DEVICE_TIMEZONE);
 }
 
 // callback for bluetooth timeout
@@ -559,16 +593,20 @@ uint8_t fn_cb_set_eerpom_bluetooth_timeout(m2_rom_void_p element, uint8_t msg, u
 
   if ( msg == M2_U8_MSG_SET_VALUE ) // if we get a SET message
     eeprom_set(val, EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX); // set the EEPROM value at that index to val
+
+	return (uint8_t) eeprom_get(EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX);
 }
 
 // callback for OLED timeout
-uint8_t fn_cb_set_eerpom_lcd_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val)
+uint8_t fn_cb_set_oled_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val)
 {
   if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
-    return (uint8_t) eeprom_get(EERPOM_LCD_AUTO_TIMEOUT_INDEX); // set val to the EEPROM value at that index
+		return (uint8_t) FeRAMReadByte(FERAM_OLED_AUTO_TIMEOUT); // get val
 
   if ( msg == M2_U8_MSG_SET_VALUE ) // if we get a SET message
-		eeprom_set(val, EERPOM_LCD_AUTO_TIMEOUT_INDEX); // set the EEPROM value at that index to val
+		FeRAMWriteByte(FERAM_OLED_AUTO_TIMEOUT, val); // set val
+
+	return (uint8_t) FeRAMReadByte(FERAM_OLED_AUTO_TIMEOUT); // ...so that we dont have an non-return for this type of function
 }
 
 // callback for gps log frequency
@@ -601,6 +639,8 @@ const char *fn_cb_get_batt_charge_status(m2_rom_void_p element)
 		if (digitalRead(MCP73871_charge_status_1_pin) == LOW || digitalRead(MCP73871_charge_status_2_pin) == HIGH)
 			return "BATT LOW";
 	}
+
+	return "foo";
 }
 
 // callback for MCP73871 input power status
@@ -894,9 +934,8 @@ void sd_buffer_write(char *in_string, uint8_t in_size)
 }
 
 // determines baud rate (approximately)
-uint16_t detectBaud(int pin)
+uint32_t detectBaud(int pin)
 {
-	uint16_t baud;
 	uint16_t rate = 10000;
 	uint16_t x;
 
