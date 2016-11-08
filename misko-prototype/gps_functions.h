@@ -105,7 +105,6 @@ void get_nmea_sentences() {
 //  due to iteration from the main loop, eventually the whole NMEA sentence accumulates in the global buffer variable
 
   uint8_t sum; // variable for the NMEA checksum of each sentence
-  bool gotGPRMC = false;    // flag that indicates GPRMC or GPGGA strings
 
   if (gps.available()) // if gps is availiable
   {
@@ -147,9 +146,9 @@ void get_nmea_sentences() {
 				//flag_gps_week_set = 1;
 			//}
 
-      //NMEA sentence printout
-      if (EEPROM[EERPOM_NMEA_PRINTOUT_INDEX])
-				Serial.print(NMEA_buffer);
+			//NMEA sentence printout
+				if (EEPROM[EERPOM_NMEA_PRINTOUT_INDEX])
+					Serial.print(NMEA_buffer);
 
       // check for GPRMC sentence
       if (strncmp(NMEA_buffer, "$GNRMC", 6) == 0) // if we have a GPRMC sentence (compare the NMEA buffer with its sentence to gprmc[])
