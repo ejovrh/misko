@@ -45,9 +45,9 @@ bool flag_gps_on = 1; // is the gps powered on or off?
 int8_t timezone;
 
 // device variables
-int8_t temperature = 0; // temperature in degrees Celsius
-char temp[6] = "T+xxC";
-uint16_t avg_temp = 0;
+//int8_t temperature = 0; // temperature in degrees Celsius
+char temp[6] = "T+__C";
+//uint16_t avg_temp = 0;
 char vcc[9] = "Vccx.xxV";
 char bat_a_pct[9] = "batAxxx%";
 char sd_buffer[SD_BUFFERSIZE]; // buffer holding 2x 512byte blocks of NMEA sentences for buffered write of 512byte blocks
