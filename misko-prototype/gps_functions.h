@@ -147,7 +147,7 @@ void get_nmea_sentences() {
 			//}
 
 			//NMEA sentence printout
-				if (EEPROM[EERPOM_NMEA_PRINTOUT_INDEX])
+				if ( (FeRAMReadByte(FERAM_GPS_MISC_CFG) >> FERAM_GPS_MISC_CFG_NMEA_PRINT_TO_SERIAL) & 0x01 ) // if the 2nd bit is set
 					Serial.print(NMEA_buffer);
 
       // check for GPRMC sentence
@@ -169,12 +169,11 @@ void get_nmea_sentences() {
 
 			// start the write cycle
       #if BUFFER_DEBUG_PRINT
-			if (EEPROM[EERPOM_SD_WRITE_ENABLE_INDEX] && flag_sd_write_enable) // if we are set up to write - i.e. the logfile name is set
+			if ( ( (FeRAMReadByte(FERAM_DEVICE_MISC_CFG1) >> FERAM_DEVICE_MISC_CFG1_SD_WRITE ) & 0x01) && flag_sd_write_enable) // if we are set up to write - i.e. the logfile name is set
 			#else
-			if (EEPROM[EERPOM_SD_WRITE_ENABLE_INDEX] && flag_sd_write_enable && flag_gps_fix) // if we are set up to write - i.e. the logfile name is set
+			if ( ( (FeRAMReadByte(FERAM_DEVICE_MISC_CFG1) >> FERAM_DEVICE_MISC_CFG1_SD_WRITE ) & 0x01) && flag_sd_write_enable && flag_gps_fix) // if we are set up to write - i.e. the logfile name is set
 			#endif
       {
-
 				// logfile name generation - should run only once a day
 				if (strlen(gps_date) != 2 && strstr(gps_logfile, gps_date) == NULL ) // if "gps_date is initialized" and "gps_logfile does not contain the current datetime (e.g. on startup or on date change)"
 				{
