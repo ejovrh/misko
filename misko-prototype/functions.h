@@ -12,7 +12,7 @@ void poor_mans_debugging(void);
  *
  * times are in milliseconds !!
  */
-int eeprom_timer(uint32_t in_button_press_time, uint8_t timeout_val)
+uint8_t inline auto_timeout(uint32_t in_button_press_time, uint8_t timeout_val)
 {
   return (abs( in_button_press_time - millis()) / 1000 > timeout_val ?  1 :  0);
 }
@@ -243,7 +243,7 @@ void handle_bluetooth_button(void)
 	if (flag_bluetooth_power_keep_on) // if the BT device is marked to be kept on
 		return;	// do nothing
 
-	if ( flag_bluetooth_is_on && eeprom_timer(bluetooth_button_press_time, EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX)) // if the device is on and enough time has passed
+	if ( flag_bluetooth_is_on && auto_timeout(bluetooth_button_press_time, FeRAMReadByte(FERAM_BLUETOOTH_AUTO_TIMEOUT)) ) // if the device is on and enough time has passed
 	{
 			digitalWrite(Bluetooth_wakeup_pin, LOW); // turn off the device
 			flag_bluetooth_is_on = 0; // set flag to off
@@ -251,13 +251,13 @@ void handle_bluetooth_button(void)
 	}
 }
 
-// puts the oled to sleep accrding to the eeprom setting
+// puts the oled to sleep accrding to config setting
 void handle_lcd_sleep(void)
 {
-	if (flag_oled_sleep || EEPROM[EERPOM_LCD_POWER_INDEX] == 1) // dont do anything on "on" setting or in sleep mode
+	if (flag_oled_sleep || ( (FeRAMReadByte(FERAM_DEVICE_MISC_CFG1) >> FERAM_DEVICE_MISC_CFG1_OLED_AUTO_POWER) & 0x01 ) ) // dont do anything on "on" setting or in sleep mode
 		return;
 
-	if (eeprom_timer(lcd_button_press_time, FeRAMReadByte(FERAM_OLED_AUTO_TIMEOUT) )) // true if tiem is up
+	if (auto_timeout(lcd_button_press_time, FeRAMReadByte(FERAM_OLED_AUTO_TIMEOUT) )) // true if time is up
 	{
 		flag_oled_sleep = 1;
 		OLED.sleepOn();
@@ -373,7 +373,7 @@ const char *fn_cb_bluetooth_power_setting(m2_rom_void_p element, uint8_t msg, ui
 	switch(msg) // msg can be one of: M2_COMBOFN_MSG_GET_VALUE, M2_COMBOFN_MSG_SET_VALUE, M2_COMBOFN_MSG_GET_STRING
   {
 		case M2_COMBOFN_MSG_GET_VALUE: // we get the vaue from eeprom
-			*valptr = EEPROM[EERPOM_BLUETOOTH_POWER_INDEX];
+			*valptr = (uint8_t) (FeRAMReadByte(FERAM_DEVICE_MISC_CFG2) >> FERAM_DEVICE_MISC_CFG2_BLUETOOTH_POWER);
       break;
 
     case M2_COMBOFN_MSG_SET_VALUE: // we set the value into eeprom
@@ -410,23 +410,19 @@ const char *fn_cb_lcd_power_setting(m2_rom_void_p element, uint8_t msg, uint8_t 
 	switch(msg)
   {
 		case M2_COMBOFN_MSG_GET_VALUE:
-			*valptr = EEPROM[EERPOM_LCD_POWER_INDEX];
-      break;
+			*valptr = (FeRAMReadByte(FERAM_DEVICE_MISC_CFG1) >> FERAM_DEVICE_MISC_CFG1_OLED_AUTO_POWER) & 0x01; // see if bit 1 is set
+			break;
 
     case M2_COMBOFN_MSG_SET_VALUE:
-			EEPROM[EERPOM_LCD_POWER_INDEX] = *valptr;
-      break;
+			FeRAMWriteByte(FERAM_DEVICE_MISC_CFG1, FeRAMReadByte(FERAM_DEVICE_MISC_CFG1) ^ (1<<FERAM_DEVICE_MISC_CFG1_OLED_AUTO_POWER)); // set it 1
+			break;
 
     case M2_COMBOFN_MSG_GET_STRING:
       if (*valptr == 0)
-			{
         return "auto";
-			}
 
       if (*valptr == 1)
-			{
         return "on";
-			}
   }
 
   return NULL;
@@ -439,18 +435,18 @@ const char *fn_cb_gps_power_setting(m2_rom_void_p element, uint8_t msg, uint8_t 
 	switch(msg)
   {
 		case M2_COMBOFN_MSG_GET_VALUE:
-			*valptr = EEPROM[EERPOM_GPS_POWER_INDEX];
+			*valptr = (FeRAMReadByte(FERAM_GPS_MISC_CFG) >> FERAM_GPS_MISC_CFG_POWER_CTL) & 0x01;
       break;
 
     case M2_COMBOFN_MSG_SET_VALUE:
-			EEPROM[EERPOM_GPS_POWER_INDEX] = *valptr;
+			FeRAMWriteByte(FERAM_GPS_MISC_CFG, FeRAMReadByte(FERAM_GPS_MISC_CFG) ^ (1<<FERAM_GPS_MISC_CFG_POWER_CTL)); // set it 1
 			break;
 
     case M2_COMBOFN_MSG_GET_STRING:
       if (*valptr == 0)
         return "off";
-
-      if (*valptr == 1)
+		//if (*valptr == 1)
+		else
         return "on";
   }
 
@@ -462,28 +458,24 @@ const char *fn_cb_nmea_printout_setting(m2_rom_void_p element, uint8_t msg, uint
 {
 	// see fn_cb_bluetooth_power_setting for comments
 	switch(msg)
-  {
+	{
 		case M2_COMBOFN_MSG_GET_VALUE:
-			*valptr = EEPROM[EERPOM_NMEA_PRINTOUT_INDEX];
-      break;
+		*valptr = (FeRAMReadByte(FERAM_GPS_MISC_CFG) >> FERAM_GPS_MISC_CFG_NMEA_PRINT_TO_SERIAL) & 0x01;
+		break;
 
-    case M2_COMBOFN_MSG_SET_VALUE:
-			EEPROM[EERPOM_NMEA_PRINTOUT_INDEX] = *valptr;
-      break;
+		case M2_COMBOFN_MSG_SET_VALUE:
+		FeRAMWriteByte(FERAM_GPS_MISC_CFG, FeRAMReadByte(FERAM_GPS_MISC_CFG) ^ (1<<FERAM_GPS_MISC_CFG_NMEA_PRINT_TO_SERIAL)); // set it 1
+		break;
 
-    case M2_COMBOFN_MSG_GET_STRING:
-      if (*valptr == 0)
-			{
-        return "off";
-			}
+		case M2_COMBOFN_MSG_GET_STRING:
+		if (*valptr == 0)
+			return "off";
+		//if (*valptr == 1)
+		else
+			return "on";
+	}
 
-      if (*valptr == 1)
-			{
-        return "on";
-			}
-  }
-
-  return NULL;
+	return NULL;
 }
 
 // callback for serial port setting
@@ -551,23 +543,18 @@ const char *fn_cb_sd_write(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
 	switch(msg)
   {
 		case M2_COMBOFN_MSG_GET_VALUE:
-			*valptr = EEPROM[EERPOM_SD_WRITE_ENABLE_INDEX];
-      break;
+			*valptr = (FeRAMReadByte(FERAM_DEVICE_MISC_CFG1) >> FERAM_DEVICE_MISC_CFG1_SD_WRITE) & 0x01;
+			break;
 
     case M2_COMBOFN_MSG_SET_VALUE:
-			EEPROM[EERPOM_SD_WRITE_ENABLE_INDEX] = *valptr;
-      break;
+			FeRAMWriteByte(FERAM_DEVICE_MISC_CFG1, FeRAMReadByte(FERAM_DEVICE_MISC_CFG1) ^  (1<<FERAM_DEVICE_MISC_CFG1_SD_WRITE) ); // set it 1
+			break;
 
     case M2_COMBOFN_MSG_GET_STRING:
       if (*valptr == 0)
-			{
         return "off";
-			}
-
-      if (*valptr == 1)
-			{
+		if (*valptr == 1)
         return "on";
-			}
   }
 
   return NULL;
@@ -585,16 +572,53 @@ int8_t fn_cb_set_tz(m2_rom_void_p element, uint8_t msg, int8_t val)
 	return FeRAMReadByte(FERAM_DEVICE_TIMEZONE);
 }
 
+// callback for OLED power setting
+const char *fn_cb_accel_enable(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
+{
+	// see fn_cb_bluetooth_power_setting for comments
+	switch(msg)
+	{
+		case M2_COMBOFN_MSG_GET_VALUE:
+		*valptr = ( FeRAMReadByte(FERAM_DEVICE_MISC_CFG1) >> FERAM_DEVICE_MISC_CFG1_ADXL345_AUTO_POWER ) & 0x01;
+		break;
+
+		case M2_COMBOFN_MSG_SET_VALUE:
+		FeRAMWriteByte(FERAM_DEVICE_MISC_CFG1, FeRAMReadByte(FERAM_DEVICE_MISC_CFG1) ^ (1<<FERAM_DEVICE_MISC_CFG1_ADXL345_AUTO_POWER));
+		break;
+
+		case M2_COMBOFN_MSG_GET_STRING:
+		if (*valptr == 0)
+			return "off";
+		//if (*valptr == 1)
+		else
+			return "on";
+	}
+
+	return NULL;
+}
+
+// callback for accelerometer timeout value setting
+int8_t fn_cb_set_accel_timeout(m2_rom_void_p element, uint8_t msg, int8_t val)
+{
+	if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
+	return (uint8_t) FeRAMReadByte(FERAM_ADXL345_MOVEMENT_TIMEOUT);
+
+	if ( msg == M2_U8_MSG_SET_VALUE ) // if we get a SET message
+	FeRAMWriteByte(FERAM_ADXL345_MOVEMENT_TIMEOUT, val);
+
+	return FeRAMReadByte(FERAM_ADXL345_MOVEMENT_TIMEOUT);
+}
+
 // callback for bluetooth timeout
-uint8_t fn_cb_set_eerpom_bluetooth_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val)
+uint8_t fn_cb_set_bluetooth_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val)
 {
   if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
-    return (uint8_t) eeprom_get(EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX); // set val to the EEPROM value at that index
+    return (uint8_t) FeRAMReadByte(FERAM_BLUETOOTH_AUTO_TIMEOUT); // get value
 
   if ( msg == M2_U8_MSG_SET_VALUE ) // if we get a SET message
-    eeprom_set(val, EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX); // set the EEPROM value at that index to val
+		FeRAMWriteByte(FERAM_BLUETOOTH_AUTO_TIMEOUT, val);
 
-	return (uint8_t) eeprom_get(EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX);
+	return (uint8_t) FeRAMReadByte(FERAM_BLUETOOTH_AUTO_TIMEOUT);
 }
 
 // callback for OLED timeout
@@ -983,16 +1007,8 @@ void poor_mans_debugging(void)
 {
  	  // poor man's debugging
 
-		// EEPROM fields
-		Serial.println("EERPOM fields");
-    for (uint8_t i=0; i< 11; i++)
-    {
-      Serial.print(i); Serial.print(F(" - "));Serial.println(EEPROM[i]);
-    }
-		Serial.println("EERPOM fields");
-
- 		//SPI voodoo
-		SPI.beginTransaction(SPISettings(20000000, MSBFIRST, SPI_MODE3));
+		//SPI voodoo
+		SPI.beginTransaction(SPISettings(5000000, MSBFIRST, SPI_MODE3));
 		adxl345_readByte(0x00);
 		Serial.print(F("INT_SOURCE -"));Serial.print(adxl345_readByte(0x30), BIN);Serial.println("-");
 		Serial.print(F("INT_MAP -"));Serial.print(adxl345_readByte(0x2F), BIN);Serial.println("-");
@@ -1006,15 +1022,8 @@ void poor_mans_debugging(void)
 
 		//$PSRF104,4547.9088,01555.1489,110,75000,<TimeOfWeek>,<WeekNo>,12,1
 
-		if (flag_gps_time_of_week_set)
-		{
-			Serial.print(F("TOW:"));Serial.println(gps_time_of_week);
-		}
-
-		if (flag_gps_week_set)
-		{
-			Serial.print(F("WK:"));Serial.println(gps_week);
-		}
+Serial.print("FERAM_DEVICE_MISC_CFG2 ");
+Serial.println(FeRAMReadByte(FERAM_DEVICE_MISC_CFG2), BIN);
 
 
 
