@@ -33,8 +33,11 @@ void loop()
   #include "loop.h" // the actual loop [ without () ]
 }
 
+// ISR names
+//	http://www.nongnu.org/avr-libc/user-manual/group__avr__interrupts.html
+
 //ISR for the ADXL345 accelerometer
-ISR(__vectorPCINT6_vect)
+ISR(INT7_vect)
 {
 	flag_adxl345_int1 = 1; // simply (for now) set a flag to true (is false by default)
 }

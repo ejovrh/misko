@@ -16,7 +16,7 @@
 #define SPI_MISO_pin 11 										// PB3 - SPI - MISO - blue - connected are: ADXL345(SDO)
 #define GPS_sw_serial_rx 12 								// PB4 - software serial RX for GPS
 #define GPS_sw_serial_tx 13 								// PB5 - software serial TX for GPS
-#define ADXL345_INT1_interrupt_pin 14				// PB6 - ADXL345 INT1 pin // FIXME !!!
+#define SD_card_detect_pin 14								// PB6 - SD card detect pin
 #define Bluetooth_wakeup_pin 15							// PB7 - wakeup signal for Bluetooth device
 
 // port C
@@ -47,7 +47,7 @@
 #define SPI_OLED_a0_pin 4 	 								// PE4 - OLED a0 (D/C)
 #define SPI_SS_OLED_pin 5 									// PE5 - SPI - SS - OLED
 #define SPI_SS_SD_card_pin 6 								// PE6 - SPI - SS - SD card
-#define SD_card_detect_pin 7								// PE7 - SD card detect
+#define ADXL345_INT1_interrupt_pin 7				// PE7 - ADXL345 INT0 pin (on INT7)
 
 // port F
 #define TMP36_Vsense_pin 46 								// PF0 - ADC TMP36 temperature sensor voltage out

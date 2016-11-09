@@ -24,8 +24,8 @@
 
 // ADXL345 INT1 pin connects to here, fires IRQ on act/inact
 	cli();
-	PCMSK0 |= (1<<PCINT6); // enable PCINT6
-	PCICR |= (1<<PCIE0); // enable PCIE0 (where PCINT6 lives)
+	EIMSK |= (1<<INT7); // enable INT7 (lives on pin PE7)
+	EICRB |= (1<<ISC70); // set to register a change
 	sei();
 
 
