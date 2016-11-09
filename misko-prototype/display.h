@@ -99,7 +99,7 @@ M2_ALIGN(el_top_timezone_menu, "-1|1W64H64", &el_timezone_grid);
 // Bluetooth start
 M2_LABEL(el_bluetooth_power, "rf0", "Power");
 M2_COMBOFN(el_bluetooth_power_value, "rf0", 3, fn_cb_bluetooth_power_setting);
-M2_S8NUMFN(el_bluetooth_power_timeout, "+0c1f0", 1, 5, fn_cb_set_eerpom_bluetooth_timeout);
+M2_S8NUMFN(el_bluetooth_power_timeout, "+0c1f0", 1, 5, fn_cb_set_bluetooth_timeout);
 M2_LIST(el_bluetooth_list) = { &el_bluetooth_power, &el_bluetooth_power_value, &el_bluetooth_power_timeout, &el_ok };
 M2_GRIDLIST(el_bluetooth_grid, "c2", el_bluetooth_list);
 M2_ALIGN(el_top_bluetooth_menu, "-1|1W64H64", &el_bluetooth_grid);
@@ -130,11 +130,20 @@ M2_ALIGN(el_top_gps_menu, "-1|1W64H64", &el_gps_grid);
 // GSM start
 M2_COMBOFN(el_gsm_power, "rf0", 2, fn_cb_gsm_power);
 M2_ROOT(el_gsm_ok, "f0", "OK", &top_el_expandable_menu);
-
 M2_LIST(el_gsm_list) = { &el_gsm_power, &el_gsm_ok };
 M2_GRIDLIST(el_gsm_grid, "c2", el_gsm_list);
 M2_ALIGN(el_top_gsm_menu, "-1|1W64H64", &el_gsm_grid);
 // GSM end
+
+// ADXL345 start
+M2_LABEL(el_accel_str, "rf0", "trigger sleep");
+M2_COMBOFN(el_accel_enable_value, "rf0", 2, fn_cb_accel_enable);
+M2_S8NUMFN(el_accel_timeout, "+0c1f0", 1, 5, fn_cb_set_accel_timeout);
+M2_LIST(el_accel_list) = { &el_accel_str, &el_accel_enable_value, &el_accel_timeout, &el_ok };
+M2_GRIDLIST(el_accel_grid, "c2", el_accel_list);
+M2_ALIGN(el_top_accel_menu, "-1|1W64H64", &el_accel_grid);
+// ADXL345 end
+
 // config items end
 
 m2_menu_entry m2_2lmenu_data[] =
@@ -152,6 +161,7 @@ m2_menu_entry m2_2lmenu_data[] =
   { ". Display", &el_top_lcd_menu },
   { ". GPS", &el_top_gps_menu },
 	{ ". GSM", &el_top_gsm_menu },
+	{ ". accelerometer", &el_top_accel_menu },
   { NULL, NULL },
 };
 
