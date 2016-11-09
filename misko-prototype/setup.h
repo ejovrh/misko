@@ -23,12 +23,10 @@
 	analogReference(EXTERNAL);
 
 // ADXL345 INT1 pin connects to here, fires IRQ on act/inact
-	//attachInterrupt(ADXL345_INT1_interrupt_pin, ISR_ADXL345, CHANGE);
-	//cli();
-	//SREG |= 0b1000000;
-	//PCICR |= 0b00000001;
-	//PCMSK0 |= 0b01000000; // PCINT6
-	//sei();
+	cli();
+	PCMSK0 |= (1<<PCINT6); // enable PCINT6
+	PCICR |= (1<<PCIE0); // enable PCIE0 (where PCINT6 lives)
+	sei();
 
 
 // connect to the PDI serial terminal
@@ -49,12 +47,14 @@
 	*/
 	gps.begin(9600);   // connect to the GPS at the default rate
 	Serial.println(F("GPS SW serial set")); // set gps serial comm. baud rate
-	gps.println("$PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*28");
+	gps.println("$PMTK314,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*29");
 	gps.println("$PMTK250,3,3,4800*15"); // set in/out data format to NMEA over 4600 baud
 	gps.println("$PMTK251,4800*14"); // set baud rate to 4600
+
 	gps.end();
 
-	gps.begin(4800);
+	gps.begin(GPSRATE);
+
 	gps.println("$PMTK185,1*23"); // disable locus logging
 	gps.println("$PMTK353,1,1,1,0,0*2A"); // look for GPS, GLASNOSS and GALILEO satellites
 	//gps.println("$PMTK299,1*2D"); // output debug messages
@@ -66,14 +66,17 @@
 	gps.println("$PMTK286,1*23"); // enable active interface cancellation
 	gps.println("$PMTK225,0*2B"); // no power saving, i.e. normal mode
 	gps.println("$PMTK869,1,1*35"); // enable EASY
+	gps.println("$PMTK255,1*2D"); // set sync PPS and NMEA
+	gps.println("$PMTK285,4,50*0C"); // set PPS
+	gps.println("$PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0*2A");
+
 	// $PMTK220 - what does it do?
 	// $PMTK262 - fitness mode?
 	// $PMTK306 - minimum satellite SNR
 	// $PMTK311 - mimimum elevation mask
 
 // GPS device initialization end
-
-	gps.begin(GPSRATE); // from here onwards the GPS is initialized and ready to use
+// from here onwards the GPS is initialized and ready to use
 
 // set up display elements
 	m2_SetU8g(OLED.getU8g(), m2_u8g_box_icon); // connect u8glib with m2tklib
