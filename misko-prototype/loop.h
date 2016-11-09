@@ -33,13 +33,13 @@
 	if (flag_adxl345_int1) // if the ADXL345 INT1 flag is set
 		handle_adx_intl(); // execute the function
 
-	if( !flag_gps_on && eeprom_get(EERPOM_GPS_POWER_INDEX)) // user powers GPS on
+	if( !flag_gps_on && ( (FeRAMReadByte(FERAM_GPS_MISC_CFG) >> FERAM_GPS_MISC_CFG_POWER_CTL) & 0x01 ) ) // user powers GPS on
 	{
 		digitalWrite(GPS_power_ctl_pin, HIGH); // pull high to wake up
 		flag_gps_on = 1;
 	}
 
-	if(flag_gps_on && !eeprom_get(EERPOM_GPS_POWER_INDEX)) // user powers GPS off
+	if( flag_gps_on && !( (FeRAMReadByte(FERAM_GPS_MISC_CFG) >> FERAM_GPS_MISC_CFG_POWER_CTL) & 0x01 ) ) // user powers GPS off
 	{
 		digitalWrite(GPS_power_ctl_pin, LOW); // keep low on sleep
 		gps.println("$PMTK225,4*2F"); //puts the GPS receiver into backup mode
