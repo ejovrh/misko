@@ -4,7 +4,7 @@
 #define MCP73871_power_good_pin 24					// PA0 - MCP73871 supply power indicator
 #define MCP73871_charge_status_2_pin 25			// PA1 - MCP73871 charge status indicator 2
 #define MCP73871_charge_status_1_pin 26			// PA2 - charge status indicator 1
-																						// PA3 - not used
+#define TMP36_shutdown_pin 27								// PA3 - TMP36 shutdown pin
 																						// PA3 - not used
 																						// PA4 - not used
 																						// PA5 - not used
@@ -51,7 +51,7 @@
 
 // port F
 #define TMP36_Vsense_pin 46 								// PF0 - ADC TMP36 temperature sensor voltage out
-#define TMP36_shutdown_pin 47								// PF1 - TMP36 shutdown pin
+#define Vcc_sense_pin 47										// PF1 - pin for Vcc measurement
 #define bat_A_pin 48 												// PF2 - ADC battery A voltage
 																						// PF3 - not used
 #define JTAG_TCL_pin 50											// PF4 - JTAG TCK

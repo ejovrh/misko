@@ -10,7 +10,9 @@
 //PA2 - MCP73871 charge status indicator 1
 	pinMode(MCP73871_charge_status_1_pin, INPUT);			//
 	digitalWrite(MCP73871_charge_status_1_pin, HIGH); //
-//PA3 - not used
+//PA3 - TMP36 shutdown pin
+pinMode(TMP36_shutdown_pin, OUTPUT);							//
+digitalWrite(TMP36_shutdown_pin, HIGH);						//
 //PA4 - not used
 //PA5 - not used
 //PA6 - not used
@@ -99,11 +101,10 @@
 // port F
 //PF0 - ADC TMP36 temperature sensor voltage out
 	pinMode(TMP36_Vsense_pin, INPUT);
-//PF1 - TMP36 shutdown control - on(high), low(off), on by default
-	pinMode(TMP36_shutdown_pin, OUTPUT);							//
-	digitalWrite(TMP36_shutdown_pin, HIGH);						//
-//PF2 - ADC battery A voltage
-	pinMode(bat_A_pin, INPUT_PULLUP);
+//PF1 - ADC battery A voltage
+	pinMode(Vcc_sense_pin, INPUT);
+//PF2 - battery A voltage sense
+	pinMode(bat_A_pin, INPUT);
 //PF3 - not used
 //PF4 - JTAG_TCL_pin
 //PF5 - JTAG_TMS_pin
