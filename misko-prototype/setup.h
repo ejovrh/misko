@@ -10,7 +10,7 @@
 		OC4: 6, 7, 8 - 16bit
 		OC5: 44, 45, 46 - 16bit, i dont need PWM, this is a 16bit counter which means i'll use this one
 */
-	noInterrupts(); // globally disable interrupts
+	cli(); // globally disable interrupts
 	TCCR5A  = 0; // clear the register (A and B)
 	TCCR5B  = 0;
 	OCR5A = 15624; // set compare match register to desired timer count
@@ -18,16 +18,15 @@
 	TCCR5B |= (1 << CS10); // Set CS10 and CS12 bits for 1024 prescaler
 	TCCR5B |= (1 << CS12);
 	TIMSK5 |= (1 << OCIE5A); // enable timer compare interrupt
-	interrupts(); // globally enable interrupts
+	sei(); // globally enable interrupts
 
 	analogReference(EXTERNAL);
 
 // ADXL345 INT1 pin connects to here, fires IRQ on act/inact
-	cli();
+	cli(); // disable interrupts
 	EIMSK |= (1<<INT7); // enable INT7 (lives on pin PE7)
 	EICRB |= (1<<ISC70); // set to register a change
-	sei();
-
+	sei(); // enable interrupts
 
 // connect to the PDI serial terminal
 	// 230400 == 28.125 kB/s, as large as possible since we will be transferring files of up to 20 MB
@@ -40,21 +39,20 @@
 // GPS device initialization start
 	/* two step approach:
 			1. connet via 9600 baud to set to 4800 baud
-			2. configure settings
+			2. once at 4800, configure other settings
 
 			if the GPS receiver power-cycles, it loses all its configuration settings
 				and reverts to factory defautls (9600 baud)
+				a supercap remedies this somewhat
 	*/
 	gps.begin(9600);   // connect to the GPS at the default rate
 	Serial.println(F("GPS SW serial set")); // set gps serial comm. baud rate
 	gps.println("$PMTK314,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*29");
 	gps.println("$PMTK250,3,3,4800*15"); // set in/out data format to NMEA over 4600 baud
 	gps.println("$PMTK251,4800*14"); // set baud rate to 4600
-
 	gps.end();
 
 	gps.begin(GPSRATE);
-
 	gps.println("$PMTK185,1*23"); // disable locus logging
 	gps.println("$PMTK353,1,1,1,0,0*2A"); // look for GPS, GLASNOSS and GALILEO satellites
 	//gps.println("$PMTK299,1*2D"); // output debug messages
@@ -81,13 +79,13 @@
 // set up display elements
 	m2_SetU8g(OLED.getU8g(), m2_u8g_box_icon); // connect u8glib with m2tklib
 	m2.setFont(0, u8g_font_6x10); // assign u8g_font_6x10 font to index 0
-	m2.setPin(M2_KEY_SELECT, menu_right_button_pin); // 33
-	m2.setPin(M2_KEY_PREV, menu_up_button_pin); // 32
-	m2.setPin(M2_KEY_NEXT, menu_down_button_pin); // 31
-	m2.setPin(M2_KEY_EXIT, menu_left_button_pin); // 30
+	m2.setPin(M2_KEY_SELECT, menu_right_button_pin); // 37
+	m2.setPin(M2_KEY_PREV, menu_up_button_pin); // 35
+	m2.setPin(M2_KEY_NEXT, menu_down_button_pin); // 34
+	m2.setPin(M2_KEY_EXIT, menu_left_button_pin); // 32
 
 // ADXL345 config start
-	SPI.beginTransaction(SPISettings(20000000, MSBFIRST, SPI_MODE3));
+	SPI.beginTransaction(SPISettings(5000000, MSBFIRST, SPI_MODE3));
 	delay(10);
 
 	if (adxl345_readByte(DEVID) != B11100101)
@@ -96,14 +94,12 @@
 	adxl345_writeByte(DATA_FORMAT, DATA_FORMAT_CFG); // see adxl345.h
 	adxl345_writeByte(INT_MAP, INT_MAP_CFG);
 	adxl345_writeByte(INT_ENABLE, INT_ENABLE_CFG);
-	adxl345_writeByte(TIME_INACT, TIME_INACT_CFG);
-	adxl345_writeByte(THRESH_INACT, THRESH_INACT_CFG);
-	adxl345_writeByte(THRESH_ACT, THRESH_ACT_CFG);
+	adxl345_writeByte(TIME_INACT, FeRAMReadByte(FERAM_ADXL345_MOVEMENT_TIMEOUT));
+	adxl345_writeByte(THRESH_INACT, FeRAMReadByte(FERAM_ADXL345_INACTIVITY_THRESHOLD));
+	adxl345_writeByte(THRESH_ACT, FeRAMReadByte(FERAM_ADXL345_ACTIVITY_THRESHOLD));
 	adxl345_writeByte(ACT_INACT_CTL, ACT_INACT_CTL_CFG);
 	adxl345_writeByte(POWER_CTL, POWER_CTL_CFG);
 	adxl345_writeByte(BW_RATE, BW_RATE_CFG);
-
-	adxl345_readByte(0x00);
 	SPI.endTransaction();
 // ADXL345 config end
 
