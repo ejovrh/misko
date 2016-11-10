@@ -130,7 +130,7 @@
 #define FERAM_DEVICE_MISC_CFG1_OLED_AUTO_POWER			0 // enable OLED auto-poweroff - auto(0), constant on(1)
 #define FERAM_DEVICE_MISC_CFG1_ADXL345_AUTO_POWER		1	// allow the accelerometer to trigger a device sleep - yes(1), no(0)
 #define FERAM_DEVICE_MISC_CFG1_SD_WRITE							2 // write NMEA on fix - yes(1), no(0)
-#define FERAM_DEVICE_MISC_CFG1_bit3									3 // unassigned - on(1) or off(0)
+#define FERAM_DEVICE_MISC_CFG1_STAT_WRITE						3 // unassigned - on(1) or off(0)
 #define FERAM_DEVICE_MISC_CFG1_bit4									4 // unassigned - on(1) or off(0)
 #define FERAM_DEVICE_MISC_CFG1_bit5									5 // unassigned - on(1) or off(0)
 #define FERAM_DEVICE_MISC_CFG1_bit6									6 // unassigned - on(1) or off(0)
@@ -147,4 +147,21 @@
 #define FERAM_DEVICE_MISC_CFG2_BLUETOOTH_POWER			2 // Bluetooth power scheme - off(0), on(1), auto(2)
 #define FERAM_DEVICE_MISC_CFG2_pair2								4 // unassigned
 #define FERAM_DEVICE_MISC_CFG2_pair3								6 // unassigned
+
+/*
+ *	FERAM_ADXL345_ACTIVITY_THRESHOLD
+ *		whole byte range
+ *
+ *		represents the activity threshold
+ */
+#define FERAM_ADXL345_ACTIVITY_THRESHOLD						0x0B
+
+/*
+ *	FERAM_ADXL345_INACTIVITY_THRESHOLD
+ *		whole byte range
+ *
+ *		represents the inactivity threshold
+ */
+#define FERAM_ADXL345_INACTIVITY_THRESHOLD					0x0C
+
 
