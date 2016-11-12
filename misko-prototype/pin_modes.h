@@ -32,7 +32,7 @@ digitalWrite(TMP36_shutdown_pin, HIGH);						//
 	digitalWrite(ADXL345_INT1_interrupt_pin, HIGH);
 //PB7
 	pinMode(Bluetooth_wakeup_pin, OUTPUT);						// bluetooth power control, bluetooth module draws ~40mA when not connected, 20-30 in connected state
-	digitalWrite(Bluetooth_wakeup_pin, LOW);					// mosfet gate for bluetooth module, on(high), off(low)
+	digitalWrite(Bluetooth_wakeup_pin, HIGH);					// mosfet gate for bluetooth module, on(high), off(low)
 
 // port C
 //PC0 - user buttons - left, on(high), low(off)
