@@ -46,7 +46,7 @@ M2_LABELFN(el_batt_charge, "rf0", fn_cb_get_batt_charge_status);
 M2_LIST(el_power_list) = {&el_power_good, &el_whitespace, &el_batt_charge};
 M2_HLIST(el_power_hlist, "rf0", el_power_list);
 M2_LABELFN(el_batt_a, "rf0", fn_cb_get_bat_pct);
-M2_LABEL(el_batt_b, "rf0", "batB 0%");
+M2_LABEL(el_batt_b, "rf0", "batB000%");
 M2_LABELFN(el_vcc, "rf0", fn_cb_get_Vcc);
 M2_LIST(el_list_batt) = {&el_batt_a, &el_whitespace, &el_batt_b};
 M2_HLIST(el_hlist_batt, "rf0", el_list_batt);
@@ -72,9 +72,11 @@ M2_ALIGN(el_top_sd_content_menu, "-1|1W64H64", &el_fs_grid);
 
 // config items start
 // SD card start el_top_sd_menu
-M2_LABEL(el_sd_write, "rf0", "SD card write");
+M2_LABEL(el_sd_write, "rf0", "Log position");
 M2_COMBOFN(el_sd_write_setting, "rf0", 2, fn_cb_sd_write);
-M2_LIST(el_sd_list) = { &el_sd_write, &el_sd_write_setting, &el_ok };
+M2_LABEL(el_stat_write, "rf0", "Log statistics");
+M2_COMBOFN(el_stat_write_setting, "rf0", 2, fn_cb_stat_write);
+M2_LIST(el_sd_list) = { &el_sd_write, &el_sd_write_setting, &el_stat_write, &el_stat_write_setting, &el_ok };
 M2_GRIDLIST(el_sd_grid, "c2", el_sd_list);
 M2_ALIGN(el_top_sd_menu, "-1|1W64H64", &el_sd_grid);
 // SD card end
@@ -136,10 +138,15 @@ M2_ALIGN(el_top_gsm_menu, "-1|1W64H64", &el_gsm_grid);
 // GSM end
 
 // ADXL345 start
-M2_LABEL(el_accel_str, "rf0", "trigger sleep");
+M2_LABEL(el_accel_str, "rf0", "Trigger Sleep:");
 M2_COMBOFN(el_accel_enable_value, "rf0", 2, fn_cb_accel_enable);
-M2_S8NUMFN(el_accel_timeout, "+0c1f0", 1, 5, fn_cb_set_accel_timeout);
-M2_LIST(el_accel_list) = { &el_accel_str, &el_accel_enable_value, &el_accel_timeout, &el_ok };
+M2_LABEL(el_accel_sleep_str, "rf0", "Motion Timeout:");
+M2_S8NUMFN(el_accel_timeout, "+0c2f0", 1, 15, fn_cb_set_accel_timeout);
+M2_LABEL(el_accel_act_thresh_str, "rf0", "Inact. Treshold:");
+M2_S8NUMFN(el_accel_act_thresh_val, "+0c2f0", 1, 15, fn_cb_set_act_threshold);
+M2_LABEL(el_accel_inact_thresh_str, "rf0", "Act. Treshold:");
+M2_S8NUMFN(el_accel_inact_thresh_val, "+0c2f0", 1, 15, fn_cb_set_inact_threshold);
+M2_LIST(el_accel_list) = { &el_accel_str, &el_accel_enable_value, &el_accel_sleep_str, &el_accel_timeout, &el_accel_act_thresh_str, &el_accel_act_thresh_val, &el_accel_inact_thresh_str, &el_accel_inact_thresh_val, &el_ok };
 M2_GRIDLIST(el_accel_grid, "c2", el_accel_list);
 M2_ALIGN(el_top_accel_menu, "-1|1W64H64", &el_accel_grid);
 // ADXL345 end
@@ -154,7 +161,7 @@ m2_menu_entry m2_2lmenu_data[] =
   { ". Device Status", &el_top_device_misc_menu},
 	{ ". SD card", &el_top_sd_content_menu},
   { "Settings", NULL },
-	{ ". SD card", &el_top_sd_menu},
+	{ ". Logging", &el_top_sd_menu},
 	{ ". Serial port", &el_top_serial_menu},
   { ". Timezone", &el_top_timezone_menu },
   { ". Bluetooth", &el_top_bluetooth_menu },
