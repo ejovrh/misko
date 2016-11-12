@@ -50,7 +50,7 @@
  *	FERAM_OLED_AUTO_TIMEOUT
  *		full byte, unsigned integer from 1 to 255
  *
- *		OLED device power timeout in seconds
+ *		OLED device auto power-off timeout in seconds
  */
 #define FERAM_OLED_AUTO_TIMEOUT											0x02 // byte (1 ... 255) -- seconds
 
@@ -58,7 +58,7 @@
  *	FERAM_BLUETOOTH_AUTO_TIMEOUT
  *		full byte, unsigned integer from 1 to 255
  *
- *		Bluetooth device power timeout in seconds
+ *		Bluetooth device auto power-off timeout in seconds
  */
 #define FERAM_BLUETOOTH_AUTO_TIMEOUT								0x03 // byte (1 ... 255) -- seconds
 
@@ -66,7 +66,7 @@
  *	FERAM_ADXL345_MOVEMENT_TIMEOUT
  *		full byte, unsigned integer from 1 to 255
  *
- *		ADXL345 time in seconds until sleep once no movement is detected
+ *		ADXL345 timeout in seconds until sleep after last movement is detected
  */
 #define FERAM_ADXL345_MOVEMENT_TIMEOUT							0x04 // byte (1 ... 255) -- seconds
 
@@ -78,8 +78,8 @@
  *			b4-b7: GPGGA frequency in seconds
  */
 #define FERAM_GPS_GPRMC_GPGGA_FREQ									0x05 // nibble (0 ... 15) -- seconds
-#define FERAM_GPS_GPRMC_FREQ												0b00001111
-#define FERAM_GPS_GPGGA_FREQ												0b11110000
+#define FERAM_GPS_GPRMC_FREQ												0
+#define FERAM_GPS_GPGGA_FREQ												4
 
 /*
  *	FERAM_GPS_GPRMC_GPGGA_FREQ
@@ -89,8 +89,8 @@
  *			b4-b7: GPGSV frequency in seconds
  */
 #define FERAM_GPS_GPGSA_GPGSV_FREQ									0x06 // nibble (0 ... 15) -- seconds
-#define FERAM_GPS_GPGSA_FREQ												0b00001111
-#define FERAM_GPS_GPGSV_FREQ												0b11110000
+#define FERAM_GPS_GPGSA_FREQ												0
+#define FERAM_GPS_GPGSV_FREQ												4
 
 /*
  *	FERAM_GPS_GPRMC_GPGGA_FREQ
@@ -100,15 +100,17 @@
  *			b4-b7: GPVTG frequency in seconds
  */
 #define FERAM_GPS_GPZDA_GPVTG_FREQ									0x07 // nibble (0 ... 15) -- seconds
-#define FERAM_GPS_GPZDA_FREQ												0b00001111
-#define FERAM_GPS_GPVTG_FREQ												0b11110000
+#define FERAM_GPS_GPZDA_FREQ												0
+#define FERAM_GPS_GPVTG_FREQ												4
 
 /*
  *	FERAM_GPS_MISC_CFG
  *		individual bits, 0 (off), 1 (on)
  *
- *		miscellaneous boolean GPS settings
- *		see http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/
+ *		miscellaneous boolean GPS settings, mostly flag-type things
+ *
+ *
+ *		for reading/setting individual bits see http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/
  */
 #define FERAM_GPS_MISC_CFG													0x08 // bit (0, 1)
 #define FERAM_GPS_MISC_CFG_POWER_CTL								0 // GPS power - on(1) or off(0)
@@ -129,8 +131,8 @@
 #define FERAM_DEVICE_MISC_CFG1											0x09 //
 #define FERAM_DEVICE_MISC_CFG1_OLED_AUTO_POWER			0 // enable OLED auto-poweroff - auto(0), constant on(1)
 #define FERAM_DEVICE_MISC_CFG1_ADXL345_AUTO_POWER		1	// allow the accelerometer to trigger a device sleep - yes(1), no(0)
-#define FERAM_DEVICE_MISC_CFG1_SD_WRITE							2 // write NMEA on fix - yes(1), no(0)
-#define FERAM_DEVICE_MISC_CFG1_STAT_WRITE						3 // unassigned - on(1) or off(0)
+#define FERAM_DEVICE_MISC_CFG1_SD_WRITE							2 // write NMEA to SD card on valid fix - yes(1), no(0)
+#define FERAM_DEVICE_MISC_CFG1_STAT_WRITE						3 // write device statistics to SD card - yes(1) or no(0)
 #define FERAM_DEVICE_MISC_CFG1_bit4									4 // unassigned - on(1) or off(0)
 #define FERAM_DEVICE_MISC_CFG1_bit5									5 // unassigned - on(1) or off(0)
 #define FERAM_DEVICE_MISC_CFG1_bit6									6 // unassigned - on(1) or off(0)
@@ -140,7 +142,7 @@
  *	FERAM_DEVICE_MISC_CFG2
  *		two bits, 0 (off), 1 (on), 2(auto)
  *
- *		miscellaneous device settings with values from 0 to 3
+ *		miscellaneous tristate device settings
  */
 #define FERAM_DEVICE_MISC_CFG2											0x0A //
 #define FERAM_DEVICE_MISC_CFG2_SYSTEM_SERIAL				0 // connection to serial console - GPS(0), SIM800(1), system(2)
@@ -164,4 +166,8 @@
  */
 #define FERAM_ADXL345_INACTIVITY_THRESHOLD					0x0C
 
-
+/*
+ *
+ *
+ */
+#define FERAM_ADXL345_FREE													0x0D //
