@@ -2,17 +2,17 @@
 /*
 	a good read: http://www.engblaze.com/microcontroller-tutorial-avr-and-arduino-timer-interrupts/
 
-	according to the arduino schematic, the following timers are available and tied to the following pins:
-		OC0: 4, 13 - 8bit
-		OC1: 11, 12 - 16bit
-		OC2: 9, 10 - 8bit
-		OC3: 2, 3, 5 - 16bit
-		OC4: 6, 7, 8 - 16bit
-		OC5: 44, 45, 46 - 16bit, i dont need PWM, this is a 16bit counter which means i'll use this one
+	according to the atmega256X/128X datasheet, the following timers are available:
+		OC0:	8bit
+		OC1: 16bit
+		OC2:  8bit
+		OC3: 16bit
+		OC4: 16bit
+		OC5: 16bit, i dont need PWM, this is a 16bit counter which means i'll use this one
 */
 	cli(); // globally disable interrupts
-	TCCR5A  = 0; // clear the register (A and B)
-	TCCR5B  = 0;
+	TCCR5A  = 0x0; // clear the register (A and B)
+	TCCR5B  = 0x0;
 	OCR5A = 15624; // set compare match register to desired timer count
 	TCCR5B |= (1 << WGM12); // turn on CTC mode
 	TCCR5B |= (1 << CS10); // Set CS10 and CS12 bits for 1024 prescaler
@@ -23,10 +23,11 @@
 	analogReference(EXTERNAL);
 
 // ADXL345 INT1 pin connects to here, fires IRQ on act/inact
-	cli(); // disable interrupts
+	cli(); // globally disable interrupts
 	EIMSK |= (1<<INT7); // enable INT7 (lives on pin PE7)
-	EICRB |= (1<<ISC70); // set to register a change
-	sei(); // enable interrupts
+	EICRB |= (1<<ISC70); // set to register a
+	EICRB |= (1<<ISC71); //		rising edge
+	sei(); // globally enable interrupts
 
 // connect to the PDI serial terminal
 	// 230400 == 28.125 kB/s, as large as possible since we will be transferring files of up to 20 MB
@@ -55,7 +56,6 @@
 	gps.begin(GPSRATE);
 	gps.println("$PMTK185,1*23"); // disable locus logging
 	gps.println("$PMTK353,1,1,1,0,0*2A"); // look for GPS, GLASNOSS and GALILEO satellites
-	//gps.println("$PMTK299,1*2D"); // output debug messages
 	gps.println("$PMTK301,2*2E"); // set DGPS mode to SBAS
 	gps.println("$PMTK313,1*2E"); // enable SBAS
 	gps.println("$PMTK386,0.5*38"); // static nav. threshold 0.5m/s
@@ -74,7 +74,7 @@
 	// $PMTK311 - mimimum elevation mask
 
 // GPS device initialization end
-// from here onwards the GPS is initialized and ready to use
+//		from here onwards the GPS is initialized and ready to use
 
 // set up display elements
 	m2_SetU8g(OLED.getU8g(), m2_u8g_box_icon); // connect u8glib with m2tklib
@@ -84,22 +84,27 @@
 	m2.setPin(M2_KEY_NEXT, menu_down_button_pin); // 34
 	m2.setPin(M2_KEY_EXIT, menu_left_button_pin); // 32
 
-// ADXL345 config start
+// ADXL345 config start - some settings are read from FeRAM
 	SPI.beginTransaction(SPISettings(5000000, MSBFIRST, SPI_MODE3));
 	delay(10);
 
 	if (adxl345_readByte(DEVID) != B11100101)
-		Serial.println(F("ADXL345 init failed"));
+		Serial.println(F("DEVID mismatch - ADXL345 init failed"));
 
 	adxl345_writeByte(DATA_FORMAT, DATA_FORMAT_CFG); // see adxl345.h
-	adxl345_writeByte(INT_MAP, INT_MAP_CFG);
-	adxl345_writeByte(INT_ENABLE, INT_ENABLE_CFG);
-	adxl345_writeByte(TIME_INACT, FeRAMReadByte(FERAM_ADXL345_MOVEMENT_TIMEOUT));
-	adxl345_writeByte(THRESH_INACT, FeRAMReadByte(FERAM_ADXL345_INACTIVITY_THRESHOLD));
-	adxl345_writeByte(THRESH_ACT, FeRAMReadByte(FERAM_ADXL345_ACTIVITY_THRESHOLD));
-	adxl345_writeByte(ACT_INACT_CTL, ACT_INACT_CTL_CFG);
-	adxl345_writeByte(POWER_CTL, POWER_CTL_CFG);
-	adxl345_writeByte(BW_RATE, BW_RATE_CFG);
+	adxl345_writeByte(INT_MAP, INT_MAP_CFG); // see adxl345.h
+
+	if ( ( FeRAMReadByte(FERAM_DEVICE_MISC_CFG1) >> FERAM_DEVICE_MISC_CFG1_ADXL345_AUTO_POWER ) & 0x01 ) // see if the enable bit is set
+		adxl345_writeByte(INT_ENABLE, INT_ENABLE_CFG); // enable interrupts on act/inact (i.e. enable the ADXL)
+	else
+		adxl345_writeByte(INT_ENABLE, INT_DISABLE_CFG); // disable all interrupts (i.e. disable the ADXL)
+
+	adxl345_writeByte(TIME_INACT, FeRAMReadByte(FERAM_ADXL345_MOVEMENT_TIMEOUT)); // fetch settings from FeRAM
+	adxl345_writeByte(THRESH_INACT, FeRAMReadByte(FERAM_ADXL345_INACTIVITY_THRESHOLD)); // fetch settings from FeRAM
+	adxl345_writeByte(THRESH_ACT, FeRAMReadByte(FERAM_ADXL345_ACTIVITY_THRESHOLD)); // fetch settings from FeRAM
+	adxl345_writeByte(ACT_INACT_CTL, ACT_INACT_CTL_CFG); // see adxl345.h
+	adxl345_writeByte(POWER_CTL, POWER_CTL_CFG); // see adxl345.h
+	adxl345_writeByte(BW_RATE, BW_RATE_CFG); // see adxl345.h, gets changed on act/inact
 	SPI.endTransaction();
 // ADXL345 config end
 
