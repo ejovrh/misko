@@ -77,6 +77,7 @@ ISR(TIMER5_COMPA_vect)
 
 		//SPI voodoo - for some reason it is necessary for the ADXL345 to "work"
 		SPI.beginTransaction(SPISettings(5000000, MSBFIRST, SPI_MODE3));
+		adxl345_readByte(DEVID); // reads INT SRC to clear the act/inact bits
 		adxl345_readByte(INT_SOURCE); // reads INT SRC to clear the act/inact bits
 		SPI.endTransaction();
 
