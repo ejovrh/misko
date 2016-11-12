@@ -32,7 +32,7 @@ digitalWrite(TMP36_shutdown_pin, HIGH);						//
 	digitalWrite(ADXL345_INT1_interrupt_pin, HIGH);
 //PB7
 	pinMode(Bluetooth_wakeup_pin, OUTPUT);						// bluetooth power control, bluetooth module draws ~40mA when not connected, 20-30 in connected state
-	digitalWrite(Bluetooth_wakeup_pin, HIGH);					// mosfet gate for bluetooth module, on(high), off(low)
+	digitalWrite(Bluetooth_wakeup_pin, HIGH);					// mosfet gate for bluetooth module, on(low), off(high)
 
 // port C
 //PC0 - user buttons - left, on(high), low(off)
@@ -73,8 +73,8 @@ digitalWrite(TMP36_shutdown_pin, HIGH);						//
 	pinMode(SIM800C_power_pin, OUTPUT);								// SIM800L power control, connected directly to battery ( due to up 2A current )
 	digitalWrite(SIM800C_power_pin, LOW);							// mosfet gate for SIM800L module, on(high), off(low)
 //PD7 - GPS power control pin, high(on), low(off)
-	pinMode(GPS_power_ctl_pin, OUTPUT);								//
-	digitalWrite(GPS_power_ctl_pin, LOW);							//
+	pinMode(GPS_power_ctl_pin, OUTPUT);								// signals a wakeup to the GPS device; the sleep command is issued in software
+	digitalWrite(GPS_power_ctl_pin, LOW);							// off(low), on (high); the wakeup is triggered by pulling the pin high
 
 //port E
 //PE0 - PDI_UART0_RX_pin
@@ -101,7 +101,7 @@ digitalWrite(TMP36_shutdown_pin, HIGH);						//
 // port F
 //PF0 - ADC TMP36 temperature sensor voltage out
 	pinMode(TMP36_Vsense_pin, INPUT);
-//PF1 - ADC battery A voltage
+//PF1 - ADC battery A voltage - reads Vcc via a voltage divider
 	pinMode(Vcc_sense_pin, INPUT);
 //PF2 - battery A voltage sense
 	pinMode(bat_A_pin, INPUT);
