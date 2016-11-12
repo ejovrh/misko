@@ -30,13 +30,14 @@
 #define FIFO_CTL  			0x38  	//FIFO control
 #define FIFO_STATUS 		0x39  	//FIFO status
 
-//config items for act/inact detection
+//config values for act/inact detection
 #define	DATA_FORMAT_CFG		0x00	// +-2g range
 #define	INT_MAP_CFG				0x00	// send all to INT1
 #define	INT_ENABLE_CFG		0x18	// enable interrupts only for act/inact detection
+#define INT_DISABLE_CFG		0x00	// disable all interrupts
 //set via FeRAM readout #define	TIME_INACT_CFG		0x02	// LSB meaning: 0x05 (dec 5) => 5s , 0x3C (dec 60) => 60s
 //set via FeRAM readout #define	THRESH_INACT_CFG	0x02	// 62.5mg / LSB
 //set via FeRAM readout #define	THRESH_ACT_CFG		0x02	// 62.5mg / LSB
 #define	ACT_INACT_CTL_CFG	0xFF	// enable activity and inactivity detection on x,y,z using ac
-#define	POWER_CTL_CFG			0x3B	// 1Hz sampling on sleep, in measure mode, in sleep and link mode
-#define	BW_RATE_CFG				0x08	//
+#define	POWER_CTL_CFG			0x3A	// 1Hz sampling on sleep, in measure mode, in autosleep and link mode
+#define	BW_RATE_CFG				0x07	//
