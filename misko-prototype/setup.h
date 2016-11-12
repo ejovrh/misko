@@ -1,4 +1,4 @@
-// timer setup
+// 1Hz timer interrupt setup
 /*
 	a good read: http://www.engblaze.com/microcontroller-tutorial-avr-and-arduino-timer-interrupts/
 
@@ -20,14 +20,14 @@
 	TIMSK5 |= (1 << OCIE5A); // enable timer compare interrupt
 	sei(); // globally enable interrupts
 
-	analogReference(EXTERNAL);
-
-// ADXL345 INT1 pin connects to here, fires IRQ on act/inact
+// INT7 interrupt setup - ADXL345 INT1 pin connects to here, fires IRQ on act/inact
 	cli(); // globally disable interrupts
 	EIMSK |= (1<<INT7); // enable INT7 (lives on pin PE7)
 	EICRB |= (1<<ISC70); // set to register a
 	EICRB |= (1<<ISC71); //		rising edge
 	sei(); // globally enable interrupts
+
+	analogReference(EXTERNAL); // set the reference voltage source (needed for all voltage measurements via the ADC)
 
 // connect to the PDI serial terminal
 	// 230400 == 28.125 kB/s, as large as possible since we will be transferring files of up to 20 MB
@@ -36,6 +36,29 @@
 
 	Serial1.begin(9600); // set up the terminal for the SIM800L
 	Serial.println(F("SIM800C HW serial set"));
+
+// Bluetooth device initialization start
+	digitalWrite(Bluetooth_wakeup_pin, LOW); // turn the device on
+	digitalWrite(analog_sw_ctrl_pin, LOW); // set into Bluetooth programming mode (state B1)
+	delay(10);
+
+	gps.begin(115200); // Bluetooth default baud rate
+	gps.write("$$$\r\n"); // enter command mode
+	gps.write("su,4800\r\n"); // set 4800 baud
+	gps.write("sp,0000\r\n"); // set 0000 as pin code
+	gps.write("s-,Miško\r\n"); // give the device its name
+	gps.write("sn,Miško\r\n"); // give the device its name
+	gps.write("S|,0101"); // on/off duty cycle in seconds when not connected (1s off, 1s on)
+	gps.write("S%,1000"); // set the GPIO's to inputs, thereby disabling them all
+	gps.write("SY,0000"); // set TX power to 0dBM
+	gps.write("sa,2\r\n"); // set authentication to "SPP just works"
+	gps.write("sw,0800\r\n"); // 500ms for sniff mode (needed???)
+	gps.write("r,1\r\n"); // reboot it
+	gps.end();
+
+	digitalWrite(analog_sw_ctrl_pin, HIGH); // set back to normal operation mode (state B2)
+	digitalWrite(Bluetooth_wakeup_pin, HIGH); // turn the device off
+// Bluetooth device initialization end
 
 // GPS device initialization start
 	/* two step approach:
@@ -73,8 +96,8 @@
 	// $PMTK306 - minimum satellite SNR
 	// $PMTK311 - mimimum elevation mask
 
-// GPS device initialization end
 //		from here onwards the GPS is initialized and ready to use
+// GPS device initialization end
 
 // set up display elements
 	m2_SetU8g(OLED.getU8g(), m2_u8g_box_icon); // connect u8glib with m2tklib
@@ -109,12 +132,16 @@
 // ADXL345 config end
 
 // SD card init
-	if (!SD.begin(SPI_SS_SD_card_pin)) // will fail if the card is not present
+	if (digitalRead(SD_card_detect_pin) == LOW) // fist, see if a card is inserted
 	{
-		Serial.println(F("SD card initialization failed"));
-	}
-	else
-	{
+		Serial.println("card inserted");
+		// SD card init
+		if (!SD.begin(SPI_SS_SD_card_pin)) // will fail if the card is not present
+			Serial.println(F("SD card initialization failed"));
+		else
 			Serial.println(F("Wiring is correct and a card is present."));
 	}
+	else
+		Serial.println("card not inserted");
+
 	mas_Init(mas_device_sd, NULL);
