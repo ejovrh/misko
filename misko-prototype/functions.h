@@ -21,7 +21,7 @@ uint8_t inline auto_timeout(uint32_t in_button_press_time, uint8_t timeout_val)
 byte adxl345_readByte(byte registerAddress) // reads one byte at registerAddress
 {
 		digitalWrite(SPI_SS_ADXL345_pin, LOW); // reserve the slave
-    	SPI.transfer(0x80 | registerAddress); // set the MSB to 1 (the read command), then send address to read from
+   	SPI.transfer(0x80 | registerAddress); // set the MSB to 1 (the read command), then send address to read from
 		byte retval = SPI.transfer(0x00); // send one byte (0x00) into the circular FIFO buffer, get one byte back
 		digitalWrite(SPI_SS_ADXL345_pin, HIGH); // release the slave
     return retval;  // return value
@@ -105,34 +105,13 @@ inline int8_t eeprom_get(int in_index)
   return EEPROM[in_index];
 }
 
-// returns processor-determined Vcc in volts
-float readVcc() // http://provideyourown.com/2012/secret-arduino-voltmeter-measure-battery-voltage/
-{
-  // Read 1.1V reference against AVcc
-  // set the reference to Vcc and the measurement to the internal 1.1V reference
-	ADMUX = _BV(REFS0) | _BV(MUX4) | _BV(MUX3) | _BV(MUX2) | _BV(MUX1);
-
-  delay(2); // Wait for Vref to settle
-  ADCSRA |= _BV(ADSC); // Start conversion
-  while (bit_is_set(ADCSRA,ADSC)); // measuring
-
-  uint8_t low  = ADCL; // must read ADCL first - it then locks ADCH
-  uint8_t high = ADCH; // unlocks both
-
-  long result = (high<<8) | low;
-
-  float retval = 1125.300 / result; // Calculate Vcc in V; 1125.300 = 1.1*1023
-
-  return retval; // Vcc in V
-}
-
  // returns the external voltage reference in volts
 inline float read_Varef() // the external reference voltage is set to 2.50V via a zener diode
 {
 	return AREF_VOLTAGE;
 }
 
- // returns the voltage on a given pin
+// returns the voltage on a given pin
 float calculate_voltage(int pin) // calculates the voltage on a given pin by considering read_aref_V()
 {
 	uint16_t reading = analogRead(pin); // read raw sensor data (voltage) - 10bit resolution -> values form 0-1023
@@ -140,7 +119,7 @@ float calculate_voltage(int pin) // calculates the voltage on a given pin by con
 }
 
 // calculates the temperature by reading voltage from the TMP36
-inline int8_t calculate_temperature(void) // executed from loop()
+inline float calculate_temperature(void) // executed from loop()
 {
 	return (calculate_voltage(TMP36_Vsense_pin) - 0.5) * 100.0 ;  // 10 mv per C, 500 mV offset
 }
@@ -148,35 +127,18 @@ inline int8_t calculate_temperature(void) // executed from loop()
 // callback for Vcc
 const char *fn_cb_get_Vcc(m2_rom_void_p element)
 {
- 	//  sprintf(vcc + 3*sizeof(char), "%.2f", readVcc()); // dont work - on arduinos the %f is not supported
-	dtostrf(readVcc(), 3, 2, vcc+3*sizeof(char)); // instead, this works
-		// http://www.atmel.com/webdoc/AVRLibcReferenceManual/group__avr__stdlib_1ga060c998e77fb5fc0d3168b3ce8771d42.html
-	strcat(vcc, "V");
-	return vcc;
+	static char retval[9]; // will return something like Vcc3.23V
+	static char tmp_vcc[5]; // holds e.g "3.23" as an intermediate conversion to string
+
+	dtostrf(val_Vcc, 3, 2, tmp_vcc); // convert the float into a string
+	sprintf(retval, "Vcc%sV", tmp_vcc ); // print the string into the retval string
+	return retval;
 }
 
 // callback for battery percentage
 const char *fn_cb_get_bat_pct(m2_rom_void_p element)
 {
-	/* the percentage calculation
-		union battery datasheet: charge cutoff voltage: Vbat 4.20V, discharge cutoff voltage: Vbat 2.70V
-			over the voltage divider this gives 2.10V and 1.3V
-			our voltage divider gives 0.5 Vbat
-
-	 percentage calculation see https://racelogic.support/02VBOX_Motorsport/Video_Data_Loggers/Video_VBOX_Range/Video_VBOX_-_User_manual/24_-_Calculating_Scale_and_Offset
-
-		dX is 2.1 - 1.35 = 0.75
-		dY is 100 - 0 = 100
-	 the gradient is dX/dY = 133
-
-	 Y = percent = 0, X = Voltage = 1.35V
-	 	0 = ((dX/dY)* voltage) + c
-		0 = (133 * 1.35) + c <=> 0 = 180 + c <=> c = -180
-		our equation is: y = 133 * x - 180
-
-	elementary, dr. watson!
- 	*/
-	dtostrf((133 * calculate_voltage(bat_A_pin)) - 180, 3, 0, bat_a_pct + 4*sizeof(char)); // instead, this works
+	dtostrf(val_batA_pct, 3, 0, bat_a_pct + 4*sizeof(char)); // instead, this works
 		// http://www.atmel.com/webdoc/AVRLibcReferenceManual/group__avr__stdlib_1ga060c998e77fb5fc0d3168b3ce8771d42.html
 	strcat(bat_a_pct, "% ");
 	return bat_a_pct;
@@ -218,7 +180,7 @@ void handle_bluetooth_button(void)
 				return; // do nothing
 
 			bluetooth_button_press_time = millis(); // record time of button press; this is used in a bit down to keep bt on on auto
-			digitalWrite(Bluetooth_wakeup_pin, HIGH); // turn on the device
+			digitalWrite(Bluetooth_wakeup_pin, LOW); // turn on the device
 			flag_bluetooth_is_on = 1; // set flag to on
 		}
 	}
@@ -245,7 +207,7 @@ void handle_bluetooth_button(void)
 
 	if ( flag_bluetooth_is_on && auto_timeout(bluetooth_button_press_time, FeRAMReadByte(FERAM_BLUETOOTH_AUTO_TIMEOUT)) ) // if the device is on and enough time has passed
 	{
-			digitalWrite(Bluetooth_wakeup_pin, LOW); // turn off the device
+			digitalWrite(Bluetooth_wakeup_pin, HIGH); // turn off the device
 			flag_bluetooth_is_on = 0; // set flag to off
 			// flag_bluetooth_power_keep_on = 0;
 	}
@@ -359,11 +321,9 @@ const char *fn_cb_get_utc(m2_rom_void_p element)
 // callback for temperature
 const char *fn_cb_get_temperature(m2_rom_void_p element)
 {
-Serial.println(temp);
-		dtostrf(calculate_temperature(), 3, 0, temp+3*sizeof(char)); // instead, this works
-		// http://www.atmel.com/webdoc/AVRLibcReferenceManual/group__avr__stdlib_1ga060c998e77fb5fc0d3168b3ce8771d42.html
-		strcat(temp, "C");
-		return temp;
+	static char retval[6]; // holds retval of e.g. "T+24C" of "T-10C"
+	sprintf(retval, "T%+02dC", (int8_t) round(val_temperature) ); // round & print the temperature as an integer into the retval string
+	return retval;
 }
 
 // callback for bluetooth power setting
@@ -373,7 +333,7 @@ const char *fn_cb_bluetooth_power_setting(m2_rom_void_p element, uint8_t msg, ui
 	switch(msg) // msg can be one of: M2_COMBOFN_MSG_GET_VALUE, M2_COMBOFN_MSG_SET_VALUE, M2_COMBOFN_MSG_GET_STRING
   {
 		case M2_COMBOFN_MSG_GET_VALUE: // we get the vaue from eeprom
-			*valptr = (uint8_t) (FeRAMReadByte(FERAM_DEVICE_MISC_CFG2) >> FERAM_DEVICE_MISC_CFG2_BLUETOOTH_POWER);
+			*valptr = EEPROM[EERPOM_BLUETOOTH_POWER_INDEX];
       break;
 
     case M2_COMBOFN_MSG_SET_VALUE: // we set the value into eeprom
@@ -383,19 +343,19 @@ const char *fn_cb_bluetooth_power_setting(m2_rom_void_p element, uint8_t msg, ui
     case M2_COMBOFN_MSG_GET_STRING: // we get the string _and_ set it (implicitly via M2_COMBOFN_MSG_SET_VALUE) via *valptr
       if (*valptr == 0) // values are coded in eeprom.h
 			{
-				digitalWrite(Bluetooth_wakeup_pin, LOW);
+				digitalWrite(Bluetooth_wakeup_pin, HIGH);
         return "off";
 			}
 
       if (*valptr == 1)
 			{
-				digitalWrite(Bluetooth_wakeup_pin, HIGH);
+				digitalWrite(Bluetooth_wakeup_pin, LOW);
         return "on";
 			}
 
       if (*valptr == 2)
 			{
-				digitalWrite(Bluetooth_wakeup_pin, LOW);
+				digitalWrite(Bluetooth_wakeup_pin, HIGH);
         return "auto";
 			}
   }
@@ -560,6 +520,30 @@ const char *fn_cb_sd_write(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
   return NULL;
 }
 
+// callback for statistics write setting
+const char *fn_cb_stat_write(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
+{
+	// see fn_cb_bluetooth_power_setting for comments
+	switch(msg)
+	{
+		case M2_COMBOFN_MSG_GET_VALUE:
+		*valptr = (FeRAMReadByte(FERAM_DEVICE_MISC_CFG1) >> FERAM_DEVICE_MISC_CFG1_STAT_WRITE) & 0x01;
+		break;
+
+		case M2_COMBOFN_MSG_SET_VALUE:
+		FeRAMWriteByte(FERAM_DEVICE_MISC_CFG1, FeRAMReadByte(FERAM_DEVICE_MISC_CFG1) ^  (1<<FERAM_DEVICE_MISC_CFG1_STAT_WRITE) ); // set it 1
+		break;
+
+		case M2_COMBOFN_MSG_GET_STRING:
+		if (*valptr == 0)
+		return "off";
+		if (*valptr == 1)
+		return "on";
+	}
+
+	return NULL;
+}
+
 // callback for timezone setting
 int8_t fn_cb_set_tz(m2_rom_void_p element, uint8_t msg, int8_t val)
 {
@@ -572,26 +556,31 @@ int8_t fn_cb_set_tz(m2_rom_void_p element, uint8_t msg, int8_t val)
 	return FeRAMReadByte(FERAM_DEVICE_TIMEZONE);
 }
 
-// callback for OLED power setting
+// callback for ADXL345 activity power setting
 const char *fn_cb_accel_enable(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
 {
 	// see fn_cb_bluetooth_power_setting for comments
 	switch(msg)
 	{
 		case M2_COMBOFN_MSG_GET_VALUE:
-		*valptr = ( FeRAMReadByte(FERAM_DEVICE_MISC_CFG1) >> FERAM_DEVICE_MISC_CFG1_ADXL345_AUTO_POWER ) & 0x01;
-		break;
+			*valptr = ( FeRAMReadByte(FERAM_DEVICE_MISC_CFG1) >> FERAM_DEVICE_MISC_CFG1_ADXL345_AUTO_POWER ) & 0x01;
+			break;
 
 		case M2_COMBOFN_MSG_SET_VALUE:
-		FeRAMWriteByte(FERAM_DEVICE_MISC_CFG1, FeRAMReadByte(FERAM_DEVICE_MISC_CFG1) ^ (1<<FERAM_DEVICE_MISC_CFG1_ADXL345_AUTO_POWER));
-		break;
+			FeRAMWriteByte(FERAM_DEVICE_MISC_CFG1, FeRAMReadByte(FERAM_DEVICE_MISC_CFG1) ^ (1<<FERAM_DEVICE_MISC_CFG1_ADXL345_AUTO_POWER));
+			break;
 
 		case M2_COMBOFN_MSG_GET_STRING:
 		if (*valptr == 0)
+		{
+			adxl345_writeByte(INT_ENABLE, INT_DISABLE_CFG);
 			return "off";
-		//if (*valptr == 1)
+		}
 		else
+		{
+			adxl345_writeByte(INT_ENABLE, INT_ENABLE_CFG);
 			return "on";
+		}
 	}
 
 	return NULL;
@@ -604,9 +593,39 @@ int8_t fn_cb_set_accel_timeout(m2_rom_void_p element, uint8_t msg, int8_t val)
 	return (uint8_t) FeRAMReadByte(FERAM_ADXL345_MOVEMENT_TIMEOUT);
 
 	if ( msg == M2_U8_MSG_SET_VALUE ) // if we get a SET message
-	FeRAMWriteByte(FERAM_ADXL345_MOVEMENT_TIMEOUT, val);
-
+	{
+	 FeRAMWriteByte(FERAM_ADXL345_MOVEMENT_TIMEOUT, val);
+	 adxl345_writeByte(TIME_INACT, val);
+	}
 	return FeRAMReadByte(FERAM_ADXL345_MOVEMENT_TIMEOUT);
+}
+
+// callback for accelerometer inativity threshold setting
+int8_t fn_cb_set_inact_threshold(m2_rom_void_p element, uint8_t msg, int8_t val)
+{
+	if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
+	return (uint8_t) FeRAMReadByte(FERAM_ADXL345_INACTIVITY_THRESHOLD);
+
+	if ( msg == M2_U8_MSG_SET_VALUE ) // if we get a SET message
+	{
+		FeRAMWriteByte(FERAM_ADXL345_INACTIVITY_THRESHOLD, val);
+		adxl345_writeByte(TIME_INACT, val);
+	}
+	return FeRAMReadByte(FERAM_ADXL345_INACTIVITY_THRESHOLD);
+}
+
+// callback for accelerometer ativity threshold setting
+int8_t fn_cb_set_act_threshold(m2_rom_void_p element, uint8_t msg, int8_t val)
+{
+	if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
+	return (uint8_t) FeRAMReadByte(FERAM_ADXL345_ACTIVITY_THRESHOLD);
+
+	if ( msg == M2_U8_MSG_SET_VALUE ) // if we get a SET message
+	{
+		FeRAMWriteByte(FERAM_ADXL345_ACTIVITY_THRESHOLD, val);
+		adxl345_writeByte(TIME_INACT, val);
+	}
+	return FeRAMReadByte(FERAM_ADXL345_ACTIVITY_THRESHOLD);
 }
 
 // callback for bluetooth timeout
@@ -691,19 +710,47 @@ const char *fn_cb_gps_longtitude(m2_rom_void_p element)
 // callback for gps altitude
 const char *fn_cb_gps_altitude(m2_rom_void_p element)
 {
-		return gps_altitude;
+	static char retval[7]; // will return e.g. "-333m" or "+5555m"
+	uint8_t len = strlen(gps_altitude);
+
+	if (len == 0) // if no altitude is given
+		sprintf(retval, "alt-m"); // print "alt" and a dummy into retval
+	else
+		sprintf(retval, "alt%sm", gps_altitude); // print "alt" and the actual number-string into retval
+
+	return retval;
 }
 
 // callback for gps satellites in view
 const char *fn_cb_gps_satellites_in_view(m2_rom_void_p element)
 {
-		return gps_satellites_in_view;
+	static char retval[5]; // will return something like "0.00" or "99.99"
+	uint8_t len = strlen(gps_satellites_in_view); // lenght of HDOP string
+
+	if (len == 1) // empty string (only a null terminator)
+		sprintf(retval, "sat--"); // copy "sat" and the actual number-string into retval
+
+	if (len == 2) // one digit value
+		sprintf(retval, "sat0%s", gps_satellites_in_view); // copy "sat" and the actual number-string into retval
+
+	if (len > 2) // two digit value
+		sprintf(retval, "sat%s", gps_satellites_in_view); // copy "sat" and the actual number-string into retval
+
+	return retval; // return that val
 }
 
 // callback for gps HDOP
 const char *fn_cb_gps_hdop(m2_rom_void_p element)
 {
-		return gps_hdop;
+	static char retval[9];
+	uint8_t len = strlen(gps_hdop);
+
+	if (len < 2)
+		sprintf(retval, "hdop-.--"); // copy "hdop" and the actual number-string into retval
+	else
+	sprintf(retval, "hdop%s", gps_hdop); // copy "hdop" and the actual number-string into retval
+
+	return retval; // return that val
 }
 
 // send contents of file over serial to host PC
@@ -821,43 +868,6 @@ void gsm_power(bool in_val)
 		Serial.println(F("gsm off"));
 		//Serial1.end();
 	}
-}
-
-// interrupt handler for ADXL345
-void handle_adx_intl(void)
-{
-	byte adxl345_irq_src = adxl345_readByte(INT_SOURCE);
-	//Serial.print("adxl345_irq_src");Serial.print(adxl345_irq_src,BIN);Serial.println("adxl345_irq_src");
-
-
-		// inactivity
-    if(adxl345_irq_src & 0x08) // if the inact bit is set
-		{
-      Serial.println("Inactivity");
-
-      byte bwRate = adxl345_readByte(BW_RATE); // get current config
-      adxl345_writeByte(BW_RATE, (bwRate | 0x10) ); // set to low power mode, bit 5 (was 0x0A, becomes 0x1A)
-    }
-
-		// activity
-    if(adxl345_irq_src & 0x10) // if the act bit is set
-		{
-      Serial.println("Activity");
-
-      byte powerCTL = adxl345_readByte(POWER_CTL); // get current config
-      // set the device back in measurement mode
-      // as suggested on the datasheet, we put it in standby then in measurement mode
-      //writeTo(DEVICE, R_POWER_CTL, powerCTL & B8(11110011));
-      adxl345_writeByte(POWER_CTL, 0x04); // first standby
-      delay(10); // let's give it some time (not sure if this is needed)
-      //writeTo(DEVICE, R_POWER_CTL, powerCTL & B8(11111011));
-      adxl345_writeByte(POWER_CTL, POWER_CTL_CFG); // then full measurement mode
-
-      // set the LOW_POWER bit to 0 in R_BW_RATE: get back to full accuracy measurement (we will consume more power)
-      byte bwRate = adxl345_readByte(BW_RATE);
-      adxl345_writeByte(BW_RATE, (BW_RATE & 0x08) );
-    }
-    flag_adxl345_int1 = 0;
 }
 
 // buffered write onto SD card utilizing a circular buffer
@@ -1005,25 +1015,12 @@ uint32_t detectBaud(int pin)
 // primitive BT button-activated printout
 void poor_mans_debugging(void)
 {
- 	  // poor man's debugging
+	// poor man's debugging
 
-		//SPI voodoo
-		SPI.beginTransaction(SPISettings(5000000, MSBFIRST, SPI_MODE3));
-		adxl345_readByte(0x00);
-		Serial.print(F("INT_SOURCE -"));Serial.print(adxl345_readByte(0x30), BIN);Serial.println("-");
-		Serial.print(F("INT_MAP -"));Serial.print(adxl345_readByte(0x2F), BIN);Serial.println("-");
-		Serial.print(F("INT_ENABLE -"));Serial.print(adxl345_readByte(0x2E), BIN);Serial.println("-");
-		Serial.print(F("vbatt -"));Serial.print(calculate_voltage(bat_A_pin));Serial.println("-");
-		SPI.endTransaction();
+		//Serial.print("temp:");Serial.print(temp);Serial.println(":");
 
-		// Serial.print("temp: ");Serial.println(temp);
-		// PSRF104,37.3875111,-121.97232,0,96000,237759,922,12,3
-		//$PSRF104,<Lat>,<Lon>,<Alt>,<ClkOffset>,<TimeOfWeek>,<WeekNo>,<ChannelCount>, <ResetCfg>*CKSUM<CR><LF>
-
-		//$PSRF104,4547.9088,01555.1489,110,75000,<TimeOfWeek>,<WeekNo>,12,1
-
-Serial.print("FERAM_DEVICE_MISC_CFG2 ");
-Serial.println(FeRAMReadByte(FERAM_DEVICE_MISC_CFG2), BIN);
+	//Serial.print("FERAM_DEVICE_MISC_CFG2 ");
+	//Serial.println(FeRAMReadByte(FERAM_DEVICE_MISC_CFG2), BIN);
 
 
 
