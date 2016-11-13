@@ -3,13 +3,12 @@
 void gps_parse_gprmc() // KLUDGE
 {
   // sample NMEA GPRMC sentence
-  //		$GNRMC,180536.000,A,4547.8467,N,01555.1699,E,2.79,213.57,311016,,,A*7F
-  //    $GPRMC,170942.000,A,4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
-  //    $GNRMC,180538.000,V,,,,,2.79,213.57,311016,,,E*55
+  //		$GNRMC,214329.000,A,4547.9089,N,01555.1553,E,1.33,121.79,121116,,,A*7A
   //    $GPRMC,221939.869,V,,,,,,,060816,,,N*41
+  //    $GNRMC,214325.073,V,,,,,1.48,112.99,121116,,,N*5F
 
   // real programmers would probably do this in a more elegant way..
-  // strtok would be a much cooler way but i done want to have a loop within a loop (nema parser) (within a loop (loop()) )
+  // strtok would be a much cooler way but i dont want to have a loop within a loop (nema parser) (within a loop (loop()) )
   //  p = strchr(p, ',')+1, on the other hand, lets me seek the next comma in a non destructive way
   char *p;  // pointer for parsing
 
@@ -43,6 +42,7 @@ void gps_parse_gprmc() // KLUDGE
     memcpy(gps_longtitude+(14*sizeof(char)), p, sizeof(char)); // fill up gps_longtitude[] , part 2, appends letter
 
   // [not needed] field 8 - speed over ground: 0.13,142.38,050816,,,A*63
+	// FIXME - speed over ground is needed for "fitness vs. normal mode" setting in the GPS receiver
   p = strchr(p, ',')+1;
   // [not needed] field 9 - course over ground: 142.38,050816,,,A*63
   p = strchr(p, ',')+1;
@@ -61,43 +61,53 @@ void gps_parse_gprmc() // KLUDGE
     //Serial.print("gps_time: ");  Serial.println(gps_time);
 }
 
-// parses out sattelites used and HDOP
-void gps_parse_gpgga() // KLUDGE
+// parses out satellites used, HDOP, MSL altitude
+void gps_parse_gpgga(char *in_str)
 {
-	if (!flag_gps_fix)
-		return;
+	// $GNGGA,214323.073,,,,,0,0,,,M,,M,,*57
+	// $GNGGA,214326.073,4547.9072,N,01555.1584,E,1,5,1.59,140.9,M,42.5,M,,*43
+	//
+	// fields of interest are (0-indexed):
+	//	not really: #6 - position fix indicator: "1" after the "E," in the above example)
+	//	#7 - satellites used: "5" in the above example
+	//	#8 - HDOP: "1.59" in the above example
+	//	#9 - MSL altitude: "140.9" in the above example
 
-	uint8_t len = 0;
+	char *p = strtok(in_str, ","); // char pointer for strtok
+	uint8_t i = 0; // counter for the string tokenizer
+	uint8_t len = 0; // how long is a piece of string?
 
-  char *p; // char pointer for string search
-	// $GPGGA,185447.258,4547.8986,N,01555.1525,E,1,04,4.3,126.8,M,42.5,M,,0000*5F
-	// $GNGGA,180539.000,4547.8448,N,01555.1665,E,6,2,99.99,196.9,M,42.5,M,,*77
+	while (*p) // for as long as there is something to tokenize with the given delimiter...
+	{
+		//if (i == 6) // position fix indicator
+		//{
+			//Serial.print("position fix indicator:"); Serial.println(*p);
+		//}
 
-  p = NMEA_buffer+7; // set the pointer to position 185447.258,4547.8986,N,01555.1525,E,1,04,4.3,126.8,M,42.5,M,,0000*5F
-	p = strchr(p, ',')+1; // 4547.8986,N,01555.1525,E,1,04,4.3,126.8,M,42.5,M,,0000*5F
-	p = strchr(p, ',')+1; // N,01555.1525,E,1,04,4.3,126.8,M,42.5,M,,0000*5F
-	p = strchr(p, ',')+1; // 01555.1525,E,1,04,4.3,126.8,M,42.5,M,,0000*5F
-	p = strchr(p, ',')+1; // E,1,04,4.3,126.8,M,42.5,M,,0000*5F
-	p = strchr(p, ',')+1; // 1,04,4.3,126.8,M,42.5,M,,0000*5F
+		if (i == 7) // satellites used
+		{
+			len = strcspn (p, ",");
+			memcpy( gps_satellites_in_view, p, len * sizeof(char) );
+			*(gps_satellites_in_view+len+1) = '\0';
+		}
 
-	// satellites in view
-	p = strchr(p, ',')+1; // 04,4.3,126.8,M,42.5,M,,0000*5F
-	len = strcspn (p, ",");
-	memcpy( gps_satellites_in_view + 3 * sizeof(char), p, len * sizeof(char) ); // copy the value
-  *(gps_satellites_in_view+2+len+1) = '\0'; // terminate the string
+		if (i == 8) // hdop
+		{
+			len = strcspn (p, ",");
+			memcpy( gps_hdop, p, len * sizeof(char) ); // copy the value
+			*(gps_hdop+len+1) = '\0'; // terminate the string
+		}
 
-	// HDOP
-	p = strchr(p, ',')+1; // 4.3,126.8,M,42.5,M,,0000*5F
-	len = strcspn (p, ",");
-  memcpy( gps_hdop + 3 * sizeof(char), p, len * sizeof(char) ); // copy the value
-  *(gps_hdop+2+len+1) = '\0'; // terminate the string
+		if (i == 9) // altitude
+		{
+			len = strcspn (p, ".,");
+			memcpy( gps_altitude, p, len * sizeof(char) ); // copy the numbers...
+			*(p+3+len+1) = '\0'; // at the next position, terminate the string
+		}
 
-	// altitude
-	p = strchr(p, ',')+1; // 126.8,M,42.5,M,,0000*5F
-	len = strcspn (p, ".,");
-  memcpy( gps_altitude + ( 4*sizeof(char) ), p, len * sizeof(char) ); // copy the numbers...
-  *(p+3+len) = 'm'; // at this position, put the meter symbol
-  *(p+3+len+1) = '\0'; // at the next position, terminate the string
+		p = strtok(NULL, ",");
+		i++;
+	}
 }
 
 void get_nmea_sentences() {
@@ -132,19 +142,6 @@ void get_nmea_sentences() {
         bufferid = 0; // set pointer back to the beginning
         return;
       }
-			//// extract GPS time of week, runs only once (if vara is not set)
-			//if ( *gps_time_of_week == 'x' && (strcmp(NMEA_buffer, "$PSRFTXT,TOW:") > 0)) // if gps_time_of_week is not set and we have the TOW string
-			//{
-				//sscanf(NMEA_buffer, "$PSRFTXT,TOW:%6s", gps_time_of_week);	// set the value
-				//flag_gps_time_of_week_set = 1;
-			//}
-
-			//// extract GPS week, runs only once (if vara is not set)
-			//if ( *gps_week == 'x' && (strcmp(NMEA_buffer, "$PSRFTXT,WK:") > 0)) // if gps_week is not set and we have the WK string
-			//{
-				//sscanf(NMEA_buffer, "$PSRFTXT,WK:%4s", gps_week);	// set the value
-				//flag_gps_week_set = 1;
-			//}
 
 			//NMEA sentence printout
 				if ( (FeRAMReadByte(FERAM_GPS_MISC_CFG) >> FERAM_GPS_MISC_CFG_NMEA_PRINT_TO_SERIAL) & 0x01 ) // if the 2nd bit is set
@@ -162,8 +159,8 @@ void get_nmea_sentences() {
       }
 
       // check for GPGGA sentence
-      if (strncmp(NMEA_buffer, "$GNGGA",  6) == 0) // if we have a GPRMC sentence
-          gps_parse_gpgga(); // get HDOP, altitude and satellites in view
+      if (flag_gps_fix && strncmp(NMEA_buffer, "$GNGGA",  6) == 0) // if we have a GPRMC sentence
+          gps_parse_gpgga(NMEA_buffer); // get HDOP, altitude and satellites in view
 
 			bufferid++; // ?!? needed??
 
