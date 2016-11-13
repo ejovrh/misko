@@ -89,7 +89,7 @@
 	gps.println("$PMTK869,1,1*35"); // enable EASY
 	gps.println("$PMTK255,1*2D"); // set sync PPS and NMEA
 	gps.println("$PMTK285,4,50*0C"); // set PPS
-	gps.println("$PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0*2A");
+	gps.println("$PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0*2A"); // FIXME - GPZDA doesnt work
 
 	// $PMTK220 - what does it do?
 	// $PMTK262 - fitness mode?
