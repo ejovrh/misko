@@ -39,7 +39,31 @@ void loop()
 //ISR for the ADXL345 accelerometer
 ISR(INT7_vect)
 {
+	cli();
 	adxl345_irq_src = adxl345_readByte(INT_SOURCE);
+
+	// inactivity
+	if( (adxl345_irq_src >> 3) & 0x01)  // if the inact bit is set
+	{
+		Serial.println("Inactivity");
+		adxl345_writeByte(BW_RATE, 0x17 ); // 0001 0111 (0x1A) - set to low power mode, bit 5 (was 0x0A, becomes 0x1A)
+	}
+
+	// activity
+	if( (adxl345_irq_src >> 4) & 0x01) // if the act bit is set
+	{
+		Serial.println("Activity");
+
+		// set the device back in measurement mode
+		// as suggested on the datasheet, we put it in standby then in measurement mode
+		//adxl345_writeByte(POWER_CTL_CFG, powerCTL & 11110011);
+		//adxl345_writeByte(POWER_CTL, 0x04); // first standby
+		//adxl345_writeByte(POWER_CTL_CFG, powerCTL & 11111011);
+		//adxl345_writeByte(POWER_CTL, POWER_CTL_CFG); // then full measurement mode
+
+		adxl345_writeByte(BW_RATE, 0x07 ); // 0000 0111 (0x0A) get back to full accuracy measurement (we will consume more power)
+	}
+	sei();
 }
 
 // ISR for timer5 events - generated every second
@@ -48,8 +72,8 @@ ISR(TIMER5_COMPA_vect)
 {
 	scheduler_run_count++;
 
-	val_vcc = 2 * calculate_voltage(Vcc_sense_pin); // measures Vcc across a voltage divider
-	val_temp = calculate_temperature(); // reads out temperature-dependant voltage
+	val_Vcc = 2 * calculate_voltage(Vcc_sense_pin); // measures Vcc across a voltage divider
+	val_temperature = calculate_temperature(); // reads out temperature-dependant voltage
 		/* the percentage calculation
 		union battery datasheet: charge cutoff voltage: Vbat 4.20V, discharge cutoff voltage: Vbat 2.70V
 			over the voltage divider this gives 2.10V and 1.3V
@@ -79,7 +103,7 @@ ISR(TIMER5_COMPA_vect)
 		SPI.beginTransaction(SPISettings(5000000, MSBFIRST, SPI_MODE3));
 		adxl345_readByte(DEVID); // reads INT SRC to clear the act/inact bits
 		adxl345_readByte(INT_SOURCE); // reads INT SRC to clear the act/inact bits
+		adxl345_writeByte(BW_RATE, 0x07 );
 		SPI.endTransaction();
-
 	}
 }
