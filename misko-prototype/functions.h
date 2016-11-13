@@ -727,13 +727,13 @@ const char *fn_cb_gps_satellites_in_view(m2_rom_void_p element)
 	static char retval[5]; // will return something like "0.00" or "99.99"
 	uint8_t len = strlen(gps_satellites_in_view); // lenght of HDOP string
 
-	if (len == 1) // empty string (only a null terminator)
+	if (len == 0) // empty string (only a null terminator)
 		sprintf(retval, "sat--"); // copy "sat" and the actual number-string into retval
 
-	if (len == 2) // one digit value
+	if (len == 1) // one digit value
 		sprintf(retval, "sat0%s", gps_satellites_in_view); // copy "sat" and the actual number-string into retval
 
-	if (len > 2) // two digit value
+	if (len > 1) // two digit value
 		sprintf(retval, "sat%s", gps_satellites_in_view); // copy "sat" and the actual number-string into retval
 
 	return retval; // return that val
