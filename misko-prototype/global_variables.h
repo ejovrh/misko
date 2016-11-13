@@ -32,25 +32,23 @@ char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
 char gps_logfile[22] = "";
 char gps_latitude[16] = "lat hhmm.ssss  "; // N or S, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
 char gps_longtitude[17] = "lon hhhmm.ssss  "; // W or E, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
-char gps_altitude[9] = "alt+___m"; // GPS altitude: "altxxxxm" or "alt-xxxm", populated in gps_functions.h:gps_parse_gpgga()
-char gps_hdop[8] = "dop____"; // GPS horizontal dilution of position: "dop12.5" , populated in gps_functions.h:gps_parse_gprmc()
-char gps_satellites_in_view[6] = "sat__"; // GPS satellites in view
-char gps_week[5] = "xxxx"; // string holding the GPS Week
-char gps_time_of_week[7] = "xxxxxx"; // string holding the GPS Time Of Week
+char gps_altitude[5] = ""; // GPS altitude: [xxxx or -xxx], populated in gps_functions.h:gps_parse_gpgga()
+char gps_hdop[5] = ""; // GPS horizontal dilution of position [0.99 - 99.99], populated in gps_functions.h:gps_parse_gprmc()
+char gps_satellites_in_view[3] = "0"; // GPS satellites in view [00 - 99]
+//char gps_week[5] = "xxxx"; // string holding the GPS Week
+//char gps_time_of_week[7] = "xxxxxx"; // string holding the GPS Time Of Week
 bool flag_gps_fix = 0; // do we have a fix or not?
-bool flag_gps_time_of_week_set = 0; // is the GPS time of week set or not?
-bool flag_gps_week_set = 0; // is the GPS week set or not?
-bool flag_nmea_sentence_printout = 0; // shall incoming NMEA sentences (regardless of fix) be printed out or not?
+//bool flag_gps_time_of_week_set = 0; // is the GPS time of week set or not?
+//bool flag_gps_week_set = 0; // is the GPS week set or not?
+//bool flag_nmea_sentence_printout = 0; // shall incoming NMEA sentences (regardless of fix) be printed out or not?
 bool flag_gps_on = 1; // is the gps powered on or off?
 int8_t timezone;
 
 // device variables
-//int8_t temperature = 0; // temperature in degrees Celsius
-char temp[6] = "T+__C";
-//uint16_t avg_temp = 0;
-char vcc[9] = "Vccx.xxV";
 char bat_a_pct[9] = "batAxxx%";
+char bat_b_pct[9] = "batBxxx%";
 char sd_buffer[SD_BUFFERSIZE]; // buffer holding 2x 512byte blocks of NMEA sentences for buffered write of 512byte blocks
+byte adxl345_irq_src; // holds INT_SRC - a register in the ADXL345 via which it is determined which interrupt was triggered
 
 // Bluetooth flags
 uint32_t bluetooth_button_press_time = millis(); // time of button press
@@ -65,6 +63,8 @@ bool flag_lcd_is_on = 0; // flag is BT device is powered on or off
 bool flag_oled_sleep = 0; // flag if the OLED shall sleep or not
 M2_EXTERN_ALIGN(top_el_expandable_menu); // Forward declaration of the top level element
 M2_EXTERN_ALIGN(el_top_sd_content_menu); // Forward declaration of the top level element
+const char format_rf0[] = "rf0"; // menu format string
+const char format_1W64H64[] = "-0|1W64H64"; //
 
 // display device initializations
 //U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_FAST);
@@ -83,3 +83,9 @@ uint16_t scheduler_run_count = 0; // counts how many times the scheduler has run
 volatile bool flag_adxl345_int1 = 0; // flag for active interrupt
 bool flag_gsm_on = 0; // flag if the gsm modem shall be powered on or not, controlled via menu combo, inspected in loop()
 uint8_t flag_cb_gsm_power = 0; // used in GSM power callback
+bool flag_run_once = 0; // runs exactly once, triggered by timer5
+
+float val_Vcc; // measured Vcc, updated in timer5 ISR
+float val_temperature; // measured temperature, updated in timer5 ISR
+uint8_t val_batA_pct; // battA percentage, updated in timer5 ISR
+uint8_t val_batB_pct; // battB percentage, updated in timer5 ISR
