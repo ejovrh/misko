@@ -30,8 +30,8 @@
 	get_nmea_sentences(); // gets NMEA sentences out of the GPS and deals with them
 	//Serial.println(millis());
 
-	if (flag_adxl345_int1) // if the ADXL345 INT1 flag is set
-		handle_adx_intl(); // execute the function
+	//if (flag_adxl345_int1) // if the ADXL345 INT1 flag is set
+		//handle_adx_intl(); // execute the function
 
 	if( !flag_gps_on && ( (FeRAMReadByte(FERAM_GPS_MISC_CFG) >> FERAM_GPS_MISC_CFG_POWER_CTL) & 0x01 ) ) // user powers GPS on
 	{
@@ -47,30 +47,30 @@
 		flag_gps_fix = 0;
 	}
 
-	//FIXME
+	//FIXME - serial redirection makes garbage
 	if (eeprom_get(EERPOM_SERIAL_SETTING_INDEX) == 0) // user selects GPS in serial menu
 	{
 		// serial redirection for GPS testing
 		if(gps.available()) //read GPS output (if available) and print it in arduino IDE serial monitor
 			Serial.write(gps.read()); // NL & CR need to be enabled
-
 		if(Serial.available()) //read arduino IDE serial monitor inputs (if available) and send them to GPS
 			gps.write(Serial.read()); // NL & CR need to be enabled
 	}
 
-	//FIXME
-	//if (eeprom_get(EERPOM_SERIAL_SETTING_INDEX) == 1) // user selects GSM in user menu
-	//{
-		//// serial redirection for GSM modem testing
-		//if(Serial1.available()) //read SIM800 output (if available) and print it in arduino IDE serial monitor
-			//Serial.write(Serial1.read()); // NL & CR need to be enabled
-//
-		//if(Serial.available()) //read arduino IDE serial monitor inputs (if available) and send them to SIM800
-			//Serial1.write(Serial.read()); // NL & CR need to be enabled
-	//}
+	//FIXME - serial redirection makes garbage
+	if (eeprom_get(EERPOM_SERIAL_SETTING_INDEX) == 1) // user selects GSM in user menu
+	{
+		// serial redirection for GSM modem testing
+		if(Serial1.available()) //read SIM800 output (if available) and print it in arduino IDE serial monitor
+			Serial.write(Serial1.read()); // NL & CR need to be enabled
+
+		if(Serial.available()) //read arduino IDE serial monitor inputs (if available) and send them to SIM800
+			Serial1.write(Serial.read()); // NL & CR need to be enabled
+	}
 
 // GSM modem power control
 	if (flag_cb_gsm_power && !flag_gsm_on)
 		gsm_power(1);
 	if (!flag_cb_gsm_power && flag_gsm_on)
 		gsm_power(0);
+
