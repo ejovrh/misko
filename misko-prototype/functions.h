@@ -714,10 +714,11 @@ const char *fn_cb_gps_altitude(m2_rom_void_p element)
 	uint8_t len = strlen(gps_altitude);
 
 	if (len == 0) // if no altitude is given
-		sprintf(retval, "alt-m"); // print "alt" and a dummy into retval
+		sprintf(retval, "alt -m"); // print "alt" and a dummy into retval
 	else
-		sprintf(retval, "alt%sm", gps_altitude); // print "alt" and the actual number-string into retval
+		sprintf(retval, "alt %sm", gps_altitude); // print "alt" and the actual number-string into retval
 
+	Serial.print("alt retval:");Serial.print(retval);Serial.println(":alt retval");
 	return retval;
 }
 
@@ -728,14 +729,11 @@ const char *fn_cb_gps_satellites_in_view(m2_rom_void_p element)
 	uint8_t len = strlen(gps_satellites_in_view); // lenght of HDOP string
 
 	if (len == 0) // empty string (only a null terminator)
-		sprintf(retval, "sat--"); // copy "sat" and the actual number-string into retval
+		sprintf(retval, "sat --"); // copy "sat" and the actual number-string into retval
+	else
+		sprintf(retval, "sat %s", gps_satellites_in_view); // copy "sat" and the actual number-string into retval
 
-	if (len == 1) // one digit value
-		sprintf(retval, "sat0%s", gps_satellites_in_view); // copy "sat" and the actual number-string into retval
-
-	if (len > 1) // two digit value
-		sprintf(retval, "sat%s", gps_satellites_in_view); // copy "sat" and the actual number-string into retval
-
+	Serial.print("sat retval:");Serial.print(retval);Serial.println(":sat retval");
 	return retval; // return that val
 }
 
@@ -745,11 +743,12 @@ const char *fn_cb_gps_hdop(m2_rom_void_p element)
 	static char retval[9];
 	uint8_t len = strlen(gps_hdop);
 
-	if (len < 2)
-		sprintf(retval, "hdop-.--"); // copy "hdop" and the actual number-string into retval
+	if (len == 0) // empty string or not?
+		sprintf(retval, "hdop -.--"); // copy "hdop" and the actual number-string into retval
 	else
-	sprintf(retval, "hdop%s", gps_hdop); // copy "hdop" and the actual number-string into retval
+		sprintf(retval, "hdop %s", gps_hdop); // copy "hdop" and the actual number-string into retval
 
+	Serial.print("hdop retval:");Serial.print(retval);Serial.println(":hdop retval");
 	return retval; // return that val
 }
 
