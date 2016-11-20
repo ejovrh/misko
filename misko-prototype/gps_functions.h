@@ -68,10 +68,29 @@ void gps_parse_gpgga(char *in_str)
 	// $GNGGA,214326.073,4547.9072,N,01555.1584,E,1,5,1.59,140.9,M,42.5,M,,*43
 	//
 	// fields of interest are (0-indexed):
-	//	not really: #6 - position fix indicator: "1" after the "E," in the above example)
-	//	#7 - satellites used: "5" in the above example
-	//	#8 - HDOP: "1.59" in the above example
-	//	#9 - MSL altitude: "140.9" in the above example
+	//
+	//  #0 - talker ID
+	//  #1 - UTC time
+	//  #2 - latitude
+	//  #3 - north/south
+	//  #4 - longtitude
+	//  #5 - east/west
+	//-	#6 - position fix indicator: "1" after the "E," in the above example)
+	//		0 - invalid
+	//		1 - GPS (SPS)
+	//		2 - DGPS
+	//		3 - PPS
+	//		4 - real time kinetic
+	//		5 - float real time kinetic
+	//		6 - estimated
+	//		7 - manual input
+	//		8 - simulation mode
+	//-	#7 - satellites used: "5" in the above example
+	//-	#8 - HDOP: "1.59" in the above example
+	//-	#9 - MSL altitude: "140.9" in the above example
+	//	#10 - unit: "M"
+	//	#11 - height above geoid: "42.5" in the above example
+	//	#12 - unit: "M"
 
 	char *p = strtok(in_str, ","); // char pointer for strtok
 	uint8_t i = 0; // counter for the string tokenizer
@@ -79,10 +98,10 @@ void gps_parse_gpgga(char *in_str)
 
 	while (*p) // for as long as there is something to tokenize with the given delimiter...
 	{
-		//if (i == 6) // position fix indicator
-		//{
-			//Serial.print("position fix indicator:"); Serial.println(*p);
-		//}
+		if (i == 6) // position fix indicator
+		{
+			Serial.print("position fix indicator:"); Serial.println(*p);
+		}
 
 		if (i == 7) // satellites used
 		{
