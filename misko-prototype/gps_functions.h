@@ -93,7 +93,6 @@ void gps_parse_gpgga(char *in_str)
 
 		if (i == 8) // hdop
 		{
-			memset(gps_hdop, 5, '\0');
 			len = strcspn (p, ",");
 			memcpy( gps_hdop, p, len * sizeof(char) ); // copy the value
 			*(gps_hdop+len+1) = '\0'; // terminate the string
@@ -101,7 +100,6 @@ void gps_parse_gpgga(char *in_str)
 
 		if (i == 9) // altitude
 		{
-			memset(gps_altitude, 5, '\0');
 			len = strcspn (p, ".,");
 			memcpy( gps_altitude, p, len * sizeof(char) ); // copy the numbers...
 			*(p+3+len+1) = '\0'; // at the next position, terminate the string
