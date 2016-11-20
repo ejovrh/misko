@@ -32,15 +32,10 @@ char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
 char gps_logfile[22] = "";
 char gps_latitude[16] = "lat hhmm.ssss  "; // N or S, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
 char gps_longtitude[17] = "lon hhhmm.ssss  "; // W or E, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
-char gps_altitude[5] = ""; // GPS altitude: [xxxx or -xxx], populated in gps_functions.h:gps_parse_gpgga()
-char gps_hdop[5] = ""; // GPS horizontal dilution of position [0.99 - 99.99], populated in gps_functions.h:gps_parse_gprmc()
-char gps_satellites_in_view[3] = "0"; // GPS satellites in view [00 - 99]
-//char gps_week[5] = "xxxx"; // string holding the GPS Week
-//char gps_time_of_week[7] = "xxxxxx"; // string holding the GPS Time Of Week
+char gps_altitude[5]; // GPS altitude: [xxxx or -xxx], populated in gps_functions.h:gps_parse_gpgga()
+char gps_hdop[5]; // GPS horizontal dilution of position [0.99 - 99.99], populated in gps_functions.h:gps_parse_gprmc()
+char gps_satellites_in_view[3]; // GPS satellites in view [00 - 99]
 bool flag_gps_fix = 0; // do we have a fix or not?
-//bool flag_gps_time_of_week_set = 0; // is the GPS time of week set or not?
-//bool flag_gps_week_set = 0; // is the GPS week set or not?
-//bool flag_nmea_sentence_printout = 0; // shall incoming NMEA sentences (regardless of fix) be printed out or not?
 bool flag_gps_on = 1; // is the gps powered on or off?
 int8_t timezone;
 
