@@ -6,6 +6,22 @@ void gps_parse_gprmc() // KLUDGE
   //		$GNRMC,214329.000,A,4547.9089,N,01555.1553,E,1.33,121.79,121116,,,A*7A
   //    $GPRMC,221939.869,V,,,,,,,060816,,,N*41
   //    $GNRMC,214325.073,V,,,,,1.48,112.99,121116,,,N*5F
+  //
+	//
+	// fields of interest (0-indexed) are marked with an X:
+	//
+	// #0 - talker ID
+	// #1 - UTC time
+	// #2 - fix indicator: A - valid, V - invalid
+	// #3 - latitude; "4547.9089" in above example
+	// #4 - latitude indicator; "N" in above example
+	// #5 - longtitude; "01555.1553" in above example
+	// #6 - longtitude indicator; "E" in above exmaple
+	// #7 - speed over ground, knots; "1.33" in above example
+	// #8 - course, ; "121.79" in above example
+	// #9 - date in DDMMYY format; "121116" in above example
+	// #10 - magnetic variation
+	// #11 - magnetic variation indicator
 
   // real programmers would probably do this in a more elegant way..
   // strtok would be a much cooler way but i dont want to have a loop within a loop (nema parser) (within a loop (loop()) )
@@ -44,6 +60,7 @@ void gps_parse_gprmc() // KLUDGE
   // [not needed] field 8 - speed over ground: 0.13,142.38,050816,,,A*63
 	// FIXME - speed over ground is needed for "fitness vs. normal mode" setting in the GPS receiver
   p = strchr(p, ',')+1;
+
   // [not needed] field 9 - course over ground: 142.38,050816,,,A*63
   p = strchr(p, ',')+1;
 
@@ -67,7 +84,7 @@ void gps_parse_gpgga(char *in_str)
 	// $GNGGA,214323.073,,,,,0,0,,,M,,M,,*57
 	// $GNGGA,214326.073,4547.9072,N,01555.1584,E,1,5,1.59,140.9,M,42.5,M,,*43
 	//
-	// fields of interest are (0-indexed):
+	// fields of interest (0-indexed) are marked with an X:
 	//
 	//  #0 - talker ID
 	//  #1 - UTC time
@@ -75,7 +92,7 @@ void gps_parse_gpgga(char *in_str)
 	//  #3 - north/south
 	//  #4 - longtitude
 	//  #5 - east/west
-	//-	#6 - position fix indicator: "1" after the "E," in the above example)
+	//X	#6 - position fix indicator: "1" after the "E," in the above example)
 	//		0 - invalid
 	//		1 - GPS (SPS)
 	//		2 - DGPS
@@ -85,9 +102,9 @@ void gps_parse_gpgga(char *in_str)
 	//		6 - estimated
 	//		7 - manual input
 	//		8 - simulation mode
-	//-	#7 - satellites used: "5" in the above example
-	//-	#8 - HDOP: "1.59" in the above example
-	//-	#9 - MSL altitude: "140.9" in the above example
+	//X	#7 - satellites used: "5" in the above example
+	//X	#8 - HDOP: "1.59" in the above example
+	//X	#9 - MSL altitude: "140.9" in the above example
 	//	#10 - unit: "M"
 	//	#11 - height above geoid: "42.5" in the above example
 	//	#12 - unit: "M"
@@ -99,9 +116,7 @@ void gps_parse_gpgga(char *in_str)
 	while (*p) // for as long as there is something to tokenize with the given delimiter...
 	{
 		if (i == 6) // position fix indicator
-		{
-			Serial.print("position fix indicator:"); Serial.println(*p);
-		}
+			gps_position_fix_indicator = *p;
 
 		if (i == 7) // satellites used
 		{
