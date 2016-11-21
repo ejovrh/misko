@@ -110,7 +110,10 @@
  *		miscellaneous boolean GPS settings, mostly flag-type things
  *
  *
- *		for reading/setting individual bits see http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/
+ *		for reading/setting individual bits see :
+ *			http://www.catonmat.net/blog/low-level-bit-hacks-you-absolutely-must-know/
+ *			http://www.avrfreaks.net/forum/tut-c-bit-manipulation-aka-programming-101?page=all
+ *			and many others
  */
 #define FERAM_GPS_MISC_CFG													0x08 // bit (0, 1)
 #define FERAM_GPS_MISC_CFG_POWER_CTL								0 // GPS power - on(1) or off(0)
