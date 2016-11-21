@@ -107,3 +107,9 @@ ISR(TIMER5_COMPA_vect)
 		SPI.endTransaction();
 	}
 }
+
+//
+ISR(BADISR_vect)
+{
+	Serial.println("!!! BADISR_vect !!!");
+}
