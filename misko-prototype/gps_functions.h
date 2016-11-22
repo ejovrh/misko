@@ -17,7 +17,7 @@ void gps_parse_gprmc() // KLUDGE
 	// #4 - latitude indicator; "N" in above example
 	// #5 - longtitude; "01555.1553" in above example
 	// #6 - longtitude indicator; "E" in above exmaple
-	// #7 - speed over ground, knots; "1.33" in above example
+	// #7 - speed over ground in knots; "1.33" in above example
 	// #8 - course, ; "121.79" in above example
 	// #9 - date in DDMMYY format; "121116" in above example
 	// #10 - magnetic variation
@@ -57,9 +57,12 @@ void gps_parse_gprmc() // KLUDGE
   if (flag_gps_fix)
     memcpy(gps_longtitude+(14*sizeof(char)), p, sizeof(char)); // fill up gps_longtitude[] , part 2, appends letter
 
-  // [not needed] field 8 - speed over ground: 0.13,142.38,050816,,,A*63
-	// FIXME - speed over ground is needed for "fitness vs. normal mode" setting in the GPS receiver
-  p = strchr(p, ',')+1;
+  // field 8 - speed over ground: 0.13,142.38,050816,,,A*63
+	p = strchr(p, ',')+1;
+
+  if (flag_gps_fix)
+	// TODO: this needs to be verified under real world conditions (i.e. real movement with varying speeds)
+		gps_speed = atoi( strtok(p, ".") ); // tokenize and convert what's left of the dot to an integer
 
   // [not needed] field 9 - course over ground: 142.38,050816,,,A*63
   p = strchr(p, ',')+1;
