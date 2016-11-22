@@ -96,8 +96,8 @@ ISR(TIMER5_COMPA_vect)
 	val_batA_pct = (133 * calculate_voltage(bat_A_pin)) - 180; // calculus...
 	val_batB_pct = 000;
 
-// set and unset of the fitness mode ( a MTK3333 chipset feature )
-	if (flag_gps_fitness_is_set && gps_speed >= GPS_FITNESS_MODE_THRESHOLD ) // 10 knots == 5.1m/s ( 18,.5km/h ) or faster
+// set and unset of the fitness mode ( a MTK3333 chipset feature which depends on velocity of the GPS receiver)
+	if (flag_gps_fitness_is_set && gps_speed >= GPS_FITNESS_MODE_THRESHOLD ) // 10 knots == 5.1m/s ( 18,.5km/h ) or faster - 5m/s is the threshold reported in the datasheet
 	{
 		gps.println("$PMTK886,0*28"); // set to normal mode
 		flag_gps_fitness_is_set = 0; // flag fitness mode off
