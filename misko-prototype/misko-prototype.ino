@@ -72,6 +72,7 @@ ISR(TIMER5_COMPA_vect)
 {
 	scheduler_run_count++;
 
+// statistical data (voltages, temperatures, etc.)
 	val_Vcc = 2 * calculate_voltage(Vcc_sense_pin); // measures Vcc across a voltage divider
 	val_temperature = calculate_temperature(); // reads out temperature-dependant voltage
 		/* the percentage calculation
@@ -95,6 +96,20 @@ ISR(TIMER5_COMPA_vect)
 	val_batA_pct = (133 * calculate_voltage(bat_A_pin)) - 180; // calculus...
 	val_batB_pct = 000;
 
+// set and unset of the fitness mode ( a MTK3333 chipset feature )
+	if (flag_gps_fitness_is_set && gps_speed >= GPS_FITNESS_MODE_THRESHOLD ) // 10 knots == 5.1m/s ( 18,.5km/h ) or faster
+	{
+		gps.println("$PMTK886,0*28"); // set to normal mode
+		flag_gps_fitness_is_set = 0; // flag fitness mode off
+	}
+
+	if (!flag_gps_fitness_is_set && gps_speed < GPS_FITNESS_MODE_THRESHOLD) // lower speed
+	{
+		gps.println("$PMTK886,1*29"); // enable fitness mode (good for speeds up to 5m/s (== 9.72 knots), for faster speeds normal mode is better)
+		flag_gps_fitness_is_set = 1; // flag fitness mode on
+	}
+
+// construct which runs only once at power-up
 	if(!flag_run_once)
 	{
 		flag_run_once = 1;
@@ -108,7 +123,7 @@ ISR(TIMER5_COMPA_vect)
 	}
 }
 
-//
+// catchall interrupt handler
 ISR(BADISR_vect)
 {
 	Serial.println("!!! BADISR_vect !!!");
