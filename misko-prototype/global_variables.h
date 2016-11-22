@@ -4,11 +4,11 @@
 
 #define BUFFER_DEBUG_PRINT 0 // SD write debug printout
 #define AREF_VOLTAGE 2.50
-#define TEMPERATURE_SAMPLE_PERIOD 10 // temperature measure interval in seconds
 #define GPSRATE 4800
 #define SERIALRATE 115200
 #define NMEA_BUFFERSIZE 82 // officially, NMEA sentences are at maximum 82 characters long (80 readable characters + \r\n)
 #define SD_BUFFERSIZE 1024 // cyclical buffer for NMEA sentences to be written to SD card
+#define GPS_FITNESS_MODE_THRESHOLD 10 // theshold in knots/h for transition from fitness mode <-> normal mode
 
 // EERPOM indices
 #define EERPOM_LCD_POWER_INDEX 1
@@ -24,17 +24,22 @@
 #define EERPOM_SERIAL_SETTING_INDEX 11
 
 // GPS variables
-char NMEA_buffer[NMEA_BUFFERSIZE] = "";        // string buffer for the NMEA sentence
+char NMEA_buffer[NMEA_BUFFERSIZE] = "";	// string buffer for the NMEA sentence
 uint8_t bufferid = 0; // holds the current position in the NMEA_buffer array, used for walk through the buffer
 char gps_command_buffer[24];
 char gps_date[9] = "20"; // 0-7 + 1 for '\0' -- YEAR 2100-BUG, HERE WE COME!!!
 char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
 char gps_logfile[22] = "";
-char gps_latitude[16] = "lat hhmm.ssss  "; // N or S, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
-char gps_longtitude[17] = "lon hhhmm.ssss  "; // W or E, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
-char gps_altitude[5]; // GPS altitude: [xxxx or -xxx], populated in gps_functions.h:gps_parse_gpgga()
-char gps_hdop[5]; // GPS horizontal dilution of position [0.99 - 99.99], populated in gps_functions.h:gps_parse_gprmc()
-char gps_satellites_in_view[3]; // GPS satellites in view [00 - 99]
+// TODO: verify that "static" is indeed working as intended
+static char gps_latitude[16] = "lat hhmm.ssss  "; // N or S, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
+static char gps_longtitude[17] = "lon hhhmm.ssss  "; // W or E, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
+static char gps_altitude[5]; // GPS altitude: [xxxx or -xxx], populated in gps_functions.h:gps_parse_gpgga()
+static char gps_hdop[5]; // GPS horizontal dilution of position [0.99 - 99.99], populated in gps_functions.h:gps_parse_gprmc()
+// FIXME: gps_satellites_in_view - " " seems a buggy thing to do; without it there is no value
+static char gps_satellites_in_view[3] = " "; // GPS satellites in view [00 - 99]
+static char gps_position_fix_indicator; // indicates the type of fix
+static uint8_t gps_speed = 0; // gps speed in knots (only the interger part of the speed is relevant)
+bool flag_gps_fitness_is_set = 1; // is the fitness mode set or not?
 bool flag_gps_fix = 0; // do we have a fix or not?
 bool flag_gps_on = 1; // is the gps powered on or off?
 int8_t timezone;
@@ -43,6 +48,7 @@ int8_t timezone;
 char bat_a_pct[9] = "batAxxx%";
 char bat_b_pct[9] = "batBxxx%";
 char sd_buffer[SD_BUFFERSIZE]; // buffer holding 2x 512byte blocks of NMEA sentences for buffered write of 512byte blocks
+char statistics_buffer[SD_BUFFERSIZE] = ""; // buffer for statistical data which ends up written to SD
 byte adxl345_irq_src; // holds INT_SRC - a register in the ADXL345 via which it is determined which interrupt was triggered
 
 // Bluetooth flags
