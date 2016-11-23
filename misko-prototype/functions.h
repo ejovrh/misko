@@ -748,14 +748,36 @@ const char *fn_cb_gps_satellites_in_view(m2_rom_void_p element)
 // callback for the position fix indicator
 const char *fn_cb_gps_fix_indicator(m2_rom_void_p element)
 {
-	if (gps_position_fix_indicator == '0')
-		return "inv.";
+		switch(gps_position_fix_indicator)
+		{
+			case '0':
+				return "inv.";
 
-	if (gps_position_fix_indicator == '1')
-		return "SPS";
+			case '1':
+				return "SPS";
 
-	if (gps_position_fix_indicator == '2')
-		return "DGPS";
+			case '2':
+				return "DGPS";
+
+			case '3':
+				return "PPS";
+
+			case '4':
+				return "RTK";
+
+			case '5':
+				return "FRTK";
+
+			case '6':
+				return "est.";
+
+			case '7':
+				return "man.";
+
+			case '8':
+				return "sim.";
+		}
+
 }
 
 // callback for gps HDOP
