@@ -750,9 +750,6 @@ const char *fn_cb_gps_fix_indicator(m2_rom_void_p element)
 {
 		switch(gps_position_fix_indicator)
 		{
-			case '0':
-				return "inv.";
-
 			case '1':
 				return "SPS";
 
@@ -776,6 +773,10 @@ const char *fn_cb_gps_fix_indicator(m2_rom_void_p element)
 
 			case '8':
 				return "sim.";
+
+			case '0':
+			default:
+				return "inv.";
 		}
 
 }
