@@ -30,12 +30,15 @@ M2_ALIGN(el_top_datetime_menu, format_1W64H64, &el_datetime_grid);
 // GPS position
 M2_LABELFN(el_gps_latitude, format_rf0, fn_cb_gps_latitude);
 M2_LABELFN(el_gps_longtitude, format_rf0, fn_cb_gps_longtitude);
-M2_LABELFN(el_altitude, format_rf0, fn_cb_gps_altitude);
+M2_LABELFN(el_gps_altitude, format_rf0, fn_cb_gps_altitude);
 M2_LABELFN(el_gps_sat_in_view, format_rf0, fn_cb_gps_satellites_in_view);
 M2_LABELFN(el_gps_hdop, format_rf0, fn_cb_gps_hdop);
-M2_LIST(el_sat_dop_list) = {&el_gps_sat_in_view, &el_whitespace, & el_gps_hdop};
+M2_LABELFN(el_gps_position_fix, format_rf0, fn_cb_gps_fix_indicator);
+M2_LIST(el_gps_alt_fix_list) = {& el_gps_altitude, &el_whitespace, &el_gps_position_fix};
+M2_HLIST(el_gps_hlist_alt_fix_list, format_rf0, el_gps_alt_fix_list);
+M2_LIST(el_sat_dop_list) = {&el_gps_sat_in_view, &el_whitespace, &el_gps_hdop};
 M2_HLIST(el_hlist_sat_dop, format_rf0, el_sat_dop_list);
-M2_LIST(el_position_list) = {&el_gps_latitude, &el_gps_longtitude, &el_altitude, &el_hlist_sat_dop, &el_ok};
+M2_LIST(el_position_list) = {&el_gps_latitude, &el_gps_longtitude, &el_gps_hlist_alt_fix_list, &el_hlist_sat_dop, &el_ok};
 M2_GRIDLIST(el_position_grid, "c1", el_position_list);
 M2_ALIGN(el_top_position_menu, format_1W64H64, &el_position_grid);
 // GPS position
