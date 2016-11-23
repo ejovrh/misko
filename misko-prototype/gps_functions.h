@@ -1,86 +1,80 @@
 
 // determines fix or not, parses coordinates, datetime
-void gps_parse_gprmc() // KLUDGE
+void gps_parse_gprmc(char *in_str)
 {
-  // sample NMEA GPRMC sentence
-  //		$GNRMC,214329.000,A,4547.9089,N,01555.1553,E,1.33,121.79,121116,,,A*7A
-  //    $GPRMC,221939.869,V,,,,,,,060816,,,N*41
-  //    $GNRMC,214325.073,V,,,,,1.48,112.99,121116,,,N*5F
-  //
-	//
-	// fields of interest (0-indexed), irrelevant are marked with an !:
-	//
-	//	 #0 - talker ID
-	//	 #1 - UTC time
-	//	 #2 - fix indicator: A - valid, V - invalid
-	//	 #3 - latitude; "4547.9089" in above example
-	//	 #4 - latitude indicator; "N" in above example
-	//	 #5 - longtitude; "01555.1553" in above example
-	//	 #6 - longtitude indicator; "E" in above exmaple
-	//	 #7 - speed over ground in knots; "1.33" in above example
-	//!	 #8 - course, ; "121.79" in above example
-	//	 #9 - date in DDMMYY format; "121116" in above example
-	//!	 #10 - magnetic variation
-	//!	 #11 - magnetic variation indicator
+	/*
+	 * sample NMEA GPRMC sentence
+	 *		$GNRMC,214329.000,A,4547.9089,N,01555.1553,E,1.33,121.79,121116,,,A*7A
+   *    $GPRMC,221939.869,V,,,,,,,060816,,,N*41
+   *    $GNRMC,214325.073,V,,,,,1.48,112.99,121116,,,N*5F
+   *
+	 *
+	 * fields of interest (0-indexed), irrelevant are marked with an !:
+	 *
+	 *	 #0 - talker ID
+	 *	 #1 - UTC time
+	 *	 #2 - fix indicator: A - valid, V - invalid
+	 *	 #3 - latitude; "4547.9089" in above example
+	 *	 #4 - latitude indicator; "N" in above example
+	 *	 #5 - longtitude; "01555.1553" in above example
+	 *	 #6 - longtitude indicator; "E" in above exmaple
+	 *	 #7 - speed over ground in knots; "1.33" in above example
+	 *!	 #8 - course, ; "121.79" in above example
+	 *	 #9 - date in DDMMYY format; "121116" in above example
+	 *!	 #10 - magnetic variation
+	 *!	 #11 - magnetic variation indicator
+	 */
 
-  // real programmers would probably do this in a more elegant way..
-  // strtok would be a much cooler way but i dont want to have a loop within a loop (nema parser) (within a loop (loop()) )
-  //  p = strchr(p, ',')+1, on the other hand, lets me seek the next comma in a non destructive way
-  char *p;  // pointer for parsing
+	uint8_t i = 0; // counter for the string tokenizer
 
-  // field 2 - hhmmss time data: 170942.000,A,4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
-  p = NMEA_buffer+7;  // set pointer to proper position: 154951.285,A,4547.8814,N,01555.2455,E,0.92,115.67,020814,,,A*69
-  memcpy(gps_time, p, 6* sizeof(char)); // fill char gps_time[7] = "XXXXXX" by copying from one array into another
+	char *p = strtok(in_str, ","); // char pointer for strtok
 
-  // field 3 - fix indicator: A,4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
-  p = strchr(p, ',')+1; // finds position of next comma and puts the cursor one position further
+	while (*p) // for as long as there is something to tokenize with the given delimiter...
+	{
+		if (i == 1)	// field 1 - hhmmss time data: 170942.000,A,4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
+			memcpy(gps_time, p, 6* sizeof(char)); // fill char gps_time[7] = "XXXXXX" by copying from one array into another
 
-	flag_gps_fix = ( *p == 'A' ? 1 : 0 ); // sets flag_gps_fix to 1 if there is a fix
+		if (i == 2)	// field 2 - fix indicator: A,4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
+			flag_gps_fix = ( *p == 'A' ? 1 : 0 ); // sets flag_gps_fix to 1 if there is a fix
 
-  // field 4 - latitude: 4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
-  p = strchr(p, ',')+1;
-  if (flag_gps_fix)
-    memcpy(gps_latitude+(4*sizeof(char)), p, 9 * sizeof(char)); // fill up gps_latitude[] , part 1
+		if (i == 3)	// field 3 - latitude: 4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
+		  if (flag_gps_fix)
+			  memcpy(gps_latitude+(4*sizeof(char)), p, 9 * sizeof(char)); // fill up gps_latitude[] , part 1
 
-  // field 5 - latitude indicator: N,01555.1254,E,0.13,142.38,050816,,,A*63
-  p = strchr(p, ',')+1;
-  if (flag_gps_fix)
-    memcpy(gps_latitude+(13*sizeof(char)), p, sizeof(char)); // fill up gps_latitude[] , part 2
+		if (i == 4) // field 4 - latitude indicator: N,01555.1254,E,0.13,142.38,050816,,,A*63
+		  if (flag_gps_fix)
+			  memcpy(gps_latitude+(13*sizeof(char)), p, sizeof(char)); // fill up gps_latitude[] , part 2
 
-  // field 6 - longtitude: 01555.1254,E,0.13,142.38,050816,,,A*63
-  p = strchr(p, ',')+1;
-  if (flag_gps_fix)
-    memcpy(gps_longtitude+(4*sizeof(char)), p, 10 * sizeof(char)); // fill up gps_longtitude[] , part 1
+		if (i == 5)	// field 5 - longtitude: 01555.1254,E,0.13,142.38,050816,,,A*63
+			if (flag_gps_fix)
+				memcpy(gps_longtitude+(4*sizeof(char)), p, 10 * sizeof(char)); // fill up gps_longtitude[] , part 1
 
-  // field 7 - longtitude indicator: E,0.13,142.38,050816,,,A*63
-  p = strchr(p, ',')+1;
-  if (flag_gps_fix)
-    memcpy(gps_longtitude+(14*sizeof(char)), p, sizeof(char)); // fill up gps_longtitude[] , part 2, appends letter
+		if (i == 6) // field 6 - longtitude indicator: E,0.13,142.38,050816,,,A*63
+			if (flag_gps_fix)
+				memcpy(gps_longtitude+(14*sizeof(char)), p, sizeof(char)); // fill up gps_longtitude[] , part 2, appends letter
 
-  // field 8 - speed over ground: 0.13,142.38,050816,,,A*63
-	p = strchr(p, ',')+1;
+		if (i == 7)	// field 7 - speed over ground: 0.13,142.38,050816,,,A*63
+		  if (flag_gps_fix)
+				// TODO: this needs to be verified under real world conditions (i.e. real movement with varying speeds)
+				gps_speed = atoi(p);
 
-  if (flag_gps_fix)
-	// TODO: this needs to be verified under real world conditions (i.e. real movement with varying speeds)
-		gps_speed = atoi( strtok(p, ".") ); // tokenize and convert what's left of the dot to an integer
+		if (i == 9)	// field 9 - date: 050816,,,A*63
+		{
+			// fill gps_date
+			*(gps_date+2) = *(p+4);  // Y - 1
+			*(gps_date+3) = *(p+5);  // Y - 6
+			*(gps_date+4) = *(p+2);  // M - 0
+			*(gps_date+5) = *(p+3);  // M - 8
+			*(gps_date+6) = *(p+0);  // D - 0
+			*(gps_date+7) = *(p+1);  // D - 5
+			//Serial.print("gps_date: ");  Serial.println(gps_date);
+			//Serial.print("gps_time: ");  Serial.println(gps_time);
+		}
 
-  // [not needed] field 9 - course over ground: 142.38,050816,,,A*63
-  p = strchr(p, ',')+1;
-
-  // field 10 - date: 050816,,,A*63
-  p = strchr(p, ',')+1;
-
-  // fill gps_date
-      *(gps_date+2) = *(p+4);  // Y - 1
-      *(gps_date+3) = *(p+5);  // Y - 6
-      *(gps_date+4) = *(p+2);  // M - 0
-      *(gps_date+5) = *(p+3);  // M - 8
-      *(gps_date+6) = *(p+0);  // D - 0
-      *(gps_date+7) = *(p+1);  // D - 5
-    //Serial.print("gps_date: ");  Serial.println(gps_date);
-    //Serial.print("gps_time: ");  Serial.println(gps_time);
+		p = strtok(NULL, ","); // set the tokenizer for the next iteration
+		i++; // counter increment
+	}
 }
-
 // parses out satellites used, HDOP, MSL altitude
 void gps_parse_gpgga(char *in_str)
 {
@@ -186,7 +180,7 @@ void get_nmea_sentences() {
       // check for GPRMC sentence
       if (strncmp(NMEA_buffer, "$GNRMC", 6) == 0) // if we have a GPRMC sentence (compare the NMEA buffer with its sentence to gprmc[])
 			{
-        gps_parse_gprmc(); // parse the GPRMC sentence and get datetime and other values
+        gps_parse_gprmc(NMEA_buffer); // parse the GPRMC sentence and get datetime and other values
 
         if (flag_gps_fix) // valid fix - indicate it by lighting up the red LED
           digitalWrite(gps_green_led_pin, LOW);
