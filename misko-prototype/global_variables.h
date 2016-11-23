@@ -30,13 +30,11 @@ char gps_command_buffer[24];
 char gps_date[9] = "20"; // 0-7 + 1 for '\0' -- YEAR 2100-BUG, HERE WE COME!!!
 char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
 char gps_logfile[22] = "";
-// TODO: verify that "static" is indeed working as intended
 static char gps_latitude[16] = "lat hhmm.ssss  "; // N or S, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
 static char gps_longtitude[17] = "lon hhhmm.ssss  "; // W or E, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
 static char gps_altitude[5]; // GPS altitude: [xxxx or -xxx], populated in gps_functions.h:gps_parse_gpgga()
 static char gps_hdop[5]; // GPS horizontal dilution of position [0.99 - 99.99], populated in gps_functions.h:gps_parse_gprmc()
-// FIXME: gps_satellites_in_view - " " seems a buggy thing to do; without it there is no value
-static char gps_satellites_in_view[3] = " "; // GPS satellites in view [00 - 99]
+static char gps_satellites_in_view[3]; // GPS satellites in view [00 - 99]
 static char gps_position_fix_indicator; // indicates the type of fix
 static uint8_t gps_speed = 0; // gps speed in knots (only the interger part of the speed is relevant)
 bool flag_gps_fitness_is_set = 1; // is the fitness mode set or not?
