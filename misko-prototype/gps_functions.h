@@ -124,22 +124,23 @@ void gps_parse_gpgga(char *in_str)
 		if (i == 7) // satellites used
 		{
 			len = strcspn (p, ",");
+			memset(gps_satellites_in_view, '\0', 3);
 			memcpy( gps_satellites_in_view, p, len * sizeof(char) );
-			*(gps_satellites_in_view+len+1) = '\0';
+			Serial.print("satsrc:");Serial.print(gps_satellites_in_view);Serial.println(":satsrc");
 		}
 
 		if (i == 8) // hdop
 		{
 			len = strcspn (p, ",");
+			memset(gps_hdop, '\0', 5);
 			memcpy( gps_hdop, p, len * sizeof(char) ); // copy the value
-			*(gps_hdop+len+1) = '\0'; // terminate the string
 		}
 
 		if (i == 9) // altitude
 		{
 			len = strcspn (p, ".,");
+			memset(gps_altitude, '\0', 5);
 			memcpy( gps_altitude, p, len * sizeof(char) ); // copy the numbers...
-			*(p+3+len+1) = '\0'; // at the next position, terminate the string
 		}
 
 		p = strtok(NULL, ",");
