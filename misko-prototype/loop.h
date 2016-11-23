@@ -48,7 +48,7 @@
 	}
 
 	//FIXME - serial redirection makes garbage
-	if (eeprom_get(EERPOM_SERIAL_SETTING_INDEX) == 0) // user selects GPS in serial menu
+	if ( ( ( FeRAMReadByte(FERAM_DEVICE_MISC_CFG2) >> FERAM_DEVICE_MISC_CFG2_SYSTEM_SERIAL) & 0x03 ) == 0 ) // user selects GPS in serial menu
 	{
 		// serial redirection for GPS testing
 		if(gps.available()) //read GPS output (if available) and print it in arduino IDE serial monitor
@@ -58,7 +58,7 @@
 	}
 
 	//FIXME - serial redirection makes garbage
-	if (eeprom_get(EERPOM_SERIAL_SETTING_INDEX) == 1) // user selects GSM in user menu
+	if ( ( ( FeRAMReadByte(FERAM_DEVICE_MISC_CFG2) >> FERAM_DEVICE_MISC_CFG2_SYSTEM_SERIAL) & 0x03 ) == 1 ) // user selects GSM in user menu
 	{
 		// serial redirection for GSM modem testing
 		if(Serial1.available()) //read SIM800 output (if available) and print it in arduino IDE serial monitor
