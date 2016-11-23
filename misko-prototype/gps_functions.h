@@ -8,20 +8,20 @@ void gps_parse_gprmc() // KLUDGE
   //    $GNRMC,214325.073,V,,,,,1.48,112.99,121116,,,N*5F
   //
 	//
-	// fields of interest (0-indexed) are marked with an X:
+	// fields of interest (0-indexed), irrelevant are marked with an !:
 	//
-	// #0 - talker ID
-	// #1 - UTC time
-	// #2 - fix indicator: A - valid, V - invalid
-	// #3 - latitude; "4547.9089" in above example
-	// #4 - latitude indicator; "N" in above example
-	// #5 - longtitude; "01555.1553" in above example
-	// #6 - longtitude indicator; "E" in above exmaple
-	// #7 - speed over ground in knots; "1.33" in above example
-	// #8 - course, ; "121.79" in above example
-	// #9 - date in DDMMYY format; "121116" in above example
-	// #10 - magnetic variation
-	// #11 - magnetic variation indicator
+	//	 #0 - talker ID
+	//	 #1 - UTC time
+	//	 #2 - fix indicator: A - valid, V - invalid
+	//	 #3 - latitude; "4547.9089" in above example
+	//	 #4 - latitude indicator; "N" in above example
+	//	 #5 - longtitude; "01555.1553" in above example
+	//	 #6 - longtitude indicator; "E" in above exmaple
+	//	 #7 - speed over ground in knots; "1.33" in above example
+	//!	 #8 - course, ; "121.79" in above example
+	//	 #9 - date in DDMMYY format; "121116" in above example
+	//!	 #10 - magnetic variation
+	//!	 #11 - magnetic variation indicator
 
   // real programmers would probably do this in a more elegant way..
   // strtok would be a much cooler way but i dont want to have a loop within a loop (nema parser) (within a loop (loop()) )
@@ -126,6 +126,7 @@ void gps_parse_gpgga(char *in_str)
 			len = strcspn (p, ",");
 			memset(gps_satellites_in_view, '\0', 3);
 			memcpy( gps_satellites_in_view, p, len * sizeof(char) );
+// TODO: remove after a transition of 9 -> 10 -> 9 is observed
 			Serial.print("satsrc:");Serial.print(gps_satellites_in_view);Serial.println(":satsrc");
 		}
 

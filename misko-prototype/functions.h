@@ -1,16 +1,16 @@
 // forward declaration of this shitty function (it's at the very end of this file)
 void poor_mans_debugging(void);
 
-/* eeprom_timer() - returns 1 if enough time has passed
+/* auto_timeout() - returns 1 if enough time has passed
  *  returns:
  *    1 if time is up
  *    0 otherwise
  *
  * input arguments:
- *    unsigned int in_bluetooth_button_press_time - time of button press
- *    char in_eeprom_index - index of time paramater in EEPROM[]
+ *    uint32_t some_button_press_time - time of button press
+ *    uint8_t timeout - timeout in seconds
  *
- * times are in milliseconds !!
+ * times are in seconds !!
  */
 uint8_t inline auto_timeout(uint32_t in_button_press_time, uint8_t timeout_val)
 {
@@ -147,7 +147,7 @@ const char *fn_cb_get_bat_pct(m2_rom_void_p element)
 // handler for the bluetooth power toggle button
 void handle_bluetooth_button(void)
 {
-	/* purpose: control BT power based on eeprom settings
+	/* purpose: control BT power based on feram settings
 
 		the idea is: via one button control BT power according to EERPOM settings.
 
@@ -333,11 +333,11 @@ const char *fn_cb_bluetooth_power_setting(m2_rom_void_p element, uint8_t msg, ui
 	// see https://github.com/olikraus/m2tklib/wiki/elref#combofn
 	switch(msg) // msg can be one of: M2_COMBOFN_MSG_GET_VALUE, M2_COMBOFN_MSG_SET_VALUE, M2_COMBOFN_MSG_GET_STRING
   {
-		case M2_COMBOFN_MSG_GET_VALUE: // we get the vaue from eeprom
+		case M2_COMBOFN_MSG_GET_VALUE: // we get the vaue from feram
 			*valptr = (FeRAMReadByte(FERAM_DEVICE_MISC_CFG2) >> FERAM_DEVICE_MISC_CFG2_BLUETOOTH_POWER) & 0x03; // see if bit 1 is set
       break;
 
-    case M2_COMBOFN_MSG_SET_VALUE: // we set the value into eeprom
+    case M2_COMBOFN_MSG_SET_VALUE: // we set the value into feram
 			val = FeRAMReadByte(FERAM_DEVICE_MISC_CFG2); // retrieve byte
 			// TODO: these two lines can probably be written more beautiful
 			val &= ~ (1 << FERAM_DEVICE_MISC_CFG2_BLUETOOTH_POWER); // hopefully set these two bits to 0 (so that they dont poison the subsequent write)

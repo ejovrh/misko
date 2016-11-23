@@ -30,9 +30,7 @@
 	get_nmea_sentences(); // gets NMEA sentences out of the GPS and deals with them
 	//Serial.println(millis());
 
-	//if (flag_adxl345_int1) // if the ADXL345 INT1 flag is set
-		//handle_adx_intl(); // execute the function
-
+// GPS device power control
 	if( !flag_gps_on && ( (FeRAMReadByte(FERAM_GPS_MISC_CFG) >> FERAM_GPS_MISC_CFG_POWER_CTL) & 0x01 ) ) // user powers GPS on
 	{
 		digitalWrite(GPS_power_ctl_pin, HIGH); // pull high to wake up

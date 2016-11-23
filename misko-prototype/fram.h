@@ -145,7 +145,7 @@
  *	FERAM_DEVICE_MISC_CFG2
  *		two bits, 0 (off), 1 (on), 2(auto)
  *
- *		miscellaneous tristate device settings
+ *		miscellaneous tristate device settings, e.g. on, off and something else
  */
 #define FERAM_DEVICE_MISC_CFG2											0x0A //
 #define FERAM_DEVICE_MISC_CFG2_SYSTEM_SERIAL				0 // connection to serial console - GPS(0), SIM800(1), system(2)
