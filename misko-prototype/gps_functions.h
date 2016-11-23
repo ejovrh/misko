@@ -84,68 +84,65 @@ void gps_parse_gprmc() // KLUDGE
 // parses out satellites used, HDOP, MSL altitude
 void gps_parse_gpgga(char *in_str)
 {
-	// $GNGGA,214323.073,,,,,0,0,,,M,,M,,*57
-	// $GNGGA,214326.073,4547.9072,N,01555.1584,E,1,5,1.59,140.9,M,42.5,M,,*43
-	//
-	// fields of interest (0-indexed) are marked with an X:
-	//
-	//  #0 - talker ID
-	//  #1 - UTC time
-	//  #2 - latitude
-	//  #3 - north/south
-	//  #4 - longtitude
-	//  #5 - east/west
-	//X	#6 - position fix indicator: "1" after the "E," in the above example)
-	//		0 - invalid
-	//		1 - GPS (SPS)
-	//		2 - DGPS
-	//		3 - PPS
-	//		4 - real time kinetic
-	//		5 - float real time kinetic
-	//		6 - estimated
-	//		7 - manual input
-	//		8 - simulation mode
-	//X	#7 - satellites used: "5" in the above example
-	//X	#8 - HDOP: "1.59" in the above example
-	//X	#9 - MSL altitude: "140.9" in the above example
-	//	#10 - unit: "M"
-	//	#11 - height above geoid: "42.5" in the above example
-	//	#12 - unit: "M"
+	/*
+	 *	$GNGGA,214323.073,,,,,0,0,,,M,,M,,*57
+	 *	$GNGGA,214326.073,4547.9072,N,01555.1584,E,1,5,1.59,140.9,M,42.5,M,,*43
+	 *
+	 *	fields of interest (0-indexed) are marked with an X:
+	 *	#0 - talker ID
+	 *	#1 - UTC time
+	 *	#2 - latitude
+	 *	#3 - north/south
+	 *	#4 - longtitude
+	 *	#5 - east/west
+	 *X	#6 - position fix indicator: "1" after the "E," in the above example)
+	 *			0 - invalid
+	 *			1 - GPS (SPS)
+	 *			2 - DGPS
+	 *			3 - PPS
+	 *			4 - real time kinetic
+	 *			5 - float real time kinetic
+	 *			6 - estimated
+	 *			7 - manual input
+	 *			8 - simulation mode
+	 *X	#7 - satellites used: "5" in the above example
+	 *X	#8 - HDOP: "1.59" in the above example
+	 *X	#9 - MSL altitude: "140.9" in the above example
+	 *	#10 - unit: "M"
+	 *	#11 - height above geoid: "42.5" in the above example
+	 *	#12 - unit: "M"
+	 *
+	 */
+
+	uint8_t i = 0; // counter for the string tokenizer
 
 	char *p = strtok(in_str, ","); // char pointer for strtok
-	uint8_t i = 0; // counter for the string tokenizer
-	uint8_t len = 0; // how long is a piece of string?
 
 	while (*p) // for as long as there is something to tokenize with the given delimiter...
 	{
 		if (i == 6) // position fix indicator
-			gps_position_fix_indicator = *p;
+			gps_position_fix_indicator = *p; // it's just one char (number)
 
 		if (i == 7) // satellites used
 		{
-			len = strcspn (p, ",");
-			memset(gps_satellites_in_view, '\0', 3);
-			memcpy( gps_satellites_in_view, p, len * sizeof(char) );
-// TODO: remove after a transition of 9 -> 10 -> 9 is observed
-			Serial.print("satsrc:");Serial.print(gps_satellites_in_view);Serial.println(":satsrc");
+			memset(gps_satellites_in_view, '\0', 3); // set the whole container to \0
+			memcpy( gps_satellites_in_view, p, strcspn (p, ",") * sizeof(char) ); // copy an adequate lenght of bytes from src into the container
 		}
 
 		if (i == 8) // hdop
 		{
-			len = strcspn (p, ",");
 			memset(gps_hdop, '\0', 5);
-			memcpy( gps_hdop, p, len * sizeof(char) ); // copy the value
+			memcpy( gps_hdop, p, strcspn (p, ",") * sizeof(char) );
 		}
 
 		if (i == 9) // altitude
 		{
-			len = strcspn (p, ".,");
 			memset(gps_altitude, '\0', 5);
-			memcpy( gps_altitude, p, len * sizeof(char) ); // copy the numbers...
+			memcpy( gps_altitude, p, strcspn (p, ".,") * sizeof(char) ); // copy the numbers...
 		}
 
-		p = strtok(NULL, ",");
-		i++;
+		p = strtok(NULL, ","); // set the tokenizer for the next iteration
+		i++; // counter increment
 	}
 }
 
