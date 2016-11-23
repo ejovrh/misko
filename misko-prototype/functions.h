@@ -173,7 +173,7 @@ void handle_bluetooth_button(void)
 			flag_bluetooth_power_toggle_pressed = 1; // flag the button as pressed, prevents multiple calls
 			poor_mans_debugging(); // execute poor mans debugging
 
-			if (EEPROM[EERPOM_BLUETOOTH_POWER_INDEX] != 2) // if bt setting is not auto (meaning is set to on or off)
+	if ( ( (FeRAMReadByte(FERAM_DEVICE_MISC_CFG2) >> FERAM_DEVICE_MISC_CFG2_BLUETOOTH_POWER) & 0x03 ) != 2 )
 				return; // do nothing
 
 			if (flag_bluetooth_power_keep_on) // prevent the timer from starting when we want to turn off manually toggled power
@@ -186,7 +186,7 @@ void handle_bluetooth_button(void)
 	}
 	else // the button is already flagged as pressed == is held pressed
 	{
-		if (EEPROM[EERPOM_BLUETOOTH_POWER_INDEX] != 2) // if bt setting is auto
+	if ( ( (FeRAMReadByte(FERAM_DEVICE_MISC_CFG2) >> FERAM_DEVICE_MISC_CFG2_BLUETOOTH_POWER) & 0x03 ) != 2 )
 			return;
 
 		if ( digitalRead(menu_bluetooth_power_toggle_pin) == LOW) // the button is released
@@ -199,7 +199,7 @@ void handle_bluetooth_button(void)
 		}
 	}
 
-	if (EEPROM[EERPOM_BLUETOOTH_POWER_INDEX] != 2) // if bt setting is not auto
+	if ( ( (FeRAMReadByte(FERAM_DEVICE_MISC_CFG2) >> FERAM_DEVICE_MISC_CFG2_BLUETOOTH_POWER) & 0x03 ) != 2 )
 		return; // do nothing
 
 	if (flag_bluetooth_power_keep_on) // if the BT device is marked to be kept on
@@ -329,19 +329,24 @@ const char *fn_cb_get_temperature(m2_rom_void_p element)
 // callback for bluetooth power setting
 const char *fn_cb_bluetooth_power_setting(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
 {
+	uint8_t val;
 	// see https://github.com/olikraus/m2tklib/wiki/elref#combofn
 	switch(msg) // msg can be one of: M2_COMBOFN_MSG_GET_VALUE, M2_COMBOFN_MSG_SET_VALUE, M2_COMBOFN_MSG_GET_STRING
   {
 		case M2_COMBOFN_MSG_GET_VALUE: // we get the vaue from eeprom
-			*valptr = EEPROM[EERPOM_BLUETOOTH_POWER_INDEX];
+			*valptr = (FeRAMReadByte(FERAM_DEVICE_MISC_CFG2) >> FERAM_DEVICE_MISC_CFG2_BLUETOOTH_POWER) & 0x03; // see if bit 1 is set
       break;
 
     case M2_COMBOFN_MSG_SET_VALUE: // we set the value into eeprom
-			EEPROM[EERPOM_BLUETOOTH_POWER_INDEX] = *valptr;
+			val = FeRAMReadByte(FERAM_DEVICE_MISC_CFG2); // retrieve byte
+			// TODO: these two lines can probably be written more beautiful
+			val &= ~ (1 << FERAM_DEVICE_MISC_CFG2_BLUETOOTH_POWER); // hopefully set these two bits to 0 (so that they dont poison the subsequent write)
+			val &= ~ (1 << (FERAM_DEVICE_MISC_CFG2_BLUETOOTH_POWER +1) );
+			FeRAMWriteByte( FERAM_DEVICE_MISC_CFG2, val ^ (*valptr << FERAM_DEVICE_MISC_CFG2_BLUETOOTH_POWER) );	// now save the new bit values & write the crap
       break;
 
     case M2_COMBOFN_MSG_GET_STRING: // we get the string _and_ set it (implicitly via M2_COMBOFN_MSG_SET_VALUE) via *valptr
-      if (*valptr == 0) // values are coded in eeprom.h
+      if (*valptr == 0) // values are coded in fram.h
 			{
 				digitalWrite(Bluetooth_wakeup_pin, HIGH);
         return "off";
@@ -444,13 +449,18 @@ const char *fn_cb_serial_setting(m2_rom_void_p element, uint8_t msg, uint8_t *va
 	// see fn_cb_bluetooth_power_setting for comments
 	switch(msg)
   {
+		uint8_t val;
 		case M2_COMBOFN_MSG_GET_VALUE:
-			*valptr = EEPROM[EERPOM_SERIAL_SETTING_INDEX];
-      break;
+			*valptr = (FeRAMReadByte(FERAM_DEVICE_MISC_CFG2) >> FERAM_DEVICE_MISC_CFG2_SYSTEM_SERIAL) & 0x03; // see if bit 1 is set
+			break;
 
     case M2_COMBOFN_MSG_SET_VALUE:
-			EEPROM[EERPOM_SERIAL_SETTING_INDEX] = *valptr;
-      break;
+			val = FeRAMReadByte(FERAM_DEVICE_MISC_CFG2); // retrieve byte
+			// TODO: these two lines can probably be written more beautiful
+			val &= ~ (1 << FERAM_DEVICE_MISC_CFG2_SYSTEM_SERIAL); // hopefully set these two bits to 0 (so that they dont poison the subsequent write)
+			val &= ~ (1 << (FERAM_DEVICE_MISC_CFG2_SYSTEM_SERIAL +1) );
+			FeRAMWriteByte( FERAM_DEVICE_MISC_CFG2, val ^ (*valptr << FERAM_DEVICE_MISC_CFG2_SYSTEM_SERIAL) );	// now save the new bit values & write the crap
+			break;
 
     case M2_COMBOFN_MSG_GET_STRING:
       if (*valptr == 0)
@@ -710,7 +720,7 @@ const char *fn_cb_gps_longtitude(m2_rom_void_p element)
 // callback for gps altitude
 const char *fn_cb_gps_altitude(m2_rom_void_p element)
 {
-	static char retval[7]; // will return e.g. "-333m" or "+5555m"
+	static char retval[10]; // will return e.g. "-333m" or "+5555m"
 	uint8_t len = strlen(gps_altitude);
 
 	if (len == 0) // if no altitude is given
@@ -718,14 +728,13 @@ const char *fn_cb_gps_altitude(m2_rom_void_p element)
 	else
 		sprintf(retval, "alt %sm", gps_altitude); // print "alt" and the actual number-string into retval
 
-	Serial.print("alt retval:");Serial.print(retval);Serial.println(":alt retval");
 	return retval;
 }
 
 // callback for gps satellites in view
 const char *fn_cb_gps_satellites_in_view(m2_rom_void_p element)
 {
-	static char retval[5]; // will return something like "0.00" or "99.99"
+	static char retval[7]; // will return something like "0.00" or "99.99"
 	uint8_t len = strlen(gps_satellites_in_view); // lenght of HDOP string
 
 	if (len == 0) // empty string (only a null terminator)
@@ -733,22 +742,33 @@ const char *fn_cb_gps_satellites_in_view(m2_rom_void_p element)
 	else
 		sprintf(retval, "sat %s", gps_satellites_in_view); // copy "sat" and the actual number-string into retval
 
-	Serial.print("sat retval:");Serial.print(retval);Serial.println(":sat retval");
 	return retval; // return that val
+}
+
+// callback for the position fix indicator
+const char *fn_cb_gps_fix_indicator(m2_rom_void_p element)
+{
+	if (gps_position_fix_indicator == '0')
+		return "inv.";
+
+	if (gps_position_fix_indicator == '1')
+		return "SPS";
+
+	if (gps_position_fix_indicator == '2')
+		return "DGPS";
 }
 
 // callback for gps HDOP
 const char *fn_cb_gps_hdop(m2_rom_void_p element)
 {
-	static char retval[9];
+	static char retval[10];
 	uint8_t len = strlen(gps_hdop);
 
 	if (len == 0) // empty string or not?
-		sprintf(retval, "hdop -.--"); // copy "hdop" and the actual number-string into retval
+		sprintf(retval, "hdop --.--"); // copy "hdop" and the actual number-string into retval
 	else
 		sprintf(retval, "hdop %s", gps_hdop); // copy "hdop" and the actual number-string into retval
 
-	Serial.print("hdop retval:");Serial.print(retval);Serial.println(":hdop retval");
 	return retval; // return that val
 }
 
@@ -871,6 +891,9 @@ void gsm_power(bool in_val)
 
 // buffered write onto SD card utilizing a circular buffer
 void sd_buffer_write(char *in_string, uint8_t in_size)
+// TODO add 3rd argument: the dst buffer
+//void sd_buffer_write(char *dst_buffer, char *in_string, uint8_t in_size)
+
 {
 	// pointer arithmetrics, beware!
 	static char *end = sd_buffer + SD_BUFFERSIZE; // end address of buffer
@@ -1021,7 +1044,7 @@ void poor_mans_debugging(void)
 	//Serial.print("FERAM_DEVICE_MISC_CFG2 ");
 	//Serial.println(FeRAMReadByte(FERAM_DEVICE_MISC_CFG2), BIN);
 
-
+	Serial.print("bt:");Serial.print(FeRAMReadByte(FERAM_DEVICE_MISC_CFG2), BIN);Serial.println(":bt");
 
 /* 		char buffer[82];
 		sprintf(buffer, "$PSRF104,%s,%s,%s,75000,%s,%s,12,1", gps_latitude, gps_longtitude, gps_altitude, gps_time_of_week, gps_week);
