@@ -27,7 +27,8 @@
  	handle_lcd_sleep(); // checks if it is time for the display to go to sleep
 
 	//Serial.println(millis());
-	get_nmea_sentences(); // gets NMEA sentences out of the GPS and deals with them
+	if (flag_gps_on)	// if the device is turned on
+		get_nmea_sentences(); // gets NMEA sentences out of the GPS and deals with them
 	//Serial.println(millis());
 
 // GPS device power control
