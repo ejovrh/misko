@@ -71,7 +71,7 @@ digitalWrite(TMP36_shutdown_pin, HIGH);						//
 	digitalWrite(SIM800C_status_pin, HIGH);
 //PD6 - SIM800C_power_pin
 	pinMode(SIM800C_power_pin, OUTPUT);								// SIM800L power control, connected directly to battery ( due to up 2A current )
-	digitalWrite(SIM800C_power_pin, LOW);							// mosfet gate for SIM800L module, on(high), off(low)
+	digitalWrite(SIM800C_power_pin, LOW);							// power control for SIM800L module, on(high), off(low)
 //PD7 - GPS power control pin, high(on), low(off)
 	pinMode(GPS_power_ctl_pin, OUTPUT);								// signals a wakeup to the GPS device; the sleep command is issued in software
 	digitalWrite(GPS_power_ctl_pin, LOW);							// off(low), on (high); the wakeup is triggered by pulling the pin high
