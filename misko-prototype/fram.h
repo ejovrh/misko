@@ -174,3 +174,21 @@
  *
  */
 #define FERAM_ADXL345_FREE													0x0D //
+
+/*
+ *	FERAM_GSM_MISC_CFG
+ *		individual bits, 0 (off), 1 (on)
+ *
+ *		miscellaneous boolean GSM settings, mostly flag-type things
+ *
+ */
+#define FERAM_GSM_MISC_CFG													0x0E // bit (0, 1)
+#define FERAM_GSM_MISC_CFG_POWER_CTL								0 // GSM  power - on(1) or off(0)
+#define FERAM_GSM_MISC_CFG_NMEA_PRINT_TO_SERIAL			1 // unassigned - on(1) or off(0)
+#define FERAM_GSM_MISC_CFG_bit3											2 // unassigned - on(1) or off(0)
+#define FERAM_GSM_MISC_CFG_bit4											3 // unassigned - on(1) or off(0)
+#define FERAM_GSM_MISC_CFG_bit5											4 // unassigned - on(1) or off(0)
+#define FERAM_GSM_MISC_CFG_bit6											5 // unassigned - on(1) or off(0)
+#define FERAM_GSM_MISC_CFG_bit7											6 // unassigned - on(1) or off(0)
+#define FERAM_GSM_MISC_CFG_bit8											7 // unassigned - on(1) or off(0)
+
