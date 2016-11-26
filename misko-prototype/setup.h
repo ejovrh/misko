@@ -91,6 +91,7 @@
 	gps.println("$PMTK255,1*2D"); // set sync PPS and NMEA
 	gps.println("$PMTK285,4,50*0C"); // set PPS
 	gps.println("$PMTK886,1*29"); // enable fitness mode (good for speeds up to 5m/s (== 9.72 knots), for faster speeds normal mode is better)
+	gps.println("$PMTK220,1000*1F"); // 1Hz update rate per fix
 	gps.println("$PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0*2A"); // FIXME - GPZDA doesnt work
 
 	// $PMTK220 - what does it do?
