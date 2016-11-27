@@ -2,7 +2,6 @@
 #include <SoftwareSerial.h> // software serial library for GPS/Bluetooth
 #include <SD.h> // SD card library
 #include <SPI.h> // SPI library
-#include <EEPROM.h> // EEPROM library for configuration data
 #include <U8glib.h> // OLED chip driver - https://github.com/olikraus/u8glib/wiki/userreference
 #include <M2tk.h> // user menu library - https://code.google.com/archive/p/m2tklib/
 #include "utility/m2ghu8g.h" // U8glib graphics handler (one of many)
@@ -21,7 +20,6 @@
 
 void setup()
 {
-	#include "eeprom_config.h" // definition of EEPROM fields
 	#include "pin_modes.h" // definiton of pin modes
   #include "setup.h" // the actual setup [ without () ]
 }
