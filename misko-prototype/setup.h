@@ -71,30 +71,30 @@
 	*/
 	gps.begin(9600);   // connect to the GPS at the default rate
 	Serial.println(F("GPS SW serial set")); // set gps serial comm. baud rate
-	gps.println("$PMTK314,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*29");
+	gps.println("$PMTK314,0,0,0,0,5,10,0,0,0,0,0,0,0,0,0,0,1,0,0*1D");
 	gps.println("$PMTK250,3,3,4800*15"); // set in/out data format to NMEA over 4600 baud
 	gps.println("$PMTK251,4800*14"); // set baud rate to 4600
 	gps.end();
 
 	gps.begin(GPSRATE);
-	gps.println("$PMTK262,3*2B"); // enable GLP (low power mode) mode
 	gps.println("$PMTK185,1*23"); // disable locus logging
-	gps.println("$PMTK353,1,1,1,0,0*2A"); // look for GPS, GLASNOSS and GALILEO satellites
-	gps.println("$PMTK301,2*2E"); // set DGPS mode to SBAS
-	gps.println("$PMTK313,1*2E"); // enable SBAS
-	gps.println("$PMTK386,0.5*38"); // static nav. threshold 0.5m/s
-	gps.println("$PMTK257,1*2F"); // tunnel/garage high accurancy function
-	gps.println("$PMTK308,3*26"); // ouput 3 fixes after entering tunnel/garage
-	gps.println("$PMTK286,1*23"); // enable active interface cancellation
+	//gps.println("$PMTK220,1000*1F"); // 1Hz update rate per fix
 	gps.println("$PMTK225,0*2B"); // no power saving, i.e. normal mode
-	gps.println("$PMTK869,1,1*35"); // enable EASY
 	gps.println("$PMTK255,1*2D"); // set sync PPS and NMEA
+	gps.println("$PMTK257,1*2F"); // tunnel/garage high accurancy function
+	gps.println("$PMTK262,3*2B"); // enable GLP (low power mode) mode
 	gps.println("$PMTK285,4,50*0C"); // set PPS
+	gps.println("$PMTK286,1*23"); // enable active interface cancellation
+	gps.println("$PMTK301,2*2E"); // set DGPS mode to SBAS
+	gps.println("$PMTK308,3*26"); // ouput 3 fixes after entering tunnel/garage
+	gps.println("$PMTK313,1*2E"); // enable SBAS
+	gps.println("$PMTK353,1,1,1,0,0*2A"); // look for GPS, GLASNOSS and GALILEO satellites
+	gps.println("$PMTK386,0.5*38"); // static nav. threshold 0.5m/s
+	gps.println("$PMTK869,1,1*35"); // enable EASY
 	gps.println("$PMTK886,1*29"); // enable fitness mode (good for speeds up to 5m/s (== 9.72 knots), for faster speeds normal mode is better)
-	gps.println("$PMTK220,1000*1F"); // 1Hz update rate per fix
-	gps.println("$PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0*2A"); // FIXME - GPZDA doesnt work
+	gps_adjust_log_freq(); // operates directly off values stored in FeRAM
+	//gps.println("$PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0*2A"); // FIXME - GPZDA doesnt work
 
-	// $PMTK220 - what does it do?
 	// $PMTK306 - minimum satellite SNR
 	// $PMTK311 - mimimum elevation mask
 
