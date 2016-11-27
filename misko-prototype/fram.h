@@ -77,9 +77,9 @@
  *			b0-b3: GPRMC frequency in seconds
  *			b4-b7: GPGGA frequency in seconds
  */
-#define FERAM_GPS_GPRMC_GPGGA_FREQ									0x05 // nibble (0 ... 15) -- seconds
-#define FERAM_GPS_GPRMC_FREQ												0
-#define FERAM_GPS_GPGGA_FREQ												4
+#define FERAM_GPS_GPRMC_GGA_GSA_FREQ								0x05 // nibble (0 ... 15) -- seconds
+#define FERAM_GPS_GPRMC_GGA_FREQ										0
+#define FERAM_GPS_GPGSA_FREQ												4
 
 /*
  *	FERAM_GPS_GPRMC_GPGGA_FREQ
@@ -88,20 +88,9 @@
  *			b0-b3: GPGSA frequency in seconds
  *			b4-b7: GPGSV frequency in seconds
  */
-#define FERAM_GPS_GPGSA_GPGSV_FREQ									0x06 // nibble (0 ... 15) -- seconds
-#define FERAM_GPS_GPGSA_FREQ												0
-#define FERAM_GPS_GPGSV_FREQ												4
-
-/*
- *	FERAM_GPS_GPRMC_GPGGA_FREQ
- *		2 nibbles, unsigned integer from 0 to 15
- *
- *			b0-b3: GPZDA frequency in seconds
- *			b4-b7: GPVTG frequency in seconds
- */
-#define FERAM_GPS_GPZDA_GPVTG_FREQ									0x07 // nibble (0 ... 15) -- seconds
+#define FERAM_GPS_GPZDA_GSV_FREQ										0x06 // nibble (0 ... 15) -- seconds
 #define FERAM_GPS_GPZDA_FREQ												0
-#define FERAM_GPS_GPVTG_FREQ												4
+#define FERAM_GPS_GPGSV_FREQ												4
 
 /*
  *	FERAM_GPS_MISC_CFG
@@ -115,7 +104,7 @@
  *			http://www.avrfreaks.net/forum/tut-c-bit-manipulation-aka-programming-101?page=all
  *			and many others
  */
-#define FERAM_GPS_MISC_CFG													0x08 // bit (0, 1)
+#define FERAM_GPS_MISC_CFG													0x07 // bit (0, 1)
 #define FERAM_GPS_MISC_CFG_POWER_CTL								0 // GPS power - on(1) or off(0)
 #define FERAM_GPS_MISC_CFG_NMEA_PRINT_TO_SERIAL			1 // print NMEA sentences to serial - yes(1) or no(0)
 #define FERAM_GPS_MISC_CFG_bit3											2 // unassigned - on(1) or off(0)
@@ -131,7 +120,7 @@
  *
  *		miscellaneous boolean device settings
  */
-#define FERAM_DEVICE_MISC_CFG1											0x09 //
+#define FERAM_DEVICE_MISC_CFG1											0x08 //
 #define FERAM_DEVICE_MISC_CFG1_OLED_AUTO_POWER			0 // enable OLED auto-poweroff - auto(0), constant on(1)
 #define FERAM_DEVICE_MISC_CFG1_ADXL345_AUTO_POWER		1	// allow the accelerometer to trigger a device sleep - yes(1), no(0)
 #define FERAM_DEVICE_MISC_CFG1_SD_WRITE							2 // write NMEA to SD card on valid fix - yes(1), no(0)
@@ -147,7 +136,7 @@
  *
  *		miscellaneous tristate device settings, e.g. on, off and something else
  */
-#define FERAM_DEVICE_MISC_CFG2											0x0A //
+#define FERAM_DEVICE_MISC_CFG2											0x09 //
 #define FERAM_DEVICE_MISC_CFG2_SYSTEM_SERIAL				0 // connection to serial console - GPS(0), SIM800(1), system(2)
 #define FERAM_DEVICE_MISC_CFG2_BLUETOOTH_POWER			2 // Bluetooth power scheme - off(0), on(1), auto(2)
 #define FERAM_DEVICE_MISC_CFG2_pair2								4 // unassigned
@@ -159,7 +148,7 @@
  *
  *		represents the activity threshold
  */
-#define FERAM_ADXL345_ACTIVITY_THRESHOLD						0x0B
+#define FERAM_ADXL345_ACTIVITY_THRESHOLD						0x0A
 
 /*
  *	FERAM_ADXL345_INACTIVITY_THRESHOLD
@@ -167,13 +156,13 @@
  *
  *		represents the inactivity threshold
  */
-#define FERAM_ADXL345_INACTIVITY_THRESHOLD					0x0C
+#define FERAM_ADXL345_INACTIVITY_THRESHOLD					0x0B
 
 /*
  *
  *
  */
-#define FERAM_ADXL345_FREE													0x0D //
+#define FERAM_ADXL345_FREE													0x0C //
 
 /*
  *	FERAM_GSM_MISC_CFG
@@ -182,7 +171,7 @@
  *		miscellaneous boolean GSM settings, mostly flag-type things
  *
  */
-#define FERAM_GSM_MISC_CFG													0x0E // bit (0, 1)
+#define FERAM_GSM_MISC_CFG													0x0D // bit (0, 1)
 #define FERAM_GSM_MISC_CFG_POWER_CTL								0 // GSM  power - on(1) or off(0)
 #define FERAM_GSM_MISC_CFG_NMEA_PRINT_TO_SERIAL			1 // unassigned - on(1) or off(0)
 #define FERAM_GSM_MISC_CFG_bit3											2 // unassigned - on(1) or off(0)
