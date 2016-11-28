@@ -132,14 +132,14 @@
 
 /*
  *	FERAM_DEVICE_MISC_CFG2
- *		two bits, 0 (off), 1 (on), 2(auto)
+ *		two bits, 0 (off), 1 (on), 2(auto) 3(if defined)
  *
  *		miscellaneous tristate device settings, e.g. on, off and something else
  */
 #define FERAM_DEVICE_MISC_CFG2											0x09 //
 #define FERAM_DEVICE_MISC_CFG2_SYSTEM_SERIAL				0 // connection to serial console - GPS(0), SIM800(1), system(2)
 #define FERAM_DEVICE_MISC_CFG2_BLUETOOTH_POWER			2 // Bluetooth power scheme - off(0), on(1), auto(2)
-#define FERAM_DEVICE_MISC_CFG2_pair2								4 // unassigned
+#define FERAM_DEVICE_MISC_CFG2_GPRS_FUNCTION				4 // GPRS module behaviour - nothing(0), push on demand(1), upload log(2), foo(3)
 #define FERAM_DEVICE_MISC_CFG2_pair3								6 // unassigned
 
 /*
