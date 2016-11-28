@@ -93,18 +93,6 @@ byte FeRAMReadByte(uint16_t addr)
 	return retval; // returns read out data
 }
 
-// sets an eeprom value at a certain index
-inline void eeprom_set(int in_val, int in_index) // sets EEPROM[in_index to val
-{
-  EEPROM[in_index] = in_val;
-}
-
-// gets an eeprom value from a certain index
-inline int8_t eeprom_get(int in_index)
-{
-  return EEPROM[in_index];
-}
-
  // returns the external voltage reference in volts
 inline float read_Varef() // the external reference voltage is set to 2.50V via a zener diode
 {
@@ -138,18 +126,23 @@ const char *fn_cb_get_Vcc(m2_rom_void_p element)
 // callback for battery percentage
 const char *fn_cb_get_bat_pct(m2_rom_void_p element)
 {
-	dtostrf(val_batA_pct, 3, 0, bat_a_pct + 4*sizeof(char)); // instead, this works
-		// http://www.atmel.com/webdoc/AVRLibcReferenceManual/group__avr__stdlib_1ga060c998e77fb5fc0d3168b3ce8771d42.html
-	strcat(bat_a_pct, "% ");
-	return bat_a_pct;
+	// FIXME
+
+	const char retval[9];
+	sprintf("batA %3d%", val_batA_pct);
+	return retval;
+
+	//return "foo";
+	//dtostrf(val_batA_pct, 3, 0, bat_a_pct + 4*sizeof(char)); // instead, this works
+		//// http://www.atmel.com/webdoc/AVRLibcReferenceManual/group__avr__stdlib_1ga060c998e77fb5fc0d3168b3ce8771d42.html
+	//strcat(bat_a_pct, "% ");
+	//return bat_a_pct;
 }
 
 // handler for the bluetooth power toggle button
 void handle_bluetooth_button(void)
 {
 	/* purpose: control BT power based on feram settings
-
-		the idea is: via one button control BT power according to EERPOM settings.
 
 		the button functions are, if auto mode is enabled:
 			- press and the device turns on. after EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX is over, turn off
@@ -171,7 +164,6 @@ void handle_bluetooth_button(void)
 		if(digitalRead(menu_bluetooth_power_toggle_pin) == HIGH) // if the button gets pressed
 		{
 			flag_bluetooth_power_toggle_pressed = 1; // flag the button as pressed, prevents multiple calls
-			poor_mans_debugging(); // execute poor mans debugging
 
 	if ( ( (FeRAMReadByte(FERAM_DEVICE_MISC_CFG2) >> FERAM_DEVICE_MISC_CFG2_BLUETOOTH_POWER) & 0x03 ) != 2 )
 				return; // do nothing
@@ -210,6 +202,55 @@ void handle_bluetooth_button(void)
 			digitalWrite(Bluetooth_wakeup_pin, HIGH); // turn off the device
 			flag_bluetooth_is_on = 0; // set flag to off
 			// flag_bluetooth_power_keep_on = 0;
+	}
+}
+
+// handler for the bluetooth power toggle button
+void handle_gprs_button(void)
+{
+	/*	purpose: control the GPRS module based on FeRAM settings
+	 *
+	 *	this function is called from loop and checks if a button press occured
+	 *		if it did, it acts upon it
+	 *
+	 *	prerequisites for any GPRS action:
+	 *		1. power on the GSM module & dialup
+	 *		2. authenticate on HTTP server
+	 *		3. do the task at hand
+	 *		4. report status
+	 *		5. tear down the connection & power off the GSM module
+	 */
+
+	if (!flag_gprs_push_pressed) // if the button is not flagged as pressed
+	{
+		if(digitalRead(menu_gprs_push_button_pin) == HIGH) // if the button gets pressed
+		{
+			uint8_t config = ( ( FeRAMReadByte(FERAM_DEVICE_MISC_CFG2) >> FERAM_DEVICE_MISC_CFG2_GPRS_FUNCTION) & 0x03 ); // fish out the device setting in FeRAM
+			flag_gprs_push_pressed = 1; // flag the button as pressed, prevents multiple calls
+
+			if (!config) // if it is set to do nothing...
+				return; // then do nothing
+
+			if (config == 1) // immediate push of position
+			{
+				Serial.println("immediate push of position");
+			}
+
+			if (config == 2) // upload all of today's logs
+			{
+				Serial.println("upload of today's logs");
+			}
+
+			if (config == 3) // FIXME: GPS fucking
+			{
+				poor_mans_debugging();
+			}
+		}
+	}
+	else // the button is already flagged as pressed
+	{
+		if ( digitalRead(menu_gprs_push_button_pin) == LOW) // the button is released
+			flag_gprs_push_pressed = 0; // mark button as released
 	}
 }
 
@@ -254,44 +295,41 @@ int16_t parseHex(char g)
 }
 
 // sets the RMC/GGA sentence frequency by sending the EM406A module an appropriate NMEA config sentence
-void gps_adjust_log_freq(uint8_t in_msg, uint8_t in_val) // example call for GPGGA: gps_adjust_log_freq(04, val) for GPRMC
+void gps_adjust_log_freq(void) // operates directly off values stored in FeRAM
 {
-      /* EXAMPLE EM406A
+	/* valid for MTK3333 and similar chipsets
+	*	314_PMTK_API_SET_NMEA_OUTPUT is what configures it
+	*	fields:
+	*			0 NMEA_SEN_GLL, GPGLL interval - Geographic Position - Latitude longitude
+	*->		1 NMEA_SEN_RMC, GNRMC interval - Recommended Minimum Specific GNSS Sentence
+	*			2 NMEA_SEN_VTG, GPVTG interval - Course Over Ground and Ground Speed
+	*->		3 NMEA_SEN_GGA, GPGGA interval - GPS Fix Data
+	*			4 NMEA_SEN_GSA, GPGSA interval - GNSS DOPS and Active Satellites
+	*->		5 NMEA_SEN_GSV, GPGSV interval - GNSS Satellites in View
+	*			6 NMEA_SEN_GRS, GPGRS interval - GNSS Range Residuals
+	*			7 NMEA_SEN_GST, GPGST interval - GNSS Pseudorange Errors Statistics
+	*
+	*			13 NMEA_SEN_MALM, PMTKALM interval - GPS almanac information
+	*			14 NMEA_SEN_MEPH, PMTKEPH interval - GPS ephmeris information
+	*			15 NMEA_SEN_MDGP, PMTKDGP interval - GPS differential correction information
+	*			16 NMEA_SEN_MDBG, PMTKDBG interval – MTK debug information
+	*			17 NMEA_SEN_ZDA, GPZDA interval - Time & Date
+	*			18 NMEA_SEN_MCHN, PMTKCHN interval - GNSS channel status
+	*			19 NMEA_SEN_DTM, GPDTM interval - Datum reference
+	*
+	*		NMEA checksum calculator:
+	*			http://www.hhhh.org/wiml/proj/nmeaxor.html
+	*
+	*/
 
-      $PSRF103,<msg>,<mode>,<rate>,<cksumEnable>*CKSUM<CR><LF>
-      <msg> 00=GGA,01=GLL,02=GSA,03=GSV,04=RMC,05=VTG
-      <mode> 00=SetRate,01=Query
-      <rate> Output every <rate>seconds, off=00,max=255
-      <cksumEnable> 00=disable Checksum,01=Enable checksum for specified message
-      Note: checksum is required
+	sprintf(gps_command_buffer, "$PMTK314,0,%d,0,%d,0,%d,0,0,0,0,0,0,0,0,0,0,0,0,0,0*", // construct the command string
+		(uint8_t) ( (FeRAMReadByte(FERAM_GPS_GPRMC_GGA_GSA_FREQ) >> FERAM_GPS_GPRMC_GGA_FREQ) & 0x0F ), // RMC - index 1
+		(uint8_t) ( (FeRAMReadByte(FERAM_GPS_GPRMC_GGA_GSA_FREQ) >> FERAM_GPS_GPRMC_GGA_FREQ) & 0x0F ), // GGA - index 3
+		(uint8_t) ( (FeRAMReadByte(FERAM_GPS_GPZDA_GSV_FREQ) >> FERAM_GPS_GPGSV_FREQ) & 0x0F )); // GSV - field 5
 
-      Example 1: Query the GGA message with checksum enabled
-      $PSRF103,00,01,00,01*25
-
-      Example 2: Enable VTG message for a 1Hz constant output with checksum enabled
-      $PSRF103,05,00,01,01*20
-
-      Example 3: Disable VTG message
-      $PSRF103,05,00,00,01*21
-
-      NMEA checksum:
-      http://www.hhhh.org/wiml/proj/nmeaxor.html
-      */
-
-			/* EXAMPLE MTK3339
-			$PMTK220,1000*1F<CR><LF> -- adjust log frequency
-
-			*/
-			if (in_val > 10) // some bug in the menu
-				in_val -= 10;
-
-			#ifdef GPS_MTK3339_CHIP
-			// here we can set the lof freq globally for all NMEA sentences - a nice feature!
-			sprintf(gps_command_buffer, "$PMTK220,%.d000*", in_val); // adjust log freq
-			#endif
-
-			sprintf(gps_command_buffer + strlen(gps_command_buffer), "%02X\r\n", getCheckSum(gps_command_buffer));
-			gps.write(gps_command_buffer);
+	sprintf(gps_command_buffer + strlen(gps_command_buffer), "%02X", getCheckSum(gps_command_buffer)); // append the checksum
+	//Serial.println(gps_command_buffer);
+	gps.println(gps_command_buffer);
 	return;
 }
 
@@ -318,6 +356,51 @@ const char *fn_cb_get_utc(m2_rom_void_p element)
 	return retval;
 }
 
+// callback for GSM device power status
+const char *fn_cb_get_gsm_power_status(m2_rom_void_p element)
+{
+	if (flag_gsm_on)
+		return "on";
+
+	return "off";
+;}
+
+// callback for GSM device network status
+const char *fn_cb_get_gsm_network_status(m2_rom_void_p element)
+{
+	if (!flag_gsm_on) // if the device is off
+		return "n/a";
+
+	return "netw";
+}
+
+// callback for GSM device power status
+const char *fn_cb_get_gsm_foo1(m2_rom_void_p element)
+{
+	if (!flag_gsm_on) // if the device is off
+		return "n/a";
+
+	return "foo1";
+}
+
+// callback for GSM device power status
+const char *fn_cb_get_gsm_foo2(m2_rom_void_p element)
+{
+	if (!flag_gsm_on) // if the device is off
+		return "n/a";
+
+	return "foo2";
+}
+
+// callback for GSM device power status
+const char *fn_cb_get_gsm_foo3(m2_rom_void_p element)
+{
+	if (!flag_gsm_on) // if the device is off
+		return "n/a";
+
+	return "foo3";
+}
+
 // callback for temperature
 const char *fn_cb_get_temperature(m2_rom_void_p element)
 {
@@ -327,7 +410,7 @@ const char *fn_cb_get_temperature(m2_rom_void_p element)
 }
 
 // callback for bluetooth power setting
-const char *fn_cb_bluetooth_power_setting(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
+const char *fn_cb_set_bluetooth_power_setting(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
 {
 	uint8_t val;
 	// see https://github.com/olikraus/m2tklib/wiki/elref#combofn
@@ -368,10 +451,47 @@ const char *fn_cb_bluetooth_power_setting(m2_rom_void_p element, uint8_t msg, ui
   return NULL;
 }
 
-// callback for OLED power setting
-const char *fn_cb_lcd_power_setting(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
+// callback for bluetooth power setting
+const char *fn_cb_set_gsm_function(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
 {
-	// see fn_cb_bluetooth_power_setting for comments
+	uint8_t val;
+	// see https://github.com/olikraus/m2tklib/wiki/elref#combofn
+	switch(msg) // msg can be one of: M2_COMBOFN_MSG_GET_VALUE, M2_COMBOFN_MSG_SET_VALUE, M2_COMBOFN_MSG_GET_STRING
+	{
+		case M2_COMBOFN_MSG_GET_VALUE: // we get the vaue from feram
+		*valptr = (FeRAMReadByte(FERAM_DEVICE_MISC_CFG2) >> FERAM_DEVICE_MISC_CFG2_GPRS_FUNCTION) & 0x03; // see if bit 1 is set
+		break;
+
+		case M2_COMBOFN_MSG_SET_VALUE: // we set the value into feram
+		val = FeRAMReadByte(FERAM_DEVICE_MISC_CFG2); // retrieve byte
+		// TODO: these two lines can probably be written more beautiful
+		val &= ~ (1 << FERAM_DEVICE_MISC_CFG2_GPRS_FUNCTION); // hopefully set these two bits to 0 (so that they dont poison the subsequent write)
+		val &= ~ (1 << (FERAM_DEVICE_MISC_CFG2_GPRS_FUNCTION +1) );
+		FeRAMWriteByte( FERAM_DEVICE_MISC_CFG2, val ^ (*valptr << FERAM_DEVICE_MISC_CFG2_GPRS_FUNCTION) );	// now save the new bit values & write the crap
+		break;
+
+		case M2_COMBOFN_MSG_GET_STRING: // we get the string _and_ set it (implicitly via M2_COMBOFN_MSG_SET_VALUE) via *valptr
+		if (*valptr == 0) // values are coded in fram.h
+			return "off";
+
+		if (*valptr == 1)
+			return "imdiate upload";
+
+		if (*valptr == 2)
+			return "end of day upload";
+
+		if (*valptr == 3)
+			return "GPS fuck";
+
+	}
+
+	return NULL;
+}
+
+// callback for OLED power setting
+const char *fn_cb_set_oled_power_setting(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
+{
+	// see fn_cb_set_bluetooth_power_setting for comments
 	switch(msg)
   {
 		case M2_COMBOFN_MSG_GET_VALUE:
@@ -394,9 +514,9 @@ const char *fn_cb_lcd_power_setting(m2_rom_void_p element, uint8_t msg, uint8_t 
 }
 
 // callback for GPS power setting
-const char *fn_cb_gps_power_setting(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
+const char *fn_cb_set_gps_power_setting(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
 {
-	// see fn_cb_bluetooth_power_setting for comments
+	// see fn_cb_set_bluetooth_power_setting for comments
 	switch(msg)
   {
 		case M2_COMBOFN_MSG_GET_VALUE:
@@ -421,7 +541,7 @@ const char *fn_cb_gps_power_setting(m2_rom_void_p element, uint8_t msg, uint8_t 
 // callback for NMEA sentence printout setting
 const char *fn_cb_nmea_printout_setting(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
 {
-	// see fn_cb_bluetooth_power_setting for comments
+	// see fn_cb_set_bluetooth_power_setting for comments
 	switch(msg)
 	{
 		case M2_COMBOFN_MSG_GET_VALUE:
@@ -444,9 +564,9 @@ const char *fn_cb_nmea_printout_setting(m2_rom_void_p element, uint8_t msg, uint
 }
 
 // callback for serial port setting
-const char *fn_cb_serial_setting(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
+const char *fn_cb_set_serial_setting(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
 {
-	// see fn_cb_bluetooth_power_setting for comments
+	// see fn_cb_set_bluetooth_power_setting for comments
 	switch(msg)
   {
 		uint8_t val;
@@ -477,19 +597,20 @@ const char *fn_cb_serial_setting(m2_rom_void_p element, uint8_t msg, uint8_t *va
   return NULL;
 }
 
-// callback for OLED power setting
-const char *fn_cb_gsm_power(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
+// callback for GSM power setting
+// TODO: test me
+const char *fn_cb_set_gsm_power(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
 {
-	// see fn_cb_bluetooth_power_setting for comments
+	// see fn_cb_set_bluetooth_power_setting for comments
 	switch(msg)
   {
 		case M2_COMBOFN_MSG_GET_VALUE:
-			*valptr = flag_cb_gsm_power;
-			break;
+		*valptr = (FeRAMReadByte(FERAM_GSM_MISC_CFG) >> FERAM_GSM_MISC_CFG_POWER_CTL) & 0x01;
+		break;
 
-    case M2_COMBOFN_MSG_SET_VALUE:
-			flag_cb_gsm_power = *valptr;
-			break;
+		case M2_COMBOFN_MSG_SET_VALUE:
+		FeRAMWriteByte(FERAM_GSM_MISC_CFG, FeRAMReadByte(FERAM_GSM_MISC_CFG) ^ (1<<FERAM_GSM_MISC_CFG_POWER_CTL)); // set it 1
+		break;
 
     case M2_COMBOFN_MSG_GET_STRING:
       if (*valptr == 0)
@@ -506,10 +627,100 @@ const char *fn_cb_gsm_power(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
   return NULL;
 }
 
-// callback for SD write setting
-const char *fn_cb_sd_write(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
+// callback for GSM APN setting
+// TODO: test me
+const char *fn_cb_gsm_apn(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
 {
-	// see fn_cb_bluetooth_power_setting for comments
+	// see fn_cb_set_bluetooth_power_setting for comments
+	switch(msg)
+	{
+		case M2_COMBOFN_MSG_GET_VALUE:
+		*valptr = (FeRAMReadByte(FERAM_GSM_MISC_CFG) >> FERAM_GSM_MISC_CFG_POWER_CTL) & 0x01;
+		break;
+
+		case M2_COMBOFN_MSG_SET_VALUE:
+		FeRAMWriteByte(FERAM_GSM_MISC_CFG, FeRAMReadByte(FERAM_GSM_MISC_CFG) ^ (1<<FERAM_GSM_MISC_CFG_POWER_CTL)); // set it 1
+		break;
+
+		case M2_COMBOFN_MSG_GET_STRING:
+		if (*valptr == 0)
+		{
+			return "off";
+		}
+
+		if (*valptr == 1)
+		{
+			return "on";
+		}
+	}
+
+	return NULL;
+}
+
+// callback for GSM http server setting
+// TODO: test me
+const char *fn_cb_gsm_http_server(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
+{
+	// see fn_cb_set_bluetooth_power_setting for comments
+	switch(msg)
+	{
+		case M2_COMBOFN_MSG_GET_VALUE:
+		*valptr = (FeRAMReadByte(FERAM_GSM_MISC_CFG) >> FERAM_GSM_MISC_CFG_POWER_CTL) & 0x01;
+		break;
+
+		case M2_COMBOFN_MSG_SET_VALUE:
+		FeRAMWriteByte(FERAM_GSM_MISC_CFG, FeRAMReadByte(FERAM_GSM_MISC_CFG) ^ (1<<FERAM_GSM_MISC_CFG_POWER_CTL)); // set it 1
+		break;
+
+		case M2_COMBOFN_MSG_GET_STRING:
+		if (*valptr == 0)
+		{
+			return "off";
+		}
+
+		if (*valptr == 1)
+		{
+			return "on";
+		}
+	}
+
+	return NULL;
+}
+
+// callback for GSM power setting
+// TODO: test me
+const char *fn_cb_gsm_credentials(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
+{
+	// see fn_cb_set_bluetooth_power_setting for comments
+	switch(msg)
+	{
+		case M2_COMBOFN_MSG_GET_VALUE:
+		*valptr = (FeRAMReadByte(FERAM_GSM_MISC_CFG) >> FERAM_GSM_MISC_CFG_POWER_CTL) & 0x01;
+		break;
+
+		case M2_COMBOFN_MSG_SET_VALUE:
+		FeRAMWriteByte(FERAM_GSM_MISC_CFG, FeRAMReadByte(FERAM_GSM_MISC_CFG) ^ (1<<FERAM_GSM_MISC_CFG_POWER_CTL)); // set it 1
+		break;
+
+		case M2_COMBOFN_MSG_GET_STRING:
+		if (*valptr == 0)
+		{
+			return "off";
+		}
+
+		if (*valptr == 1)
+		{
+			return "on";
+		}
+	}
+
+	return NULL;
+}
+
+// callback for SD write setting
+const char *fn_cb_set_sd_write(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
+{
+	// see fn_cb_set_bluetooth_power_setting for comments
 	switch(msg)
   {
 		case M2_COMBOFN_MSG_GET_VALUE:
@@ -531,9 +742,9 @@ const char *fn_cb_sd_write(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
 }
 
 // callback for statistics write setting
-const char *fn_cb_stat_write(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
+const char *fn_cb_set_stat_write(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
 {
-	// see fn_cb_bluetooth_power_setting for comments
+	// see fn_cb_set_bluetooth_power_setting for comments
 	switch(msg)
 	{
 		case M2_COMBOFN_MSG_GET_VALUE:
@@ -567,9 +778,9 @@ int8_t fn_cb_set_tz(m2_rom_void_p element, uint8_t msg, int8_t val)
 }
 
 // callback for ADXL345 activity power setting
-const char *fn_cb_accel_enable(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
+const char *fn_cb_set_accel_enable(m2_rom_void_p element, uint8_t msg, uint8_t *valptr)
 {
-	// see fn_cb_bluetooth_power_setting for comments
+	// see fn_cb_set_bluetooth_power_setting for comments
 	switch(msg)
 	{
 		case M2_COMBOFN_MSG_GET_VALUE:
@@ -662,35 +873,112 @@ uint8_t fn_cb_set_oled_timeout(m2_rom_void_p element, uint8_t msg, uint8_t val)
 	return (uint8_t) FeRAMReadByte(FERAM_OLED_AUTO_TIMEOUT); // ...so that we dont have an non-return for this type of function
 }
 
-// callback for gps log frequency
-uint8_t fn_cb_set_eerpom_gps_log_freq(m2_rom_void_p element, uint8_t msg, uint8_t val)
+// callback for gps GPRMC and GPGGA log frequency
+uint8_t fn_cb_set_gps_rmc_gga_log_freq(m2_rom_void_p element, uint8_t msg, uint8_t val)
 {
   if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
-    return (uint8_t) eeprom_get(EEPROM_GPS_GPRMC_GGA_FREQ_INDEX); // set val to the EEPROM value at that index
+    return (uint8_t) ( (FeRAMReadByte(FERAM_GPS_GPRMC_GGA_GSA_FREQ) >> FERAM_GPS_GPRMC_GGA_FREQ) & 0x0F ); // convert the rightmost 4 bits to a number
 
   if ( msg == M2_U8_MSG_SET_VALUE ) // if we get a SET message
-	{
-    eeprom_set(val, EEPROM_GPS_GPRMC_GGA_FREQ_INDEX); // set the EEPROM value at that index to val
-		gps_adjust_log_freq(00, val); // GPGGA
-		gps_adjust_log_freq(04, val); // GPRMC
+	{ // populate bit fields in FeRAM
+		uint8_t outval = FeRAMReadByte(FERAM_GPS_GPRMC_GGA_GSA_FREQ); // retrieve byte
+		// TODO: these two lines can probably be written more beautiful
+		outval &= ~ (1 << (FERAM_GPS_GPRMC_GGA_FREQ +0) ); // hopefully set these 4 bits to 0 (so that they dont poison the subsequent write)
+		outval &= ~ (1 << (FERAM_GPS_GPRMC_GGA_FREQ +1) );
+		outval &= ~ (1 << (FERAM_GPS_GPRMC_GGA_FREQ +2) );
+		outval &= ~ (1 << (FERAM_GPS_GPRMC_GGA_FREQ +3) );
+		FeRAMWriteByte( FERAM_GPS_GPRMC_GGA_GSA_FREQ, outval ^ (val << FERAM_GPS_GPRMC_GGA_FREQ) );	// now save the new bit values & write the crap
+
+		gps_adjust_log_freq(); // call function, which in turn sends the actual command to the gps device
+	}
+}
+
+// callback for gps GPGSV log frequency
+uint8_t fn_cb_set_gps_gsv_log_freq(m2_rom_void_p element, uint8_t msg, uint8_t val)
+{
+	if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
+	return (uint8_t) ( (FeRAMReadByte(FERAM_GPS_GPZDA_GSV_FREQ) >> FERAM_GPS_GPGSV_FREQ) & 0x0F ); // convert the rightmost 4 bits to a number
+
+	if ( msg == M2_U8_MSG_SET_VALUE ) // if we get a SET message
+	{ // populate bit fields in FeRAM
+		uint8_t outval = FeRAMReadByte(FERAM_GPS_GPZDA_GSV_FREQ); // retrieve byte
+		// TODO: these two lines can probably be written more beautiful
+		outval &= ~ (1 << (FERAM_GPS_GPGSV_FREQ +0) ); // hopefully set these 4 bits to 0 (so that they dont poison the subsequent write)
+		outval &= ~ (1 << (FERAM_GPS_GPGSV_FREQ +1) );
+		outval &= ~ (1 << (FERAM_GPS_GPGSV_FREQ +2) );
+		outval &= ~ (1 << (FERAM_GPS_GPGSV_FREQ +3) );
+		FeRAMWriteByte( FERAM_GPS_GPZDA_GSV_FREQ, outval ^ (val << FERAM_GPS_GPGSV_FREQ) );	// now save the new bit values & write the crap
+
+		gps_adjust_log_freq(); // call function, which in turn sends the actual command to the gps device
+	}
+}
+
+// callback for gps GPGSA log frequency
+uint8_t fn_cb_set_gps_gsa_log_freq(m2_rom_void_p element, uint8_t msg, uint8_t val)
+{
+  if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
+  return (uint8_t) ( (FeRAMReadByte(FERAM_GPS_GPRMC_GGA_GSA_FREQ) >> FERAM_GPS_GPGSA_FREQ) & 0x0F ); // convert the rightmost 4 bits to a number
+
+  if ( msg == M2_U8_MSG_SET_VALUE ) // if we get a SET message
+  { // populate bit fields in FeRAM
+	  uint8_t outval = FeRAMReadByte(FERAM_GPS_GPRMC_GGA_GSA_FREQ); // retrieve byte
+	  // TODO: these two lines can probably be written more beautiful
+	  outval &= ~ (1 << (FERAM_GPS_GPGSA_FREQ +0) ); // hopefully set these 4 bits to 0 (so that they dont poison the subsequent write)
+	  outval &= ~ (1 << (FERAM_GPS_GPGSA_FREQ +1) );
+	  outval &= ~ (1 << (FERAM_GPS_GPGSA_FREQ +2) );
+	  outval &= ~ (1 << (FERAM_GPS_GPGSA_FREQ +3) );
+	  FeRAMWriteByte( FERAM_GPS_GPRMC_GGA_GSA_FREQ, outval ^ (val << FERAM_GPS_GPGSA_FREQ) );	// now save the new bit values & write the crap
+
+		gps_adjust_log_freq(); // call function, which in turn sends the actual command to the gps device
+	}
+}
+
+// callback for gps GPZDA log frequency
+uint8_t fn_cb_set_gps_zda_log_freq(m2_rom_void_p element, uint8_t msg, uint8_t val)
+{
+	if ( msg == M2_U8_MSG_GET_VALUE ) // if we get a GET message
+{
+	//FIXME: without the print's the display gets garbled
+	Serial.print("foo:");
+	Serial.print((uint8_t) ( (FeRAMReadByte(FERAM_GPS_GPZDA_GSV_FREQ) >> FERAM_GPS_GPZDA_FREQ) & 0x0F ));
+	Serial.println(":foo");  // convert the rightmost 4 bits to a number
+  return (uint8_t) ( (FeRAMReadByte(FERAM_GPS_GPZDA_GSV_FREQ) >> FERAM_GPS_GPZDA_FREQ) & 0x0F );
+}
+
+	if ( msg == M2_U8_MSG_SET_VALUE ) // if we get a SET message
+	{ // populate bit fields in FeRAM
+		uint8_t outval = FeRAMReadByte(FERAM_GPS_GPZDA_GSV_FREQ); // retrieve byte
+		// TODO: these two lines can probably be written more beautiful
+		outval &= ~ (1 << (FERAM_GPS_GPZDA_FREQ +0) ); // hopefully set these 4 bits to 0 (so that they dont poison the subsequent write)
+		outval &= ~ (1 << (FERAM_GPS_GPZDA_FREQ +1) );
+		outval &= ~ (1 << (FERAM_GPS_GPZDA_FREQ +2) );
+		outval &= ~ (1 << (FERAM_GPS_GPZDA_FREQ +3) );
+		FeRAMWriteByte( FERAM_GPS_GPZDA_GSV_FREQ, outval ^ (val << FERAM_GPS_GPZDA_FREQ) );	// now save the new bit values & write the crap
+
+		gps_adjust_log_freq(); // call function, which in turn sends the actual command to the gps device
 	}
 }
 
 // callback for MCP73871 battery charge status
-const char *fn_cb_get_batt_charge_status(m2_rom_void_p element)
+// TODO: needs to be tested with a battery
+const char *fn_cb_get_bat_charge_status(m2_rom_void_p element)
 {
-	if (digitalRead(MCP73871_power_good_pin) == LOW)
+	if (digitalRead(MCP73871_power_good_pin) == LOW) // see MCP83871 datasheet p.21
 	{
 		if (digitalRead(MCP73871_charge_status_1_pin) == HIGH || digitalRead(MCP73871_charge_status_2_pin) == LOW)
-			return "charging ";
+			return "charged";
 		if (digitalRead(MCP73871_charge_status_1_pin) == LOW || digitalRead(MCP73871_charge_status_2_pin) == HIGH)
-			return "charged ";
+			return "charging";
+		if (digitalRead(MCP73871_charge_status_1_pin) == HIGH || digitalRead(MCP73871_charge_status_2_pin) == HIGH)
+			return "STANDBY";
 	}
 
 	if (digitalRead(MCP73871_power_good_pin) == HIGH)
 	{
 		if (digitalRead(MCP73871_charge_status_1_pin) == LOW || digitalRead(MCP73871_charge_status_2_pin) == HIGH)
 			return "BATT LOW";
+		if (digitalRead(MCP73871_charge_status_1_pin) == HIGH || digitalRead(MCP73871_charge_status_2_pin) == HIGH)
+			return "SHUTD";
 	}
 
 	return "foo";
@@ -706,19 +994,19 @@ const char *fn_cb_get_power_good_status(m2_rom_void_p element)
 }
 
 // callback for gps latitude
-const char *fn_cb_gps_latitude(m2_rom_void_p element)
+const char *fn_cb_get_gps_latitude(m2_rom_void_p element)
 {
 		return gps_latitude;
 }
 
 // callback for gps longtitude
-const char *fn_cb_gps_longtitude(m2_rom_void_p element)
+const char *fn_cb_get_gps_longtitude(m2_rom_void_p element)
 {
 		return gps_longtitude;
 }
 
 // callback for gps altitude
-const char *fn_cb_gps_altitude(m2_rom_void_p element)
+const char *fn_cb_get_gps_altitude(m2_rom_void_p element)
 {
 	static char retval[10]; // will return e.g. "-333m" or "+5555m"
 	uint8_t len = strlen(gps_altitude);
@@ -732,7 +1020,7 @@ const char *fn_cb_gps_altitude(m2_rom_void_p element)
 }
 
 // callback for gps satellites in view
-const char *fn_cb_gps_satellites_in_view(m2_rom_void_p element)
+const char *fn_cb_get_gps_satellites_in_view(m2_rom_void_p element)
 {
 	static char retval[7]; // will return something like "0.00" or "99.99"
 	uint8_t len = strlen(gps_satellites_in_view); // lenght of HDOP string
@@ -746,8 +1034,11 @@ const char *fn_cb_gps_satellites_in_view(m2_rom_void_p element)
 }
 
 // callback for the position fix indicator
-const char *fn_cb_gps_fix_indicator(m2_rom_void_p element)
+const char *fn_cb_get_gps_fix_indicator(m2_rom_void_p element)
 {
+		if (!flag_gps_on && digitalRead(GPS_power_ctl_pin == LOW))
+			return "dev. off";
+
 		switch(gps_position_fix_indicator)
 		{
 			case '1':
@@ -782,7 +1073,7 @@ const char *fn_cb_gps_fix_indicator(m2_rom_void_p element)
 }
 
 // callback for gps HDOP
-const char *fn_cb_gps_hdop(m2_rom_void_p element)
+const char *fn_cb_get_gps_hdop(m2_rom_void_p element)
 {
 	static char retval[10];
 	uint8_t len = strlen(gps_hdop);
@@ -886,30 +1177,6 @@ const char *fs_strlist_getstr(uint8_t idx, uint8_t msg)
 	}
 
 	return NULL;
-}
-
-// switched GSM on / off, inits on "on"
-void gsm_power(bool in_val)
-{
-	if (in_val)
-	{
-		digitalWrite(SIM800C_power_pin, HIGH);
-		flag_gsm_on = 1;
-
-		// TODO - software serial via SIM800L_sw_serial_tx and SIM800L_sw_serial_rx
-		Serial.println(F("gsm on"));
-
-		delay(10);
-		Serial1.print(F("AT")); // 1st AT
-		Serial1.print(F("ATE0")); // turn off command echo
-	}
-	else
-	{
-		digitalWrite(SIM800C_power_pin, LOW);
-		flag_gsm_on = 0;
-		Serial.println(F("gsm off"));
-		//Serial1.end();
-	}
 }
 
 // buffered write onto SD card utilizing a circular buffer
@@ -1057,6 +1324,146 @@ uint32_t detectBaud(int pin)
   return 0;
  }
 
+ // determines fix or not, parses coordinates, time
+void gps_parse_gprmc(char *in_str)
+{
+	/*
+	 * sample NMEA GPRMC sentence
+	 *		$GNRMC,214329.000,A,4547.9089,N,01555.1553,E,1.33,121.79,121116,,,A*7A
+   *    $GPRMC,221939.869,V,,,,,,,060816,,,N*41
+   *    $GNRMC,214325.073,V,,,,,1.48,112.99,121116,,,N*5F
+   *
+	 *
+	 * fields of interest (0-indexed), irrelevant are marked with an !:
+	 *
+	 *	 #0 - talker ID
+	 *	 #1 - UTC time
+	 *	 #2 - fix indicator: A - valid, V - invalid
+	 *	 #3 - latitude; "4547.9089" in above example
+	 *	 #4 - latitude indicator; "N" in above example
+	 *	 #5 - longtitude; "01555.1553" in above example
+	 *	 #6 - longtitude indicator; "E" in above exmaple
+	 *	 #7 - speed over ground in knots; "1.33" in above example
+	 *!	 #8 - course, ; "121.79" in above example
+	 *	 #9 - date in DDMMYY format; "121116" in above example
+	 *!	 #10 - magnetic variation
+	 *!	 #11 - magnetic variation indicator
+	 */
+
+	uint8_t i = 0; // counter for the string tokenizer
+
+	char *p = strtok(in_str, ","); // char pointer for strtok
+
+	while (*p) // for as long as there is something to tokenize with the given delimiter...
+	{
+		if (i == 1)	// field 1 - hhmmss time data: 170942.000,A,4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
+			memcpy(gps_time, p, 6* sizeof(char)); // fill char gps_time[7] = "XXXXXX" by copying from one array into another
+
+		if (i == 2)	// field 2 - fix indicator: A,4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
+			flag_gps_fix = ( *p == 'A' ? 1 : 0 ); // sets flag_gps_fix to 1 if there is a fix
+
+		if (i == 3)	// field 3 - latitude: 4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
+		  if (flag_gps_fix)
+			  memcpy(gps_latitude+(4*sizeof(char)), p, 9 * sizeof(char)); // fill up gps_latitude[] , part 1
+
+		if (i == 4) // field 4 - latitude indicator: N,01555.1254,E,0.13,142.38,050816,,,A*63
+		  if (flag_gps_fix)
+			  memcpy(gps_latitude+(13*sizeof(char)), p, sizeof(char)); // fill up gps_latitude[] , part 2
+
+		if (i == 5)	// field 5 - longtitude: 01555.1254,E,0.13,142.38,050816,,,A*63
+			if (flag_gps_fix)
+				memcpy(gps_longtitude+(4*sizeof(char)), p, 10 * sizeof(char)); // fill up gps_longtitude[] , part 1
+
+		if (i == 6) // field 6 - longtitude indicator: E,0.13,142.38,050816,,,A*63
+			if (flag_gps_fix)
+				memcpy(gps_longtitude+(14*sizeof(char)), p, sizeof(char)); // fill up gps_longtitude[] , part 2, appends letter
+
+		if (i == 7)	// field 7 - speed over ground: 0.13,142.38,050816,,,A*63
+		  if (flag_gps_fix)
+				// TODO: this needs to be verified under real world conditions (i.e. real movement with varying speeds)
+				gps_speed = atoi(p);
+
+		if (i == 9)	// field 9 - date: 050816,,,A*63
+		{
+				// fill gps_date
+				*(gps_date+2) = *(p+4);  // Y - 1
+				*(gps_date+3) = *(p+5);  // Y - 6
+				*(gps_date+4) = *(p+2);  // M - 0
+				*(gps_date+5) = *(p+3);  // M - 8
+				*(gps_date+6) = *(p+0);  // D - 0
+				*(gps_date+7) = *(p+1);  // D - 5
+		}
+
+		p = strtok(NULL, ","); // set the tokenizer for the next iteration
+		i++; // counter increment
+	}
+}
+
+// parses out satellites used, HDOP, MSL altitude
+void gps_parse_gpgga(char *in_str)
+{
+	/*
+	 *	$GNGGA,214323.073,,,,,0,0,,,M,,M,,*57
+	 *	$GNGGA,214326.073,4547.9072,N,01555.1584,E,1,5,1.59,140.9,M,42.5,M,,*43
+	 *
+	 *	fields of interest (0-indexed) are marked with an X:
+	 *	#0 - talker ID
+	 *	#1 - UTC time
+	 *	#2 - latitude
+	 *	#3 - north/south
+	 *	#4 - longtitude
+	 *	#5 - east/west
+	 *X	#6 - position fix indicator: "1" after the "E," in the above example)
+	 *			0 - invalid
+	 *			1 - GPS (SPS)
+	 *			2 - DGPS
+	 *			3 - PPS
+	 *			4 - real time kinetic
+	 *			5 - float real time kinetic
+	 *			6 - estimated
+	 *			7 - manual input
+	 *			8 - simulation mode
+	 *X	#7 - satellites used: "5" in the above example
+	 *X	#8 - HDOP: "1.59" in the above example
+	 *X	#9 - MSL altitude: "140.9" in the above example
+	 *	#10 - unit: "M"
+	 *	#11 - height above geoid: "42.5" in the above example
+	 *	#12 - unit: "M"
+	 *
+	 */
+
+	uint8_t i = 0; // counter for the string tokenizer
+
+	char *p = strtok(in_str, ","); // char pointer for strtok
+
+	while (*p) // for as long as there is something to tokenize with the given delimiter...
+	{
+		if (i == 6) // position fix indicator
+			gps_position_fix_indicator = *p; // it's just one char (number)
+
+		if (i == 7) // satellites used
+		{
+			memset(gps_satellites_in_view, '\0', 3); // set the whole container to \0
+			memcpy( gps_satellites_in_view, p, strcspn (p, ",") * sizeof(char) ); // copy an adequate lenght of bytes from src into the container
+		}
+
+		if (i == 8) // hdop
+		{
+			memset(gps_hdop, '\0', 5);
+			memcpy( gps_hdop, p, strcspn (p, ",") * sizeof(char) );
+		}
+
+		if (i == 9) // altitude
+		{
+			memset(gps_altitude, '\0', 5);
+			memcpy( gps_altitude, p, strcspn (p, ".,") * sizeof(char) ); // copy the numbers...
+		}
+
+		p = strtok(NULL, ","); // set the tokenizer for the next iteration
+		i++; // counter increment
+	}
+}
+
 // primitive BT button-activated printout
 void poor_mans_debugging(void)
 {
@@ -1067,7 +1474,17 @@ void poor_mans_debugging(void)
 	//Serial.print("FERAM_DEVICE_MISC_CFG2 ");
 	//Serial.println(FeRAMReadByte(FERAM_DEVICE_MISC_CFG2), BIN);
 
-	Serial.print("bt:");Serial.print(FeRAMReadByte(FERAM_DEVICE_MISC_CFG2), BIN);Serial.println(":bt");
+	//Serial.print("bt:");Serial.print(FeRAMReadByte(FERAM_DEVICE_MISC_CFG2), BIN);Serial.println(":bt");
+	//	Serial.print("FERAM_GPS_GPRMC_GGA_GSA_FREQ");Serial.println(FeRAMReadByte(FERAM_GPS_GPRMC_GGA_GSA_FREQ), BIN);
+	//	Serial.print("FERAM_GPS_GPZDA_GSV_FREQ");Serial.println(FeRAMReadByte(FERAM_GPS_GPZDA_GSV_FREQ), BIN);
+
+	//gps.println("$PMTK220,1000*1F");
+
+	// issue a factory reset to the gps device
+	gps.println("$PMTK104*37");
+
+
+
 
 /* 		char buffer[82];
 		sprintf(buffer, "$PSRF104,%s,%s,%s,75000,%s,%s,12,1", gps_latitude, gps_longtitude, gps_altitude, gps_time_of_week, gps_week);

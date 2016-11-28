@@ -23,8 +23,8 @@
 // INT7 interrupt setup - ADXL345 INT1 pin connects to here, fires IRQ on act/inact
 	cli(); // globally disable interrupts
 	EIMSK |= (1<<INT7); // enable INT7 (lives on pin PE7)
-	EICRB |= (1<<ISC70); // set to register a
-	EICRB |= (1<<ISC71); //		rising edge
+	EICRB |= (1<<ISC70); // set to register
+	EICRB |= (1<<ISC71); //		a rising edge
 	sei(); // globally enable interrupts
 
 	analogReference(EXTERNAL); // set the reference voltage source (needed for all voltage measurements via the ADC)
@@ -69,9 +69,9 @@
 				and reverts to factory defautls (9600 baud)
 				a supercap remedies this somewhat
 	*/
+
 	gps.begin(9600);   // connect to the GPS at the default rate
-	Serial.println(F("GPS SW serial set")); // set gps serial comm. baud rate
-	gps.println("$PMTK314,0,0,0,0,5,10,0,0,0,0,0,0,0,0,0,0,1,0,0*1D");
+	gps.println("$PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*34");
 	gps.println("$PMTK250,3,3,4800*15"); // set in/out data format to NMEA over 4600 baud
 	gps.println("$PMTK251,4800*14"); // set baud rate to 4600
 	gps.end();
@@ -89,12 +89,15 @@
 	gps.println("$PMTK308,3*26"); // ouput 3 fixes after entering tunnel/garage
 	gps.println("$PMTK313,1*2E"); // enable SBAS
 	gps.println("$PMTK353,1,1,1,0,0*2A"); // look for GPS, GLASNOSS and GALILEO satellites
+	gps.println("$PMTK356,0*2E"); // disable HDOP theshold
 	gps.println("$PMTK386,0.5*38"); // static nav. threshold 0.5m/s
 	gps.println("$PMTK869,1,1*35"); // enable EASY
 	gps.println("$PMTK886,1*29"); // enable fitness mode (good for speeds up to 5m/s (== 9.72 knots), for faster speeds normal mode is better)
-	gps_adjust_log_freq(); // operates directly off values stored in FeRAM
-	//gps.println("$PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,2,0,0*2A"); // FIXME - GPZDA doesnt work
 
+	// TODO - works, but needs further improvement
+	gps_adjust_log_freq(); // operates directly off values stored in FeRAM
+
+	// TODO: adjust dynamically for best SNR
 	// $PMTK306 - minimum satellite SNR
 	// $PMTK311 - mimimum elevation mask
 

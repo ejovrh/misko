@@ -23,7 +23,9 @@
 	}
 	//Serial.println(millis());
 
-	handle_bluetooth_button(); // handles the bluetooth power button
+	handle_bluetooth_button(); // handles the "bluetooth power toggle" button
+	handle_gprs_button(); // handles the "gprs push" button
+
  	handle_lcd_sleep(); // checks if it is time for the display to go to sleep
 
 	//Serial.println(millis());
@@ -46,7 +48,31 @@
 		flag_gps_fix = 0;
 	}
 
-	//FIXME - serial redirection makes garbage
+// GSM power control
+// TODO: needs testing
+	if( !flag_gsm_on && ( (FeRAMReadByte(FERAM_GSM_MISC_CFG) >> FERAM_GSM_MISC_CFG_POWER_CTL) & 0x01 ) ) // user powers GSM on
+	{
+		//TODO: must be an impulse of at least 1s
+
+		digitalWrite(SIM800C_power_pin, HIGH); // pull high to wake up
+		flag_gsm_on = 1;
+
+		Serial.println(F("gsm on"));
+
+		Serial1.print(F("AT")); // 1st AT
+		Serial1.print(F("ATE1")); // turn off command echo
+	}
+
+	if( flag_gsm_on && !( (FeRAMReadByte(FERAM_GSM_MISC_CFG) >> FERAM_GSM_MISC_CFG_POWER_CTL) & 0x01 ) ) // user powers GSM off
+	{
+		//TODO: must be an impulse of at least 1s
+		digitalWrite(SIM800C_power_pin, LOW); // keep low on sleep
+		flag_gsm_on = 0;
+
+		Serial.println(F("gsm on"));
+	}
+
+//FIXME - serial redirection makes garbage
 	if ( ( ( FeRAMReadByte(FERAM_DEVICE_MISC_CFG2) >> FERAM_DEVICE_MISC_CFG2_SYSTEM_SERIAL) & 0x03 ) == 0 ) // user selects GPS in serial menu
 	{
 		// serial redirection for GPS testing
@@ -56,7 +82,7 @@
 			gps.write(Serial.read()); // NL & CR need to be enabled
 	}
 
-	//FIXME - serial redirection makes garbage
+//FIXME - serial redirection makes garbage
 	if ( ( ( FeRAMReadByte(FERAM_DEVICE_MISC_CFG2) >> FERAM_DEVICE_MISC_CFG2_SYSTEM_SERIAL) & 0x03 ) == 1 ) // user selects GSM in user menu
 	{
 		// serial redirection for GSM modem testing
@@ -66,10 +92,3 @@
 		if(Serial.available()) //read arduino IDE serial monitor inputs (if available) and send them to SIM800
 			Serial1.write(Serial.read()); // NL & CR need to be enabled
 	}
-
-// GSM modem power control
-	if (flag_cb_gsm_power && !flag_gsm_on)
-		gsm_power(1);
-	if (!flag_cb_gsm_power && flag_gsm_on)
-		gsm_power(0);
-

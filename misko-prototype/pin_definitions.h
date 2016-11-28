@@ -30,8 +30,8 @@
 #define gps_green_led_pin 39 								// PC7 - LED1, blinks on write onto SD card
 
 // port D
-#define I2C_SCL_pin	21											// PD0 - I2C SCL
-#define I2C_SDA_pin	20											// PD1 - I2C SDA
+#define I2C_SCL_pin	16											// PD0 - I2C SCL
+#define I2C_SDA_pin	17											// PD1 - I2C SDA
 #define SIM800C_rx_pin 19  									// PD2 - Serial1 RX
 #define SIM800C_tx_pin 18  									// PD3 - Serial1 TX
 #define SIM800C_cts_pin 20									// PD4 - SIM800C CTS

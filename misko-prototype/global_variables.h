@@ -10,28 +10,15 @@
 #define SD_BUFFERSIZE 1024 // cyclical buffer for NMEA sentences to be written to SD card
 #define GPS_FITNESS_MODE_THRESHOLD 10 // theshold in knots/h for transition from fitness mode <-> normal mode
 
-// EERPOM indices
-#define EERPOM_LCD_POWER_INDEX 1
-#define EERPOM_BLUETOOTH_POWER_INDEX 2
-#define EERPOM_LCD_AUTO_TIMEOUT_INDEX 3
-#define EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX 4
-#define EERPOM_TIMEZONE_INDEX 5
-#define EEPROM_GPS_GPRMC_GGA_FREQ_INDEX 6
-#define EEPROM_GPS_USE_WAAS_INDEX 7
-#define EERPOM_SD_WRITE_ENABLE_INDEX 8
-#define EERPOM_NMEA_PRINTOUT_INDEX 9
-#define EERPOM_GPS_POWER_INDEX 10
-#define EERPOM_SERIAL_SETTING_INDEX 11
-
 // GPS variables
 char NMEA_buffer[NMEA_BUFFERSIZE] = "";	// string buffer for the NMEA sentence
 uint8_t bufferid = 0; // holds the current position in the NMEA_buffer array, used for walk through the buffer
 char gps_command_buffer[24];
-char gps_date[9] = "20"; // 0-7 + 1 for '\0' -- YEAR 2100-BUG, HERE WE COME!!!
-char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
+char gps_date[9] = "20------"; // YYYYMMDD derived from NMEA sentence
+char gps_time[7] = "------"; // 0-5 + 1 for '\0'
 char gps_logfile[22] = "";
-static char gps_latitude[16] = "lat hhmm.ssss  "; // N or S, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
-static char gps_longtitude[17] = "lon hhhmm.ssss  "; // W or E, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
+static char gps_latitude[16] = "lat ----.----  "; // N or S, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
+static char gps_longtitude[17] = "lon -----.----  "; // W or E, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
 static char gps_altitude[5]; // GPS altitude: [xxxx or -xxx], populated in gps_functions.h:gps_parse_gpgga()
 static char gps_hdop[5]; // GPS horizontal dilution of position [0.99 - 99.99], populated in gps_functions.h:gps_parse_gprmc()
 static char gps_satellites_in_view[3]; // GPS satellites in view [00 - 99]
@@ -41,6 +28,12 @@ bool flag_gps_fitness_is_set = 1; // is the fitness mode set or not?
 bool flag_gps_fix = 0; // do we have a fix or not?
 bool flag_gps_on = 1; // is the gps powered on or off?
 int8_t timezone;
+
+// SIM800C variables
+bool flag_gprs_push_pressed = 0; // flag marks GSM device button pressed or not - used to recognize button state change for proper high/low handling
+char gsm_apn[64] = "web.htgprs"; // APN for the GPRS connection (per protocol max 63 octets)
+char gsm_http_server[64] = ""; // HTTP server for log upload (arbitrary lenght)
+char gsm_http_cred[11] = ""; // HTTP server credentials (arbitrary lenght)
 
 // device variables
 char bat_a_pct[9] = "batAxxx%";
