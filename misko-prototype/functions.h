@@ -12,13 +12,13 @@ void poor_mans_debugging(void);
  *
  * times are in seconds !!
  */
-uint8_t inline auto_timeout(uint32_t in_button_press_time, uint8_t timeout_val)
+uint8_t inline auto_timeout(const uint32_t in_button_press_time, const uint8_t timeout_val)
 {
   return (abs( in_button_press_time - millis()) / 1000 > timeout_val ?  1 :  0);
 }
 
 // reads a byte from the ADXL345
-byte adxl345_readByte(byte registerAddress) // reads one byte at registerAddress
+byte adxl345_readByte(const byte registerAddress) // reads one byte at registerAddress
 {
 		digitalWrite(SPI_SS_ADXL345_pin, LOW); // reserve the slave
    	SPI.transfer(0x80 | registerAddress); // set the MSB to 1 (the read command), then send address to read from
@@ -28,7 +28,7 @@ byte adxl345_readByte(byte registerAddress) // reads one byte at registerAddress
 }
 
 // writes a byte into the ADXL345
-bool adxl345_writeByte(byte registerAddress, byte value)
+bool adxl345_writeByte(const byte registerAddress, const byte value)
 {
 	digitalWrite(SPI_SS_ADXL345_pin, LOW); // signal the slave
 	SPI.transfer(registerAddress); // send address to write to
@@ -45,7 +45,7 @@ bool adxl345_writeByte(byte registerAddress, byte value)
 }
 
 // writes one byte data into the FeRAM at address addr
-uint8_t FeRAMWriteByte(uint16_t addr, byte data)
+uint8_t FeRAMWriteByte(const uint16_t addr, const byte data)
 {
 	if (addr > 0x7FFF) // if we try to go past the max. RAM address
 		return 1;	// return something
@@ -72,7 +72,7 @@ uint8_t FeRAMWriteByte(uint16_t addr, byte data)
 }
 
 // returns one one byte from the FeRAM at addr
-byte FeRAMReadByte(uint16_t addr)
+byte FeRAMReadByte(const uint16_t addr)
 {
 	byte retval;
 	if (addr > 0x7FFF) // if we try to go past the max. RAM address
@@ -91,6 +91,56 @@ byte FeRAMReadByte(uint16_t addr)
 	digitalWrite(SPI_FRAM_SS_pin, HIGH); // de-select the FeRAM module
 
 	return retval; // returns read out data
+}
+
+// writes string data of len lenght into FeRAM at address addr
+uint8_t FeRAMWriteStr(const uint16_t addr, const char *data, uint8_t len)
+{
+	if (addr > 0x7FFF) // if we try to go past the max. RAM address
+	return 1;	// return something
+
+	uint8_t addr_msb = (addr >> 8) & 0xFF;
+	uint8_t addr_lsb = addr & 0xFF;
+
+	// put the FeRAM module into RW mode
+	digitalWrite(SPI_FRAM_SS_pin, LOW); // select the FeRAM module
+	SPI.transfer(CMD_WREN);	// issue WREN command
+	digitalWrite(SPI_FRAM_SS_pin, HIGH); // de-select the FeRAM module
+
+	// put into write mode, send address, then write data
+	digitalWrite(SPI_FRAM_SS_pin, LOW); // select the FeRAM module
+	SPI.transfer(CMD_WRITE);	// issue WRITE command
+	SPI.transfer(addr_msb); // send address most significant byte
+	SPI.transfer(addr_lsb); // send address least significant byte
+
+	for (uint8_t i = 0; i< len; i++)
+		SPI.transfer( *(data+i) ); // write data into module
+
+	digitalWrite(SPI_FRAM_SS_pin, HIGH); // de-select the FeRAM module
+
+	return 0;
+}
+
+// reads a string in FeRAM at addess addr of lenght len into buff
+uint8_t FeRAMReadString(const uint16_t addr, char *buff, uint8_t len=1)
+{
+	if (addr > 0x7FFF) // if we try to go past the max. RAM address
+	return -1;	// return something
+
+	uint8_t addr_msb = (addr >> 8) & 0xFF;
+	uint8_t addr_lsb = addr & 0xFF;
+
+	digitalWrite(SPI_FRAM_SS_pin, LOW); // select the FeRAM module
+	SPI.transfer(CMD_READ); // send READ command
+	SPI.transfer(addr_msb);	// send address most significant byte
+	SPI.transfer(addr_lsb); // send address least significant byte
+
+	for(uint8_t i = 0; i < len; i++)
+		*(buff+i) = (char) SPI.transfer(0xFF); // send on byte of crap into the circular buffer, get one byte back
+
+	digitalWrite(SPI_FRAM_SS_pin, HIGH); // de-select the FeRAM module
+
+	return 0; // returns 0
 }
 
  // returns the external voltage reference in volts
@@ -374,6 +424,16 @@ const char *fn_cb_get_gsm_network_status(m2_rom_void_p element)
 	return "netw";
 }
 
+// callback for GSM device upload status
+// TODO - implement it
+const char *fn_cb_get_gsm_upload_status(m2_rom_void_p element)
+{
+	if (!flag_gsm_on) // if the device is off
+	return "n/a";
+
+	return "foo1";
+}
+
 // callback for GSM device power status
 const char *fn_cb_get_gsm_foo1(m2_rom_void_p element)
 {
@@ -475,13 +535,13 @@ const char *fn_cb_set_gsm_function(m2_rom_void_p element, uint8_t msg, uint8_t *
 			return "off";
 
 		if (*valptr == 1)
-			return "imdiate upload";
+			return "imm. upload";
 
 		if (*valptr == 2)
-			return "end of day upload";
+			return "EOD upload";
 
 		if (*valptr == 3)
-			return "GPS fuck";
+			return "GPS dbg";
 
 	}
 
@@ -1481,9 +1541,15 @@ void poor_mans_debugging(void)
 	//gps.println("$PMTK220,1000*1F");
 
 	// issue a factory reset to the gps device
-	gps.println("$PMTK104*37");
+	//gps.println("$PMTK104*37");
 
+	Serial.print("current pos:");
+	char retval[83] = "";
 
+	FeRAMReadString(FERAM_GPS_LAST_GOOD_POSITION, retval, 83 );
+	Serial.print( retval);
+
+	Serial.println(":current pos");
 
 
 /* 		char buffer[82];
