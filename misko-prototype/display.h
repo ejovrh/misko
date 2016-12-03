@@ -53,8 +53,8 @@ M2_LABELFN(el_gsm_network_status, format_rf0, fn_cb_get_gsm_network_status);
 M2_LIST(el_gsm_network_list) = {&el_gsm_network_str, &el_whitespace, &el_gsm_network_status};
 M2_HLIST(el_gsm_network_hlist, format_rf0, el_gsm_network_list);
 
-M2_LABEL(el_gsm_foo1_str, format_rf0, "foo1");
-M2_LABELFN(el_gsm_foo1, format_rf0, fn_cb_get_gsm_foo1);
+M2_LABEL(el_gsm_foo1_str, format_rf0, "upload status");
+M2_LABELFN(el_gsm_foo1, format_rf0, fn_cb_get_gsm_upload_status);
 M2_LIST(el_gsm_foo1_list) = {&el_gsm_foo1_str, &el_whitespace, &el_gsm_foo1};
 M2_HLIST(el_gsm_foo1_hlist, format_rf0, el_gsm_foo1_list);
 
@@ -186,7 +186,7 @@ M2_LABEL(el_gsm_settings_power_str, format_rf0, "GSM Power: ");
 M2_COMBOFN(el_gsm_power_val, format_rf0, 2, fn_cb_set_gsm_power);
 // TODO: check!
 M2_LABEL(el_gsm_settings_function_str, format_rf0, "btn. func.");
-M2_S8NUMFN(el_gsm_settings_function_val, "+0c1f0", 0, 3, fn_cb_set_gsm_function);
+M2_COMBOFN(el_gsm_settings_function_val, "f0", 4, fn_cb_set_gsm_function);
 
 
 M2_LABEL(el_gsm_settings_apn_str, format_rf0, "APN: ");
