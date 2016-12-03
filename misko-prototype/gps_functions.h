@@ -35,15 +35,19 @@ void get_nmea_sentences()
 		if ( (FeRAMReadByte(FERAM_GPS_MISC_CFG) >> FERAM_GPS_MISC_CFG_NMEA_PRINT_TO_SERIAL) & 0x01 ) // if the 2nd bit is set
 			Serial.print(NMEA_buffer);
 
+		if (flag_gps_fix) // valid fix
+			digitalWrite(gps_green_led_pin, LOW); // indicate it by lighting up the red LED
+		else
+			digitalWrite(gps_green_led_pin, HIGH);
+
 		// check for GPRMC sentence
 		if ( strncmp(NMEA_buffer, "$GNRMC", 6) == 0 ) // if we have a GPRMC sentence (compare the NMEA buffer with its sentence to gprmc[])
 		{
-			gps_parse_gprmc(NMEA_buffer); // parse the GPRMC sentence and get datetime and other values
+			// TODO: optimize
+			if (flag_gps_fix && (scheduler_run_count % 60 == 0) ) // save the current position once every minute
+				FeRAMWriteStr(FERAM_GPS_LAST_GOOD_POSITION, NMEA_buffer, strlen(NMEA_buffer)); // write last good position; 83 because its not worth to calculate the lenght when we know that its max. 83 characters long
 
-			if (flag_gps_fix) // valid fix - indicate it by lighting up the red LED
-				digitalWrite(gps_green_led_pin, LOW);
-			else
-				digitalWrite(gps_green_led_pin, HIGH);
+			gps_parse_gprmc(NMEA_buffer); // parse the GPRMC sentence and get datetime and other values
 		}
 
 		// check for GPGGA sentence
