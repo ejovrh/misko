@@ -27,6 +27,8 @@ static uint8_t gps_speed = 0; // gps speed in knots (only the interger part of t
 bool flag_gps_fitness_is_set = 1; // is the fitness mode set or not?
 bool flag_gps_fix = 0; // do we have a fix or not?
 bool flag_gps_on = 1; // is the gps powered on or off?
+uint8_t gps_gnrmc_age = 0; // age of a GNRMC relative to uptime
+uint8_t gps_gngga_age = 0; // age of a GNGGA relative to uptime
 int8_t timezone;
 
 // SIM800C variables
@@ -71,7 +73,7 @@ bool flag_sd_write_enable = 0; // flag if a write shall be allowed or not - is c
 uint8_t fs_m2tk_first = 0; // helper variable for the strlist element
 uint8_t fs_m2tk_cnt = 0; // helper variable for the strlist element
 
-uint16_t scheduler_run_count = 0; // counts how many times the scheduler has run
+uint16_t uptime = 0; // uptime in seconds, incrementer via timer5
 volatile bool flag_adxl345_int1 = 0; // flag for active interrupt
 bool flag_gsm_on = 0; // flag if the gsm modem shall be powered on or not, controlled via menu combo, inspected in loop()
 uint8_t flag_cb_gsm_power = 0; // used in GSM power callback
