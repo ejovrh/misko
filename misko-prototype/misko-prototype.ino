@@ -68,7 +68,7 @@ ISR(INT7_vect)
 //	stuff that needs to run periodically goes here
 ISR(TIMER5_COMPA_vect)
 {
-	scheduler_run_count++;
+	uptime++; // increment every second
 
 // statistical data (voltages, temperatures, etc.)
 	val_Vcc = 2 * calculate_voltage(Vcc_sense_pin); // measures Vcc across a voltage divider
