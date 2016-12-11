@@ -36,7 +36,7 @@ void get_nmea_sentences()
 			Serial.print(NMEA_buffer);
 
 		if (flag_gps_fix) // valid fix
-			digitalWrite(gps_green_led_pin, LOW); // indicate it by lighting up the red LED
+			digitalWrite(gps_green_led_pin, LOW); // indicate it by lighting up the red LED (inverse logic)
 		else
 			digitalWrite(gps_green_led_pin, HIGH);
 
@@ -44,15 +44,27 @@ void get_nmea_sentences()
 		if ( strncmp(NMEA_buffer, "$GNRMC", 6) == 0 ) // if we have a GPRMC sentence (compare the NMEA buffer with its sentence to gprmc[])
 		{
 			// TODO: optimize
-			if (flag_gps_fix && (scheduler_run_count % 60 == 0) ) // save the current position once every minute
-				FeRAMWriteStr(FERAM_GPS_LAST_GOOD_POSITION, NMEA_buffer, strlen(NMEA_buffer)); // write last good position; 83 because its not worth to calculate the lenght when we know that its max. 83 characters long
+			if (flag_gps_fix && (abs(uptime - gps_gnrmc_age) > 60 ? 1 : 0) ) // if we have a fix and the age of fix is more than 60s
+			{
+				gps_gnrmc_age = uptime;
+				FeRAMWriteStr(FERAM_GPS_LAST_GOOD_GNRMC, NMEA_buffer, strlen(NMEA_buffer)); // write last good position; 83 because its not worth to calculate the lenght when we know that its max. 83 characters long
+			}
 
 			gps_parse_gprmc(NMEA_buffer); // parse the GPRMC sentence and get datetime and other values
 		}
 
 		// check for GPGGA sentence
 		if ( flag_gps_fix && strncmp(NMEA_buffer, "$GNGGA",  6) == 0 ) // if we have a GPRMC sentence
+		{
+			// TODO: optimize
+			if (flag_gps_fix && (abs(uptime - gps_gngga_age) > 60 ? 1 : 0) ) // if we have a fix and the age of fix is more than 60s
+			{
+				gps_gngga_age = uptime;
+				FeRAMWriteStr(FERAM_GPS_LAST_GOOD_GNGGA, NMEA_buffer, strlen(NMEA_buffer)); // write last good position; 83 because its not worth to calculate the lenght when we know that its max. 83 characters long
+			}
+
 			gps_parse_gpgga(NMEA_buffer); // get HDOP, altitude and satellites in view
+		}
 
 		bufferid++; // ?!? needed??
 
