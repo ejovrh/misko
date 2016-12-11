@@ -182,12 +182,21 @@
 #define FERAM_GSM_MISC_CFG_bit8											7 // unassigned - on(1) or off(0)
 
 	/*
-	 *	FERAM_GSM_MISC_CFG
+	 *	FERAM_GPS_LAST_GOOD_GNRMC
 	 *		83-byte field
 	 *
-	 *		contains last good GPS position as a NMEA sentece, which can be max. 82 + '\0' chars long
+	 *		contains last good RMC NMEA sentece, which can be max. 82 + '\0' chars long
 	 */
-#define FERAM_GPS_LAST_GOOD_POSITION								0x0E	// 83 bytes, holds a string
+#define FERAM_GPS_LAST_GOOD_GNRMC										0x0E	// 83 bytes, holds a string (ends at 0x61)
+
+	/*
+	 *	#define FERAM_GPS_LAST_GOOD_GNGGA
+	 *		83-byte field
+	 *
+	 *		contains last good RMC NMEA sentece, which can be max. 82 + '\0' chars long
+	 */
+#define FERAM_GPS_LAST_GOOD_GNGGA										0x62	// 83 bytes, holds a string (ends at 0xB5)
+
 
 	/*
 	 *	FERAM_GSM_APN
@@ -195,7 +204,7 @@
 	 *
 	 *		contains the APN, by protocol max 63 octets + '\0' long
 	 */
-#define FERAM_GSM_APN																0x62	// 64 bytes, holds a string
+#define FERAM_GSM_APN																0xB6	// 64 bytes, holds a string (end at 0xF6)
 
 	/*
 	 *	FERAM_GSM_HTTP_SERVER
@@ -203,7 +212,7 @@
 	 *
 	 *		contains the remote HTTP server URL, by design decision max 63 octets + '\0' long
 	 */
-#define	FERAM_GSM_HTTP_SERVER												0xA2	// 64 bytes, holds a string
+#define	FERAM_GSM_HTTP_SERVER												0xF7	// 64 bytes, holds a string (ends at 0x137)
 
 	/*
 	 *	FERAM_
@@ -211,4 +220,4 @@
 	 *
 	 *		contains the APN, by protocol max 63 octets + '\0' long
 	 */
-#define FERAM_FREE																	0xE2 //
+#define FERAM_FREE																	0x138 //
