@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -12758,6 +12758,68 @@ JST PH 2-pin thru-home side entry</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="ORG1510-MK4 GPS module">
+<packages>
+<package name="PACKAGE">
+<smd name="WAKEUP" x="0" y="0" dx="1.4224" dy="0.8636" layer="1"/>
+<smd name="CTS" x="0" y="-1.27" dx="1.4224" dy="0.8636" layer="1"/>
+<smd name="RESET" x="0" y="-2.54" dx="1.4224" dy="0.8636" layer="1"/>
+<smd name="RTS" x="0" y="-3.81" dx="1.4224" dy="0.8636" layer="1"/>
+<smd name="RX" x="0" y="-5.08" dx="1.4224" dy="0.8636" layer="1"/>
+<smd name="VCC" x="7.5438" y="-1.27" dx="1.4224" dy="0.8636" layer="1"/>
+<smd name="TX" x="7.5438" y="-2.54" dx="1.4224" dy="0.8636" layer="1" rot="R180"/>
+<smd name="GND" x="7.5438" y="0" dx="1.4224" dy="0.8636" layer="1"/>
+<smd name="1PPS" x="7.5438" y="-3.81" dx="1.4224" dy="0.8636" layer="1"/>
+<smd name="ON_OFF" x="7.5438" y="-5.08" dx="1.6764" dy="0.8636" layer="1"/>
+</package>
+</packages>
+<symbols>
+<symbol name="SYMBOL">
+<pin name="ON_OFF" x="-5.08" y="22.86" length="middle" direction="in"/>
+<pin name="1PPS" x="-5.08" y="17.78" length="middle" direction="out"/>
+<pin name="TX" x="-5.08" y="12.7" length="middle" direction="out"/>
+<pin name="VCC" x="-5.08" y="7.62" length="middle" direction="pwr"/>
+<pin name="GND" x="-5.08" y="2.54" length="middle"/>
+<pin name="WAKEUP" x="25.4" y="2.54" length="middle" rot="R180"/>
+<pin name="CTS" x="25.4" y="7.62" length="middle" direction="in" rot="R180"/>
+<pin name="RESET" x="25.4" y="12.7" length="middle" rot="R180"/>
+<pin name="RTS" x="25.4" y="17.78" length="middle" direction="out" rot="R180"/>
+<pin name="RX" x="25.4" y="22.86" length="middle" direction="in" rot="R180"/>
+<wire x1="0" y1="25.4" x2="20.32" y2="25.4" width="0.254" layer="94"/>
+<wire x1="20.32" y1="25.4" x2="20.32" y2="0" width="0.254" layer="94"/>
+<wire x1="20.32" y1="0" x2="0" y2="0" width="0.254" layer="94"/>
+<wire x1="0" y1="0" x2="0" y2="25.4" width="0.254" layer="94"/>
+<text x="2.54" y="25.4" size="1.778" layer="94">&gt;NAME</text>
+<text x="2.54" y="-2.54" size="1.778" layer="94">&gt;VALUE</text>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="ORG1510-MK4">
+<gates>
+<gate name="G$1" symbol="SYMBOL" x="27.94" y="-2.54"/>
+</gates>
+<devices>
+<device name="" package="PACKAGE">
+<connects>
+<connect gate="G$1" pin="1PPS" pad="1PPS"/>
+<connect gate="G$1" pin="CTS" pad="CTS"/>
+<connect gate="G$1" pin="GND" pad="GND"/>
+<connect gate="G$1" pin="ON_OFF" pad="ON_OFF"/>
+<connect gate="G$1" pin="RESET" pad="RESET"/>
+<connect gate="G$1" pin="RTS" pad="RTS"/>
+<connect gate="G$1" pin="RX" pad="RX"/>
+<connect gate="G$1" pin="TX" pad="TX"/>
+<connect gate="G$1" pin="VCC" pad="VCC"/>
+<connect gate="G$1" pin="WAKEUP" pad="WAKEUP"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -12889,6 +12951,7 @@ JST PH 2-pin thru-home side entry</description>
 <part name="GND36" library="supply1" deviceset="GND" device=""/>
 <part name="CN1" library="SIM800C" deviceset="JST_2PIN" device="-SMT"/>
 <part name="G2" library="battery" deviceset="CR2450V" device=""/>
+<part name="U$1" library="ORG1510-MK4 GPS module" deviceset="ORG1510-MK4" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -12902,6 +12965,7 @@ JST PH 2-pin thru-home side entry</description>
 <text x="5.08" y="553.72" size="1.778" layer="91">Power Supply - Buck/Boost Regulator</text>
 <text x="134.62" y="553.72" size="1.778" layer="91">Power Supply - Power Path Controller</text>
 <text x="5.08" y="320.04" size="1.778" layer="91">USB to Serial</text>
+<text x="2.54" y="99.06" size="1.778" layer="91">GPS module</text>
 </plain>
 <instances>
 <instance part="U1" gate="A" x="165.1" y="713.74"/>
@@ -13025,6 +13089,7 @@ JST PH 2-pin thru-home side entry</description>
 <instance part="GND36" gate="1" x="182.88" y="609.6" rot="R180"/>
 <instance part="CN1" gate="G$1" x="320.04" y="510.54"/>
 <instance part="G2" gate="1" x="274.32" y="480.06" rot="R90"/>
+<instance part="U$1" gate="G$1" x="119.38" y="40.64"/>
 </instances>
 <busses>
 </busses>

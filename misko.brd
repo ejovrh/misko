@@ -3333,6 +3333,22 @@ for trimmer refence see : &lt;u&gt;www.electrospec-inc.com/cross_references/trim
 </package>
 </packages>
 </library>
+<library name="ORG1510-MK4 GPS module">
+<packages>
+<package name="PACKAGE">
+<smd name="WAKEUP" x="0" y="0" dx="1.4224" dy="0.8636" layer="1"/>
+<smd name="CTS" x="0" y="-1.27" dx="1.4224" dy="0.8636" layer="1"/>
+<smd name="RESET" x="0" y="-2.54" dx="1.4224" dy="0.8636" layer="1"/>
+<smd name="RTS" x="0" y="-3.81" dx="1.4224" dy="0.8636" layer="1"/>
+<smd name="RX" x="0" y="-5.08" dx="1.4224" dy="0.8636" layer="1"/>
+<smd name="VCC" x="7.5438" y="-1.27" dx="1.4224" dy="0.8636" layer="1"/>
+<smd name="TX" x="7.5438" y="-2.54" dx="1.4224" dy="0.8636" layer="1" rot="R180"/>
+<smd name="GND" x="7.5438" y="0" dx="1.4224" dy="0.8636" layer="1"/>
+<smd name="1PPS" x="7.5438" y="-3.81" dx="1.4224" dy="0.8636" layer="1"/>
+<smd name="ON_OFF" x="7.5438" y="-5.08" dx="1.6764" dy="0.8636" layer="1"/>
+</package>
+</packages>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -3669,6 +3685,7 @@ design rules under a new name.</description>
 <element name="C14" library="resistor" package="C0805" value="0.1µF" x="63.5" y="-96.52"/>
 <element name="CN1" library="SIM800C" package="JST-PH-2-SMT" value="" x="236.22" y="19.05" rot="MR0"/>
 <element name="G2" library="battery" package="CR2450V" value="CR2450V" x="267.97" y="17.78"/>
+<element name="U$1" library="ORG1510-MK4 GPS module" package="PACKAGE" value="ORG1510-MK4" x="-11.43" y="-100.33"/>
 </elements>
 <signals>
 <signal name="VCC">
@@ -3693,6 +3710,7 @@ design rules under a new name.</description>
 <contactref element="C10" pad="2"/>
 <contactref element="C14" pad="1"/>
 <contactref element="U1" pad="21"/>
+<contactref element="U$1" pad="VCC"/>
 <wire x1="197.866" y1="12.7" x2="204.2668" y2="27.94" width="0" layer="19" extent="1-1"/>
 <wire x1="184.1246" y1="35.56" x2="204.2668" y2="27.94" width="0" layer="19" extent="1-1"/>
 <wire x1="176.85" y1="34.46" x2="184.1246" y2="35.56" width="0" layer="19" extent="1-1"/>
@@ -3713,6 +3731,7 @@ design rules under a new name.</description>
 <wire x1="7.3" y1="-13.97" x2="15.24" y2="30.48" width="0" layer="19" extent="1-1"/>
 <wire x1="7.3" y1="-33.02" x2="7.3" y2="-13.97" width="0" layer="19" extent="1-1"/>
 <wire x1="62.55" y1="-96.52" x2="54.29" y2="-36.83" width="0" layer="19" extent="1-1"/>
+<wire x1="-3.8862" y1="-101.6" x2="62.55" y2="-96.52" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="GND">
 <contactref element="IC2" pad="5"/>
