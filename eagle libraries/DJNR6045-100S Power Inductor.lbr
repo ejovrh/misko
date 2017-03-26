@@ -83,8 +83,8 @@
 <wire x1="-2" y1="-3" x2="-3" y2="-2" width="0.127" layer="21"/>
 <text x="-3" y="4" size="1.27" layer="21">&gt;NAME</text>
 <text x="-3" y="-5" size="1.27" layer="21">&gt;VALUE</text>
-<smd name="P$1" x="-4.7" y="0" dx="5.7" dy="1.6" layer="1" rot="R270"/>
-<smd name="P$2" x="4.7" y="0" dx="5.7" dy="1.6" layer="1" rot="R90"/>
+<smd name="P$1" x="-5.5" y="0" dx="5.7" dy="3.2" layer="1" rot="R90"/>
+<smd name="P$2" x="5.5" y="0" dx="5.7" dy="3.2" layer="1" rot="R90"/>
 </package>
 </packages>
 <symbols>
