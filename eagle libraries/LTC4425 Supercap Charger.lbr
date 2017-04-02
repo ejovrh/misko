@@ -58,7 +58,7 @@
 <library>
 <description>Highly Efficient 3A Synchronous Buck Regulator</description>
 <packages>
-<package name="DFN12(3X4)">
+<package name="DFN12">
 <description>DFN 12 LEAD DUAL FLAT NO-LEAD PLASTIC PACKAGE</description>
 <smd name="PFI" x="0.25" y="1.4" dx="0.6" dy="0.25" layer="1" rot="R90"/>
 <smd name="!PFO!" x="0.75" y="1.4" dx="0.6" dy="0.25" layer="1" rot="R90"/>
@@ -120,7 +120,7 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <gate name="G$1" symbol="LTC4425" x="0" y="0"/>
 </gates>
 <devices>
-<device name="" package="DFN12(3X4)">
+<device name="" package="DFN12">
 <connects>
 <connect gate="G$1" pin="!PFO!" pad="!PFO!"/>
 <connect gate="G$1" pin="EN" pad="EN"/>
