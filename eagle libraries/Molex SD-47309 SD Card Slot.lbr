@@ -57,24 +57,25 @@
 <library>
 <packages>
 <package name="MICRO_SD_CONNECTOR">
-<smd name="DAT1" x="-3.85" y="-1.4" dx="1.25" dy="0.6" layer="1" rot="R90"/>
-<smd name="DO" x="-2.75" y="-1.4" dx="1.25" dy="0.6" layer="1" rot="R90"/>
-<smd name="GND3" x="-1.65" y="-1.4" dx="1.25" dy="0.6" layer="1" rot="R90"/>
-<smd name="CLK" x="-0.55" y="-1.4" dx="1.25" dy="0.6" layer="1" rot="R90"/>
-<smd name="VCC" x="0.55" y="-1.4" dx="1.25" dy="0.6" layer="1" rot="R90"/>
-<smd name="DI" x="1.65" y="-1.4" dx="1.25" dy="0.6" layer="1" rot="R90"/>
-<smd name="CS" x="2.75" y="-1.4" dx="1.25" dy="0.6" layer="1" rot="R90"/>
-<smd name="DAT2" x="3.85" y="-1.4" dx="1.25" dy="0.6" layer="1" rot="R90"/>
-<smd name="GND0" x="-5" y="-3.805" dx="1.2" dy="3.79" layer="1"/>
-<smd name="CARD_DETECT" x="4.775" y="-5.275" dx="0.95" dy="0.85" layer="1"/>
-<smd name="GND1" x="5.7" y="-4.3" dx="1" dy="0.6" layer="1"/>
-<smd name="GND2" x="5.475" y="-3.05" dx="1.45" dy="1.4" layer="1"/>
-<wire x1="-5.5" y1="0" x2="-5.5" y2="-16" width="0.127" layer="21"/>
-<wire x1="-5.5" y1="-16" x2="6.5" y2="-16" width="0.127" layer="21"/>
-<wire x1="6.5" y1="-16" x2="6.5" y2="0" width="0.127" layer="21"/>
-<wire x1="6.5" y1="0" x2="-5.5" y2="0" width="0.127" layer="21"/>
-<text x="-5" y="1" size="1.27" layer="21">&gt;NAME</text>
-<text x="-5" y="-18" size="1.27" layer="21">&gt;VALUE</text>
+<wire x1="0" y1="-15.3" x2="0" y2="0" width="0.127" layer="21"/>
+<wire x1="0" y1="0" x2="11" y2="0" width="0.127" layer="21"/>
+<wire x1="11" y1="0" x2="11" y2="-15.3" width="0.127" layer="21"/>
+<wire x1="11" y1="-15.3" x2="0" y2="-15.3" width="0.127" layer="21"/>
+<smd name="DAT1" x="1.75" y="-0.63" dx="1.25" dy="0.6" layer="1" rot="R90"/>
+<smd name="DAT0" x="2.85" y="-0.63" dx="1.25" dy="0.6" layer="1" rot="R90"/>
+<smd name="VSS" x="3.95" y="-0.63" dx="1.25" dy="0.6" layer="1" rot="R90"/>
+<smd name="CLK" x="5.05" y="-0.63" dx="1.25" dy="0.6" layer="1" rot="R90"/>
+<smd name="VDD" x="6.15" y="-0.63" dx="1.25" dy="0.6" layer="1" rot="R90"/>
+<smd name="CMD" x="7.25" y="-0.63" dx="1.25" dy="0.6" layer="1" rot="R90"/>
+<smd name="CD/DAT3" x="8.35" y="-0.63" dx="1.25" dy="0.6" layer="1" rot="R90"/>
+<smd name="DAT2" x="9.45" y="-0.63" dx="1.25" dy="0.6" layer="1" rot="R90"/>
+<wire x1="0" y1="-3.95" x2="0" y2="-4.1" width="0.127" layer="1"/>
+<smd name="GND4" x="0.6" y="-3.81" dx="3.79" dy="1.2" layer="1" rot="R90"/>
+<smd name="POL" x="10.5" y="-4.3" dx="1" dy="0.6" layer="1"/>
+<smd name="GND2" x="10.3" y="-3.05" dx="1.45" dy="1.4" layer="1"/>
+<smd name="DET" x="9.9" y="-5.27" dx="0.95" dy="0.85" layer="1"/>
+<text x="3.64" y="-14.2" size="2.54" layer="21">SD</text>
+<wire x1="0" y1="-5.7" x2="11" y2="-5.7" width="0.127" layer="21"/>
 </package>
 </packages>
 <symbols>
@@ -88,19 +89,19 @@
 <wire x1="-7.62" y1="-10.16" x2="-12.7" y2="-17.78" width="0.254" layer="94" curve="-90"/>
 <text x="-12.7" y="20.32" size="1.778" layer="95">&gt;NAME</text>
 <text x="-12.7" y="17.78" size="1.778" layer="96">&gt;VALUE</text>
-<text x="-5.08" y="7.62" size="1.778" layer="94" rot="R270">microSD CARD</text>
+<text x="-11.43" y="7.366" size="1.778" layer="94" rot="R270">microSD CARD</text>
 <pin name="DI" x="12.7" y="-2.54" length="middle" rot="R180"/>
 <pin name="DO" x="12.7" y="0" length="middle" rot="R180"/>
-<pin name="GND2" x="12.7" y="7.62" length="middle" rot="R180"/>
+<pin name="GND2" x="12.7" y="10.16" length="middle" rot="R180"/>
 <pin name="CARD_DETECT" x="12.7" y="-10.16" length="middle" rot="R180"/>
 <pin name="CLK" x="12.7" y="-5.08" length="middle" rot="R180"/>
 <pin name="VCC" x="12.7" y="2.54" length="middle" rot="R180"/>
 <pin name="CS" x="12.7" y="-7.62" length="middle" rot="R180"/>
 <pin name="DAT1" x="12.7" y="-12.7" length="middle" rot="R180"/>
-<pin name="GND0" x="12.7" y="12.7" length="middle" rot="R180"/>
-<pin name="GND1" x="12.7" y="10.16" length="middle" rot="R180"/>
-<pin name="GND3" x="12.7" y="5.08" length="middle" rot="R180"/>
+<pin name="GND1" x="12.7" y="12.7" length="middle" rot="R180"/>
 <pin name="DAT2" x="12.7" y="-15.24" length="middle" rot="R180"/>
+<pin name="GND3" x="12.7" y="7.62" length="middle" rot="R180"/>
+<pin name="GND4" x="12.7" y="5.08" length="middle" rot="R180"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -112,18 +113,18 @@
 <devices>
 <device name="" package="MICRO_SD_CONNECTOR">
 <connects>
-<connect gate="G$1" pin="CARD_DETECT" pad="CARD_DETECT"/>
+<connect gate="G$1" pin="CARD_DETECT" pad="DET"/>
 <connect gate="G$1" pin="CLK" pad="CLK"/>
-<connect gate="G$1" pin="CS" pad="CS"/>
+<connect gate="G$1" pin="CS" pad="CD/DAT3"/>
 <connect gate="G$1" pin="DAT1" pad="DAT1"/>
 <connect gate="G$1" pin="DAT2" pad="DAT2"/>
-<connect gate="G$1" pin="DI" pad="DI"/>
-<connect gate="G$1" pin="DO" pad="DO"/>
-<connect gate="G$1" pin="GND0" pad="GND0"/>
-<connect gate="G$1" pin="GND1" pad="GND1"/>
+<connect gate="G$1" pin="DI" pad="CMD"/>
+<connect gate="G$1" pin="DO" pad="DAT0"/>
+<connect gate="G$1" pin="GND1" pad="VSS"/>
 <connect gate="G$1" pin="GND2" pad="GND2"/>
-<connect gate="G$1" pin="GND3" pad="GND3"/>
-<connect gate="G$1" pin="VCC" pad="VCC"/>
+<connect gate="G$1" pin="GND3" pad="POL"/>
+<connect gate="G$1" pin="GND4" pad="GND4"/>
+<connect gate="G$1" pin="VCC" pad="VDD"/>
 </connects>
 <technologies>
 <technology name=""/>
