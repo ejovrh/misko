@@ -64,22 +64,22 @@
 <wire x1="1.5" y1="-2.5" x2="-1.5" y2="-2.5" width="0.127" layer="51"/>
 <wire x1="-1.5" y1="-2.5" x2="-1.5" y2="2.5" width="0.127" layer="51"/>
 <circle x="-1" y="2" radius="0.25" width="0.127" layer="51"/>
-<smd name="RESERVED1" x="-1.1" y="0.4" dx="1.15" dy="0.55" layer="1"/>
-<smd name="GND2" x="-1.1" y="-0.4" dx="1.15" dy="0.55" layer="1"/>
-<smd name="GND3" x="-1.1" y="-1.2" dx="1.15" dy="0.55" layer="1"/>
-<smd name="VCC2" x="-1.1" y="-2" dx="1.15" dy="0.55" layer="1"/>
-<smd name="GND1" x="-1.1" y="1.2" dx="1.15" dy="0.55" layer="1"/>
-<smd name="VCC1" x="-1.1" y="2" dx="1.15" dy="0.55" layer="1"/>
-<smd name="SCL" x="0" y="2.1" dx="1.15" dy="0.55" layer="1" rot="R90"/>
-<smd name="!CS!" x="0" y="-2.1" dx="1.15" dy="0.55" layer="1" rot="R90"/>
-<smd name="RESERVED2" x="1.1" y="0.4" dx="1.15" dy="0.55" layer="1"/>
-<smd name="NC" x="1.1" y="-0.4" dx="1.15" dy="0.55" layer="1"/>
-<smd name="INT2" x="1.1" y="-1.2" dx="1.15" dy="0.55" layer="1"/>
-<smd name="INT1" x="1.1" y="-2" dx="1.15" dy="0.55" layer="1"/>
-<smd name="SDO" x="1.1" y="1.2" dx="1.15" dy="0.55" layer="1"/>
-<smd name="SDA" x="1.1" y="2" dx="1.15" dy="0.55" layer="1"/>
 <text x="-2.54" y="-5.08" size="1.27" layer="27">&gt;VALUE</text>
 <text x="-2.54" y="3.81" size="1.27" layer="25">&gt;NAME</text>
+<smd name="SDA" x="1.6" y="2" dx="2.145" dy="0.55" layer="1"/>
+<smd name="SDO" x="1.6" y="1.2" dx="2.145" dy="0.55" layer="1"/>
+<smd name="RESERVED1" x="1.6" y="0.4" dx="2.145" dy="0.55" layer="1"/>
+<smd name="NC" x="1.6" y="-0.4" dx="2.145" dy="0.55" layer="1"/>
+<smd name="VDD" x="-1.6" y="2" dx="2.145" dy="0.55" layer="1"/>
+<smd name="GND3" x="-1.6" y="1.2" dx="2.145" dy="0.55" layer="1"/>
+<smd name="RESERVED2" x="-1.6" y="0.4" dx="2.145" dy="0.55" layer="1"/>
+<smd name="GND2" x="-1.6" y="-0.4" dx="2.145" dy="0.55" layer="1"/>
+<smd name="SCL" x="0" y="2.6" dx="2.145" dy="0.55" layer="1" rot="R90"/>
+<smd name="INT2" x="1.6" y="-1.2" dx="2.145" dy="0.55" layer="1" rot="R180"/>
+<smd name="INT1" x="1.6" y="-2" dx="2.145" dy="0.55" layer="1" rot="R180"/>
+<smd name="GND1" x="-1.6" y="-1.2" dx="2.145" dy="0.55" layer="1" rot="R180"/>
+<smd name="VCC" x="-1.6" y="-2" dx="2.145" dy="0.55" layer="1" rot="R180"/>
+<smd name="!CS!" x="0" y="-2.6" dx="2.145" dy="0.55" layer="1" rot="R270"/>
 </package>
 </packages>
 <symbols>
@@ -127,8 +127,8 @@
 <connect gate="G$1" pin="SCL" pad="SCL"/>
 <connect gate="G$1" pin="SDA" pad="SDA"/>
 <connect gate="G$1" pin="SDO" pad="SDO"/>
-<connect gate="G$1" pin="VDDIO" pad="VCC1"/>
-<connect gate="G$1" pin="VS" pad="VCC2"/>
+<connect gate="G$1" pin="VDDIO" pad="VDD"/>
+<connect gate="G$1" pin="VS" pad="VCC"/>
 </connects>
 <technologies>
 <technology name=""/>
