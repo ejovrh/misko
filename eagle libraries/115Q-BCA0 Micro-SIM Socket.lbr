@@ -72,41 +72,45 @@
 <library>
 <packages>
 <package name="115Q-BCA0">
-<smd name="P$8" x="-3" y="6.08" dx="1" dy="1.3" layer="1"/>
-<smd name="P$10" x="0.58" y="-1.17" dx="1.15" dy="2.35" layer="1"/>
-<smd name="P$11" x="17.24" y="-3" dx="1.15" dy="2.5" layer="1"/>
-<smd name="P$12" x="17.24" y="-13" dx="0.6" dy="2" layer="1"/>
-<smd name="P$13" x="-3.76" y="-13" dx="0.6" dy="2" layer="1"/>
-<pad name="P$14" x="2" y="-21" drill="0.8" shape="long" rot="R90"/>
-<pad name="P$15" x="-19" y="-21" drill="0.8" shape="long" rot="R90"/>
-<rectangle x1="23.5" y1="-3" x2="33.5" y2="2" layer="21"/>
-<rectangle x1="24" y1="-10" x2="34" y2="-5" layer="21"/>
-<smd name="P$1" x="0" y="3.5" dx="1.27" dy="0.635" layer="1"/>
-<smd name="P$2" x="2.5" y="3.5" dx="1.27" dy="0.635" layer="1"/>
-<smd name="P$3" x="5" y="3" dx="1.27" dy="0.635" layer="1"/>
-<smd name="P$4" x="7.5" y="3.5" dx="1.27" dy="0.635" layer="1"/>
-<smd name="P$5" x="10" y="3.5" dx="1.27" dy="0.635" layer="1"/>
-<smd name="P$6" x="13" y="3" dx="1.27" dy="0.635" layer="1"/>
-<smd name="P$7" x="16" y="3.5" dx="1.27" dy="0.635" layer="1"/>
-<smd name="P$9" x="18.5" y="3.5" dx="1.27" dy="0.635" layer="1"/>
-<smd name="P$16" x="21.5" y="4" dx="1.27" dy="0.635" layer="1"/>
+<wire x1="0" y1="0" x2="0" y2="-17.65" width="0.127" layer="21"/>
+<wire x1="0" y1="-17.65" x2="16.15" y2="-17.65" width="0.127" layer="21"/>
+<wire x1="16.15" y1="-17.65" x2="16.15" y2="0" width="0.127" layer="21"/>
+<wire x1="16.15" y1="0" x2="0" y2="0" width="0.127" layer="21"/>
+<wire x1="0" y1="-17.65" x2="0" y2="-22.2" width="0.127" layer="21"/>
+<wire x1="16.15" y1="-17.65" x2="16.15" y2="-22.2" width="0.127" layer="21"/>
+<wire x1="0" y1="-22.2" x2="16.15" y2="-22.2" width="0.127" layer="21"/>
+<smd name="GND4" x="16.45" y="-2.4" dx="2.5" dy="1.15" layer="1" rot="R90"/>
+<smd name="GND3" x="-0.3" y="-4.65" dx="2.35" dy="1.15" layer="1" rot="R90"/>
+<smd name="CD" x="1.54" y="-1.13" dx="1" dy="1.3" layer="1"/>
+<smd name="RESERVED2" x="2.81" y="-1.13" dx="1" dy="1.3" layer="1"/>
+<smd name="RESERVED1" x="4.08" y="-1.13" dx="1" dy="1.3" layer="1"/>
+<smd name="I/O" x="5.35" y="-1.13" dx="1" dy="1.3" layer="1"/>
+<smd name="CLK" x="6.62" y="-1.13" dx="1" dy="1.3" layer="1"/>
+<smd name="VPP" x="7.89" y="-1.13" dx="1" dy="1.3" layer="1"/>
+<smd name="RST" x="9.16" y="-1.13" dx="1" dy="1.3" layer="1"/>
+<smd name="GND1" x="10.43" y="-1.13" dx="1" dy="1.3" layer="1"/>
+<smd name="VCC" x="11.7" y="-1.13" dx="1" dy="1.3" layer="1"/>
+<smd name="GND6" x="16.15" y="-13.35" dx="0.6" dy="2" layer="1"/>
+<smd name="GND5" x="0" y="-13.34" dx="0.6" dy="2" layer="1"/>
+<pad name="GND7" x="0" y="-16.45" drill="0.5" shape="long" rot="R90"/>
+<pad name="GND2" x="16.15" y="-16.45" drill="0.5" shape="long" rot="R90"/>
 </package>
 </packages>
 <symbols>
 <symbol name="115Q-BCA0">
-<pin name="VCC" x="5.08" y="0" length="middle" direction="pwr" rot="R180"/>
-<pin name="RST" x="5.08" y="-2.54" length="middle" rot="R180"/>
-<pin name="CLK" x="5.08" y="-5.08" length="middle" rot="R180"/>
-<pin name="RESERVED1" x="5.08" y="-7.62" length="middle" direction="nc" rot="R180"/>
-<pin name="GND5" x="5.08" y="-35.56" length="middle" rot="R180"/>
-<pin name="VPP" x="5.08" y="-12.7" length="middle" rot="R180"/>
-<pin name="I/O" x="5.08" y="-15.24" length="middle" rot="R180"/>
-<pin name="RESERVED2" x="5.08" y="-17.78" length="middle" direction="nc" rot="R180"/>
-<pin name="CD" x="5.08" y="-22.86" length="middle" rot="R180"/>
+<pin name="VCC" x="5.08" y="-12.7" length="middle" direction="pwr" rot="R180"/>
+<pin name="RST" x="5.08" y="-17.78" length="middle" rot="R180"/>
+<pin name="CLK" x="5.08" y="-15.24" length="middle" rot="R180"/>
+<pin name="RESERVED1" x="-43.18" y="-27.94" length="middle" direction="nc"/>
+<pin name="GND5" x="-43.18" y="-17.78" length="middle"/>
+<pin name="VPP" x="5.08" y="-22.86" length="middle" rot="R180"/>
+<pin name="I/O" x="5.08" y="-20.32" length="middle" rot="R180"/>
+<pin name="RESERVED2" x="-43.18" y="-30.48" length="middle" direction="nc"/>
+<pin name="CD" x="5.08" y="-25.4" length="middle" rot="R180"/>
 <pin name="GND1" x="5.08" y="-10.16" length="middle" rot="R180"/>
-<pin name="GND2" x="5.08" y="-27.94" length="middle" rot="R180"/>
-<pin name="GND3" x="5.08" y="-30.48" length="middle" rot="R180"/>
-<pin name="GND4" x="5.08" y="-33.02" length="middle" rot="R180"/>
+<pin name="GND2" x="-43.18" y="-10.16" length="middle"/>
+<pin name="GND3" x="-43.18" y="-12.7" length="middle"/>
+<pin name="GND4" x="-43.18" y="-15.24" length="middle"/>
 <wire x1="0" y1="5.08" x2="0" y2="-40.64" width="0.254" layer="94"/>
 <wire x1="0" y1="-40.64" x2="-38.1" y2="-40.64" width="0.254" layer="94"/>
 <wire x1="-38.1" y1="-40.64" x2="-38.1" y2="5.08" width="0.254" layer="94"/>
@@ -114,6 +118,8 @@
 <text x="-33.02" y="0" size="1.27" layer="94">&gt;NAME</text>
 <text x="-33.02" y="-2.54" size="1.27" layer="94">&gt;VALUE</text>
 <text x="-33.02" y="-35.56" size="1.27" layer="94">115Q-BCA0 Micro-SIM Socket</text>
+<pin name="GND6" x="-43.18" y="-20.32" length="middle"/>
+<pin name="GND7" x="-43.18" y="-22.86" length="middle"/>
 </symbol>
 </symbols>
 <devicesets>
@@ -124,19 +130,21 @@
 <devices>
 <device name="" package="115Q-BCA0">
 <connects>
-<connect gate="G$1" pin="CD" pad="P$1"/>
-<connect gate="G$1" pin="CLK" pad="P$2"/>
-<connect gate="G$1" pin="GND1" pad="P$3"/>
-<connect gate="G$1" pin="GND2" pad="P$4"/>
-<connect gate="G$1" pin="GND3" pad="P$5"/>
-<connect gate="G$1" pin="GND4" pad="P$6"/>
-<connect gate="G$1" pin="GND5" pad="P$7"/>
-<connect gate="G$1" pin="I/O" pad="P$8"/>
-<connect gate="G$1" pin="RESERVED1" pad="P$9"/>
-<connect gate="G$1" pin="RESERVED2" pad="P$10"/>
-<connect gate="G$1" pin="RST" pad="P$11"/>
-<connect gate="G$1" pin="VCC" pad="P$12"/>
-<connect gate="G$1" pin="VPP" pad="P$13"/>
+<connect gate="G$1" pin="CD" pad="CD"/>
+<connect gate="G$1" pin="CLK" pad="CLK"/>
+<connect gate="G$1" pin="GND1" pad="GND1"/>
+<connect gate="G$1" pin="GND2" pad="GND2"/>
+<connect gate="G$1" pin="GND3" pad="GND3"/>
+<connect gate="G$1" pin="GND4" pad="GND4"/>
+<connect gate="G$1" pin="GND5" pad="GND5"/>
+<connect gate="G$1" pin="GND6" pad="GND6"/>
+<connect gate="G$1" pin="GND7" pad="GND7"/>
+<connect gate="G$1" pin="I/O" pad="I/O"/>
+<connect gate="G$1" pin="RESERVED1" pad="RESERVED1"/>
+<connect gate="G$1" pin="RESERVED2" pad="RESERVED2"/>
+<connect gate="G$1" pin="RST" pad="RST"/>
+<connect gate="G$1" pin="VCC" pad="VCC"/>
+<connect gate="G$1" pin="VPP" pad="VPP"/>
 </connects>
 <technologies>
 <technology name=""/>
