@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.05" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="yes"/>
@@ -72,38 +72,51 @@
 <library>
 <packages>
 <package name="RN-42">
-<smd name="GND1" x="-6.35" y="7.62" dx="1.27" dy="0.635" layer="1"/>
-<smd name="SPI_MOSI" x="-6.35" y="6.35" dx="1.27" dy="0.635" layer="1"/>
-<smd name="GPIO6" x="-6.35" y="5.08" dx="1.27" dy="0.635" layer="1"/>
-<smd name="GPIO7" x="-6.35" y="3.81" dx="1.27" dy="0.635" layer="1"/>
-<smd name="RESET" x="-6.35" y="2.54" dx="1.27" dy="0.635" layer="1"/>
-<smd name="SPI_CLOCK" x="-6.35" y="1.27" dx="1.27" dy="0.635" layer="1"/>
-<smd name="PCM_CLK" x="-6.35" y="0" dx="1.27" dy="0.635" layer="1"/>
-<smd name="PCM_SYNC" x="-6.35" y="-1.27" dx="1.27" dy="0.635" layer="1"/>
-<smd name="PCM_IN" x="-6.35" y="-2.54" dx="1.27" dy="0.635" layer="1"/>
-<smd name="PCM_OUT" x="-6.35" y="-3.81" dx="1.27" dy="0.635" layer="1"/>
-<smd name="VCC" x="-6.35" y="-5.08" dx="1.27" dy="0.635" layer="1"/>
-<smd name="GND2" x="-6.35" y="-6.35" dx="1.27" dy="0.635" layer="1"/>
-<smd name="AIO1" x="-3.81" y="-10.16" dx="1.27" dy="0.635" layer="1" rot="R90"/>
-<smd name="GND3" x="-2.54" y="-10.16" dx="1.27" dy="0.635" layer="1" rot="R90"/>
-<smd name="GPIO11" x="-1.27" y="-10.16" dx="1.27" dy="0.635" layer="1" rot="R90"/>
-<smd name="GPIO10" x="0" y="-10.16" dx="1.27" dy="0.635" layer="1" rot="R90"/>
-<smd name="GPIO9" x="1.27" y="-10.16" dx="1.27" dy="0.635" layer="1" rot="R90"/>
-<smd name="GPIO8" x="2.54" y="-10.16" dx="1.27" dy="0.635" layer="1" rot="R90"/>
-<smd name="GND4" x="3.81" y="-10.16" dx="1.27" dy="0.635" layer="1" rot="R90"/>
-<smd name="AIO0" x="5.08" y="-10.16" dx="1.27" dy="0.635" layer="1" rot="R90"/>
-<smd name="UART_RX" x="7.62" y="-6.35" dx="1.27" dy="0.635" layer="1" rot="R180"/>
-<smd name="UART_TX" x="7.62" y="-5.08" dx="1.27" dy="0.635" layer="1" rot="R180"/>
-<smd name="UART_RTS" x="7.62" y="-3.81" dx="1.27" dy="0.635" layer="1" rot="R180"/>
-<smd name="UART_CTS" x="7.62" y="-2.54" dx="1.27" dy="0.635" layer="1" rot="R180"/>
-<smd name="USB_D+" x="7.62" y="-1.27" dx="1.27" dy="0.635" layer="1" rot="R180"/>
-<smd name="USB_D-" x="7.62" y="0" dx="1.27" dy="0.635" layer="1" rot="R180"/>
-<smd name="GPIO2" x="7.62" y="1.27" dx="1.27" dy="0.635" layer="1" rot="R180"/>
-<smd name="GPIO3" x="7.62" y="2.54" dx="1.27" dy="0.635" layer="1" rot="R180"/>
-<smd name="GPIO5" x="7.62" y="3.81" dx="1.27" dy="0.635" layer="1" rot="R180"/>
-<smd name="GPIO4" x="7.62" y="5.08" dx="1.27" dy="0.635" layer="1" rot="R180"/>
-<smd name="SPI_CSB" x="7.62" y="6.35" dx="1.27" dy="0.635" layer="1" rot="R180"/>
-<smd name="SPI_MISO" x="7.62" y="7.62" dx="1.27" dy="0.635" layer="1" rot="R180"/>
+<wire x1="0" y1="0" x2="0" y2="25.6" width="0.127" layer="21"/>
+<wire x1="0" y1="25.6" x2="13.4" y2="25.6" width="0.127" layer="21"/>
+<wire x1="13.4" y1="25.6" x2="13.4" y2="0" width="0.127" layer="21"/>
+<wire x1="13.4" y1="0" x2="0" y2="0" width="0.127" layer="21"/>
+<smd name="AIO1" x="2.6" y="0" dx="2.6" dy="0.8" layer="1" rot="R90"/>
+<smd name="GND4" x="3.6" y="0" dx="2.6" dy="0.8" layer="1" rot="R90"/>
+<smd name="GPIO11" x="4.9" y="0" dx="2.6" dy="0.8" layer="1" rot="R90"/>
+<smd name="GPIO10" x="6.1" y="0" dx="2.6" dy="0.8" layer="1" rot="R90"/>
+<smd name="GPIO9" x="7.3" y="0" dx="2.6" dy="0.8" layer="1" rot="R90"/>
+<smd name="GPIO8" x="8.5" y="0" dx="2.6" dy="0.8" layer="1" rot="R90"/>
+<smd name="GND5" x="9.8" y="0" dx="2.6" dy="0.8" layer="1" rot="R90"/>
+<smd name="AIO0" x="10.8" y="0" dx="2.6" dy="0.8" layer="1" rot="R90"/>
+<smd name="GND2" x="0" y="2.8" dx="2.6" dy="0.8" layer="1" rot="R180"/>
+<smd name="VDD" x="0" y="4" dx="2.6" dy="0.8" layer="1"/>
+<smd name="PCM_OUT" x="0" y="5.2" dx="2.6" dy="0.8" layer="1"/>
+<smd name="PCM_IN" x="0" y="6.4" dx="2.6" dy="0.8" layer="1"/>
+<smd name="PCM_SYNC" x="0" y="7.6" dx="2.6" dy="0.8" layer="1"/>
+<smd name="PCM_CLK" x="0" y="8.8" dx="2.6" dy="0.8" layer="1"/>
+<smd name="SPI_CLOCK" x="0" y="10" dx="2.6" dy="0.8" layer="1"/>
+<smd name="RESET" x="0" y="11.2" dx="2.6" dy="0.8" layer="1"/>
+<smd name="GPIO7" x="0" y="12.4" dx="2.6" dy="0.8" layer="1"/>
+<smd name="GPIO6" x="0" y="13.6" dx="2.6" dy="0.8" layer="1"/>
+<smd name="SPI_MOSI" x="0" y="14.8" dx="2.6" dy="0.8" layer="1"/>
+<smd name="GND1" x="0" y="16" dx="2.6" dy="0.8" layer="1"/>
+<smd name="UART_TX" x="13.4" y="4" dx="2.6" dy="0.8" layer="1"/>
+<smd name="UART_RTS" x="13.4" y="5.2" dx="2.6" dy="0.8" layer="1"/>
+<smd name="UART_CTS" x="13.4" y="6.4" dx="2.6" dy="0.8" layer="1"/>
+<smd name="UART_RX" x="13.4" y="2.8" dx="2.6" dy="0.8" layer="1" rot="R180"/>
+<smd name="USB_DN" x="13.4" y="8.8" dx="2.6" dy="0.8" layer="1"/>
+<smd name="USB_DP" x="13.4" y="7.6" dx="2.6" dy="0.8" layer="1"/>
+<smd name="GPIO2" x="13.4" y="10" dx="2.6" dy="0.8" layer="1"/>
+<smd name="GPIO3" x="13.4" y="11.2" dx="2.6" dy="0.8" layer="1"/>
+<smd name="SPI_MISO" x="13.4" y="16" dx="2.6" dy="0.8" layer="1"/>
+<smd name="SPI_CSB" x="13.4" y="14.8" dx="2.6" dy="0.8" layer="1"/>
+<smd name="GPIO4" x="13.4" y="13.6" dx="2.6" dy="0.8" layer="1"/>
+<smd name="GPIO5" x="13.4" y="12.4" dx="2.6" dy="0.8" layer="1"/>
+<smd name="GND8" x="1.1" y="19.7" dx="2" dy="1" layer="1"/>
+<smd name="GND7" x="12.3" y="19.7" dx="2" dy="1" layer="1"/>
+<smd name="GND6" x="12.6" y="0.7" dx="1" dy="1" layer="1"/>
+<smd name="GND3" x="0.7" y="0.7" dx="1" dy="1" layer="1"/>
+<text x="7.7" y="4.2" size="2.54" layer="21" rot="R90">RN-42</text>
+<text x="-1.4" y="16.8" size="0.6096" layer="21">1</text>
+<text x="-1.4" y="1.4" size="0.6096" layer="21">12</text>
+<text x="14" y="1.4" size="0.6096" layer="21">13</text>
+<text x="14" y="16.8" size="0.6096" layer="21">24</text>
 </package>
 </packages>
 <symbols>
@@ -126,8 +139,8 @@
 <pin name="GPIO5" x="10.16" y="10.16" length="middle" rot="R180"/>
 <pin name="GPIO3" x="10.16" y="7.62" length="middle" rot="R180"/>
 <pin name="GPIO2" x="10.16" y="5.08" length="middle" rot="R180"/>
-<pin name="USB_D-" x="10.16" y="2.54" length="middle" rot="R180"/>
-<pin name="USB_D+" x="10.16" y="0" length="middle" rot="R180"/>
+<pin name="USB_DN" x="10.16" y="2.54" length="middle" rot="R180"/>
+<pin name="USB_DP" x="10.16" y="0" length="middle" rot="R180"/>
 <pin name="UART_CTS" x="10.16" y="-2.54" length="middle" rot="R180"/>
 <pin name="UART_RTS" x="10.16" y="-5.08" length="middle" rot="R180"/>
 <pin name="UART_TX" x="10.16" y="-7.62" length="middle" direction="out" rot="R180"/>
@@ -185,9 +198,9 @@
 <connect gate="G$1" pin="UART_RTS" pad="UART_RTS"/>
 <connect gate="G$1" pin="UART_RX" pad="UART_RX"/>
 <connect gate="G$1" pin="UART_TX" pad="UART_TX"/>
-<connect gate="G$1" pin="USB_D+" pad="USB_D+"/>
-<connect gate="G$1" pin="USB_D-" pad="USB_D-"/>
-<connect gate="G$1" pin="VCC" pad="VCC"/>
+<connect gate="G$1" pin="USB_DN" pad="USB_DN"/>
+<connect gate="G$1" pin="USB_DP" pad="USB_DP"/>
+<connect gate="G$1" pin="VCC" pad="VDD"/>
 </connects>
 <technologies>
 <technology name=""/>
