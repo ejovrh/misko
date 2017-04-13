@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="yes"/>
@@ -77,12 +77,12 @@
 <circle x="10" y="0" radius="11.661903125" width="0.127" layer="21"/>
 <text x="-7" y="-3" size="6.4516" layer="21">-</text>
 <text x="23" y="-3" size="6.4516" layer="21">+</text>
-<text x="0" y="15.24" size="1.27" layer="21">&gt;NAME</text>
-<text x="5.08" y="0" size="1.27" layer="21">&gt;VALUE</text>
+<text x="0" y="3.24" size="1.27" layer="21">&gt;NAME</text>
+<text x="0.08" y="-4" size="1.27" layer="21">&gt;VALUE</text>
 </package>
 </packages>
 <symbols>
-<symbol name="1F">
+<symbol name="SUPERCAP">
 <pin name="+" x="6.731" y="0" length="middle" rot="R180"/>
 <pin name="-" x="-6.604" y="0" length="middle"/>
 <wire x1="1.651" y1="-1.651" x2="1.651" y2="1.651" width="0.254" layer="94"/>
@@ -101,9 +101,9 @@
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="1F">
+<deviceset name="EECS5R5H155">
 <gates>
-<gate name="G$1" symbol="1F" x="-5.08" y="-12.7"/>
+<gate name="G$1" symbol="SUPERCAP" x="-5.08" y="-12.7"/>
 </gates>
 <devices>
 <device name="" package="TH">
