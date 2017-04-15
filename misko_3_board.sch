@@ -20700,6 +20700,73 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 </deviceset>
 </devicesets>
 </library>
+<library name="DS1031-14 - IDC socket">
+<packages>
+<package name="SMD_1.27X30">
+<hole x="-4.115" y="0" drill="1.4"/>
+<hole x="4.115" y="0" drill="1.4"/>
+<smd name="TDI" x="-2.54" y="1.95" dx="0.8" dy="2.4" layer="1"/>
+<smd name="7" x="-1.27" y="1.95" dx="0.8" dy="2.4" layer="1"/>
+<smd name="TMS" x="0" y="1.95" dx="0.8" dy="2.4" layer="1"/>
+<smd name="TDO" x="1.27" y="1.95" dx="0.8" dy="2.4" layer="1"/>
+<smd name="TCK" x="2.54" y="1.95" dx="0.8" dy="2.4" layer="1"/>
+<smd name="8" x="-1.27" y="-1.95" dx="0.8" dy="2.4" layer="1"/>
+<smd name="RESET" x="0" y="-1.95" dx="0.8" dy="2.4" layer="1"/>
+<smd name="GND1" x="2.54" y="-1.95" dx="0.8" dy="2.4" layer="1"/>
+<smd name="GND2" x="-2.54" y="-1.95" dx="0.8" dy="2.4" layer="1" rot="R180"/>
+<smd name="VCC" x="1.27" y="-1.95" dx="0.8" dy="2.4" layer="1"/>
+<wire x1="-4.9" y1="3.3" x2="4.9" y2="3.3" width="0.127" layer="21"/>
+<wire x1="4.9" y1="3.3" x2="4.9" y2="-3.3" width="0.127" layer="21"/>
+<wire x1="4.9" y1="-3.3" x2="-4.9" y2="-3.3" width="0.127" layer="21"/>
+<wire x1="-4.9" y1="-3.3" x2="-4.9" y2="3.3" width="0.127" layer="21"/>
+<rectangle x1="-1.7" y1="3.3" x2="1.7" y2="4.1" layer="21"/>
+<text x="-3.81" y="5.08" size="1.27" layer="25">&gt;NAME</text>
+<text x="-3.81" y="-5.08" size="1.27" layer="27">&gt;VALUE</text>
+</package>
+</packages>
+<symbols>
+<symbol name="JTAG">
+<pin name="TCK" x="-5.08" y="7.62" length="middle" rot="R180"/>
+<pin name="TDO" x="-5.08" y="2.54" length="middle" rot="R180"/>
+<pin name="TMS" x="-5.08" y="-2.54" length="middle" rot="R180"/>
+<pin name="TDI" x="-5.08" y="-7.62" length="middle" rot="R180"/>
+<pin name="RESET" x="-5.08" y="-12.7" length="middle" rot="R180"/>
+<pin name="GND1" x="-33.02" y="-12.7" length="middle"/>
+<pin name="GND2" x="-33.02" y="-7.62" length="middle"/>
+<wire x1="-27.94" y1="-15.24" x2="-27.94" y2="10.16" width="0.254" layer="94"/>
+<wire x1="-27.94" y1="10.16" x2="-10.16" y2="10.16" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="10.16" x2="-10.16" y2="-15.24" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="-15.24" x2="-27.94" y2="-15.24" width="0.254" layer="94"/>
+<text x="-25.4" y="12.7" size="1.27" layer="94">&gt;NAME</text>
+<text x="-25.4" y="-17.78" size="1.27" layer="94">&gt;VALUE</text>
+<pin name="VCC" x="-33.02" y="-2.54" length="middle"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="JTAGHEADER">
+<gates>
+<gate name="G$1" symbol="JTAG" x="17.78" y="2.54"/>
+</gates>
+<devices>
+<device name="" package="SMD_1.27X30">
+<connects>
+<connect gate="G$1" pin="GND1" pad="GND1"/>
+<connect gate="G$1" pin="GND2" pad="GND2"/>
+<connect gate="G$1" pin="RESET" pad="RESET"/>
+<connect gate="G$1" pin="TCK" pad="TCK"/>
+<connect gate="G$1" pin="TDI" pad="TDI"/>
+<connect gate="G$1" pin="TDO" pad="TDO"/>
+<connect gate="G$1" pin="TMS" pad="TMS"/>
+<connect gate="G$1" pin="VCC" pad="VCC"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -20984,6 +21051,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <part name="U$12" library="micro joystick" deviceset="MICROJOYSTICK" device=""/>
 <part name="BLUETOOTH" library="switch-omron" deviceset="10-XX" device="" value="BT"/>
 <part name="GPRS" library="switch-omron" deviceset="10-XX" device="" value="gprs"/>
+<part name="U$13" library="DS1031-14 - IDC socket" deviceset="JTAGHEADER" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -21289,6 +21357,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <instance part="U$12" gate="G$1" x="182.88" y="355.6"/>
 <instance part="BLUETOOTH" gate="1" x="20.32" y="388.62" rot="R270"/>
 <instance part="GPRS" gate="1" x="20.32" y="363.22" rot="R270"/>
+<instance part="U$13" gate="G$1" x="294.64" y="802.64"/>
 </instances>
 <busses>
 <bus name="B$1">
@@ -21588,6 +21657,11 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <pinref part="VCC5" gate="G$1" pin="TP"/>
 <wire x1="274.32" y1="759.46" x2="279.4" y2="759.46" width="0.1524" layer="91"/>
 <label x="279.4" y="759.46" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="U$13" gate="G$1" pin="VCC"/>
+<wire x1="261.62" y1="800.1" x2="254" y2="800.1" width="0.1524" layer="91"/>
+<label x="254" y="800.1" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -22192,6 +22266,16 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <wire x1="193.04" y1="342.9" x2="208.28" y2="342.9" width="0.1524" layer="91"/>
 <label x="208.28" y="342.9" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="U$13" gate="G$1" pin="GND1"/>
+<wire x1="261.62" y1="789.94" x2="254" y2="789.94" width="0.1524" layer="91"/>
+<label x="254" y="789.94" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="U$13" gate="G$1" pin="GND2"/>
+<wire x1="261.62" y1="795.02" x2="254" y2="795.02" width="0.1524" layer="91"/>
+<label x="254" y="795.02" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="5V0" class="1">
 <segment>
@@ -22468,6 +22552,11 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <wire x1="515.62" y1="782.32" x2="523.24" y2="782.32" width="0.1524" layer="91"/>
 <label x="523.24" y="782.32" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="U$13" gate="G$1" pin="TDI"/>
+<wire x1="289.56" y1="795.02" x2="297.18" y2="795.02" width="0.1524" layer="91"/>
+<label x="297.18" y="795.02" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="JTAG_TDO_PIN" class="2">
 <segment>
@@ -22489,6 +22578,11 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <pinref part="TL20" gate="G$1" pin="8"/>
 <wire x1="515.62" y1="779.78" x2="523.24" y2="779.78" width="0.1524" layer="91"/>
 <label x="523.24" y="779.78" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="U$13" gate="G$1" pin="TDO"/>
+<wire x1="289.56" y1="805.18" x2="297.18" y2="805.18" width="0.1524" layer="91"/>
+<label x="297.18" y="805.18" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="JTAG_TMS_PIN" class="2">
@@ -22512,6 +22606,11 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <wire x1="515.62" y1="777.24" x2="523.24" y2="777.24" width="0.1524" layer="91"/>
 <label x="523.24" y="777.24" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="U$13" gate="G$1" pin="TMS"/>
+<wire x1="289.56" y1="800.1" x2="297.18" y2="800.1" width="0.1524" layer="91"/>
+<label x="297.18" y="800.1" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="JTAG_TCL_PIN" class="2">
 <segment>
@@ -22533,6 +22632,11 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <pinref part="TL20" gate="G$1" pin="6"/>
 <wire x1="515.62" y1="774.7" x2="523.24" y2="774.7" width="0.1524" layer="91"/>
 <label x="523.24" y="774.7" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="U$13" gate="G$1" pin="TCK"/>
+<wire x1="289.56" y1="810.26" x2="297.18" y2="810.26" width="0.1524" layer="91"/>
+<label x="297.18" y="810.26" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="BAT_A_PIN" class="2">
@@ -22584,9 +22688,9 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <label x="73.66" y="-152.4" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="U1" gate="A" pin="(T3/INT6)_PE6"/>
-<wire x1="68.58" y1="782.32" x2="33.02" y2="782.32" width="0.1524" layer="91"/>
-<label x="33.02" y="782.32" size="1.778" layer="95"/>
+<pinref part="U1" gate="A" pin="(ICP3/CLKO/INT7)_PE7"/>
+<wire x1="68.58" y1="779.78" x2="33.02" y2="779.78" width="0.1524" layer="91"/>
+<label x="33.02" y="779.78" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="SPI_SS_SD_CARD_PIN" class="2">
@@ -23150,6 +23254,11 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <pinref part="U$5" gate="G$1" pin="CARD_DETECT"/>
 <wire x1="284.48" y1="-149.86" x2="322.58" y2="-149.86" width="0.1524" layer="91"/>
 <label x="317.5" y="-149.86" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="U1" gate="A" pin="(T3/INT6)_PE6"/>
+<wire x1="68.58" y1="782.32" x2="33.02" y2="782.32" width="0.1524" layer="91"/>
+<label x="33.02" y="782.32" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="BLUETOOTH_WAKEUP_PIN" class="2">
@@ -23769,6 +23878,11 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <pinref part="TR20" gate="G$1" pin="17"/>
 <wire x1="515.62" y1="726.44" x2="523.24" y2="726.44" width="0.1524" layer="91"/>
 <label x="523.24" y="726.44" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="U$13" gate="G$1" pin="RESET"/>
+<wire x1="289.56" y1="789.94" x2="297.18" y2="789.94" width="0.1524" layer="91"/>
+<label x="297.18" y="789.94" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="XTAL2" class="0">
@@ -24571,13 +24685,6 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <pinref part="T10" gate="1" pin="7"/>
 <wire x1="414.02" y1="843.28" x2="426.72" y2="843.28" width="0.1524" layer="91"/>
 <label x="426.72" y="843.28" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="PE7" class="0">
-<segment>
-<pinref part="U1" gate="A" pin="(ICP3/CLKO/INT7)_PE7"/>
-<wire x1="68.58" y1="779.78" x2="33.02" y2="779.78" width="0.1524" layer="91"/>
-<label x="33.02" y="779.78" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="PG2" class="2">
