@@ -20804,8 +20804,8 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <part name="JTAG" library="JTAG 1.27mm 10pin header" deviceset="JTAG-1.27-10-PIN-HEADER" device=""/>
 <part name="BOARD" library="1.27mm 10pin header" deviceset="1.27-10-PIN-HEADER" device=""/>
 <part name="LID" library="1.27mm 10pin header" deviceset="1.27-10-PIN-HEADER" device=""/>
-<part name="GPRS_SWITCH" library="jumper" deviceset="JP1E" device="" value="GPRS"/>
-<part name="BLUETOOTH_SWITCH" library="jumper" deviceset="JP1E" device="" value="BT"/>
+<part name="BLUETOOTH" library="switch-omron" deviceset="10-XX" device="" value="bt"/>
+<part name="GPRS" library="switch-omron" deviceset="10-XX" device="" value="gprs"/>
 </parts>
 <sheets>
 <sheet>
@@ -21034,8 +21034,8 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <instance part="JTAG" gate="G$1" x="267.97" y="822.94"/>
 <instance part="BOARD" gate="G$1" x="567.69" y="811.53"/>
 <instance part="LID" gate="G$1" x="648.97" y="812.8"/>
-<instance part="GPRS_SWITCH" gate="A" x="189.23" y="414.02" rot="R90"/>
-<instance part="BLUETOOTH_SWITCH" gate="A" x="189.23" y="375.92" rot="R90"/>
+<instance part="BLUETOOTH" gate="1" x="190.5" y="378.46" rot="R270"/>
+<instance part="GPRS" gate="1" x="189.23" y="416.56" rot="R270"/>
 </instances>
 <busses>
 <bus name="B$1">
@@ -21698,19 +21698,9 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <label x="195.58" y="622.3" size="1.778" layer="95" ratio="9"/>
 </segment>
 <segment>
-<pinref part="GPRS_SWITCH" gate="A" pin="1"/>
-<wire x1="191.77" y1="414.02" x2="195.58" y2="414.02" width="0.1524" layer="91"/>
-<label x="195.58" y="414.02" size="1.778" layer="95" ratio="9"/>
-</segment>
-<segment>
 <pinref part="C30" gate="G$1" pin="1"/>
 <wire x1="214.64" y1="406.39" x2="205.74" y2="406.39" width="0.1524" layer="91"/>
 <label x="205.74" y="406.4" size="1.778" layer="95" ratio="9"/>
-</segment>
-<segment>
-<pinref part="BLUETOOTH_SWITCH" gate="A" pin="1"/>
-<wire x1="191.77" y1="375.92" x2="194.31" y2="375.92" width="0.1524" layer="91"/>
-<label x="194.31" y="375.92" size="1.778" layer="95" ratio="9"/>
 </segment>
 <segment>
 <pinref part="C8" gate="G$1" pin="1"/>
@@ -22077,6 +22067,22 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <pinref part="ANT2" gate="A" pin="GND1"/>
 <junction x="299.72" y="-406.4"/>
 <wire x1="299.72" y1="-406.4" x2="289.56" y2="-406.4" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="GPRS" gate="1" pin="P"/>
+<pinref part="GPRS" gate="1" pin="P1"/>
+<wire x1="184.15" y1="416.56" x2="184.15" y2="414.02" width="0.1524" layer="91"/>
+<wire x1="184.15" y1="416.56" x2="175.26" y2="416.56" width="0.1524" layer="91"/>
+<junction x="184.15" y="416.56"/>
+<label x="175.26" y="416.56" size="1.778" layer="95" ratio="9"/>
+</segment>
+<segment>
+<pinref part="BLUETOOTH" gate="1" pin="P"/>
+<pinref part="BLUETOOTH" gate="1" pin="P1"/>
+<wire x1="185.42" y1="378.46" x2="185.42" y2="375.92" width="0.1524" layer="91"/>
+<wire x1="185.42" y1="378.46" x2="173.99" y2="378.46" width="0.1524" layer="91"/>
+<junction x="185.42" y="378.46"/>
+<label x="173.99" y="378.46" size="1.778" layer="95" ratio="9"/>
 </segment>
 </net>
 <net name="5V0" class="1">
@@ -23673,8 +23679,11 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <wire x1="213.36" y1="386.08" x2="213.36" y2="378.46" width="0.1524" layer="91"/>
 <junction x="213.36" y="378.46"/>
 <label x="208.07" y="378.12" size="1.778" layer="95" rot="R90"/>
-<pinref part="BLUETOOTH_SWITCH" gate="A" pin="2"/>
-<wire x1="191.77" y1="378.46" x2="213.36" y2="378.46" width="0.1524" layer="91"/>
+<wire x1="195.58" y1="378.46" x2="213.36" y2="378.46" width="0.1524" layer="91"/>
+<pinref part="BLUETOOTH" gate="1" pin="S"/>
+<pinref part="BLUETOOTH" gate="1" pin="S1"/>
+<wire x1="195.58" y1="378.46" x2="195.58" y2="375.92" width="0.1524" layer="91"/>
+<junction x="195.58" y="378.46"/>
 </segment>
 <segment>
 <pinref part="BOARD" gate="G$1" pin="9"/>
@@ -24175,13 +24184,6 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <junction x="279.4" y="-411.48"/>
 </segment>
 </net>
-<net name="PG0" class="0">
-<segment>
-<pinref part="U1" gate="A" pin="PG0_(~WR)"/>
-<wire x1="154.94" y1="822.96" x2="162.56" y2="822.96" width="0.1524" layer="91"/>
-<label x="162.56" y="822.96" size="1.778" layer="95"/>
-</segment>
-</net>
 <net name="V_SUPERCAP_SENSE_PIN" class="0">
 <segment>
 <pinref part="R48" gate="G$1" pin="2"/>
@@ -24358,20 +24360,6 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <pinref part="C38" gate="G$1" pin="2"/>
 <wire x1="149.86" y1="-231.14" x2="160.02" y2="-231.14" width="0.1524" layer="91"/>
 <label x="160.02" y="-231.14" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="PG1" class="0">
-<segment>
-<pinref part="U1" gate="A" pin="PG1_(~RD)"/>
-<wire x1="154.94" y1="820.42" x2="162.56" y2="820.42" width="0.1524" layer="91"/>
-<label x="162.56" y="820.42" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="PD7" class="0">
-<segment>
-<pinref part="U1" gate="A" pin="(T0)_PD7"/>
-<wire x1="154.94" y1="741.68" x2="162.56" y2="741.68" width="0.1524" layer="91"/>
-<label x="162.56" y="741.68" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="LTC4425_EN" class="2">
@@ -24578,8 +24566,12 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <wire x1="213.36" y1="425.45" x2="213.36" y2="416.56" width="0.1524" layer="91"/>
 <junction x="213.36" y="416.56"/>
 <label x="207.01" y="416.56" size="1.778" layer="95" ratio="9" rot="R90"/>
-<pinref part="GPRS_SWITCH" gate="A" pin="2"/>
-<wire x1="191.77" y1="416.56" x2="213.36" y2="416.56" width="0.1524" layer="91"/>
+<wire x1="199.39" y1="416.56" x2="213.36" y2="416.56" width="0.1524" layer="91"/>
+<pinref part="GPRS" gate="1" pin="S"/>
+<pinref part="GPRS" gate="1" pin="S1"/>
+<wire x1="194.31" y1="416.56" x2="194.31" y2="414.02" width="0.1524" layer="91"/>
+<wire x1="213.36" y1="416.56" x2="194.31" y2="416.56" width="0.1524" layer="91"/>
+<junction x="194.31" y="416.56"/>
 </segment>
 <segment>
 <pinref part="BOARD" gate="G$1" pin="7"/>
