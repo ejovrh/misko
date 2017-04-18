@@ -1,5 +1,5 @@
 [Eagle]
-Version="08 01 00"
+Version="08 01 01"
 Platform="Windows"
 Globals="Globals"
 Desktop="Desktop"
@@ -351,10 +351,23 @@ UsedLibrary="eagle libraries/EECS5R5H155 Supercap.lbr"
 UsedLibrary="eagle libraries/micro joystick.lbr"
 UsedLibrary="eagle libraries/MX500075-1517 USB Mini-B straight socket.lbr"
 UsedLibrary="eagle libraries/DS1031-14 - IDC socket.lbr"
+UsedLibrary="eagle libraries/1.27mm 10pin header.lbr"
+UsedLibrary="eagle libraries/JTAG 1.27mm 10pin header.lbr"
+UsedLibrary="eagle libraries/ORG1510-MK4 GPS module.lbr"
+UsedLibrary="eagle libraries/SIM800 GPRS Module.lbr"
+UsedLibrary="eagle libraries/EN42-I Bluetooth Module.lbr"
+UsedLibrary="eagle libraries/LTC4425 Supercap Charger.lbr"
+UsedLibrary="eagle libraries/DJNR3015-1R5 Inductor.lbr"
+UsedLibrary="eagle libraries/115Q-BCA0 Micro-SIM Socket.lbr"
+UsedLibrary="eagle libraries/ADXL345 Accelerometer.lbr"
+UsedLibrary="eagle libraries/Molex SD-47309 SD Card Slot.lbr"
+UsedLibrary="eagle libraries/DJNR6045-100S Power Inductor.lbr"
+UsedLibrary="eagle libraries/74HCT1G32GW.lbr"
+UsedLibrary="eagle libraries/FM25W256 FERAM.lbr"
 
 [Win_1]
 Type="Control Panel"
-Loc="0 0 1199 599"
+Loc="52 196 1251 795"
 State=2
 Number=0
 
