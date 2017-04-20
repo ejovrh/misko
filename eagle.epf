@@ -367,7 +367,7 @@ UsedLibrary="eagle libraries/FM25W256 FERAM.lbr"
 
 [Win_1]
 Type="Control Panel"
-Loc="52 196 1251 795"
+Loc="0 0 1199 599"
 State=2
 Number=0
 
