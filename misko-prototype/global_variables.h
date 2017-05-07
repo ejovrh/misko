@@ -2,60 +2,47 @@
 #define CONFIG_VERSION 5 // protection against excessive EEPROM writes
 //   CONFIG_VERSION MUST BE CHANGED IF ANY CHANGES ARE MADE IN setup.h
 
-#define GPS_EM406A_CHIP 0	// the EM406A receiver
-#define GPS_MTK3339_CHIP 1 // the MTK3339  receiver
-
 #define BUFFER_DEBUG_PRINT 0 // SD write debug printout
-
-
 #define AREF_VOLTAGE 2.50
-#define TEMPERATURE_SAMPLE_PERIOD 10 // temperature measure interval in seconds
 #define GPSRATE 4800
-#define SERIALRATE 9600
+#define SERIALRATE 115200
 #define NMEA_BUFFERSIZE 82 // officially, NMEA sentences are at maximum 82 characters long (80 readable characters + \r\n)
 #define SD_BUFFERSIZE 1024 // cyclical buffer for NMEA sentences to be written to SD card
-
-// EERPOM indices
-#define EERPOM_LCD_POWER_INDEX 1
-#define EERPOM_BLUETOOTH_POWER_INDEX 2
-#define EERPOM_LCD_AUTO_TIMEOUT_INDEX 3
-#define EERPOM_BLUETOOTH_AUTO_TIMEOUT_INDEX 4
-#define EERPOM_TIMEZONE_INDEX 5
-#define EEPROM_GPS_GPRMC_GGA_FREQ_INDEX 6
-#define EEPROM_GPS_USE_WAAS_INDEX 7
-#define EERPOM_SD_WRITE_ENABLE_INDEX 8
-#define EERPOM_NMEA_PRINTOUT_INDEX 9
-#define EERPOM_GPS_POWER_INDEX 10
-#define EERPOM_SERIAL_SETTING_INDEX 11
+#define GPS_FITNESS_MODE_THRESHOLD 10 // theshold in knots/h for transition from fitness mode <-> normal mode
 
 // GPS variables
-char NMEA_buffer[NMEA_BUFFERSIZE] = "";        // string buffer for the NMEA sentence
+char NMEA_buffer[NMEA_BUFFERSIZE] = "";	// string buffer for the NMEA sentence
 uint8_t bufferid = 0; // holds the current position in the NMEA_buffer array, used for walk through the buffer
 char gps_command_buffer[24];
-char gps_date[9] = "20"; // 0-7 + 1 for '\0' -- YEAR 2100-BUG, HERE WE COME!!!
-char gps_time[7] = "XXXXXX"; // 0-5 + 1 for '\0'
+char gps_date[9] = "20------"; // YYYYMMDD derived from NMEA sentence
+char gps_time[7] = "------"; // 0-5 + 1 for '\0'
 char gps_logfile[22] = "";
-char gps_latitude[16] = "lat hhmm.ssss  "; // N or S, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
-char gps_longtitude[17] = "lon hhhmm.ssss  "; // W or E, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
-char gps_altitude[9] = "alt    m"; // GPS altitude: "altxxxxm" or "alt-xxxm", populated in gps_functions.h:gps_parse_gpgga()
-char gps_hdop[8] = "dop____"; // GPS horizontal dilution of position: "dop12.5" , populated in gps_functions.h:gps_parse_gprmc()
-char gps_satellites_in_view[6] = "sat__"; // GPS satellites in view
-char gps_week[5] = "xxxx"; // string holding the GPS WeeK 
-char gps_time_of_week[7] = "xxxxxx"; // string holding the GPS Time Of Week
+static char gps_latitude[16] = "lat ----.----  "; // N or S, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
+static char gps_longtitude[17] = "lon -----.----  "; // W or E, memcpy needs to start to write at pos 4 ( populated in gps_functions.h:gps_parse_gprmc() )
+static char gps_altitude[5]; // GPS altitude: [xxxx or -xxx], populated in gps_functions.h:gps_parse_gpgga()
+static char gps_hdop[5]; // GPS horizontal dilution of position [0.99 - 99.99], populated in gps_functions.h:gps_parse_gprmc()
+static char gps_satellites_in_view[3]; // GPS satellites in view [00 - 99]
+static char gps_position_fix_indicator; // indicates the type of fix
+static uint8_t gps_speed = 0; // gps speed in knots (only the interger part of the speed is relevant)
+bool flag_gps_fitness_is_set = 1; // is the fitness mode set or not?
 bool flag_gps_fix = 0; // do we have a fix or not?
-bool flag_gps_time_of_week_set = 0; // is the GPS time of week set or not?
-bool flag_gps_week_set = 0; // is the GPS week set or not?
-bool flag_nmea_sentence_printout = 0; // shall incoming NMEA sentences (regardless of fix) be printed out or not?
 bool flag_gps_on = 1; // is the gps powered on or off?
+uint8_t gps_gnrmc_age = 0; // age of a GNRMC relative to uptime
+uint8_t gps_gngga_age = 0; // age of a GNGGA relative to uptime
 int8_t timezone;
 
+// SIM800C variables
+bool flag_gprs_push_pressed = 0; // flag marks GSM device button pressed or not - used to recognize button state change for proper high/low handling
+char gsm_apn[64] = "web.htgprs"; // APN for the GPRS connection (per protocol max 63 octets)
+char gsm_http_server[64] = ""; // HTTP server for log upload (arbitrary lenght)
+char gsm_http_cred[11] = ""; // HTTP server credentials (arbitrary lenght)
+
 // device variables
-int8_t temperature = 0; // temperature in degrees Celsius
-char temp[6] = "T+xxC";
-uint16_t avg_temp = 0;
-char vcc[9] = "Vccx.xxV";
 char bat_a_pct[9] = "batAxxx%";
+char bat_b_pct[9] = "batBxxx%";
 char sd_buffer[SD_BUFFERSIZE]; // buffer holding 2x 512byte blocks of NMEA sentences for buffered write of 512byte blocks
+char statistics_buffer[SD_BUFFERSIZE] = ""; // buffer for statistical data which ends up written to SD
+byte adxl345_irq_src; // holds INT_SRC - a register in the ADXL345 via which it is determined which interrupt was triggered
 
 // Bluetooth flags
 uint32_t bluetooth_button_press_time = millis(); // time of button press
@@ -70,6 +57,8 @@ bool flag_lcd_is_on = 0; // flag is BT device is powered on or off
 bool flag_oled_sleep = 0; // flag if the OLED shall sleep or not
 M2_EXTERN_ALIGN(top_el_expandable_menu); // Forward declaration of the top level element
 M2_EXTERN_ALIGN(el_top_sd_content_menu); // Forward declaration of the top level element
+const char format_rf0[] = "rf0"; // menu format string
+const char format_1W64H64[] = "-0|1W64H64"; //
 
 // display device initializations
 //U8GLIB_SSD1306_128X64 OLED(U8G_I2C_OPT_FAST);
@@ -84,7 +73,13 @@ bool flag_sd_write_enable = 0; // flag if a write shall be allowed or not - is c
 uint8_t fs_m2tk_first = 0; // helper variable for the strlist element
 uint8_t fs_m2tk_cnt = 0; // helper variable for the strlist element
 
-uint16_t scheduler_run_count = 0; // counts how many times the scheduler has run
+uint16_t uptime = 0; // uptime in seconds, incrementer via timer5
 volatile bool flag_adxl345_int1 = 0; // flag for active interrupt
 bool flag_gsm_on = 0; // flag if the gsm modem shall be powered on or not, controlled via menu combo, inspected in loop()
 uint8_t flag_cb_gsm_power = 0; // used in GSM power callback
+bool flag_run_once = 0; // runs exactly once, triggered by timer5
+
+float val_Vcc; // measured Vcc, updated in timer5 ISR
+float val_temperature; // measured temperature, updated in timer5 ISR
+uint8_t val_batA_pct; // battA percentage, updated in timer5 ISR
+uint8_t val_batB_pct; // battB percentage, updated in timer5 ISR
