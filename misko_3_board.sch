@@ -25074,6 +25074,42 @@ www.irf.com&lt;p&gt;
 </nets>
 </sheet>
 </sheets>
+<errors>
+<approved hash="101,1,53.34,-215.9,OLED-1,1,,,,"/>
+<approved hash="101,1,53.34,-231.14,OLED-7,1,,,,"/>
+<approved hash="101,1,53.34,-264.16,OLED-20,1,,,,"/>
+<approved hash="101,1,53.34,-289.56,OLED-30,1,,,,"/>
+<approved hash="104,1,68.58,820.42,U1,VCC_2,VCC,,,"/>
+<approved hash="104,1,78.74,226.06,IC2,VCCIO,N$10,,,"/>
+<approved hash="104,1,109.22,220.98,IC2,VCC,5V0,,,"/>
+<approved hash="104,1,182.88,589.28,U5,+VS,VCC,,,"/>
+<approved hash="104,1,238.76,528.32,U7,OUT_2,V_LIION_REGULATED,,,"/>
+<approved hash="104,1,238.76,525.78,U7,OUT,V_LIION_REGULATED,,,"/>
+<approved hash="104,1,238.76,508,U7,VSS_2,GND,,,"/>
+<approved hash="104,1,238.76,505.46,U7,VSS,GND,,,"/>
+<approved hash="104,1,43.18,45.72,GND,VCC,VGPS,,,"/>
+<approved hash="104,1,106.68,-43.18,U$3,VCC,BLUE_LED,,,"/>
+<approved hash="104,1,213.36,-132.08,IC4,SCK,SPI_SCK_PIN,,,"/>
+<approved hash="104,1,40.64,-127,U$4,VDDIO,VCC,,,"/>
+<approved hash="104,1,40.64,-132.08,U$4,VS,VCC,,,"/>
+<approved hash="104,1,40.64,-137.16,U$4,GND$1,GND,,,"/>
+<approved hash="104,1,40.64,-142.24,U$4,GND$2,GND,,,"/>
+<approved hash="104,1,40.64,-147.32,U$4,GND$3,GND,,,"/>
+<approved hash="104,1,238.76,-378.46,U8,VBAT1,V_LIION_REGULATED,,,"/>
+<approved hash="104,1,236.22,-378.46,U8,VBAT2,V_LIION_REGULATED,,,"/>
+<approved hash="104,1,27.94,-386.08,U$7,GND5,GND,,,"/>
+<approved hash="104,1,76.2,-378.46,U$7,GND1,GND,,,"/>
+<approved hash="104,1,27.94,-378.46,U$7,GND2,GND,,,"/>
+<approved hash="104,1,27.94,-381,U$7,GND3,GND,,,"/>
+<approved hash="104,1,27.94,-383.54,U$7,GND4,GND,,,"/>
+<approved hash="104,1,27.94,-388.62,U$7,GND6,GND,,,"/>
+<approved hash="104,1,27.94,-391.16,U$7,GND7,GND,,,"/>
+<approved hash="104,1,294.64,220.98,U$11,VBUS,VUSB,,,"/>
+<approved hash="104,1,278.13,805.16,JTAG,GND1,GND,,,"/>
+<approved hash="104,1,278.13,800.08,JTAG,GND2,GND,,,"/>
+<approved hash="104,1,172.72,63.5,U6,VDD,VCC,,,"/>
+<approved hash="202,1,172.72,58.42,U6,CT,,,,"/>
+</errors>
 </schematic>
 </drawing>
 </eagle>
