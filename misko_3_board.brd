@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.25" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.005" altunitdist="mm" altunit="mm"/>
+<grid distance="0.5" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.005" altunitdist="mm" altunit="mm"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -32,8 +32,8 @@
 <layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
@@ -412,6 +412,28 @@
 <wire x1="53.25" y1="150.5" x2="53.25" y2="148.5" width="0.3" layer="21"/>
 <wire x1="249.25" y1="105" x2="249.25" y2="109" width="0.25" layer="21"/>
 <wire x1="249.25" y1="109" x2="234" y2="109" width="0.25" layer="21"/>
+<text x="193.5" y="132" size="0.75" layer="25">IC10</text>
+<text x="293.75" y="110.75" size="1" layer="25">Bluetooth</text>
+<text x="313" y="110.75" size="1" layer="25">GPRS</text>
+<text x="45.905" y="13.34" size="0.75" layer="25">SDA</text>
+<text x="46.005" y="6.85" size="0.75" layer="25">SCL</text>
+<text x="32" y="172.5" size="1" layer="25" rot="SR270">IC13</text>
+<text x="26.5" y="157" size="1" layer="26" rot="MR0">IC20</text>
+<text x="34" y="154.5" size="1" layer="26" rot="MR0">IC21</text>
+<text x="67.5" y="10" size="1" layer="25">VCC</text>
+<text x="20.5" y="161" size="1" layer="25">GPS</text>
+<text x="16" y="171" size="1" layer="25">BT</text>
+<text x="54.865" y="28.79" size="0.75" layer="25" rot="R90">R1</text>
+<text x="24" y="0.5" size="1" layer="25">Miško</text>
+<text x="31.5" y="0.5" size="1" layer="25">Hrvoje Ivanić</text>
+<text x="41.5" y="0.5" size="1" layer="25">Stjenka Bojanić</text>
+<text x="9" y="145.5" size="1" layer="25">Miško</text>
+<text x="205" y="102.5" size="1" layer="25">Miško</text>
+<text x="16.5" y="145.5" size="1" layer="25">Hrvoje Ivanić</text>
+<text x="212.5" y="102.5" size="1" layer="25">Hrvoje Ivanić</text>
+<text x="26.5" y="145.5" size="1" layer="25">Stjenka Bojanić</text>
+<text x="222.5" y="102.5" size="1" layer="25">Stjenka Bojanić</text>
+<text x="18.5" y="25.5" size="0.75" layer="25">IC17</text>
 </plain>
 <libraries>
 <library name="discrete">
@@ -3249,23 +3271,6 @@ type 0204, grid 5 mm</description>
 <rectangle x1="-1.0668" y1="-0.6985" x2="-0.4168" y2="0.7015" layer="51"/>
 <rectangle x1="-0.1999" y1="-0.5001" x2="0.1999" y2="0.5001" layer="35"/>
 </package>
-<package name="M0805">
-<description>&lt;b&gt;RESISTOR&lt;/b&gt;&lt;p&gt;
-MELF 0.10 W</description>
-<wire x1="-1.973" y1="0.983" x2="1.973" y2="0.983" width="0.0508" layer="39"/>
-<wire x1="1.973" y1="-0.983" x2="-1.973" y2="-0.983" width="0.0508" layer="39"/>
-<wire x1="-1.973" y1="-0.983" x2="-1.973" y2="0.983" width="0.0508" layer="39"/>
-<wire x1="1.973" y1="0.983" x2="1.973" y2="-0.983" width="0.0508" layer="39"/>
-<wire x1="0.7112" y1="0.635" x2="-0.7112" y2="0.635" width="0.1524" layer="51"/>
-<wire x1="0.7112" y1="-0.635" x2="-0.7112" y2="-0.635" width="0.1524" layer="51"/>
-<smd name="1" x="-0.95" y="0" dx="1.3" dy="1.6" layer="1"/>
-<smd name="2" x="0.95" y="0" dx="1.3" dy="1.6" layer="1"/>
-<text x="-1.27" y="1.27" size="1.27" layer="25">&gt;NAME</text>
-<text x="-1.27" y="-2.54" size="1.27" layer="27">&gt;VALUE</text>
-<rectangle x1="-1.0414" y1="-0.7112" x2="-0.6858" y2="0.7112" layer="51"/>
-<rectangle x1="0.6858" y1="-0.7112" x2="1.0414" y2="0.7112" layer="51"/>
-<rectangle x1="-0.1999" y1="-0.5999" x2="0.1999" y2="0.5999" layer="35"/>
-</package>
 </packages>
 </library>
 <library name="SIM800C">
@@ -5407,29 +5412,29 @@ design rules under a new name.</description>
 </pass>
 </autorouter>
 <elements>
-<element name="ANT" library="discrete" package="SMD" value="U.FL-R-SMT 1" x="55.21" y="184.36" smashed="yes" rot="MR0"/>
-<element name="B10" library="con-lstb" package="MA10-1" value="bottom" x="3.35" y="21" smashed="yes" rot="R90">
+<element name="CONN15" library="discrete" package="SMD" value="U.FL-R-SMT 1" x="55.21" y="184.36" smashed="yes" rot="MR0"/>
+<element name="CONN1" library="con-lstb" package="MA10-1" value="bottom" x="3.35" y="21" smashed="yes" rot="R90">
 <attribute name="MF" value="" x="3.35" y="21" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="MPN" value="" x="3.35" y="21" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="OC_FARNELL" value="unknown" x="3.35" y="21" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="OC_NEWARK" value="unknown" x="3.35" y="21" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="VALUE" x="6.271" y="22.27" size="1.27" layer="27" ratio="10" rot="R90"/>
 </element>
-<element name="BL20" library="con-lsta" package="FE20" value="bottom left" x="38" y="38.65" smashed="yes">
+<element name="CONN2" library="con-lsta" package="FE20" value="bottom left" x="38" y="38.65" smashed="yes">
 <attribute name="MF" value="" x="38" y="38.65" size="1.778" layer="27" display="off"/>
 <attribute name="MPN" value="" x="38" y="38.65" size="1.778" layer="27" display="off"/>
 <attribute name="OC_FARNELL" value="unknown" x="38" y="38.65" size="1.778" layer="27" display="off"/>
 <attribute name="OC_NEWARK" value="unknown" x="38" y="38.65" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="12.6" y="35.729" size="1.27" layer="27" ratio="10"/>
 </element>
-<element name="BR20" library="con-lsta" package="FE20" value="bottom right" x="38" y="3.35" smashed="yes">
+<element name="CONN3" library="con-lsta" package="FE20" value="bottom right" x="38" y="3.35" smashed="yes">
 <attribute name="MF" value="" x="38" y="3.35" size="1.778" layer="27" display="off"/>
 <attribute name="MPN" value="" x="38" y="3.35" size="1.778" layer="27" display="off"/>
 <attribute name="OC_FARNELL" value="unknown" x="38" y="3.35" size="1.778" layer="27" display="off"/>
 <attribute name="OC_NEWARK" value="unknown" x="38" y="3.35" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="12.6" y="0.429" size="1.27" layer="27" ratio="10"/>
 </element>
-<element name="BT_LED" library="led" package="LED2X5" value="blue" x="314.5" y="123.75" smashed="yes" rot="MR180">
+<element name="LED5" library="led" package="LED2X5" value="blue" x="314.5" y="123.75" smashed="yes" rot="MR180">
 <attribute name="VALUE" x="311.96" y="126.163" size="1.016" layer="28" ratio="10" rot="MR180"/>
 </element>
 <element name="C1" library="resistor" package="C0805" value="1µF" x="190.49" y="135.62" smashed="yes" rot="R90">
@@ -5457,7 +5462,7 @@ design rules under a new name.</description>
 <attribute name="VALUE" x="203.23" y="129.04" size="1.27" layer="28" rot="MR180"/>
 </element>
 <element name="C17" library="rcl" package="C0805" value="0.1µF" x="16.5" y="7" smashed="yes" rot="R180">
-<attribute name="NAME" x="15.5" y="5" size="0.75" layer="25"/>
+<attribute name="NAME" x="15.71" y="5.205" size="0.75" layer="25"/>
 <attribute name="VALUE" x="17.77" y="9.54" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="C19" library="rcl" package="C0805" value="100µF" x="-8.01" y="183.04" smashed="yes" rot="MR180">
@@ -5564,59 +5569,59 @@ design rules under a new name.</description>
 <attribute name="NAME" x="230.68" y="107.23" size="0.75" layer="25" rot="R90"/>
 <attribute name="VALUE" x="231.48" y="105.26" size="1.27" layer="27"/>
 </element>
-<element name="LIION" library="SIM800C" package="JST-PH-2-THM-RA" value="LiPo Battery" x="72" y="31" smashed="yes" rot="MR270">
+<element name="CONN16" library="SIM800C" package="JST-PH-2-THM-RA" value="LiPo Battery" x="72" y="31" smashed="yes" rot="MR270">
 <attribute name="NAME" x="72.5" y="26.5" size="0.75" layer="26" font="vector" rot="MR0"/>
 </element>
 <element name="D1" library="Diode2" package="D0805" value="1N4148" x="29" y="7" smashed="yes">
-<attribute name="NAME" x="28.5025" y="4.9875" size="0.75" layer="25"/>
+<attribute name="NAME" x="27.5325" y="5.3725" size="0.75" layer="25"/>
 <attribute name="VALUE" x="30.5875" y="6.0475" size="1.27" layer="27" rot="R180"/>
 </element>
-<element name="GPRS_LED" library="led" package="LED2X5" value="red" x="314.5" y="120.5" smashed="yes" rot="MR180">
+<element name="LED6" library="led" package="LED2X5" value="red" x="314.5" y="120.5" smashed="yes" rot="MR180">
 <attribute name="VALUE" x="311.96" y="122.913" size="1.016" layer="28" ratio="10" rot="MR180"/>
 </element>
-<element name="GPS_GREEN_LED" library="led" package="LED2X5" value="green" x="299" y="124" smashed="yes" rot="MR180">
+<element name="LED1" library="led" package="LED2X5" value="green" x="299" y="124" smashed="yes" rot="MR180">
 <attribute name="VALUE" x="296.46" y="126.413" size="1.016" layer="28" ratio="10" rot="MR180"/>
 </element>
-<element name="GPS_RED_LED" library="led" package="LED2X5" value="red" x="299" y="120.5" smashed="yes" rot="MR180">
+<element name="LED2" library="led" package="LED2X5" value="red" x="299" y="120.5" smashed="yes" rot="MR180">
 <attribute name="VALUE" x="296.46" y="122.913" size="1.016" layer="28" ratio="10" rot="MR180"/>
 </element>
-<element name="IC1" library="microchip" package="SOT23" value="MC1525TT" x="32.79" y="32.62" smashed="yes">
+<element name="IC2" library="microchip" package="SOT23" value="MC1525TT" x="32.79" y="32.62" smashed="yes">
 <attribute name="MF" value="" x="32.79" y="32.62" size="1.778" layer="27" display="off"/>
 <attribute name="MPN" value="" x="32.79" y="32.62" size="1.778" layer="27" display="off"/>
-<attribute name="NAME" x="33.25" y="30.25" size="0.75" layer="25" rot="R90"/>
+<attribute name="NAME" x="31.745" y="30.205" size="1" layer="25"/>
 <attribute name="OC_FARNELL" value="unknown" x="32.79" y="32.62" size="1.778" layer="27" display="off"/>
 <attribute name="OC_NEWARK" value="unknown" x="32.79" y="32.62" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="30.885" y="29.445" size="1.27" layer="27"/>
 </element>
-<element name="IC2" library="ftdichip" package="SSOP16" value="FT230XS" x="250.5" y="129.5" smashed="yes" rot="MR180">
-<attribute name="NAME" x="249.825" y="126.456" size="0.75" layer="26" rot="MR180"/>
+<element name="IC7" library="ftdichip" package="SSOP16" value="FT230XS" x="250.5" y="129.5" smashed="yes" rot="MR180">
+<attribute name="NAME" x="249.395" y="126.696" size="1" layer="26" rot="MR180"/>
 <attribute name="VALUE" x="247.071" y="134.326" size="1.778" layer="28" rot="MR180"/>
 </element>
-<element name="IC3" library="LTC4425 Supercap Charger" package="DFN12" value="LTC4425" x="-5.01" y="177.04" smashed="yes" rot="MR270">
-<attribute name="NAME" x="-4.5" y="179.75" size="0.5" layer="26" rot="MR0"/>
+<element name="IC12" library="LTC4425 Supercap Charger" package="DFN12" value="LTC4425" x="-5.01" y="177.04" smashed="yes" rot="MR270">
+<attribute name="NAME" x="-3.525" y="180.095" size="1" layer="26" rot="MR0"/>
 <attribute name="VALUE" x="-3.66" y="174.29" size="0.5" layer="28" rot="MR0"/>
 </element>
-<element name="IC4" library="FM25W256 FERAM" package="SOIC08" value="FM25W256-SOIC" x="10" y="21" smashed="yes" rot="R270">
+<element name="IC16" library="FM25W256 FERAM" package="SOIC08" value="FM25W256-SOIC" x="10" y="21" smashed="yes" rot="R270">
 <attribute name="MF" value="" x="10" y="21" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="MPN" value="" x="10" y="21" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="NAME" x="9.5" y="17.251" size="0.75" layer="25" ratio="10"/>
+<attribute name="NAME" x="8.64" y="17.101" size="1" layer="25" ratio="10"/>
 <attribute name="OC_FARNELL" value="unknown" x="10" y="21" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="OC_NEWARK" value="unknown" x="10" y="21" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="VALUE" x="7.968" y="16.809" size="1.27" layer="27" ratio="10"/>
 </element>
-<element name="IC5" library="74HCT1G32GW" package="SOT353/5" value="74HCT1G32" x="20" y="12" smashed="yes" rot="R180">
-<attribute name="NAME" x="22.2" y="12" size="0.75" layer="25" font="vector" ratio="12" rot="R270" align="center"/>
+<element name="IC15" library="74HCT1G32GW" package="SOT353/5" value="74HCT1G32" x="20" y="12" smashed="yes" rot="R180">
+<attribute name="NAME" x="22.2" y="12" size="1" layer="25" font="vector" ratio="12" rot="SR270" align="center"/>
 <attribute name="VALUE" x="17.346" y="15.209" size="1.27" layer="27" font="vector" ratio="12" rot="R270"/>
 </element>
-<element name="L2" library="rcl" package="L0805" value="33µH" x="27" y="33" smashed="yes" rot="R270">
+<element name="L1" library="rcl" package="L0805" value="33µH" x="27" y="33" smashed="yes" rot="R270">
 <attribute name="NAME" x="27.5" y="35" size="0.75" layer="25" rot="R90"/>
 <attribute name="VALUE" x="24.46" y="34.27" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="NTC" library="rcl" package="0204/5" value="10k" x="52.97" y="29.42" smashed="yes" rot="MR90">
+<element name="R1" library="rcl" package="0204/5" value="NTC 10k" x="52.97" y="29.42" smashed="yes" rot="MR90">
 <attribute name="NAME" x="52.4984" y="28.4984" size="0.75" layer="26" ratio="10" rot="MR90"/>
 <attribute name="VALUE" x="50.6586" y="27.2864" size="0.9906" layer="28" ratio="10" rot="MR90"/>
 </element>
-<element name="8MHZ" library="special" package="QS" value="8MHz" x="37" y="8.45" smashed="yes" rot="R180">
+<element name="Q1" library="special" package="QS" value="8MHz" x="37" y="8.45" smashed="yes" rot="R180">
 <attribute name="NAME" x="35.67" y="11.783" size="0.75" layer="26" ratio="10" rot="MR180"/>
 <attribute name="VALUE" x="42.08" y="12.387" size="1.27" layer="27" ratio="10" rot="R180"/>
 </element>
@@ -5636,7 +5641,7 @@ design rules under a new name.</description>
 <attribute name="NAME" x="238.52" y="120.115" size="0.75" layer="26" rot="MR90"/>
 <attribute name="VALUE" x="237.135" y="118.46" size="1.27" layer="28" rot="MR0"/>
 </element>
-<element name="R14" library="rcl" package="M0805" value="100k" x="50.99" y="161.79" smashed="yes">
+<element name="R14" library="rcl" package="R0805" value="100k" x="50.99" y="161.79" smashed="yes">
 <attribute name="NAME" x="50.25" y="160" size="0.75" layer="25"/>
 <attribute name="VALUE" x="49.72" y="159.25" size="1.27" layer="27"/>
 </element>
@@ -5685,7 +5690,7 @@ design rules under a new name.</description>
 <attribute name="VALUE" x="21.46" y="33.635" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="R26" library="rcl" package="R0805" value="47k" x="51" y="30" smashed="yes" rot="R270">
-<attribute name="NAME" x="51.5" y="32" size="0.75" layer="25" rot="R90"/>
+<attribute name="NAME" x="52.04" y="32.435" size="0.75" layer="25" rot="R90"/>
 <attribute name="VALUE" x="48.46" y="30.635" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="R27" library="rcl" package="R0805" value="270k" x="53.75" y="24.26" smashed="yes" rot="MR0">
@@ -5697,7 +5702,7 @@ design rules under a new name.</description>
 <attribute name="VALUE" x="56.635" y="24.21" size="1.27" layer="28" rot="MR0"/>
 </element>
 <element name="R29" library="rcl" package="R0805" value="47k" x="49" y="30" smashed="yes" rot="R270">
-<attribute name="NAME" x="49.5" y="33.25" size="0.75" layer="25" rot="R90"/>
+<attribute name="NAME" x="49.45" y="25.225" size="0.75" layer="25" rot="R90"/>
 <attribute name="VALUE" x="46.46" y="30.635" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="R3" library="rcl" package="R0805" value="3k3" x="13.87" y="34.65" smashed="yes" rot="R90">
@@ -5705,7 +5710,7 @@ design rules under a new name.</description>
 <attribute name="VALUE" x="16.41" y="34.015" size="1.27" layer="27" rot="R90"/>
 </element>
 <element name="R30" library="rcl" package="R0805" value="47k" x="47" y="30" smashed="yes" rot="R270">
-<attribute name="NAME" x="47.5" y="31.75" size="0.75" layer="25" rot="R90"/>
+<attribute name="NAME" x="47.35" y="25.275" size="0.75" layer="25" rot="R90"/>
 <attribute name="VALUE" x="44.46" y="30.635" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="R31" library="rcl" package="R0805" value="1k" x="61" y="34" smashed="yes" rot="MR90">
@@ -5756,15 +5761,15 @@ design rules under a new name.</description>
 <attribute name="NAME" x="319.77" y="119.615" size="0.75" layer="26" rot="MR90"/>
 <attribute name="VALUE" x="315.96" y="119.865" size="1.27" layer="28" rot="MR90"/>
 </element>
-<element name="R42" library="rcl" package="M0805" value="10k" x="54.99" y="161.78" smashed="yes">
+<element name="R42" library="rcl" package="R0805" value="10k" x="54.99" y="161.78" smashed="yes">
 <attribute name="NAME" x="54" y="160" size="0.75" layer="25"/>
 <attribute name="VALUE" x="53.72" y="159.24" size="1.27" layer="27"/>
 </element>
-<element name="R43" library="rcl" package="M0805" value="10k" x="20" y="8" smashed="yes" rot="R90">
+<element name="R43" library="rcl" package="R0805" value="10k" x="20" y="8" smashed="yes" rot="R90">
 <attribute name="NAME" x="22" y="7" size="0.75" layer="25" rot="R90"/>
 <attribute name="VALUE" x="22.54" y="6.73" size="1.27" layer="27" rot="R90"/>
 </element>
-<element name="R44" library="rcl" package="M0805" value="10k" x="10" y="25.5" smashed="yes">
+<element name="R44" library="rcl" package="R0805" value="10k" x="10" y="25.5" smashed="yes">
 <attribute name="NAME" x="12" y="25" size="0.75" layer="25"/>
 <attribute name="VALUE" x="8.73" y="22.96" size="1.27" layer="27"/>
 </element>
@@ -5784,7 +5789,7 @@ design rules under a new name.</description>
 <attribute name="NAME" x="10" y="28.5" size="0.75" layer="25"/>
 <attribute name="VALUE" x="7.365" y="26.46" size="1.27" layer="27"/>
 </element>
-<element name="R49" library="rcl" package="R0805" value="4.7k" x="28" y="10" smashed="yes" rot="R90">
+<element name="R49" library="rcl" package="R0805" value="4k7" x="28" y="10" smashed="yes" rot="R90">
 <attribute name="NAME" x="28.5" y="12" size="0.75" layer="25" rot="R90"/>
 <attribute name="VALUE" x="30.54" y="9.365" size="1.27" layer="27" rot="R90"/>
 </element>
@@ -5800,15 +5805,15 @@ design rules under a new name.</description>
 <attribute name="NAME" x="56.26" y="167.405" size="0.75" layer="26" rot="MR90"/>
 <attribute name="VALUE" x="52.45" y="167.405" size="1.27" layer="28" rot="MR90"/>
 </element>
-<element name="R52" library="rcl" package="M0805" value="1k" x="54.3" y="179.56" smashed="yes" rot="MR180">
+<element name="R52" library="rcl" package="R0805" value="1k" x="54.3" y="179.56" smashed="yes" rot="MR180">
 <attribute name="NAME" x="53.5" y="178.25" size="0.75" layer="26" rot="MR180"/>
 <attribute name="VALUE" x="53.03" y="182.1" size="1.27" layer="28" rot="MR180"/>
 </element>
-<element name="R53" library="rcl" package="M0805" value="10k" x="18" y="23" smashed="yes" rot="R270">
+<element name="R53" library="rcl" package="R0805" value="10k" x="18" y="23" smashed="yes" rot="R270">
 <attribute name="NAME" x="20" y="22" size="0.75" layer="25" rot="R90"/>
 <attribute name="VALUE" x="15.46" y="24.27" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="R57" library="rcl" package="M0805" value="390k" x="216.77" y="126.46" smashed="yes" rot="MR270">
+<element name="R57" library="rcl" package="R0805" value="390k" x="216.77" y="126.46" smashed="yes" rot="MR270">
 <attribute name="NAME" x="216.02" y="124.25" size="0.75" layer="26" rot="MR180"/>
 <attribute name="VALUE" x="219.31" y="127.73" size="1.27" layer="28" rot="MR270"/>
 </element>
@@ -5832,57 +5837,56 @@ design rules under a new name.</description>
 <attribute name="NAME" x="238.52" y="125.865" size="0.75" layer="26" rot="MR90"/>
 <attribute name="VALUE" x="237.135" y="123.96" size="1.27" layer="28" rot="MR0"/>
 </element>
-<element name="RESET" library="switch-omron" package="B3F-10XX" value="RESET" x="-9.49" y="149.43" smashed="yes">
+<element name="S1" library="switch-omron" package="B3F-10XX" value="RESET" x="-9.49" y="149.43" smashed="yes">
 <attribute name="MF" value="" x="-9.49" y="149.43" size="1.778" layer="27" display="off"/>
 <attribute name="MPN" value="B3F-1000" x="-9.49" y="149.43" size="1.778" layer="27" display="off"/>
 <attribute name="OC_FARNELL" value="176432" x="-9.49" y="149.43" size="1.778" layer="27" display="off"/>
 <attribute name="OC_NEWARK" value="36M3542" x="-9.49" y="149.43" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="-12.538" y="144.35" size="1.27" layer="27" ratio="10"/>
 </element>
-<element name="POWER" library="smd-special" package="SMS-001" value="POWER_SWITCH" x="241" y="136.5" smashed="yes" rot="R90">
-<attribute name="NAME" x="239.325" y="133.036" size="0.75" layer="25" ratio="10"/>
+<element name="S2" library="smd-special" package="SMS-001" value="POWER_SWITCH" x="241" y="136.5" smashed="yes" rot="R90">
 <attribute name="VALUE" x="244.175" y="140.056" size="1.27" layer="27" ratio="10" rot="R180"/>
 </element>
-<element name="SJ1" library="jumper" package="SJW" value="GPIO6" x="53.99" y="183.04" smashed="yes" rot="R270">
+<element name="JP2" library="jumper" package="SJW" value="GPIO6" x="53.99" y="183.04" smashed="yes" rot="R270">
 <attribute name="VALUE" x="53.99" y="182.04" size="0.02" layer="27" rot="R270"/>
 </element>
-<element name="SJ2" library="jumper" package="SJW" value="RESET" x="49.99" y="183.04" smashed="yes" rot="R270">
+<element name="JP3" library="jumper" package="SJW" value="RESET" x="49.99" y="183.04" smashed="yes" rot="R270">
 <attribute name="VALUE" x="49.99" y="182.04" size="0.02" layer="27" rot="R270"/>
 </element>
-<element name="T10" library="con-lstb" package="MA10-1" value="top" x="184.35" y="123" smashed="yes" rot="R90">
+<element name="CONN7" library="con-lstb" package="MA10-1" value="top" x="184.35" y="123" smashed="yes" rot="R90">
 <attribute name="MF" value="" x="184.35" y="123" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="MPN" value="" x="184.35" y="123" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="OC_FARNELL" value="unknown" x="184.35" y="123" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="OC_NEWARK" value="unknown" x="184.35" y="123" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="VALUE" x="187.271" y="124.27" size="1.27" layer="27" ratio="10" rot="R90"/>
 </element>
-<element name="TL20" library="con-lsta" package="FE20" value="top left" x="219" y="140.65" smashed="yes">
+<element name="CONN8" library="con-lsta" package="FE20" value="top left" x="219" y="140.65" smashed="yes">
 <attribute name="MF" value="" x="219" y="140.65" size="1.778" layer="27" display="off"/>
 <attribute name="MPN" value="" x="219" y="140.65" size="1.778" layer="27" display="off"/>
 <attribute name="OC_FARNELL" value="unknown" x="219" y="140.65" size="1.778" layer="27" display="off"/>
 <attribute name="OC_NEWARK" value="unknown" x="219" y="140.65" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="193.6" y="137.729" size="1.27" layer="27" ratio="10"/>
 </element>
-<element name="TR20" library="con-lsta" package="FE20" value="top right" x="219" y="105.35" smashed="yes">
+<element name="CONN9" library="con-lsta" package="FE20" value="top right" x="219" y="105.35" smashed="yes">
 <attribute name="MF" value="" x="219" y="105.35" size="1.778" layer="27" display="off"/>
 <attribute name="MPN" value="" x="219" y="105.35" size="1.778" layer="27" display="off"/>
 <attribute name="OC_FARNELL" value="unknown" x="219" y="105.35" size="1.778" layer="27" display="off"/>
 <attribute name="OC_NEWARK" value="unknown" x="219" y="105.35" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="193.6" y="102.429" size="1.27" layer="27" ratio="10"/>
 </element>
-<element name="U8" library="SIM800 GPRS Module" package="SIM800C" value="SIM800" x="41.39" y="165.95" smashed="yes" rot="MR0"/>
-<element name="GND" library="ORG1510-MK4 GPS module" package="PACKAGE" value="ORG1510-MK4" x="194.5" y="126.5" smashed="yes">
+<element name="IC21" library="SIM800 GPRS Module" package="SIM800C" value="SIM800" x="41.39" y="165.95" smashed="yes" rot="MR0"/>
+<element name="IC10" library="ORG1510-MK4 GPS module" package="PACKAGE" value="ORG1510-MK4" x="194.5" y="126.5" smashed="yes">
 <attribute name="VALUE" x="190.69" y="117.61" size="1.27" layer="27"/>
 </element>
-<element name="U$3" library="EN42-I Bluetooth Module" package="RN-42" value="RN-42" x="35.53" y="178.16" smashed="yes" rot="R270"/>
-<element name="U$4" library="ADXL345 Accelerometer" package="LGA14" value="ADXL345" x="15" y="11" smashed="yes" rot="R90">
-<attribute name="NAME" x="11.94" y="9.96" size="0.75" layer="25" rot="R90"/>
+<element name="IC13" library="EN42-I Bluetooth Module" package="RN-42" value="RN-42" x="35.53" y="178.16" smashed="yes" rot="R270"/>
+<element name="IC14" library="ADXL345 Accelerometer" package="LGA14" value="ADXL345" x="15" y="11" smashed="yes" rot="R90">
+<attribute name="NAME" x="11.85" y="9.545" size="1" layer="25" rot="R90"/>
 <attribute name="VALUE" x="20.08" y="8.46" size="1.27" layer="27" rot="R90"/>
 </element>
-<element name="U$5" library="Molex SD-47309 SD Card Slot" package="MICRO_SD_CONNECTOR" value="MICROSD_SPI_MODE" x="21" y="15.5" smashed="yes" rot="R90"/>
-<element name="U$7" library="115Q-BCA0 Micro-SIM Socket" package="115Q-BCA0" value="115Q-BCA0" x="26.41" y="158.44" smashed="yes" rot="MR90"/>
-<element name="SUPERCAP" library="EECS5R5H155 Supercap" package="TH" value="EECS5R5H155" x="3.01" y="152.96" smashed="yes" rot="R90"/>
-<element name="U1" library="Atmel_By_element14_Batch_1-00" package="QFP80P1600X1600X120-64N" value="ATMEGA1281-16AU" x="38" y="21" smashed="yes">
+<element name="IC17" library="Molex SD-47309 SD Card Slot" package="MICRO_SD_CONNECTOR" value="MICROSD_SPI_MODE" x="21" y="15.5" smashed="yes" rot="R90"/>
+<element name="IC20" library="115Q-BCA0 Micro-SIM Socket" package="115Q-BCA0" value="115Q-BCA0" x="26.41" y="158.44" smashed="yes" rot="MR90"/>
+<element name="C43" library="EECS5R5H155 Supercap" package="TH" value="EECS5R5H155" x="3.01" y="152.96" smashed="yes" rot="R90"/>
+<element name="IC1" library="Atmel_By_element14_Batch_1-00" package="QFP80P1600X1600X120-64N" value="ATMEGA1281-16AU" x="38" y="21" smashed="yes">
 <attribute name="DESCRIPTION" value="Microcontroller" x="38" y="21" size="1.778" layer="27" display="off"/>
 <attribute name="MPN" value="ATMEGA1281-16AU" x="38" y="21" size="1.778" layer="27" display="off"/>
 <attribute name="OC_FARNELL" value="1455092" x="38" y="21" size="1.778" layer="27" display="off"/>
@@ -5891,80 +5895,80 @@ design rules under a new name.</description>
 <attribute name="SUPPLIER" value="ATMEL" x="38" y="21" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="34.5456" y="32.176" size="2.0828" layer="27" ratio="10" rot="SR0"/>
 </element>
-<element name="U2" library="Texas Instruments_By_element14_Batch_1" package="SOIC127P600X175-14N" value="SN74HCT14DR" x="58.5" y="16" smashed="yes" rot="R90">
+<element name="IC6" library="Texas Instruments_By_element14_Batch_1" package="SOIC127P600X175-14N" value="SN74HCT14DR" x="58.5" y="16" smashed="yes" rot="R90">
 <attribute name="MPN" value="SN74HCT14DR" x="58.5" y="16" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="NAME" x="60.015" y="12.9408" size="1" layer="25" ratio="10" rot="SR0"/>
+<attribute name="NAME" x="49.8292" y="12.515" size="1" layer="25" ratio="10" rot="SR90"/>
 <attribute name="OC_FARNELL" value="1387913" x="58.5" y="16" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="OC_NEWARK" value="67K2834" x="58.5" y="16" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="PACKAGE" value="SOIC-14" x="58.5" y="16" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="SUPPLIER" value="Texas Instruments" x="58.5" y="16" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="VALUE" x="61.9036" y="8.1768" size="2.0828" layer="27" ratio="10" rot="SR90"/>
 </element>
-<element name="BT-SW" library="Texas Instruments_By_element14_Batch_1" package="SOT95P280X145-6N" value="SN74LVC1G3157DBVR - BT switch" x="18.99" y="169.04" smashed="yes" rot="R270">
+<element name="IC8" library="Texas Instruments_By_element14_Batch_1" package="SOT95P280X145-6N" value="SN74LVC1G3157DBVR - BT switch" x="18.99" y="169.04" smashed="yes" rot="R270">
 <attribute name="MPN" value="SN74LVC1G3157DBVR" x="18.99" y="169.04" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="NAME" x="22" y="170.9994" size="0.75" layer="25" ratio="10" rot="SR270"/>
+<attribute name="NAME" x="21" y="170.0544" size="1" layer="25" ratio="10" rot="SR270"/>
 <attribute name="OC_FARNELL" value="1470910" x="18.99" y="169.04" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="OC_NEWARK" value="32H6364" x="18.99" y="169.04" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="PACKAGE" value="SOT-23-6" x="18.99" y="169.04" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="SUPPLIER" value="Texas Instruments" x="18.99" y="169.04" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="VALUE" x="14.545" y="172.4944" size="2.0828" layer="27" ratio="10" rot="SR270"/>
 </element>
-<element name="GPS-SW" library="Texas Instruments_By_element14_Batch_1" package="SOT95P280X145-6N" value="SN74LVC1G3157DBVR - GPS switch" x="20.99" y="164.04" smashed="yes" rot="R90">
+<element name="IC9" library="Texas Instruments_By_element14_Batch_1" package="SOT95P280X145-6N" value="SN74LVC1G3157DBVR - GPS switch" x="20.99" y="164.04" smashed="yes" rot="R90">
 <attribute name="MPN" value="SN74LVC1G3157DBVR" x="20.99" y="164.04" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="NAME" x="17.25" y="161.5006" size="0.75" layer="25" ratio="10" rot="SR90"/>
+<attribute name="NAME" x="18.985" y="163.0156" size="1" layer="25" ratio="10" rot="SR90"/>
 <attribute name="OC_FARNELL" value="1470910" x="20.99" y="164.04" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="OC_NEWARK" value="32H6364" x="20.99" y="164.04" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="PACKAGE" value="SOT-23-6" x="20.99" y="164.04" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="SUPPLIER" value="Texas Instruments" x="20.99" y="164.04" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="VALUE" x="25.435" y="160.5856" size="2.0828" layer="27" ratio="10" rot="SR90"/>
 </element>
-<element name="U5" library="TMP36GRTZ" package="SOT95P280X145-5N" value="TMP36GRTZ" x="37" y="33" smashed="yes" rot="R90">
+<element name="IC3" library="TMP36GRTZ" package="SOT95P280X145-5N" value="TMP36GRTZ" x="37" y="33" smashed="yes" rot="R90">
 <attribute name="MPN" value="TMP36GRTZ-REEL7" x="37" y="33" size="1.778" layer="27" rot="R90" display="off"/>
-<attribute name="NAME" x="37.5" y="34.0006" size="0.75" layer="25" ratio="10" rot="SR90"/>
+<attribute name="NAME" x="36.0206" y="34.77" size="1" layer="25" ratio="10" rot="SR0"/>
 <attribute name="OC_FARNELL" value="1661084" x="37" y="33" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="OC_NEWARK" value="96K2116" x="37" y="33" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="PACKAGE" value="SOT23-5" x="37" y="33" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="SUPPLIER" value="Analog Devices" x="37" y="33" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="VALUE" x="41.445" y="29.5456" size="2.0828" layer="27" ratio="10" rot="SR90"/>
 </element>
-<element name="U7" library="Microchip-MCP73871-2AAI_ML" package="QFN50P400X400X100-21N" value="MCP73871-2AAI/ML" x="60" y="29" smashed="yes" rot="MR90">
+<element name="IC5" library="Microchip-MCP73871-2AAI_ML" package="QFN50P400X400X100-21N" value="MCP73871-2AAI/ML" x="60" y="29" smashed="yes" rot="MR90">
 <attribute name="MPN" value="MCP73871-2AAI/ML" x="60" y="29" size="1.778" layer="28" rot="MR90" display="off"/>
-<attribute name="NAME" x="57.1736" y="27.417" size="0.75" layer="26" ratio="10" rot="SMR0"/>
+<attribute name="NAME" x="64.3586" y="30.197" size="1" layer="26" ratio="10" rot="SMR0"/>
 <attribute name="OC_FARNELL" value="1642487" x="60" y="29" size="1.778" layer="28" rot="MR90" display="off"/>
 <attribute name="OC_NEWARK" value="54M4955" x="60" y="29" size="1.778" layer="28" rot="MR90" display="off"/>
 <attribute name="PACKAGE" value="QFN-20" x="60" y="29" size="1.778" layer="28" rot="MR90" display="off"/>
 <attribute name="SUPPLIER" value="Microchip" x="60" y="29" size="1.778" layer="28" rot="MR90" display="off"/>
 <attribute name="VALUE" x="55.1994" y="23.1834" size="2.0828" layer="28" ratio="10" rot="SMR90"/>
 </element>
-<element name="USB_RX_LED" library="led" package="CHIPLED_1206" value="yellow" x="249" y="130" smashed="yes" rot="R180">
+<element name="LED3" library="led" package="CHIPLED_1206" value="yellow" x="249" y="130" smashed="yes" rot="R180">
 <attribute name="VALUE" x="246.46" y="131.27" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="USB_TX_LED" library="led" package="CHIPLED_1206" value="yellow" x="252" y="130" smashed="yes" rot="R180">
+<element name="LED4" library="led" package="CHIPLED_1206" value="yellow" x="252" y="130" smashed="yes" rot="R180">
 <attribute name="VALUE" x="249.46" y="131.27" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="ML20" library="con-lsta" package="FE20" value="mid left" x="22.99" y="183.69" smashed="yes">
+<element name="CONN5" library="con-lsta" package="FE20" value="mid left" x="22.99" y="183.69" smashed="yes">
 <attribute name="MF" value="" x="22.99" y="183.69" size="1.778" layer="27" display="off"/>
 <attribute name="MPN" value="" x="22.99" y="183.69" size="1.778" layer="27" display="off"/>
 <attribute name="OC_FARNELL" value="unknown" x="22.99" y="183.69" size="1.778" layer="27" display="off"/>
 <attribute name="OC_NEWARK" value="unknown" x="22.99" y="183.69" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="-2.41" y="180.769" size="1.27" layer="27" ratio="10"/>
 </element>
-<element name="MR20" library="con-lsta" package="FE20" value="mid right" x="22.99" y="148.38" smashed="yes">
+<element name="CONN6" library="con-lsta" package="FE20" value="mid right" x="22.99" y="148.38" smashed="yes">
 <attribute name="MF" value="" x="22.99" y="148.38" size="1.778" layer="27" display="off"/>
 <attribute name="MPN" value="" x="22.99" y="148.38" size="1.778" layer="27" display="off"/>
 <attribute name="OC_FARNELL" value="unknown" x="22.99" y="148.38" size="1.778" layer="27" display="off"/>
 <attribute name="OC_NEWARK" value="unknown" x="22.99" y="148.38" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="-2.41" y="145.459" size="1.27" layer="27" ratio="10"/>
 </element>
-<element name="M10" library="con-lstb" package="MA10-1" value="mid" x="-11.66" y="166.04" smashed="yes" rot="R90">
+<element name="CONN4" library="con-lstb" package="MA10-1" value="mid" x="-11.66" y="166.04" smashed="yes" rot="R90">
 <attribute name="MF" value="" x="-11.66" y="166.04" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="MPN" value="" x="-11.66" y="166.04" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="OC_FARNELL" value="unknown" x="-11.66" y="166.04" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="OC_NEWARK" value="unknown" x="-11.66" y="166.04" size="1.778" layer="27" rot="R90" display="off"/>
 <attribute name="VALUE" x="-8.739" y="167.31" size="1.27" layer="27" ratio="10" rot="R90"/>
 </element>
-<element name="U$9" library="TI TPS63031" package="NEWPVSON-N10" value="TPS63031" x="70" y="17" smashed="yes" rot="MR180">
-<attribute name="NAME" x="69.595" y="16.1298" size="0.75" layer="26" ratio="6" rot="SMR90"/>
+<element name="IC4" library="TI TPS63031" package="NEWPVSON-N10" value="TPS63031" x="70" y="17" smashed="yes" rot="MR180">
+<attribute name="NAME" x="70.8702" y="19.095" size="1" layer="26" ratio="6" rot="SMR0"/>
 <attribute name="VALUE" x="66.5456" y="17.635" size="1.27" layer="28" ratio="6" rot="SMR180"/>
 </element>
 <element name="R59" library="resistor" package="R0805" value="150k" x="72" y="22" smashed="yes" rot="MR180">
@@ -5979,55 +5983,54 @@ design rules under a new name.</description>
 <attribute name="NAME" x="69" y="20.25" size="0.75" layer="26" rot="MR0"/>
 <attribute name="VALUE" x="69.27" y="19.46" size="1.27" layer="28" rot="MR0"/>
 </element>
-<element name="U$10" library="DJNR3015-1R5 Inductor" package="FFF" value="DJNR3015-1R5" x="66" y="17" smashed="yes" rot="MR90">
+<element name="L2" library="DJNR3015-1R5 Inductor" package="FFF" value="DJNR3015-1R5" x="66" y="17" smashed="yes" rot="MR90">
 <attribute name="NAME" x="67" y="14.25" size="0.75" layer="22" rot="MR0"/>
 <attribute name="VALUE" x="62.75" y="12" size="0.75" layer="22" rot="MR90"/>
 </element>
-<element name="I2C" library="jumper" package="JP1" value="I2C" x="46.83" y="10.4" smashed="yes">
+<element name="CONN11" library="jumper" package="JP1" value="I2C" x="46.83" y="10.4" smashed="yes">
 <attribute name="VALUE" x="49.751" y="7.86" size="1.27" layer="27" ratio="10" rot="R90"/>
 </element>
-<element name="VCC" library="testpad" package="TP14R" value="PTR1TP14R" x="69" y="12" smashed="yes">
-<attribute name="NAME" x="67.8" y="9.7501" size="1" layer="25"/>
+<element name="TP4" library="testpad" package="TP14R" value="VCC" x="69" y="12" smashed="yes">
 <attribute name="TP_SIGNAL_NAME" value="" x="69" y="9.46" size="1" layer="37"/>
 <attribute name="VALUE" x="68.492" y="11.238" size="0.0254" layer="27"/>
 </element>
-<element name="SIM800" library="testpad" package="B1,27" value="PTR1B1,27" x="57.99" y="159.84" smashed="yes">
+<element name="TP7" library="testpad" package="B1,27" value="SIM800 Power CTRL Pin" x="57.99" y="159.84" smashed="yes">
 <attribute name="TP_SIGNAL_NAME" value="" x="57.355" y="157.935" size="1" layer="37"/>
 <attribute name="VALUE" x="57.355" y="159.078" size="0.0254" layer="27"/>
 </element>
-<element name="GPS_POWER_CTL_PIN" library="testpad" package="B1,27" value="PTR1B1,27" x="47" y="34.25" smashed="yes">
+<element name="TP5" library="testpad" package="B1,27" value="GPS Power CTRL Pin" x="47" y="34.25" smashed="yes">
 <attribute name="TP_SIGNAL_NAME" value="" x="46.365" y="32.345" size="1" layer="37"/>
 <attribute name="VALUE" x="46.365" y="33.488" size="0.0254" layer="27"/>
 </element>
-<element name="TP2" library="testpad" package="B1,27" value="PTR1B1,27" x="196.5" y="119.5" smashed="yes">
+<element name="TP6" library="testpad" package="B1,27" value="GPS Power CTRL Pin" x="196.5" y="119.5" smashed="yes">
 <attribute name="TP_SIGNAL_NAME" value="" x="195.865" y="117.595" size="1" layer="37"/>
 <attribute name="VALUE" x="195.865" y="118.738" size="0.0254" layer="27"/>
 </element>
-<element name="VCC1" library="testpad" package="TP14R" value="PTR1TP14R" x="-2.01" y="151.04" smashed="yes">
+<element name="TP3" library="testpad" package="TP14R" value="Analogue Switch CRTL Pin" x="-2.01" y="151.04" smashed="yes">
 <attribute name="TP_SIGNAL_NAME" value="" x="-2.01" y="148.5" size="1" layer="37"/>
 <attribute name="VALUE" x="-2.518" y="150.278" size="0.0254" layer="27"/>
 </element>
-<element name="V_LIION" library="testpad" package="TP14R" value="PTR1TP14R" x="66.5" y="24.4" smashed="yes">
+<element name="TP8" library="testpad" package="TP14R" value="VLiIon Regulated" x="66.5" y="24.4" smashed="yes">
 <attribute name="TP_SIGNAL_NAME" value="" x="66.5" y="21.86" size="1" layer="37"/>
 <attribute name="VALUE" x="65.992" y="23.638" size="0.0254" layer="27"/>
 </element>
-<element name="BT" library="testpad" package="TP14R" value="PTR1TP14R" x="27.74" y="176.54" smashed="yes">
+<element name="TP9" library="testpad" package="TP14R" value="Bluetooth Wakeup Pin" x="27.74" y="176.54" smashed="yes">
 <attribute name="TP_SIGNAL_NAME" value="" x="27.74" y="174" size="1" layer="37"/>
 <attribute name="VALUE" x="27.232" y="175.778" size="0.0254" layer="27"/>
 </element>
-<element name="V_GPS" library="testpad" package="TP14R" value="PTR1TP14R" x="-8.26" y="172.04" smashed="yes">
+<element name="TP10" library="testpad" package="TP14R" value="VGPS" x="-8.26" y="172.04" smashed="yes">
 <attribute name="TP_SIGNAL_NAME" value="" x="-8.26" y="169.5" size="1" layer="37"/>
 <attribute name="VALUE" x="-8.768" y="171.278" size="0.0254" layer="27"/>
 </element>
-<element name="VCC5" library="testpad" package="TP14R" value="PTR1TP14R" x="69" y="12" smashed="yes" rot="MR0">
+<element name="TP2" library="testpad" package="TP14R" value="VCC" x="69" y="12" smashed="yes" rot="MR0">
 <attribute name="TP_SIGNAL_NAME" value="" x="69" y="9.46" size="1" layer="38" rot="MR0"/>
 <attribute name="VALUE" x="69.508" y="11.238" size="0.0254" layer="28" rot="MR0"/>
 </element>
-<element name="TP6" library="testpad" package="P1-17Y" value="GND" x="67.25" y="39.95" smashed="yes" rot="R270">
+<element name="TP1" library="testpad" package="P1-17Y" value="GND" x="67.25" y="39.95" smashed="yes" rot="R270">
 <attribute name="TP_SIGNAL_NAME" value="" x="63.44" y="41.22" size="1" layer="37" rot="R270"/>
 <attribute name="VALUE" x="67.25" y="39.95" size="0.0254" layer="27" rot="R270"/>
 </element>
-<element name="U$11" library="MX500075-1517 USB Mini-B straight socket" package="TH" value="MX500075-1517USB_MINI-B" x="250" y="139.5" smashed="yes" rot="R180">
+<element name="CONN14" library="MX500075-1517 USB Mini-B straight socket" package="TH" value="MX500075-1517USB_MINI-B" x="250" y="139.5" smashed="yes" rot="R180">
 <attribute name="VALUE" x="253.2" y="143.3" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="L3" library="DJNR6045-100S Power Inductor" package="DJNR6045-100-S" value="DJNR6045-100-S" x="249" y="110.5" smashed="yes" rot="MR0">
@@ -6037,17 +6040,17 @@ design rules under a new name.</description>
 <attribute name="NAME" x="247.77" y="104.73" size="0.75" layer="26" rot="MR90"/>
 <attribute name="VALUE" x="243.96" y="104.23" size="1.27" layer="28" rot="MR90"/>
 </element>
-<element name="U$12" library="micro joystick" package="MICROJOYSTICK" value="MICROJOYSTICK" x="245" y="121" smashed="yes" rot="R315">
+<element name="S3" library="micro joystick" package="MICROJOYSTICK" value="MICROJOYSTICK" x="245" y="121" smashed="yes" rot="R315">
 <attribute name="VALUE" x="237.92893125" y="119.585784375" size="1.27" layer="27" rot="R315"/>
 </element>
-<element name="V_GPS1" library="testpad" package="TP14R" value="PTR1TP14R" x="196.5" y="114" smashed="yes">
+<element name="TP11" library="testpad" package="TP14R" value="VGPS" x="196.5" y="114" smashed="yes">
 <attribute name="TP_SIGNAL_NAME" value="" x="196.5" y="111.46" size="1" layer="37"/>
 <attribute name="VALUE" x="195.992" y="113.238" size="0.0254" layer="27"/>
 </element>
-<element name="OLED" library="con-hirose" package="FH12-30S-0.5SH" value="FH12-30S-0.5SH" x="219.5" y="114" smashed="yes" rot="R180">
+<element name="IC18" library="con-hirose" package="FH12-30S-0.5SH" value="FH12-30S-0.5SH" x="219.5" y="114" smashed="yes" rot="R180">
 <attribute name="MF" value="" x="219.5" y="114" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="MPN" value="FH12-30S-0.5SH(55)" x="219.5" y="114" size="1.778" layer="27" rot="R180" display="off"/>
-<attribute name="NAME" x="218.7474" y="108.5" size="0.75" layer="25"/>
+<attribute name="NAME" x="224.7474" y="108.75" size="0.75" layer="25"/>
 <attribute name="OC_FARNELL" value="1324555" x="219.5" y="114" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="OC_NEWARK" value="34M6176" x="219.5" y="114" size="1.778" layer="27" rot="R180" display="off"/>
 <attribute name="VALUE" x="227.2476" y="114.3258" size="1.27" layer="27" rot="R180"/>
@@ -6068,46 +6071,43 @@ design rules under a new name.</description>
 <attribute name="NAME" x="229.73" y="117.77" size="0.75" layer="25"/>
 <attribute name="VALUE" x="231.48" y="115.96" size="1.27" layer="27"/>
 </element>
-<element name="JTAG" library="JTAG 1.27mm 10pin header" package="TH-JTAG" value="" x="187.5" y="140.5" smashed="yes">
-<attribute name="NAME" x="186.25" y="142.75" size="0.75" layer="21"/>
-<attribute name="VALUE" x="183.5" y="136.5" size="1.27" layer="21"/>
+<element name="CONN10" library="JTAG 1.27mm 10pin header" package="TH-JTAG" value="JTAG" x="187.5" y="140.5" smashed="yes">
+<attribute name="VALUE" x="186" y="142.75" size="1" layer="21"/>
 </element>
-<element name="BOARD" library="1.27mm 10pin header" package="TH" value="" x="253" y="120" smashed="yes" rot="R270">
+<element name="CONN12" library="1.27mm 10pin header" package="TH" value="board" x="253" y="120" smashed="yes" rot="R270">
 <attribute name="NAME" x="256.25" y="118.25" size="0.75" layer="25" rot="R90"/>
 <attribute name="VALUE" x="249" y="124" size="1.27" layer="27" rot="R270"/>
 </element>
-<element name="LID" library="1.27mm 10pin header" package="TH" value="" x="305" y="120" smashed="yes" rot="MR270">
+<element name="CONN13" library="1.27mm 10pin header" package="TH" value="lid" x="305" y="120" smashed="yes" rot="MR270">
 <attribute name="VALUE" x="309" y="124" size="1.27" layer="28" rot="MR270"/>
 </element>
-<element name="BLUETOOTH" library="switch-omron" package="B3F-10XX" value="bt" x="296.5" y="115.5" smashed="yes">
+<element name="S5" library="switch-omron" package="B3F-10XX" value="bt" x="296.5" y="115.5" smashed="yes">
 <attribute name="MF" value="" x="296.5" y="115.5" size="1.778" layer="27" display="off"/>
 <attribute name="MPN" value="B3F-1000" x="296.5" y="115.5" size="1.778" layer="27" display="off"/>
-<attribute name="NAME" x="293.702" y="110.433" size="1" layer="25" ratio="10"/>
 <attribute name="OC_FARNELL" value="176432" x="296.5" y="115.5" size="1.778" layer="27" display="off"/>
 <attribute name="OC_NEWARK" value="36M3542" x="296.5" y="115.5" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="293.452" y="110.42" size="1.27" layer="27" ratio="10"/>
 </element>
-<element name="GPRS" library="switch-omron" package="B3F-10XX" value="gprs" x="314.5" y="115.5" smashed="yes">
+<element name="S4" library="switch-omron" package="B3F-10XX" value="gprs" x="314.5" y="115.5" smashed="yes">
 <attribute name="MF" value="" x="314.5" y="115.5" size="1.778" layer="27" display="off"/>
 <attribute name="MPN" value="B3F-1000" x="314.5" y="115.5" size="1.778" layer="27" display="off"/>
-<attribute name="NAME" x="311.702" y="110.433" size="1" layer="25" ratio="10"/>
 <attribute name="OC_FARNELL" value="176432" x="314.5" y="115.5" size="1.778" layer="27" display="off"/>
 <attribute name="OC_NEWARK" value="36M3542" x="314.5" y="115.5" size="1.778" layer="27" display="off"/>
 <attribute name="VALUE" x="311.452" y="110.42" size="1.27" layer="27" ratio="10"/>
 </element>
-<element name="U$6" library="DS1394U-33+ RTC SPI Module" package="10UMAX" value="DS1394U-33+" x="-4.5" y="155.25" smashed="yes" rot="MR0">
-<attribute name="NAME" x="-6.5" y="153" size="0.75" layer="26" rot="MR0"/>
+<element name="IC19" library="DS1394U-33+ RTC SPI Module" package="10UMAX" value="DS1394U-33+" x="-4.5" y="155.25" smashed="yes" rot="MR0">
+<attribute name="NAME" x="-7.5" y="156.5" size="1" layer="26" rot="MR270"/>
 <attribute name="VALUE" x="-1" y="151.75" size="1.27" layer="28" rot="MR0"/>
 </element>
 <element name="C32" library="rcl" package="C0805" value="0.1µF" x="-2.5" y="152.25" smashed="yes" rot="MR180">
 <attribute name="NAME" x="-3.25" y="151" size="0.75" layer="26" rot="MR180"/>
 <attribute name="VALUE" x="-3.77" y="154.79" size="1.27" layer="28" rot="MR180"/>
 </element>
-<element name="R55" library="rcl" package="M0805" value="10k" x="-4.5" y="158.75" smashed="yes" rot="MR180">
+<element name="R55" library="rcl" package="R0805" value="10k" x="-4.5" y="158.75" smashed="yes" rot="MR180">
 <attribute name="NAME" x="-3.75" y="160" size="0.75" layer="26" rot="MR0"/>
 <attribute name="VALUE" x="-5.77" y="161.29" size="1.27" layer="28" rot="MR180"/>
 </element>
-<element name="U$13" library="LFXTAL016178R 32.768kHz crystal" package="SMD" value="LFXTAL016178R" x="4.25" y="156" smashed="yes" rot="MR180">
+<element name="Q2" library="LFXTAL016178R 32.768kHz crystal" package="SMD" value="LFXTAL016178R" x="4.25" y="156" smashed="yes" rot="MR180">
 <attribute name="VALUE" x="0.25" y="160" size="1.27" layer="28" rot="MR180"/>
 </element>
 <element name="U$1" library="buzzer" package="F/UCW03LF" value="F/UCW03F" x="223" y="131" smashed="yes"/>
@@ -6115,13 +6115,13 @@ design rules under a new name.</description>
 <attribute name="NAME" x="32" y="34.25" size="0.75" layer="25"/>
 <attribute name="VALUE" x="34.27" y="38.54" size="1.27" layer="27" rot="R180"/>
 </element>
-<element name="Q1" library="transistor-small-signal" package="SOT23" value="BSS84" x="26.5" y="179.5" smashed="yes" rot="R90">
-<attribute name="NAME" x="28.25" y="179.25" size="0.75" layer="25"/>
+<element name="T1" library="transistor-small-signal" package="SOT23" value="BSS84" x="26.5" y="179.5" smashed="yes" rot="R90">
+<attribute name="NAME" x="26.25" y="176.75" size="0.75" layer="25"/>
 <attribute name="VALUE" x="29.675" y="177.595" size="1.27" layer="27" rot="R90"/>
 </element>
-<element name="U6" library="Texas Instruments_By_element14_Batch_1" package="SOT95P280X145-6N" value="TPS3808G33DBVT" x="200" y="117" smashed="yes" rot="R270">
+<element name="IC11" library="Texas Instruments_By_element14_Batch_1" package="SOT95P280X145-6N" value="TPS3808G33DBVT" x="200" y="117" smashed="yes" rot="R270">
 <attribute name="MPN" value="TPS3808G33DBVT" x="200" y="117" size="1.778" layer="27" rot="R270" display="off"/>
-<attribute name="NAME" x="197.54" y="117.4544" size="0.75" layer="25" ratio="10" rot="SR270"/>
+<attribute name="NAME" x="197.035" y="118.3594" size="1" layer="25" ratio="10" rot="SR270"/>
 <attribute name="OC_FARNELL" value="1755534" x="200" y="117" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="OC_NEWARK" value="21J9211" x="200" y="117" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="PACKAGE" value="SOT-23-6" x="200" y="117" size="1.778" layer="27" rot="R270" display="off"/>
@@ -6149,13 +6149,13 @@ design rules under a new name.</description>
 <signal name="VDD_EXT">
 </signal>
 <signal name="VCC" class="1">
-<contactref element="BL20" pad="4"/>
-<contactref element="ML20" pad="4"/>
-<contactref element="TL20" pad="4"/>
+<contactref element="CONN2" pad="4"/>
+<contactref element="CONN5" pad="4"/>
+<contactref element="CONN8" pad="4"/>
 <wire x1="21.49" y1="37.51" x2="21.49" y2="38.65" width="0.4064" layer="1"/>
-<contactref element="BT-SW" pad="5"/>
-<contactref element="U2" pad="14"/>
-<contactref element="U5" pad="2"/>
+<contactref element="IC8" pad="5"/>
+<contactref element="IC6" pad="14"/>
+<contactref element="IC3" pad="2"/>
 <contactref element="C14" pad="1"/>
 <contactref element="R9" pad="2"/>
 <contactref element="R21" pad="2"/>
@@ -6170,36 +6170,36 @@ design rules under a new name.</description>
 <wire x1="49" y1="30.95" x2="51" y2="30.95" width="0.3" layer="1"/>
 <contactref element="R25" pad="1"/>
 <contactref element="R39" pad="1"/>
-<contactref element="IC3" pad="FB"/>
-<contactref element="IC3" pad="SEL"/>
+<contactref element="IC12" pad="FB"/>
+<contactref element="IC12" pad="SEL"/>
 <contactref element="R38" pad="2"/>
-<contactref element="IC3" pad="VCC1"/>
+<contactref element="IC12" pad="VCC1"/>
 <contactref element="C19" pad="1"/>
 <contactref element="C21" pad="2"/>
-<contactref element="IC3" pad="VCC2"/>
-<contactref element="U1" pad="21"/>
-<contactref element="U1" pad="52"/>
-<contactref element="GPS-SW" pad="5"/>
+<contactref element="IC12" pad="VCC2"/>
+<contactref element="IC1" pad="21"/>
+<contactref element="IC1" pad="52"/>
+<contactref element="IC9" pad="5"/>
 <contactref element="R15" pad="2"/>
-<contactref element="U$4" pad="VDD"/>
+<contactref element="IC14" pad="VDD"/>
 <contactref element="C17" pad="1"/>
-<contactref element="U$4" pad="VCC"/>
+<contactref element="IC14" pad="VCC"/>
 <contactref element="R43" pad="1"/>
 <contactref element="R44" pad="2"/>
-<contactref element="IC4" pad="!WP!"/>
-<contactref element="IC4" pad="!HOLD!"/>
-<contactref element="IC4" pad="VCC"/>
+<contactref element="IC16" pad="!WP!"/>
+<contactref element="IC16" pad="!HOLD!"/>
+<contactref element="IC16" pad="VCC"/>
 <contactref element="C41" pad="1"/>
-<contactref element="GPS_GREEN_LED" pad="A"/>
-<contactref element="GPS_RED_LED" pad="A"/>
+<contactref element="LED1" pad="A"/>
+<contactref element="LED2" pad="A"/>
 <contactref element="R49" pad="1"/>
 <contactref element="D1" pad="C"/>
-<contactref element="IC5" pad="VCC"/>
-<contactref element="L2" pad="1"/>
-<contactref element="U$5" pad="VDD"/>
+<contactref element="IC15" pad="VCC"/>
+<contactref element="L1" pad="1"/>
+<contactref element="IC17" pad="VDD"/>
 <contactref element="R53" pad="2"/>
 <contactref element="C31" pad="1"/>
-<contactref element="U$9" pad="1"/>
+<contactref element="IC4" pad="1"/>
 <contactref element="C18" pad="2"/>
 <wire x1="68.500003125" y1="16.000003125" x2="68.500003125" y2="15.499996875" width="0.3" layer="16"/>
 <wire x1="68.500003125" y1="15.499996875" x2="69" y2="15" width="0.3" layer="16"/>
@@ -6250,7 +6250,7 @@ design rules under a new name.</description>
 <wire x1="35.206" y1="13.38" x2="35.206" y2="12.0152" width="0.3" layer="1"/>
 <wire x1="35.206" y1="12.0152" x2="35.2212" y2="11.74" width="0.3" layer="1"/>
 <via x="35.2212" y="11.74" extent="1-16" drill="0.6" shape="octagon"/>
-<contactref element="U$7" pad="VCC"/>
+<contactref element="IC20" pad="VCC"/>
 <wire x1="-8.96" y1="181.04" x2="-8.96" y2="183.04" width="0.3" layer="16"/>
 <wire x1="-8.96" y1="181.04" x2="-9.01" y2="180.99" width="0.3" layer="16"/>
 <wire x1="2.57" y1="178.07" x2="2.54" y2="178.04" width="0.3" layer="16"/>
@@ -6263,11 +6263,11 @@ design rules under a new name.</description>
 <wire x1="-6.41" y1="178.29" x2="-6.41" y2="177.79" width="0.25" layer="16"/>
 <wire x1="-8.96" y1="183.04" x2="-11.01" y2="183.04" width="0.3" layer="16"/>
 <via x="-11.01" y="183.04" extent="1-16" drill="0.25"/>
-<contactref element="BR20" pad="19"/>
-<contactref element="MR20" pad="19"/>
-<contactref element="TR20" pad="19"/>
+<contactref element="CONN3" pad="19"/>
+<contactref element="CONN6" pad="19"/>
+<contactref element="CONN9" pad="19"/>
 <wire x1="59.59" y1="4" x2="59.59" y2="3.35" width="0.3" layer="1"/>
-<contactref element="VCC" pad="TP"/>
+<contactref element="TP4" pad="TP"/>
 <wire x1="67.59" y1="12" x2="69" y2="12" width="0.3" layer="1"/>
 <wire x1="67.59" y1="12" x2="59.59" y2="4" width="0.3" layer="1"/>
 <wire x1="50.88" y1="16.62" x2="50.88" y2="16" width="0.3" layer="1"/>
@@ -6288,17 +6288,17 @@ design rules under a new name.</description>
 <wire x1="2.57" y1="178.13" x2="6.48" y2="182.04" width="0.3" layer="1"/>
 <wire x1="20.99" y1="167.04" x2="20.99" y2="165.3354" width="0.3048" layer="1"/>
 <via x="20.99" y="167.04" extent="1-16" drill="0.25" shape="octagon"/>
-<contactref element="VCC5" pad="TP"/>
+<contactref element="TP2" pad="TP"/>
 <wire x1="69" y1="12" x2="69" y2="12.5" width="0.3" layer="16"/>
 <wire x1="69" y1="12.5" x2="70.5" y2="14" width="0.3" layer="16"/>
 <wire x1="22.49" y1="181.8358" x2="22.49" y2="180.48" width="0.3" layer="1"/>
-<contactref element="OLED" pad="9"/>
+<contactref element="IC18" pad="9"/>
 <contactref element="C37" pad="2"/>
 <contactref element="R54" pad="2"/>
-<contactref element="JTAG" pad="VCC"/>
+<contactref element="CONN10" pad="VCC"/>
 <wire x1="297.73" y1="124" x2="297.73" y2="120.5" width="0.3" layer="1"/>
-<contactref element="BOARD" pad="6"/>
-<contactref element="LID" pad="6"/>
+<contactref element="CONN12" pad="6"/>
+<contactref element="CONN13" pad="6"/>
 <wire x1="297.73" y1="120.5" x2="298.62045625" y2="120.5" width="0.3" layer="1"/>
 <wire x1="298.62045625" y1="120.5" x2="299.78685625" y2="119.3336" width="0.3" layer="1"/>
 <wire x1="301.892375" y1="120" x2="304.37" y2="120" width="0.3" layer="1"/>
@@ -6388,7 +6388,7 @@ design rules under a new name.</description>
 <wire x1="202.4" y1="142" x2="202.4" y2="140.74" width="0.3" layer="16"/>
 <wire x1="202.4" y1="140.74" x2="202.49" y2="140.65" width="0.3" layer="16"/>
 <wire x1="20.65" y1="11.1" x2="21" y2="11.1" width="0.3" layer="1"/>
-<contactref element="U$6" pad="VCC"/>
+<contactref element="IC19" pad="VCC"/>
 <contactref element="C32" pad="1"/>
 <contactref element="R55" pad="1"/>
 <wire x1="-5.5" y1="158.75" x2="-5.45" y2="158.75" width="0.3" layer="16"/>
@@ -6409,8 +6409,8 @@ design rules under a new name.</description>
 <wire x1="-6.8" y1="167.9" x2="-6.8" y2="161.6" width="0.3" layer="1"/>
 <wire x1="-3.5" y1="171.3" x2="-3.5" y2="171.2" width="0.3" layer="1"/>
 <wire x1="-3.5" y1="171.2" x2="-6.8" y2="167.9" width="0.3" layer="1"/>
-<contactref element="U$9" pad="10"/>
-<contactref element="Q1" pad="2"/>
+<contactref element="IC4" pad="10"/>
+<contactref element="T1" pad="2"/>
 <wire x1="27.6" y1="180.45" x2="27.6" y2="180.9858" width="0.3" layer="1"/>
 <wire x1="27.6" y1="180.9858" x2="26.75" y2="181.8358" width="0.3" layer="1"/>
 <wire x1="71.499996875" y1="16.000003125" x2="71.499996875" y2="15.499996875" width="0.3" layer="16"/>
@@ -6423,7 +6423,7 @@ design rules under a new name.</description>
 <wire x1="18" y1="21.5" x2="18" y2="22.05" width="0.3" layer="1"/>
 <wire x1="21.63" y1="21.65" x2="18.15" y2="21.65" width="0.3" layer="1"/>
 <wire x1="18.15" y1="21.65" x2="18" y2="21.5" width="0.3" layer="1"/>
-<contactref element="U6" pad="6"/>
+<contactref element="IC11" pad="6"/>
 <contactref element="C34" pad="2"/>
 <contactref element="R56" pad="2"/>
 <wire x1="202.6546" y1="115.7046" x2="200.9398" y2="115.7046" width="0.3" layer="1"/>
@@ -6496,14 +6496,14 @@ design rules under a new name.</description>
 <wire x1="297.73" y1="120.5" x2="255.25" y2="119.5" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="5V0" class="1">
-<contactref element="IC2" pad="12"/>
-<contactref element="U7" pad="18"/>
-<contactref element="U7" pad="19"/>
+<contactref element="IC7" pad="12"/>
+<contactref element="IC5" pad="18"/>
+<contactref element="IC5" pad="19"/>
 <contactref element="R23" pad="1"/>
-<contactref element="U7" pad="3"/>
-<contactref element="U7" pad="17"/>
-<contactref element="U7" pad="9"/>
-<contactref element="U7" pad="4"/>
+<contactref element="IC5" pad="3"/>
+<contactref element="IC5" pad="17"/>
+<contactref element="IC5" pad="9"/>
+<contactref element="IC5" pad="4"/>
 <wire x1="61.8796" y1="28.492" x2="64" y2="28.492" width="0.3" layer="16"/>
 <wire x1="64" y1="28.492" x2="64" y2="29" width="0.3" layer="16"/>
 <via x="64" y="29" extent="1-16" drill="0.25"/>
@@ -6520,9 +6520,9 @@ design rules under a new name.</description>
 <wire x1="62.13" y1="19.63" x2="64.5" y2="22" width="0.3" layer="16"/>
 <wire x1="64.5" y1="22" x2="64.5" y2="25" width="0.3" layer="16"/>
 <wire x1="64.5" y1="25" x2="59" y2="25" width="0.3" layer="1"/>
-<contactref element="MR20" pad="20"/>
-<contactref element="TR20" pad="20"/>
-<contactref element="BR20" pad="20"/>
+<contactref element="CONN6" pad="20"/>
+<contactref element="CONN9" pad="20"/>
+<contactref element="CONN3" pad="20"/>
 <wire x1="62.13" y1="3.35" x2="62.13" y2="19.63" width="0.3" layer="16"/>
 <wire x1="57" y1="31" x2="62" y2="31" width="0.3" layer="1"/>
 <contactref element="L3" pad="P$2"/>
@@ -6556,8 +6556,8 @@ design rules under a new name.</description>
 <wire x1="240.5" y1="109" x2="64.5" y2="28.5" width="0" layer="19" extent="1-16"/>
 </signal>
 <signal name="MENU_LEFT_BUTTON_PIN" class="2">
-<contactref element="U2" pad="2"/>
-<contactref element="U1" pad="35"/>
+<contactref element="IC6" pad="2"/>
+<contactref element="IC1" pad="35"/>
 <wire x1="46.56619375" y1="16.553" x2="46.8626" y2="16.25659375" width="0.25" layer="1"/>
 <wire x1="46.8626" y1="15.1374" x2="46.8626" y2="16.25659375" width="0.25" layer="1"/>
 <wire x1="45.62" y1="16.6058" x2="45.6728" y2="16.553" width="0.25" layer="1"/>
@@ -6568,22 +6568,22 @@ design rules under a new name.</description>
 <wire x1="49.025" y1="12.975" x2="46.8626" y2="15.1374" width="0.25" layer="1"/>
 </signal>
 <signal name="MENU_BLUETOOTH_POWER_TOGGLE_PIN" class="2">
-<contactref element="U2" pad="10"/>
-<contactref element="U1" pad="39"/>
+<contactref element="IC6" pad="10"/>
+<contactref element="IC1" pad="39"/>
 <wire x1="54.5" y1="19.8062" x2="45.62" y2="19.8062" width="0.25" layer="1"/>
 <wire x1="55.96" y1="16" x2="55.96" y2="18.3462" width="0.25" layer="1"/>
 <wire x1="55.96" y1="18.3462" x2="54.5" y2="19.8062" width="0.25" layer="1"/>
 </signal>
 <signal name="MENU_DOWN_BUTTON_PIN" class="2">
-<contactref element="U2" pad="12"/>
-<contactref element="U1" pad="38"/>
+<contactref element="IC6" pad="12"/>
+<contactref element="IC1" pad="38"/>
 <wire x1="53.42" y1="16" x2="53.42" y2="18.08" width="0.25" layer="1"/>
 <wire x1="45.62" y1="18.9934" x2="52.5066" y2="18.9934" width="0.25" layer="1"/>
 <wire x1="52.5066" y1="18.9934" x2="53.42" y2="18.08" width="0.25" layer="1"/>
 </signal>
 <signal name="MENU_UP_BUTTON_PIN" class="2">
-<contactref element="U2" pad="4"/>
-<contactref element="U1" pad="36"/>
+<contactref element="IC6" pad="4"/>
+<contactref element="IC1" pad="36"/>
 <wire x1="47.4936" y1="15.398775" x2="47.4936" y2="16.51796875" width="0.25" layer="1"/>
 <wire x1="45.62" y1="17.3932" x2="45.6474" y2="17.3658" width="0.25" layer="1"/>
 <wire x1="45.6474" y1="17.3658" x2="46.64576875" y2="17.3658" width="0.25" layer="1"/>
@@ -6594,8 +6594,8 @@ design rules under a new name.</description>
 <wire x1="54.025" y1="13.475" x2="49.417375" y2="13.475" width="0.25" layer="1"/>
 </signal>
 <signal name="MENU_RIGHT_BUTTON_PIN" class="2">
-<contactref element="U2" pad="6"/>
-<contactref element="U1" pad="37"/>
+<contactref element="IC6" pad="6"/>
+<contactref element="IC1" pad="37"/>
 <wire x1="48.1246" y1="15.66015" x2="48.1246" y2="16.77934375" width="0.25" layer="1"/>
 <wire x1="45.62" y1="18.206" x2="45.6728" y2="18.1532" width="0.25" layer="1"/>
 <wire x1="45.6728" y1="18.1532" x2="46.75074375" y2="18.1532" width="0.25" layer="1"/>
@@ -6606,11 +6606,11 @@ design rules under a new name.</description>
 <wire x1="49.80975" y1="13.975" x2="48.1246" y2="15.66015" width="0.25" layer="1"/>
 </signal>
 <signal name="GPS_RED_LED_PIN" class="3" airwireshidden="yes">
-<contactref element="U1" pad="41"/>
+<contactref element="IC1" pad="41"/>
 <contactref element="R45" pad="1"/>
-<contactref element="BL20" pad="18"/>
-<contactref element="ML20" pad="18"/>
-<contactref element="TL20" pad="18"/>
+<contactref element="CONN2" pad="18"/>
+<contactref element="CONN5" pad="18"/>
+<contactref element="CONN8" pad="18"/>
 <wire x1="56.0434" y1="29.3093875" x2="56.0434" y2="25.7069375" width="0.254" layer="1"/>
 <wire x1="45.62" y1="21.4064" x2="51.7428625" y2="21.4064" width="0.254" layer="1"/>
 <wire x1="51.7428625" y1="21.4064" x2="56.0434" y2="25.7069375" width="0.25" layer="1"/>
@@ -6626,11 +6626,11 @@ design rules under a new name.</description>
 <wire x1="238.05" y1="140.65" x2="42.04" y2="183.69" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="GPS_GREEN_LED_PIN" class="3" airwireshidden="yes">
-<contactref element="U1" pad="42"/>
+<contactref element="IC1" pad="42"/>
 <contactref element="R46" pad="1"/>
-<contactref element="TL20" pad="17"/>
-<contactref element="ML20" pad="17"/>
-<contactref element="BL20" pad="17"/>
+<contactref element="CONN8" pad="17"/>
+<contactref element="CONN5" pad="17"/>
+<contactref element="CONN2" pad="17"/>
 <wire x1="55.4084" y1="25.96996875" x2="55.4084" y2="33.07003125" width="0.254" layer="1"/>
 <wire x1="45.62" y1="22.1938" x2="45.6708" y2="22.2446" width="0.254" layer="1"/>
 <wire x1="45.6708" y1="22.2446" x2="51.68303125" y2="22.2446" width="0.25" layer="1"/>
@@ -6644,8 +6644,8 @@ design rules under a new name.</description>
 <wire x1="235.51" y1="140.65" x2="39.5" y2="183.69" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="TMP36_SHUTDOWN_PIN" class="2">
-<contactref element="U5" pad="4"/>
-<contactref element="U1" pad="51"/>
+<contactref element="IC3" pad="4"/>
+<contactref element="IC1" pad="51"/>
 <wire x1="42.44803125" y1="35.081" x2="40.0507625" y2="35.081" width="0.25" layer="1"/>
 <wire x1="37.9398" y1="34.2954" x2="39.2651625" y2="34.2954" width="0.25" layer="1"/>
 <wire x1="39.2651625" y1="34.2954" x2="40.0507625" y2="35.081" width="0.25" layer="1"/>
@@ -6658,8 +6658,8 @@ design rules under a new name.</description>
 </signal>
 <signal name="MCP73871_CHARGE_STATUS_1_PIN" class="2">
 <contactref element="R30" pad="2"/>
-<contactref element="U7" pad="8"/>
-<contactref element="U1" pad="47"/>
+<contactref element="IC5" pad="8"/>
+<contactref element="IC1" pad="47"/>
 <wire x1="45.62" y1="26.207" x2="47" y2="26.207" width="0.254" layer="1"/>
 <wire x1="47" y1="27.7" x2="47" y2="26.207" width="0.254" layer="1"/>
 <wire x1="47" y1="29.05" x2="47" y2="27.7" width="0.254" layer="1"/>
@@ -6668,9 +6668,9 @@ design rules under a new name.</description>
 <wire x1="48.3" y1="29" x2="47" y2="27.7" width="0.25" layer="16"/>
 </signal>
 <signal name="MCP73871_CHARGE_STATUS_2_PIN" class="2">
-<contactref element="U7" pad="7"/>
+<contactref element="IC5" pad="7"/>
 <contactref element="R29" pad="2"/>
-<contactref element="U1" pad="46"/>
+<contactref element="IC1" pad="46"/>
 <via x="49" y="27.7" extent="1-16" drill="0.25" diameter="0.4064"/>
 <wire x1="49" y1="27.7" x2="49" y2="29.05" width="0.254" layer="1"/>
 <wire x1="47.3942" y1="25.3942" x2="49" y2="27" width="0.254" layer="1"/>
@@ -6683,8 +6683,8 @@ design rules under a new name.</description>
 </signal>
 <signal name="MCP73871_POWER_GOOD_PIN" class="2">
 <contactref element="R26" pad="2"/>
-<contactref element="U7" pad="6"/>
-<contactref element="U1" pad="45"/>
+<contactref element="IC5" pad="6"/>
+<contactref element="IC1" pad="45"/>
 <wire x1="51" y1="29.05" x2="51" y2="27.7" width="0.254" layer="1"/>
 <via x="51" y="27.7" extent="1-16" drill="0.25" diameter="0.4064"/>
 <wire x1="51" y1="27.7" x2="51" y2="27" width="0.254" layer="1"/>
@@ -6696,23 +6696,23 @@ design rules under a new name.</description>
 <wire x1="51.3094" y1="28.0094" x2="51" y2="27.7" width="0.25" layer="16"/>
 </signal>
 <signal name="JTAG_TDI_PIN" class="3" airwireshidden="yes">
-<contactref element="U1" pad="54"/>
+<contactref element="IC1" pad="54"/>
 <wire x1="40.0066" y1="28.62" x2="40.0066" y2="29.7296" width="0.25" layer="1"/>
 <wire x1="40.0066" y1="29.7296" x2="40.3178" y2="30.0408" width="0.25" layer="1"/>
 <via x="40.3178" y="30.0408" extent="1-16" drill="0.25"/>
-<contactref element="BL20" pad="9"/>
+<contactref element="CONN2" pad="9"/>
 <wire x1="34.19" y1="38.65" x2="34.19" y2="36.81" width="0.25" layer="16"/>
 <wire x1="34.419" y1="36.581" x2="34.19" y2="36.81" width="0.25" layer="16"/>
 <wire x1="40.3178" y1="33.5038625" x2="37.2406625" y2="36.581" width="0.25" layer="16"/>
 <wire x1="40.3178" y1="30.0408" x2="40.3178" y2="33.5038625" width="0.25" layer="16"/>
 <wire x1="37.2406625" y1="36.581" x2="34.419" y2="36.581" width="0.25" layer="16"/>
-<contactref element="ML20" pad="9"/>
-<contactref element="TL20" pad="9"/>
+<contactref element="CONN5" pad="9"/>
+<contactref element="CONN8" pad="9"/>
 <wire x1="215.19" y1="140.65" x2="214.95994375" y2="140.65" width="0.25" layer="16"/>
 <wire x1="214.95994375" y1="140.65" x2="209.1799375" y2="134.86999375" width="0.25" layer="16"/>
 <wire x1="194.79711875" y1="134.86999375" x2="194.784125" y2="134.857" width="0.25" layer="16"/>
 <wire x1="209.1799375" y1="134.86999375" x2="194.79711875" y2="134.86999375" width="0.25" layer="16"/>
-<contactref element="JTAG" pad="TDI"/>
+<contactref element="CONN10" pad="TDI"/>
 <wire x1="190.04" y1="139.86" x2="191.64" y2="139.86" width="0.25" layer="1"/>
 <wire x1="194" y1="137.5" x2="191.64" y2="139.86" width="0.25" layer="1"/>
 <wire x1="194.784125" y1="134.857" x2="194.357" y2="134.857" width="0.25" layer="16"/>
@@ -6723,23 +6723,23 @@ design rules under a new name.</description>
 <wire x1="190.04" y1="139.86" x2="19.18" y2="183.69" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="JTAG_TDO_PIN" class="3" airwireshidden="yes">
-<contactref element="U1" pad="55"/>
+<contactref element="IC1" pad="55"/>
 <via x="39.3304" y="30.16243125" extent="1-16" drill="0.25"/>
-<contactref element="BL20" pad="8"/>
+<contactref element="CONN2" pad="8"/>
 <wire x1="39.3304" y1="33.6696" x2="37" y2="36" width="0.25" layer="16"/>
 <wire x1="33" y1="36" x2="37" y2="36" width="0.25" layer="16"/>
 <wire x1="31.65" y1="38.65" x2="31.65" y2="37.35" width="0.25" layer="16"/>
 <wire x1="31.65" y1="37.35" x2="33" y2="36" width="0.25" layer="16"/>
 <wire x1="39.3304" y1="30.16243125" x2="39.3304" y2="33.6696" width="0.25" layer="16"/>
-<contactref element="ML20" pad="8"/>
-<contactref element="TL20" pad="8"/>
+<contactref element="CONN5" pad="8"/>
+<contactref element="CONN8" pad="8"/>
 <wire x1="202" y1="135.5" x2="202.00099375" y2="135.50099375" width="0.25" layer="16"/>
 <wire x1="207.2709375" y1="135.50099375" x2="202.00099375" y2="135.50099375" width="0.25" layer="16"/>
 <wire x1="212.65" y1="140.65" x2="212.41994375" y2="140.65" width="0.25" layer="16"/>
 <wire x1="212.41994375" y1="140.65" x2="207.2709375" y2="135.50099375" width="0.25" layer="16"/>
 <wire x1="202.00099375" y1="135.50099375" x2="194.53574375" y2="135.50099375" width="0.25" layer="16"/>
 <wire x1="194.53574375" y1="135.50099375" x2="194.52275" y2="135.488" width="0.25" layer="16"/>
-<contactref element="JTAG" pad="TDO"/>
+<contactref element="CONN10" pad="TDO"/>
 <wire x1="189.512" y1="135.488" x2="194.52275" y2="135.488" width="0.25" layer="16"/>
 <wire x1="186.23" y1="139.86" x2="186.23" y2="138.77" width="0.25" layer="16"/>
 <wire x1="186.23" y1="138.77" x2="189.512" y2="135.488" width="0.25" layer="16"/>
@@ -6749,21 +6749,21 @@ design rules under a new name.</description>
 <wire x1="186.23" y1="139.86" x2="16.64" y2="183.69" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="JTAG_TMS_PIN" class="3" airwireshidden="yes">
-<contactref element="U1" pad="56"/>
+<contactref element="IC1" pad="56"/>
 <via x="38.343" y="30.49" extent="1-16" drill="0.25"/>
-<contactref element="BL20" pad="7"/>
+<contactref element="CONN2" pad="7"/>
 <wire x1="38.343" y1="30.49" x2="38.343" y2="33.657" width="0.25" layer="16"/>
 <wire x1="29.11" y1="38" x2="29.11" y2="38.65" width="0.25" layer="16"/>
 <wire x1="36.581" y1="35.419" x2="31.691" y2="35.419" width="0.25" layer="16"/>
 <wire x1="31.691" y1="35.419" x2="29.11" y2="38" width="0.25" layer="16"/>
 <wire x1="38.343" y1="33.657" x2="36.581" y2="35.419" width="0.25" layer="16"/>
-<contactref element="ML20" pad="7"/>
-<contactref element="TL20" pad="7"/>
+<contactref element="CONN5" pad="7"/>
+<contactref element="CONN8" pad="7"/>
 <wire x1="205.3619375" y1="136.13199375" x2="194.27436875" y2="136.13199375" width="0.25" layer="16"/>
 <wire x1="210.11" y1="140.65" x2="209.87994375" y2="140.65" width="0.25" layer="16"/>
 <wire x1="209.87994375" y1="140.65" x2="205.3619375" y2="136.13199375" width="0.25" layer="16"/>
 <wire x1="194.27436875" y1="136.13199375" x2="194.261375" y2="136.119" width="0.25" layer="16"/>
-<contactref element="JTAG" pad="TMS"/>
+<contactref element="CONN10" pad="TMS"/>
 <wire x1="194.261375" y1="136.119" x2="190.381" y2="136.119" width="0.25" layer="16"/>
 <wire x1="190.381" y1="136.119" x2="187.5" y2="139" width="0.25" layer="16"/>
 <wire x1="187.5" y1="139" x2="187.5" y2="139.86" width="0.25" layer="16"/>
@@ -6773,20 +6773,20 @@ design rules under a new name.</description>
 <wire x1="187.5" y1="139.86" x2="14.1" y2="183.69" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="JTAG_TCL_PIN" class="3" airwireshidden="yes">
-<contactref element="U1" pad="57"/>
+<contactref element="IC1" pad="57"/>
 <via x="37.0556" y="30.3854" extent="1-16" drill="0.25"/>
-<contactref element="BL20" pad="6"/>
+<contactref element="CONN2" pad="6"/>
 <wire x1="36.162" y1="34.838" x2="29.162" y2="34.838" width="0.25" layer="16"/>
 <wire x1="37" y1="34" x2="36.162" y2="34.838" width="0.25" layer="16"/>
 <wire x1="26.57" y1="38.65" x2="26.57" y2="37.43" width="0.25" layer="16"/>
 <wire x1="26.57" y1="37.43" x2="29.162" y2="34.838" width="0.25" layer="16"/>
-<contactref element="ML20" pad="6"/>
-<contactref element="TL20" pad="6"/>
+<contactref element="CONN5" pad="6"/>
+<contactref element="CONN8" pad="6"/>
 <wire x1="207.57" y1="140.65" x2="207.33994375" y2="140.65" width="0.25" layer="16"/>
 <wire x1="207.33994375" y1="140.65" x2="203.4529375" y2="136.76299375" width="0.25" layer="16"/>
 <wire x1="203.4529375" y1="136.76299375" x2="194.01299375" y2="136.76299375" width="0.25" layer="16"/>
 <wire x1="194.01299375" y1="136.76299375" x2="194" y2="136.75" width="0.25" layer="16"/>
-<contactref element="JTAG" pad="TCK"/>
+<contactref element="CONN10" pad="TCK"/>
 <wire x1="185" y1="139.82" x2="184.96" y2="139.86" width="0.25" layer="16"/>
 <wire x1="194.01299375" y1="136.76299375" x2="193.23700625" y2="136.76299375" width="0.25" layer="16"/>
 <wire x1="193.23700625" y1="136.76299375" x2="192" y2="138" width="0.25" layer="16"/>
@@ -6807,7 +6807,7 @@ design rules under a new name.</description>
 <contactref element="R34" pad="2"/>
 <contactref element="R33" pad="1"/>
 <wire x1="67" y1="36.95" x2="65" y2="36.95" width="0.4064" layer="16"/>
-<contactref element="U1" pad="58"/>
+<contactref element="IC1" pad="58"/>
 <via x="37.2935" y="27.26189375" extent="1-16" drill="0.25"/>
 <wire x1="65" y1="36.95" x2="63.45" y2="36.95" width="0.25" layer="16"/>
 <wire x1="63.45" y1="36.95" x2="63" y2="36.5" width="0.25" layer="16"/>
@@ -6818,7 +6818,7 @@ design rules under a new name.</description>
 <wire x1="45.26189375" y1="27.26189375" x2="54.5" y2="36.5" width="0.25" layer="16"/>
 </signal>
 <signal name="VCC_SENSE_PIN" class="2">
-<contactref element="U1" pad="60"/>
+<contactref element="IC1" pad="60"/>
 <contactref element="R25" pad="2"/>
 <contactref element="R35" pad="1"/>
 <wire x1="35.206" y1="28.62" x2="35.206" y2="29.91716875" width="0.25" layer="1"/>
@@ -6833,8 +6833,8 @@ design rules under a new name.</description>
 <wire x1="30.5" y1="30.5" x2="30.83123125" y2="30.16876875" width="0.254" layer="16"/>
 </signal>
 <signal name="TMP36_VSENSE_PIN" class="2">
-<contactref element="U1" pad="61"/>
-<contactref element="U5" pad="1"/>
+<contactref element="IC1" pad="61"/>
+<contactref element="IC3" pad="1"/>
 <wire x1="34.748" y1="30.75" x2="34.748" y2="31" width="0.25" layer="1"/>
 <wire x1="36.0602" y1="31.7046" x2="35.4526" y2="31.7046" width="0.25" layer="1"/>
 <wire x1="35.4526" y1="31.7046" x2="34.748" y2="31" width="0.25" layer="1"/>
@@ -6842,8 +6842,8 @@ design rules under a new name.</description>
 <wire x1="34.3932" y1="28.62" x2="34.3932" y2="30.3952" width="0.25" layer="1"/>
 </signal>
 <signal name="ADXL345_INT1_INTERRUPT_PIN" class="2">
-<contactref element="U$4" pad="INT1"/>
-<contactref element="U1" pad="9"/>
+<contactref element="IC14" pad="INT1"/>
+<contactref element="IC1" pad="9"/>
 <wire x1="30.38" y1="20.5936" x2="31.5607625" y2="20.5936" width="0.25" layer="1"/>
 <wire x1="31.5607625" y1="20.5936" x2="31.8234625" y2="20.6063" width="0.25" layer="1"/>
 <via x="31.8234625" y="20.6063" extent="1-16" drill="0.25"/>
@@ -6858,10 +6858,10 @@ design rules under a new name.</description>
 <wire x1="17" y1="12.6" x2="17" y2="14.8" width="0.25" layer="1"/>
 </signal>
 <signal name="SPI_SS_SD_CARD_PIN" class="2">
-<contactref element="U$5" pad="CD/DAT3"/>
+<contactref element="IC17" pad="CD/DAT3"/>
 <contactref element="R53" pad="1"/>
 <wire x1="18" y1="23.95" x2="18.05" y2="24" width="0.254" layer="1"/>
-<contactref element="U1" pad="10"/>
+<contactref element="IC1" pad="10"/>
 <wire x1="23.1" y1="23.85" x2="21.63" y2="23.85" width="0.25" layer="1"/>
 <wire x1="23.1" y1="23.85" x2="27.15" y2="19.8" width="0.25" layer="1"/>
 <wire x1="27.15" y1="19.8" x2="30.3738" y2="19.8" width="0.25" layer="1"/>
@@ -6870,10 +6870,10 @@ design rules under a new name.</description>
 <wire x1="18" y1="23.85" x2="18" y2="23.95" width="0.254" layer="1"/>
 </signal>
 <signal name="SPI_SS_OLED_PIN" class="3" airwireshidden="yes">
-<contactref element="U1" pad="19"/>
-<contactref element="BR20" pad="4"/>
-<contactref element="MR20" pad="4"/>
-<contactref element="TR20" pad="4"/>
+<contactref element="IC1" pad="19"/>
+<contactref element="CONN3" pad="4"/>
+<contactref element="CONN6" pad="4"/>
+<contactref element="CONN9" pad="4"/>
 <wire x1="21.49" y1="3.35" x2="23.353290625" y2="5.213290625" width="0.25" layer="16"/>
 <wire x1="33.553" y1="12.43380625" x2="33.5" y2="12.38080625" width="0.25" layer="1"/>
 <wire x1="33.5" y1="12.38080625" x2="33.5" y2="11.7612" width="0.25" layer="1"/>
@@ -6881,7 +6881,7 @@ design rules under a new name.</description>
 <wire x1="33.553" y1="13.3272" x2="33.553" y2="12.43380625" width="0.25" layer="1"/>
 <via x="33.5" y="11.7612" extent="1-16" drill="0.25"/>
 <wire x1="202.49" y1="106.49" x2="202.49" y2="105.35" width="0.25" layer="1"/>
-<contactref element="OLED" pad="13"/>
+<contactref element="IC18" pad="13"/>
 <wire x1="220.75" y1="110.75" x2="220.75" y2="108.75" width="0.25" layer="1"/>
 <wire x1="220.238" y1="108.238" x2="220.75" y2="108.75" width="0.25" layer="1"/>
 <wire x1="202.49" y1="105.35" x2="202.49" y2="107.49" width="0.25" layer="1"/>
@@ -6893,10 +6893,10 @@ design rules under a new name.</description>
 <wire x1="202.49" y1="105.35" x2="33.6058" y2="13.38" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="SPI_OLED_D/C_PIN" class="3" airwireshidden="yes">
-<contactref element="BR20" pad="2"/>
-<contactref element="MR20" pad="2"/>
-<contactref element="TR20" pad="2"/>
-<contactref element="U1" pad="17"/>
+<contactref element="CONN3" pad="2"/>
+<contactref element="CONN6" pad="2"/>
+<contactref element="CONN9" pad="2"/>
+<contactref element="IC1" pad="17"/>
 <wire x1="32.0056" y1="13.38" x2="31" y2="13.38" width="0.25" layer="1"/>
 <wire x1="31" y1="13.38" x2="31" y2="13" width="0.25" layer="1"/>
 <via x="31" y="13" extent="1-16" drill="0.25"/>
@@ -6905,7 +6905,7 @@ design rules under a new name.</description>
 <wire x1="31" y1="12.5" x2="25.131" y2="6.631" width="0.25" layer="16"/>
 <wire x1="25.131" y1="6.631" x2="18.131" y2="6.631" width="0.25" layer="16"/>
 <wire x1="18.131" y1="6.631" x2="16.41" y2="4.91" width="0.25" layer="16"/>
-<contactref element="OLED" pad="15"/>
+<contactref element="IC18" pad="15"/>
 <wire x1="219.75" y1="110.75" x2="219.75" y2="109.75" width="0.25" layer="1"/>
 <wire x1="219.75" y1="109.75" x2="219.5" y2="109.5" width="0.25" layer="1"/>
 <wire x1="199.5" y1="109.5" x2="219.5" y2="109.5" width="0.25" layer="1"/>
@@ -6915,10 +6915,10 @@ design rules under a new name.</description>
 <wire x1="197.41" y1="105.35" x2="32.0056" y2="13.38" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="SPI_OLED_RESET_PIN" class="3" airwireshidden="yes">
-<contactref element="BR20" pad="3"/>
-<contactref element="MR20" pad="3"/>
-<contactref element="TR20" pad="3"/>
-<contactref element="U1" pad="18"/>
+<contactref element="CONN3" pad="3"/>
+<contactref element="CONN6" pad="3"/>
+<contactref element="CONN9" pad="3"/>
+<contactref element="IC1" pad="18"/>
 <wire x1="32.793" y1="13.38" x2="32.793" y2="12.2522" width="0.25" layer="1"/>
 <wire x1="32.793" y1="12.2522" x2="32.5" y2="11.9592" width="0.25" layer="1"/>
 <via x="32.5" y="11.9592" extent="1-16" drill="0.25"/>
@@ -6927,7 +6927,7 @@ design rules under a new name.</description>
 <wire x1="18.95" y1="5.45" x2="19.5" y2="6" width="0.25" layer="16"/>
 <wire x1="19.5" y1="6" x2="26.5408" y2="6" width="0.25" layer="16"/>
 <wire x1="26.5408" y1="6" x2="32.5" y2="11.9592" width="0.25" layer="16"/>
-<contactref element="OLED" pad="14"/>
+<contactref element="IC18" pad="14"/>
 <wire x1="220.25" y1="109.25" x2="220.25" y2="110.75" width="0.25" layer="1"/>
 <wire x1="200" y1="107.5" x2="201.369" y2="108.869" width="0.25" layer="1"/>
 <wire x1="200" y1="107.5" x2="200" y2="105.4" width="0.25" layer="1"/>
@@ -6938,10 +6938,10 @@ design rules under a new name.</description>
 <wire x1="199.95" y1="105.35" x2="32.793" y2="13.38" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="SPI_SS_ADXL345_PIN" class="2">
-<contactref element="U$4" pad="!CS!"/>
-<contactref element="IC5" pad="A"/>
+<contactref element="IC14" pad="!CS!"/>
+<contactref element="IC15" pad="A"/>
 <contactref element="R43" pad="2"/>
-<contactref element="U1" pad="7"/>
+<contactref element="IC1" pad="7"/>
 <wire x1="20" y1="8.95" x2="20" y2="12.9" width="0.25" layer="1"/>
 <wire x1="17.6" y1="11" x2="17.95" y2="11" width="0.254" layer="1"/>
 <wire x1="17.95" y1="11" x2="20" y2="8.95" width="0.254" layer="1"/>
@@ -6958,7 +6958,7 @@ design rules under a new name.</description>
 <wire x1="25.1062" y1="17.06075" x2="22.33225" y2="14.2868" width="0.25" layer="16"/>
 </signal>
 <signal name="PDI_UART0_TX_PIN" class="3">
-<contactref element="U1" pad="3"/>
+<contactref element="IC1" pad="3"/>
 <contactref element="R3" pad="1"/>
 <wire x1="30.38" y1="25.3942" x2="29.36416875" y2="25.3942" width="0.25" layer="1"/>
 <wire x1="29.36416875" y1="25.3942" x2="26.41096875" y2="28.3474" width="0.25" layer="1"/>
@@ -6969,7 +6969,7 @@ design rules under a new name.</description>
 <wire x1="13.87" y1="31.88" x2="17.4046" y2="28.3454" width="0.25" layer="1"/>
 </signal>
 <signal name="PDI_UART0_RX_PIN" class="3">
-<contactref element="U1" pad="2"/>
+<contactref element="IC1" pad="2"/>
 <contactref element="R2" pad="1"/>
 <wire x1="30.38" y1="26.207" x2="29.27261875" y2="26.207" width="0.25" layer="1"/>
 <wire x1="26.62221875" y1="28.8574" x2="29.27261875" y2="26.207" width="0.25" layer="1"/>
@@ -6978,8 +6978,8 @@ design rules under a new name.</description>
 <wire x1="19.1426" y1="28.8574" x2="16.41" y2="31.59" width="0.254" layer="1"/>
 </signal>
 <signal name="I2C_SCL_PIN" class="2">
-<contactref element="U1" pad="25"/>
-<contactref element="I2C" pad="1"/>
+<contactref element="IC1" pad="25"/>
+<contactref element="CONN11" pad="1"/>
 <wire x1="38.4064" y1="13.38" x2="38.4588" y2="13.3276" width="0.25" layer="1"/>
 <wire x1="38.4588" y1="13.3276" x2="38.4588" y2="11.4195375" width="0.25" layer="1"/>
 <wire x1="38.4588" y1="11.4195375" x2="39.7693375" y2="10.109" width="0.25" layer="1"/>
@@ -6988,8 +6988,8 @@ design rules under a new name.</description>
 <wire x1="45.391" y1="10.109" x2="46.37" y2="9.13" width="0.25" layer="1"/>
 </signal>
 <signal name="I2C_SDA_PIN" class="2">
-<contactref element="U1" pad="26"/>
-<contactref element="I2C" pad="2"/>
+<contactref element="IC1" pad="26"/>
+<contactref element="CONN11" pad="2"/>
 <wire x1="39.1938" y1="13.38" x2="39.1938" y2="11.5062" width="0.25" layer="1"/>
 <wire x1="39.1938" y1="11.5062" x2="40.01" y2="10.69" width="0.25" layer="1"/>
 <wire x1="45.42" y1="10.69" x2="40.01" y2="10.69" width="0.25" layer="1"/>
@@ -6997,14 +6997,14 @@ design rules under a new name.</description>
 <wire x1="46.4" y1="11.67" x2="45.42" y2="10.69" width="0.25" layer="1"/>
 </signal>
 <signal name="SIM800C_RX_PIN" class="3" airwireshidden="yes">
-<contactref element="U1" pad="27"/>
-<contactref element="U8" pad="UART1_TXD"/>
+<contactref element="IC1" pad="27"/>
+<contactref element="IC21" pad="UART1_TXD"/>
 <wire x1="40.0066" y1="13.38" x2="40.0066" y2="12.0066" width="0.254" layer="1"/>
 <wire x1="40.0066" y1="12.0066" x2="40" y2="11.99" width="0.254" layer="1"/>
 <via x="40" y="11.99" extent="1-16" drill="0.25"/>
-<contactref element="BR20" pad="6"/>
-<contactref element="MR20" pad="6"/>
-<contactref element="TR20" pad="6"/>
+<contactref element="CONN3" pad="6"/>
+<contactref element="CONN6" pad="6"/>
+<contactref element="CONN9" pad="6"/>
 <wire x1="47.44" y1="157.55" x2="47.44" y2="155.3058" width="0.25" layer="16"/>
 <wire x1="47.44" y1="155.3058" x2="47.1742" y2="155.04" width="0.25" layer="16"/>
 <via x="47.1742" y="155.04" extent="1-16" drill="0.25"/>
@@ -7024,11 +7024,11 @@ design rules under a new name.</description>
 <wire x1="207.57" y1="105.35" x2="47.44" y2="155.3058" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="SIM800C_TX_PIN" class="3" airwireshidden="yes">
-<contactref element="U1" pad="28"/>
-<contactref element="U8" pad="UART1_RXD"/>
-<contactref element="BR20" pad="7"/>
-<contactref element="MR20" pad="7"/>
-<contactref element="TR20" pad="7"/>
+<contactref element="IC1" pad="28"/>
+<contactref element="IC21" pad="UART1_RXD"/>
+<contactref element="CONN3" pad="7"/>
+<contactref element="CONN6" pad="7"/>
+<contactref element="CONN9" pad="7"/>
 <wire x1="46.34" y1="157.55" x2="46.34" y2="153.89" width="0.25" layer="16"/>
 <wire x1="46.34" y1="153.89" x2="45.99" y2="153.54" width="0.25" layer="16"/>
 <via x="45.99" y="153.54" extent="1-16" drill="0.25"/>
@@ -7051,14 +7051,14 @@ design rules under a new name.</description>
 <wire x1="210.11" y1="105.35" x2="46.34" y2="153.89" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="SIM800C_CTS_PIN" class="3" airwireshidden="yes">
-<contactref element="U1" pad="29"/>
-<contactref element="U8" pad="UART1_CTS"/>
+<contactref element="IC1" pad="29"/>
+<contactref element="IC21" pad="UART1_CTS"/>
 <wire x1="41.6068" y1="12.0432" x2="41.6068" y2="13.38" width="0.25" layer="1"/>
 <wire x1="41.6068" y1="12.0432" x2="41.63" y2="12.02" width="0.254" layer="1"/>
 <via x="41.63" y="12.02" extent="1-16" drill="0.25"/>
-<contactref element="TR20" pad="8"/>
-<contactref element="MR20" pad="8"/>
-<contactref element="BR20" pad="8"/>
+<contactref element="CONN9" pad="8"/>
+<contactref element="CONN6" pad="8"/>
+<contactref element="CONN3" pad="8"/>
 <wire x1="41.63" y1="12.02" x2="41.63" y2="9.25" width="0.25" layer="16"/>
 <wire x1="41.63" y1="9.25" x2="41.63" y2="9.13" width="0.25" layer="16"/>
 <wire x1="16.64" y1="148.38" x2="16.87005625" y2="148.38" width="0.25" layer="1"/>
@@ -7076,11 +7076,11 @@ design rules under a new name.</description>
 <wire x1="212.65" y1="105.35" x2="44.14" y2="152.19" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="SIM800C_STATUS_PIN" class="3" airwireshidden="yes">
-<contactref element="U1" pad="30"/>
-<contactref element="U8" pad="STATUS"/>
-<contactref element="TR20" pad="9"/>
-<contactref element="MR20" pad="9"/>
-<contactref element="BR20" pad="9"/>
+<contactref element="IC1" pad="30"/>
+<contactref element="IC21" pad="STATUS"/>
+<contactref element="CONN9" pad="9"/>
+<contactref element="CONN6" pad="9"/>
+<contactref element="CONN3" pad="9"/>
 <wire x1="39.8242" y1="5.8242" x2="36.6642" y2="5.8242" width="0.25" layer="16"/>
 <wire x1="52.5438125" y1="154.9861875" x2="52.5438125" y2="158.4861875" width="0.25" layer="1"/>
 <wire x1="52.5438125" y1="158.4861875" x2="52.49" y2="158.54" width="0.25" layer="1"/>
@@ -7103,17 +7103,17 @@ design rules under a new name.</description>
 <wire x1="215.19" y1="105.35" x2="52.5438125" y2="154.9861875" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="SIM800C_POWER_PIN" class="3" airwireshidden="yes">
-<contactref element="U1" pad="31"/>
-<contactref element="U8" pad="PWRKEY"/>
+<contactref element="IC1" pad="31"/>
+<contactref element="IC21" pad="PWRKEY"/>
 <contactref element="R51" pad="1"/>
 <wire x1="43.207" y1="13.38" x2="43.207" y2="12.0522" width="0.25" layer="1"/>
 <wire x1="43.207" y1="12.0522" x2="43.2492" y2="12.01" width="0.254" layer="1"/>
 <via x="43.2492" y="12.01" extent="1-16" drill="0.25"/>
-<contactref element="BR20" pad="10"/>
-<contactref element="MR20" pad="10"/>
-<contactref element="TR20" pad="10"/>
+<contactref element="CONN3" pad="10"/>
+<contactref element="CONN6" pad="10"/>
+<contactref element="CONN9" pad="10"/>
 <wire x1="43.2492" y1="8.2492" x2="43.2492" y2="12.01" width="0.25" layer="16"/>
-<contactref element="SIM800" pad="TP"/>
+<contactref element="TP7" pad="TP"/>
 <wire x1="57.99" y1="161.29" x2="57.99" y2="159.84" width="0.25" layer="1"/>
 <via x="57.99" y="161.29" extent="1-16" drill="0.25"/>
 <wire x1="55.04" y1="167.04" x2="54.99" y2="167.09" width="0.25" layer="16"/>
@@ -7137,12 +7137,12 @@ design rules under a new name.</description>
 <wire x1="217.73" y1="105.35" x2="57.99" y2="155.54" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="GPS_POWER_CTL_PIN" class="2" airwireshidden="yes">
-<contactref element="U1" pad="49"/>
+<contactref element="IC1" pad="49"/>
 <wire x1="43.9944" y1="30.06281875" x2="43.9944" y2="28.62" width="0.254" layer="1"/>
-<contactref element="U6" pad="3"/>
-<contactref element="BL20" pad="12"/>
-<contactref element="ML20" pad="12"/>
-<contactref element="TL20" pad="12"/>
+<contactref element="IC11" pad="3"/>
+<contactref element="CONN2" pad="12"/>
+<contactref element="CONN5" pad="12"/>
+<contactref element="CONN8" pad="12"/>
 <wire x1="43.9944" y1="28.62" x2="43.9944" y2="30.7872875" width="0.25" layer="1"/>
 <wire x1="42.91651875" y1="36.212" x2="42.538" y2="36.212" width="0.25" layer="1"/>
 <wire x1="42.538" y1="36.212" x2="41.75" y2="37" width="0.25" layer="1"/>
@@ -7152,8 +7152,8 @@ design rules under a new name.</description>
 <wire x1="45" y1="34.12851875" x2="42.91651875" y2="36.212" width="0.25" layer="1"/>
 <wire x1="41.75" y1="37" x2="41.75" y2="38.59" width="0.25" layer="1"/>
 <wire x1="41.75" y1="38.59" x2="41.81" y2="38.65" width="0.25" layer="1"/>
-<contactref element="TP2" pad="TP"/>
-<contactref element="GPS_POWER_CTL_PIN" pad="TP"/>
+<contactref element="TP6" pad="TP"/>
+<contactref element="TP5" pad="TP"/>
 <wire x1="47" y1="34.25" x2="45.25" y2="34.25" width="0.25" layer="1"/>
 <wire x1="45.25" y1="34.25" x2="45" y2="34" width="0.25" layer="1"/>
 <wire x1="196.5" y1="119.5" x2="198.5" y2="119.5" width="0.25" layer="1"/>
@@ -7172,14 +7172,14 @@ design rules under a new name.</description>
 <wire x1="196.5" y1="119.5" x2="47" y2="34.25" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="PDI_UART0_CTS_PIN" class="3" airwireshidden="yes">
-<contactref element="U1" pad="1"/>
-<contactref element="IC2" pad="6"/>
+<contactref element="IC1" pad="1"/>
+<contactref element="IC7" pad="6"/>
 <wire x1="30.38" y1="26.9944" x2="29.38325" y2="26.9944" width="0.25" layer="1"/>
 <wire x1="29.38325" y1="26.9944" x2="26.88525" y2="29.4924" width="0.25" layer="1"/>
 <wire x1="20" y1="29.4924" x2="26.88525" y2="29.4924" width="0.25" layer="1"/>
-<contactref element="BL20" pad="3"/>
-<contactref element="ML20" pad="3"/>
-<contactref element="TL20" pad="3"/>
+<contactref element="CONN2" pad="3"/>
+<contactref element="CONN5" pad="3"/>
+<contactref element="CONN8" pad="3"/>
 <wire x1="18.95" y1="38.65" x2="18.95" y2="30.5424" width="0.254" layer="1"/>
 <wire x1="18.95" y1="30.5424" x2="20" y2="29.4924" width="0.254" layer="1"/>
 <wire x1="244.5" y1="131.5" x2="244.5" y2="134.5" width="0.25" layer="16"/>
@@ -7197,11 +7197,11 @@ design rules under a new name.</description>
 <wire x1="199.95" y1="140.65" x2="3.94" y2="183.69" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="GPS_WAKEUP_PIN" class="3" airwireshidden="yes">
-<contactref element="GND" pad="WAKEUP"/>
-<contactref element="U1" pad="50"/>
-<contactref element="BL20" pad="10"/>
-<contactref element="ML20" pad="10"/>
-<contactref element="TL20" pad="10"/>
+<contactref element="IC10" pad="WAKEUP"/>
+<contactref element="IC1" pad="50"/>
+<contactref element="CONN2" pad="10"/>
+<contactref element="CONN5" pad="10"/>
+<contactref element="CONN8" pad="10"/>
 <wire x1="36.73" y1="38.65" x2="36.73" y2="37.27" width="0.25" layer="1"/>
 <wire x1="38.338" y1="35.662" x2="36.73" y2="37.27" width="0.25" layer="1"/>
 <wire x1="189.3317375" y1="129.04" x2="187.46" y2="129.04" width="0.25" layer="1"/>
@@ -7225,17 +7225,17 @@ design rules under a new name.</description>
 <wire x1="187.07219375" y1="129.42780625" x2="44.5" y2="33.92140625" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="ANALOG_SW_CTRL_PIN" class="3" airwireshidden="yes">
-<contactref element="GPS-SW" pad="6"/>
-<contactref element="BT-SW" pad="6"/>
-<contactref element="U1" pad="16"/>
+<contactref element="IC9" pad="6"/>
+<contactref element="IC8" pad="6"/>
+<contactref element="IC1" pad="16"/>
 <wire x1="30.38" y1="15.0056" x2="29.1056" y2="15.0056" width="0.25" layer="1"/>
 <wire x1="29.1056" y1="15.0056" x2="28.83" y2="14.98" width="0.254" layer="1"/>
 <via x="28.83" y="14.98" extent="1-16" drill="0.25"/>
 <wire x1="28.83" y1="14.98" x2="28.005009375" y2="14.155009375" width="0.25" layer="16"/>
 <wire x1="28.005009375" y1="13.169490625" x2="28.005009375" y2="14.155009375" width="0.25" layer="16"/>
-<contactref element="BR20" pad="1"/>
-<contactref element="MR20" pad="1"/>
-<contactref element="TR20" pad="1"/>
+<contactref element="CONN3" pad="1"/>
+<contactref element="CONN6" pad="1"/>
+<contactref element="CONN9" pad="1"/>
 <wire x1="13.81" y1="5.31" x2="16" y2="7.5" width="0.254" layer="16"/>
 <wire x1="13.81" y1="5.31" x2="13.81" y2="3.41" width="0.254" layer="16"/>
 <wire x1="13.81" y1="3.41" x2="13.87" y2="3.35" width="0.254" layer="16"/>
@@ -7247,7 +7247,7 @@ design rules under a new name.</description>
 <wire x1="19.9298" y1="168.9798" x2="19.99" y2="169.04" width="0.254" layer="1"/>
 <wire x1="16.99" y1="169.04" x2="-1.01" y2="151.04" width="0.254" layer="1"/>
 <wire x1="19.99" y1="169.04" x2="16.99" y2="169.04" width="0.254" layer="1"/>
-<contactref element="VCC1" pad="TP"/>
+<contactref element="TP3" pad="TP"/>
 <wire x1="-2.01" y1="151.04" x2="-1.01" y2="151.04" width="0.254" layer="1"/>
 <wire x1="16" y1="7.5" x2="22.33551875" y2="7.5" width="0.25" layer="16"/>
 <wire x1="22.33551875" y1="7.5" x2="28.005009375" y2="13.169490625" width="0.25" layer="16"/>
@@ -7255,10 +7255,10 @@ design rules under a new name.</description>
 <wire x1="194.87" y1="105.35" x2="20.0502" y2="165.3354" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="SPI_MOSI_PIN" class="3" airwireshidden="yes">
-<contactref element="U1" pad="12"/>
-<contactref element="IC4" pad="SI"/>
-<contactref element="IC5" pad="B"/>
-<contactref element="U$5" pad="CMD"/>
+<contactref element="IC1" pad="12"/>
+<contactref element="IC16" pad="SI"/>
+<contactref element="IC15" pad="B"/>
+<contactref element="IC17" pad="CMD"/>
 <via x="23.99" y="21.32" extent="1-16" drill="0.25"/>
 <wire x1="25.03" y1="18.22" x2="30.366" y2="18.22" width="0.25" layer="1"/>
 <wire x1="30.366" y1="18.22" x2="30.38" y2="18.206" width="0.254" layer="1"/>
@@ -7267,9 +7267,9 @@ design rules under a new name.</description>
 <via x="15.01" y="19.1" extent="1-16" drill="0.25"/>
 <wire x1="24" y1="21.31" x2="23.99" y2="21.32" width="0.254" layer="16"/>
 <wire x1="21.66" y1="22.78" x2="21.63" y2="22.75" width="0.254" layer="1"/>
-<contactref element="B10" pad="4"/>
-<contactref element="M10" pad="4"/>
-<contactref element="T10" pad="4"/>
+<contactref element="CONN1" pad="4"/>
+<contactref element="CONN4" pad="4"/>
+<contactref element="CONN7" pad="4"/>
 <wire x1="14.98" y1="19.07" x2="15.01" y2="19.1" width="0.254" layer="16"/>
 <via x="22" y="15" extent="1-16" drill="0.25" diameter="0.254"/>
 <wire x1="22" y1="15" x2="21.98" y2="15" width="0.254" layer="1"/>
@@ -7282,7 +7282,7 @@ design rules under a new name.</description>
 <wire x1="8.0012" y1="19.1712" x2="6" y2="17.17" width="0.254" layer="16"/>
 <wire x1="6" y1="17.17" x2="3.37" y2="17.17" width="0.254" layer="16"/>
 <wire x1="3.37" y1="17.17" x2="3.35" y2="17.19" width="0.254" layer="16"/>
-<contactref element="OLED" pad="19"/>
+<contactref element="IC18" pad="19"/>
 <wire x1="217.75" y1="110.75" x2="217.75" y2="112.25" width="0.25" layer="1"/>
 <wire x1="217.75" y1="112.25" x2="217" y2="113" width="0.25" layer="1"/>
 <via x="217" y="113" extent="1-16" drill="0.25"/>
@@ -7297,7 +7297,7 @@ design rules under a new name.</description>
 <wire x1="24.0784" y1="21.32" x2="24.3242" y2="21.0742" width="0.25" layer="16"/>
 <wire x1="21.63" y1="22.75" x2="22.56" y2="22.75" width="0.25" layer="1"/>
 <wire x1="22.56" y1="22.75" x2="23.99" y2="21.32" width="0.25" layer="1"/>
-<contactref element="U$6" pad="DIN"/>
+<contactref element="IC19" pad="DIN"/>
 <via x="-9.5" y="158.25" extent="1-16" drill="0.25"/>
 <wire x1="-10" y1="162.25" x2="-11.64" y2="162.25" width="0.25" layer="1"/>
 <wire x1="-11.64" y1="162.25" x2="-11.66" y2="162.23" width="0.25" layer="1"/>
@@ -7318,15 +7318,15 @@ design rules under a new name.</description>
 <wire x1="184.35" y1="119.19" x2="30.38" y2="18.206" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="SPI_MISO_PIN" class="3" airwireshidden="yes">
-<contactref element="U1" pad="13"/>
-<contactref element="IC4" pad="SO"/>
-<contactref element="U$4" pad="SDO"/>
-<contactref element="U$5" pad="DAT0"/>
-<contactref element="B10" pad="3"/>
-<contactref element="M10" pad="3"/>
-<contactref element="T10" pad="3"/>
+<contactref element="IC1" pad="13"/>
+<contactref element="IC16" pad="SO"/>
+<contactref element="IC14" pad="SDO"/>
+<contactref element="IC17" pad="DAT0"/>
+<contactref element="CONN1" pad="3"/>
+<contactref element="CONN4" pad="3"/>
+<contactref element="CONN7" pad="3"/>
 <wire x1="21.62" y1="18.36" x2="21.63" y2="18.35" width="0.254" layer="1"/>
-<contactref element="U$6" pad="DOUT"/>
+<contactref element="IC19" pad="DOUT"/>
 <wire x1="-6.5" y1="154.75" x2="-8" y2="154.75" width="0.2" layer="16"/>
 <wire x1="-8" y1="154.75" x2="-8.75" y2="155.5" width="0.2" layer="16"/>
 <wire x1="-8.75" y1="155.5" x2="-8.75" y2="158.75" width="0.25" layer="16"/>
@@ -7359,12 +7359,12 @@ design rules under a new name.</description>
 <wire x1="184.35" y1="116.65" x2="30.38" y2="17.3932" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="GPS_SW_SERIAL_RX" class="3" airwireshidden="yes">
-<contactref element="U1" pad="14"/>
-<contactref element="GPS-SW" pad="4"/>
-<contactref element="BT-SW" pad="1"/>
-<contactref element="B10" pad="2"/>
-<contactref element="M10" pad="2"/>
-<contactref element="T10" pad="2"/>
+<contactref element="IC1" pad="14"/>
+<contactref element="IC9" pad="4"/>
+<contactref element="IC8" pad="1"/>
+<contactref element="CONN1" pad="2"/>
+<contactref element="CONN4" pad="2"/>
+<contactref element="CONN7" pad="2"/>
 <wire x1="19.9298" y1="170.3354" x2="19.9298" y2="172.1298" width="0.25" layer="1"/>
 <wire x1="19.9298" y1="172.1298" x2="20" y2="172.2" width="0.25" layer="1"/>
 <via x="20" y="172.2" extent="1-16" drill="0.25"/>
@@ -7392,13 +7392,13 @@ design rules under a new name.</description>
 <wire x1="184.35" y1="114.11" x2="21.9298" y2="165.3354" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="GPS_SW_SERIAL_TX" class="3" airwireshidden="yes">
-<contactref element="U1" pad="15"/>
-<contactref element="BT-SW" pad="3"/>
-<contactref element="GND" pad="RX"/>
+<contactref element="IC1" pad="15"/>
+<contactref element="IC8" pad="3"/>
+<contactref element="IC10" pad="RX"/>
 <contactref element="C15" pad="2"/>
-<contactref element="B10" pad="1"/>
-<contactref element="M10" pad="1"/>
-<contactref element="T10" pad="1"/>
+<contactref element="CONN1" pad="1"/>
+<contactref element="CONN4" pad="1"/>
+<contactref element="CONN7" pad="1"/>
 <wire x1="189.331734375" y1="123.96" x2="187.5" y2="123.96" width="0.25" layer="1"/>
 <wire x1="184.35" y1="111.57" x2="186.07" y2="111.57" width="0.25" layer="1"/>
 <wire x1="186.07" y1="111.57" x2="187.5" y2="113" width="0.25" layer="1"/>
@@ -7424,8 +7424,8 @@ design rules under a new name.</description>
 <wire x1="187.5" y1="123.96" x2="18.0502" y2="170.3354" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="SD_CARD_DETECT_PIN" class="2">
-<contactref element="U$5" pad="DET"/>
-<contactref element="U1" pad="5"/>
+<contactref element="IC17" pad="DET"/>
+<contactref element="IC1" pad="5"/>
 <wire x1="30.38" y1="23.794" x2="28.706" y2="23.794" width="0.25" layer="1"/>
 <wire x1="28.706" y1="23.794" x2="27.25" y2="25.25" width="0.25" layer="1"/>
 <wire x1="27.25" y1="25.25" x2="26.27" y2="25.25" width="0.25" layer="1"/>
@@ -7433,18 +7433,18 @@ design rules under a new name.</description>
 </signal>
 <signal name="BLUETOOTH_WAKEUP_PIN" class="3" airwireshidden="yes">
 <contactref element="R15" pad="1"/>
-<contactref element="U1" pad="48"/>
+<contactref element="IC1" pad="48"/>
 <wire x1="45.62" y1="26.9944" x2="45.62" y2="28.9458" width="0.254" layer="1"/>
 <wire x1="45.62" y1="28.9458" x2="45.5658" y2="29" width="0.254" layer="1"/>
 <via x="45.5658" y="29" extent="1-16" drill="0.25"/>
-<contactref element="BL20" pad="13"/>
+<contactref element="CONN2" pad="13"/>
 <wire x1="45.5658" y1="34.4342" x2="45.5658" y2="29" width="0.25" layer="16"/>
 <wire x1="44.35" y1="38.65" x2="44.35" y2="35.65" width="0.254" layer="16"/>
 <wire x1="44.35" y1="35.65" x2="45.5658" y2="34.4342" width="0.254" layer="16"/>
-<contactref element="ML20" pad="13"/>
-<contactref element="TL20" pad="13"/>
-<contactref element="BT" pad="TP"/>
-<contactref element="Q1" pad="1"/>
+<contactref element="CONN5" pad="13"/>
+<contactref element="CONN8" pad="13"/>
+<contactref element="TP9" pad="TP"/>
+<contactref element="T1" pad="1"/>
 <wire x1="27.6" y1="178.55" x2="22.52" y2="178.55" width="0.25" layer="1"/>
 <wire x1="22.52" y1="178.55" x2="22.49" y2="178.58" width="0.25" layer="1"/>
 <wire x1="29.34" y1="183.69" x2="29.34" y2="177.09" width="0.25" layer="16"/>
@@ -7458,10 +7458,10 @@ design rules under a new name.</description>
 <wire x1="225.35" y1="140.65" x2="29.34" y2="177.09" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="SPI_SCK_PIN" class="3" airwireshidden="yes">
-<contactref element="U1" pad="11"/>
-<contactref element="U$4" pad="SCL"/>
-<contactref element="IC4" pad="SCK"/>
-<contactref element="U$5" pad="CLK"/>
+<contactref element="IC1" pad="11"/>
+<contactref element="IC14" pad="SCL"/>
+<contactref element="IC16" pad="SCK"/>
+<contactref element="IC17" pad="CLK"/>
 <wire x1="30.3734" y1="19" x2="30.38" y2="18.9934" width="0.254" layer="1"/>
 <wire x1="15.995" y1="20.365" x2="13.0734" y2="20.365" width="0.254" layer="1"/>
 <wire x1="15.995" y1="20.365" x2="16" y2="20.36" width="0.254" layer="1"/>
@@ -7471,15 +7471,15 @@ design rules under a new name.</description>
 <via x="20" y="20.52" extent="1-16" drill="0.25"/>
 <wire x1="20" y1="20.52" x2="21.6" y2="20.52" width="0.254" layer="1"/>
 <wire x1="21.6" y1="20.52" x2="21.63" y2="20.55" width="0.254" layer="1"/>
-<contactref element="B10" pad="5"/>
+<contactref element="CONN1" pad="5"/>
 <wire x1="15.99" y1="20.35" x2="16" y2="20.36" width="0.254" layer="16"/>
-<contactref element="M10" pad="5"/>
-<contactref element="T10" pad="5"/>
+<contactref element="CONN4" pad="5"/>
+<contactref element="CONN7" pad="5"/>
 <wire x1="16" y1="18.5" x2="16" y2="20.36" width="0.254" layer="1"/>
 <wire x1="16" y1="20.36" x2="6.67" y2="20.36" width="0.25" layer="16"/>
 <wire x1="6.67" y1="20.36" x2="6.04" y2="19.73" width="0.254" layer="16"/>
 <wire x1="6.04" y1="19.73" x2="3.35" y2="19.73" width="0.254" layer="16"/>
-<contactref element="OLED" pad="18"/>
+<contactref element="IC18" pad="18"/>
 <wire x1="218.25" y1="110.75" x2="218.25" y2="113.75" width="0.25" layer="1"/>
 <wire x1="218.25" y1="113.75" x2="218" y2="114" width="0.25" layer="1"/>
 <via x="218" y="114" extent="1-16" drill="0.25"/>
@@ -7492,7 +7492,7 @@ design rules under a new name.</description>
 <wire x1="27.23535" y1="18.9934" x2="30.38" y2="18.9934" width="0.25" layer="1"/>
 <wire x1="21.63" y1="20.55" x2="25.67875" y2="20.55" width="0.25" layer="1"/>
 <wire x1="25.67875" y1="20.55" x2="27.23535" y2="18.9934" width="0.25" layer="1"/>
-<contactref element="U$6" pad="SCLK"/>
+<contactref element="IC19" pad="SCLK"/>
 <wire x1="-6.5" y1="155.25" x2="-7.5" y2="155.25" width="0.2" layer="16"/>
 <wire x1="-8.25" y1="156" x2="-7.5" y2="155.25" width="0.2" layer="16"/>
 <wire x1="-9.75" y1="164.75" x2="-8.25" y2="163.25" width="0.25" layer="16"/>
@@ -7505,10 +7505,10 @@ design rules under a new name.</description>
 <wire x1="184.35" y1="121.73" x2="30.38" y2="18.9934" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="SPI_FRAM_SS_PIN" class="2">
-<contactref element="IC4" pad="!CS!"/>
+<contactref element="IC16" pad="!CS!"/>
 <contactref element="R44" pad="1"/>
 <wire x1="9.05" y1="23.915" x2="9.05" y2="25.5" width="0.25" layer="1"/>
-<contactref element="U1" pad="6"/>
+<contactref element="IC1" pad="6"/>
 <via x="25.65" y="23.9992" extent="1-16" drill="0.25"/>
 <via x="9.05" y="23.915" extent="1-16" drill="0.25"/>
 <wire x1="6.9266" y1="22.905" x2="6.9266" y2="23" width="0.254" layer="1"/>
@@ -7522,9 +7522,9 @@ design rules under a new name.</description>
 <wire x1="9.1342" y1="23.9992" x2="9.05" y2="23.915" width="0.25" layer="16"/>
 </signal>
 <signal name="GPS_TX" class="3" airwireshidden="yes">
-<contactref element="GND" pad="TX"/>
+<contactref element="IC10" pad="TX"/>
 <contactref element="C16" pad="1"/>
-<contactref element="GPS-SW" pad="1"/>
+<contactref element="IC9" pad="1"/>
 <wire x1="20.0502" y1="162.7446" x2="19.99" y2="162.6844" width="0.254" layer="1"/>
 <wire x1="19.99" y1="162.6844" x2="18.99" y2="162.69" width="0.254" layer="1"/>
 <via x="18.99" y="162.69" extent="1-16" drill="0.25"/>
@@ -7534,9 +7534,9 @@ design rules under a new name.</description>
 <wire x1="24.26" y1="179.81" x2="20.74" y2="176.29" width="0.25" layer="16"/>
 <wire x1="199.668265625" y1="126.5" x2="201.75" y2="126.5" width="0.25" layer="1"/>
 <via x="201.75" y="126.5" extent="1-16" drill="0.25"/>
-<contactref element="BL20" pad="11"/>
-<contactref element="ML20" pad="11"/>
-<contactref element="TL20" pad="11"/>
+<contactref element="CONN2" pad="11"/>
+<contactref element="CONN5" pad="11"/>
+<contactref element="CONN8" pad="11"/>
 <wire x1="24.26" y1="183.69" x2="24.26" y2="179.81" width="0.25" layer="16"/>
 <wire x1="220.27" y1="139.18" x2="220.27" y2="140.65" width="0.25" layer="16"/>
 <wire x1="211.3503125" y1="133.60799375" x2="211.371159375" y2="133.628840625" width="0.25" layer="16"/>
@@ -7550,18 +7550,18 @@ design rules under a new name.</description>
 <wire x1="199.668265625" y1="126.5" x2="39.27" y2="38.65" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="BLUETOOTH_TX" class="2">
-<contactref element="U$3" pad="UART_TX"/>
-<contactref element="GPS-SW" pad="3"/>
+<contactref element="IC13" pad="UART_TX"/>
+<contactref element="IC9" pad="3"/>
 <wire x1="39.53" y1="163.04" x2="39.53" y2="164.76" width="0.254" layer="1"/>
 <wire x1="39.2346" y1="162.7446" x2="39.53" y2="163.04" width="0.254" layer="1"/>
 <wire x1="21.9298" y1="162.7446" x2="39.2346" y2="162.7446" width="0.25" layer="1"/>
 </signal>
 <signal name="TXD" class="3" airwireshidden="yes">
-<contactref element="IC2" pad="1"/>
+<contactref element="IC7" pad="1"/>
 <contactref element="R2" pad="2"/>
-<contactref element="TL20" pad="2"/>
-<contactref element="ML20" pad="2"/>
-<contactref element="BL20" pad="2"/>
+<contactref element="CONN8" pad="2"/>
+<contactref element="CONN5" pad="2"/>
+<contactref element="CONN2" pad="2"/>
 <wire x1="16.41" y1="38.65" x2="16.41" y2="35.6" width="0.25" layer="1"/>
 <wire x1="243.5" y1="129.5" x2="243.5" y2="131.5" width="0.25" layer="1"/>
 <wire x1="243.5" y1="131.5" x2="242.5" y2="132.5" width="0.25" layer="1"/>
@@ -7576,8 +7576,8 @@ design rules under a new name.</description>
 <wire x1="197.41" y1="140.65" x2="1.4" y2="183.69" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="CBUS2" class="2">
-<contactref element="USB_RX_LED" pad="C"/>
-<contactref element="IC2" pad="7"/>
+<contactref element="LED3" pad="C"/>
+<contactref element="IC7" pad="7"/>
 <wire x1="247.7822" y1="131.0875" x2="247.0875" y2="131.0875" width="0.25" layer="16"/>
 <wire x1="247.0875" y1="131.0875" x2="246.5" y2="131.5" width="0.25" layer="16"/>
 <via x="246.5" y="131.5" extent="1-16" drill="0.25"/>
@@ -7587,31 +7587,31 @@ design rules under a new name.</description>
 </signal>
 <signal name="USB_RX_LED" class="2">
 <contactref element="R4" pad="2"/>
-<contactref element="USB_RX_LED" pad="A"/>
+<contactref element="LED3" pad="A"/>
 <wire x1="249" y1="131.75" x2="249" y2="133.05" width="0.25" layer="1"/>
 <wire x1="249" y1="133.05" x2="249.5" y2="133.55" width="0.25" layer="1"/>
 </signal>
 <signal name="USBDP" class="2">
 <contactref element="R7" pad="2"/>
-<contactref element="IC2" pad="8"/>
+<contactref element="IC7" pad="8"/>
 <wire x1="247.7822" y1="131.7225" x2="247.7822" y2="132.3322" width="0.25" layer="16"/>
 <wire x1="247.7822" y1="132.3322" x2="249" y2="133.55" width="0.25" layer="16"/>
 </signal>
 <signal name="USBDM" class="2">
-<contactref element="IC2" pad="9"/>
+<contactref element="IC7" pad="9"/>
 <contactref element="R6" pad="1"/>
 <wire x1="253.2178" y1="131.7225" x2="253.2178" y2="132.3322" width="0.25" layer="16"/>
 <wire x1="253.2178" y1="132.3322" x2="252" y2="133.55" width="0.25" layer="16"/>
 </signal>
 <signal name="USB_D-" class="2">
 <contactref element="R6" pad="2"/>
-<contactref element="U$11" pad="DN"/>
+<contactref element="CONN14" pad="DN"/>
 <wire x1="252" y1="135.45" x2="252" y2="137" width="0.25" layer="16"/>
 <wire x1="252" y1="137" x2="250.8" y2="138.2" width="0.25" layer="16"/>
 </signal>
 <signal name="USB_D+" class="2">
 <contactref element="R7" pad="1"/>
-<contactref element="U$11" pad="DP"/>
+<contactref element="CONN14" pad="DP"/>
 <wire x1="249" y1="135.45" x2="249" y2="136.83021875" width="0.25" layer="16"/>
 <wire x1="249" y1="136.83021875" x2="248.09" y2="137.74021875" width="0.25" layer="16"/>
 <wire x1="248.09" y1="137.74021875" x2="248.09" y2="138.89" width="0.25" layer="16"/>
@@ -7619,9 +7619,9 @@ design rules under a new name.</description>
 </signal>
 <signal name="N$10" class="2">
 <contactref element="C3" pad="1"/>
-<contactref element="IC2" pad="10"/>
-<contactref element="IC2" pad="11"/>
-<contactref element="IC2" pad="3"/>
+<contactref element="IC7" pad="10"/>
+<contactref element="IC7" pad="11"/>
+<contactref element="IC7" pad="3"/>
 <wire x1="253.2178" y1="130.4525" x2="253.2178" y2="131.0875" width="0.25" layer="16"/>
 <wire x1="251.4525" y1="130.4525" x2="253.2178" y2="130.4525" width="0.25" layer="16"/>
 <wire x1="247.7822" y1="128.5475" x2="249.5475" y2="128.5475" width="0.25" layer="16"/>
@@ -7635,7 +7635,7 @@ design rules under a new name.</description>
 <signal name="BUTTON_LEFT" class="2">
 <contactref element="R8" pad="1"/>
 <contactref element="R9" pad="1"/>
-<contactref element="U$12" pad="LEFT"/>
+<contactref element="S3" pad="LEFT"/>
 <wire x1="237.45" y1="124" x2="237.45" y2="126.5" width="0.25" layer="16"/>
 <wire x1="241.44325" y1="122.49199375" x2="241.44325" y2="122.55675" width="0.25" layer="1"/>
 <wire x1="241.44325" y1="122.55675" x2="240.5" y2="123.5" width="0.25" layer="1"/>
@@ -7646,7 +7646,7 @@ design rules under a new name.</description>
 <signal name="BUTTON_UP" class="2">
 <contactref element="R12" pad="1"/>
 <contactref element="R13" pad="1"/>
-<contactref element="U$12" pad="UP"/>
+<contactref element="S3" pad="UP"/>
 <wire x1="243.47971875" y1="124.507246875" x2="243.492753125" y2="124.507246875" width="0.25" layer="1"/>
 <wire x1="243.492753125" y1="124.507246875" x2="244.5" y2="123.5" width="0.25" layer="1"/>
 <via x="244.5" y="123.5" extent="1-16" drill="0.25"/>
@@ -7657,7 +7657,7 @@ design rules under a new name.</description>
 <signal name="BUTTON_DOWN" class="2">
 <contactref element="R10" pad="1"/>
 <contactref element="R11" pad="1"/>
-<contactref element="U$12" pad="DOWN"/>
+<contactref element="S3" pad="DOWN"/>
 <wire x1="246.4566375" y1="117.47860625" x2="246.4566375" y2="117.5433625" width="0.25" layer="1"/>
 <wire x1="246.4566375" y1="117.5433625" x2="245.5" y2="118.5" width="0.25" layer="1"/>
 <via x="245.5" y="118.5" extent="1-16" drill="0.25"/>
@@ -7669,12 +7669,12 @@ design rules under a new name.</description>
 <wire x1="243.5" y1="118.5" x2="239" y2="114" width="0.25" layer="16"/>
 </signal>
 <signal name="LEFT" class="3" airwireshidden="yes">
-<contactref element="U2" pad="1"/>
+<contactref element="IC6" pad="1"/>
 <contactref element="R8" pad="2"/>
 <contactref element="C2" pad="2"/>
-<contactref element="TR20" pad="11"/>
-<contactref element="MR20" pad="11"/>
-<contactref element="BR20" pad="11"/>
+<contactref element="CONN9" pad="11"/>
+<contactref element="CONN6" pad="11"/>
+<contactref element="CONN3" pad="11"/>
 <wire x1="235.55" y1="124" x2="233.45" y2="124" width="0.25" layer="16"/>
 <wire x1="50.88" y1="11.1994" x2="50.88" y2="7.38" width="0.25" layer="1"/>
 <wire x1="50.88" y1="7.38" x2="50.262" y2="6.762" width="0.25" layer="1"/>
@@ -7699,15 +7699,15 @@ design rules under a new name.</description>
 <wire x1="220.27" y1="105.35" x2="50.88" y2="11.1994" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="DOWN" class="3" airwireshidden="yes">
-<contactref element="TR20" pad="14"/>
+<contactref element="CONN9" pad="14"/>
 <wire x1="233.45314375" y1="103.5232" x2="234.1364" y2="104.20645625" width="0.25" layer="16"/>
 <wire x1="234.1364" y1="104.20645625" x2="234.1364" y2="106.49354375" width="0.25" layer="16"/>
 <wire x1="227.89" y1="105.35" x2="228.12005625" y2="105.35" width="0.25" layer="16"/>
 <wire x1="228.12005625" y1="105.35" x2="229.94685625" y2="103.5232" width="0.25" layer="16"/>
 <wire x1="229.94685625" y1="103.5232" x2="233.45314375" y2="103.5232" width="0.25" layer="16"/>
-<contactref element="MR20" pad="14"/>
-<contactref element="BR20" pad="14"/>
-<contactref element="U2" pad="13"/>
+<contactref element="CONN6" pad="14"/>
+<contactref element="CONN3" pad="14"/>
+<contactref element="IC6" pad="13"/>
 <wire x1="52.15" y1="16" x2="52.15" y2="17.85" width="0.25" layer="1"/>
 <wire x1="52.15" y1="17.85" x2="52" y2="18" width="0.25" layer="1"/>
 <via x="52" y="18" extent="1-16" drill="0.25"/>
@@ -7727,10 +7727,10 @@ design rules under a new name.</description>
 <contactref element="R12" pad="2"/>
 <contactref element="C5" pad="2"/>
 <wire x1="235.55" y1="118.5" x2="233.45" y2="118.5" width="0.25" layer="16"/>
-<contactref element="TR20" pad="12"/>
-<contactref element="MR20" pad="12"/>
-<contactref element="BR20" pad="12"/>
-<contactref element="U2" pad="3"/>
+<contactref element="CONN9" pad="12"/>
+<contactref element="CONN6" pad="12"/>
+<contactref element="CONN3" pad="12"/>
+<contactref element="IC6" pad="3"/>
 <wire x1="53.42" y1="11.1994" x2="53.42" y2="8.312375" width="0.25" layer="1"/>
 <wire x1="43.131" y1="6.131" x2="42" y2="5" width="0.25" layer="1"/>
 <wire x1="42" y1="5" x2="42" y2="3.54" width="0.25" layer="1"/>
@@ -7754,10 +7754,10 @@ design rules under a new name.</description>
 <contactref element="R18" pad="2"/>
 <contactref element="C7" pad="2"/>
 <wire x1="235.55" y1="113" x2="233.45" y2="113" width="0.25" layer="16"/>
-<contactref element="TR20" pad="13"/>
-<contactref element="MR20" pad="13"/>
-<contactref element="BR20" pad="13"/>
-<contactref element="U2" pad="5"/>
+<contactref element="CONN9" pad="13"/>
+<contactref element="CONN6" pad="13"/>
+<contactref element="CONN3" pad="13"/>
+<contactref element="IC6" pad="5"/>
 <wire x1="55.96" y1="11.1994" x2="55.96" y2="9.96" width="0.25" layer="1"/>
 <wire x1="55.96" y1="9.96" x2="51.5" y2="5.5" width="0.25" layer="1"/>
 <wire x1="51.5" y1="5.5" x2="45" y2="5.5" width="0.25" layer="1"/>
@@ -7773,12 +7773,12 @@ design rules under a new name.</description>
 <wire x1="225.35" y1="105.35" x2="55.96" y2="11.1994" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="BLUETOOTH" class="3" airwireshidden="yes">
-<contactref element="U2" pad="11"/>
+<contactref element="IC6" pad="11"/>
 <contactref element="R17" pad="2"/>
 <contactref element="C8" pad="2"/>
-<contactref element="BR20" pad="15"/>
-<contactref element="MR20" pad="15"/>
-<contactref element="TR20" pad="15"/>
+<contactref element="CONN3" pad="15"/>
+<contactref element="CONN6" pad="15"/>
+<contactref element="CONN9" pad="15"/>
 <wire x1="54.69" y1="16" x2="54.69" y2="18.09" width="0.25" layer="1"/>
 <wire x1="54.69" y1="18.09" x2="54.68" y2="18.1" width="0.25" layer="1"/>
 <via x="54.68" y="18.1" extent="1-16" drill="0.25"/>
@@ -7797,7 +7797,7 @@ design rules under a new name.</description>
 <signal name="VPCC" class="2">
 <contactref element="R23" pad="2"/>
 <contactref element="R24" pad="1"/>
-<contactref element="U7" pad="2"/>
+<contactref element="IC5" pad="2"/>
 <wire x1="57" y1="23.05" x2="59.05" y2="23" width="0.25" layer="16"/>
 <wire x1="59.05" y1="23" x2="59.05" y2="23.63" width="0.25" layer="16"/>
 <wire x1="59.05" y1="23.63" x2="60.51" y2="25.09" width="0.25" layer="16"/>
@@ -7805,7 +7805,7 @@ design rules under a new name.</description>
 <wire x1="60.51" y1="27.1184" x2="60.508" y2="27.1204" width="0.25" layer="16"/>
 </signal>
 <signal name="THERM" class="2">
-<contactref element="U7" pad="5"/>
+<contactref element="IC5" pad="5"/>
 <contactref element="R28" pad="1"/>
 <wire x1="58.639" y1="26.75" x2="56.95" y2="26.75" width="0.25" layer="16"/>
 <wire x1="59.0094" y1="27.1204" x2="58.639" y2="26.75" width="0.25" layer="16"/>
@@ -7813,14 +7813,14 @@ design rules under a new name.</description>
 <signal name="N$19" class="2">
 <contactref element="R28" pad="2"/>
 <contactref element="R27" pad="1"/>
-<contactref element="NTC" pad="1"/>
+<contactref element="R1" pad="1"/>
 <wire x1="52.97" y1="26.88" x2="54.92" y2="26.88" width="0.25" layer="16"/>
 <wire x1="54.92" y1="26.88" x2="55.05" y2="26.75" width="0.25" layer="16"/>
 <wire x1="55.05" y1="26.75" x2="55.05" y2="24.61" width="0.25" layer="16"/>
 <wire x1="55.05" y1="24.61" x2="54.7" y2="24.26" width="0.25" layer="16"/>
 </signal>
 <signal name="PROG1" class="2">
-<contactref element="U7" pad="13"/>
+<contactref element="IC5" pad="13"/>
 <contactref element="R31" pad="1"/>
 <wire x1="60.44" y1="32" x2="60" y2="31.56" width="0.25" layer="16"/>
 <wire x1="60" y1="30.8796" x2="60" y2="31.56" width="0.25" layer="16"/>
@@ -7829,15 +7829,15 @@ design rules under a new name.</description>
 </signal>
 <signal name="PROG3" class="2">
 <contactref element="R32" pad="1"/>
-<contactref element="U7" pad="12"/>
+<contactref element="IC5" pad="12"/>
 <wire x1="59" y1="33.05" x2="59" y2="32.06" width="0.25" layer="16"/>
 <wire x1="59" y1="32.06" x2="59.49" y2="31.57" width="0.25" layer="16"/>
 <wire x1="59.49" y1="31.57" x2="59.49" y2="30.8816" width="0.25" layer="16"/>
 <wire x1="59.49" y1="30.8816" x2="59.492" y2="30.8796" width="0.25" layer="16"/>
 </signal>
 <signal name="AREF" class="2">
-<contactref element="U1" pad="62"/>
-<contactref element="IC1" pad="2"/>
+<contactref element="IC1" pad="62"/>
+<contactref element="IC2" pad="2"/>
 <wire x1="33.6058" y1="28.62" x2="33.6058" y2="30.6058" width="0.25" layer="1"/>
 <wire x1="33.6058" y1="30.6058" x2="34" y2="31" width="0.254" layer="1"/>
 <wire x1="34" y1="31" x2="34" y2="31.26" width="0.254" layer="1"/>
@@ -7850,17 +7850,17 @@ design rules under a new name.</description>
 <wire x1="34.25" y1="36" x2="34.25" y2="33" width="0.25" layer="1"/>
 </signal>
 <signal name="RESET" class="3">
-<contactref element="U1" pad="20"/>
-<contactref element="RESET" pad="1"/>
-<contactref element="RESET" pad="2"/>
+<contactref element="IC1" pad="20"/>
+<contactref element="S1" pad="1"/>
+<contactref element="S1" pad="2"/>
 <contactref element="R47" pad="2"/>
 <contactref element="R49" pad="2"/>
 <wire x1="30" y1="10.95" x2="33.3" y2="10.95" width="0.254" layer="1"/>
-<contactref element="BR20" pad="17"/>
-<contactref element="MR20" pad="17"/>
-<contactref element="TR20" pad="17"/>
+<contactref element="CONN3" pad="17"/>
+<contactref element="CONN6" pad="17"/>
+<contactref element="CONN9" pad="17"/>
 <via x="55.5" y="5.75" extent="1-16" drill="0.6" shape="octagon"/>
-<contactref element="JTAG" pad="RESET"/>
+<contactref element="CONN10" pad="RESET"/>
 <wire x1="39.5" y1="148.38" x2="39.5" y2="147.55" width="0.25" layer="16"/>
 <wire x1="39.5" y1="147.55" x2="37.99" y2="146.04" width="0.25" layer="16"/>
 <wire x1="-2.01" y1="146.04" x2="37.99" y2="146.04" width="0.25" layer="16"/>
@@ -7895,9 +7895,9 @@ design rules under a new name.</description>
 <wire x1="182.401" y1="139.901" x2="39.5" y2="147.55" width="0" layer="19" extent="1-16"/>
 </signal>
 <signal name="XTAL2" class="2">
-<contactref element="U1" pad="23"/>
+<contactref element="IC1" pad="23"/>
 <contactref element="C23" pad="2"/>
-<contactref element="8MHZ" pad="2"/>
+<contactref element="Q1" pad="2"/>
 <wire x1="36.1" y1="8.95" x2="34.96" y2="8.95" width="0.25" layer="1"/>
 <wire x1="34.96" y1="8.95" x2="34.46" y2="8.45" width="0.25" layer="1"/>
 <wire x1="36.1" y1="8.95" x2="36.1" y2="10.1" width="0.25" layer="1"/>
@@ -7905,9 +7905,9 @@ design rules under a new name.</description>
 <wire x1="36.8062" y1="10.8062" x2="36.8062" y2="13.38" width="0.25" layer="1"/>
 </signal>
 <signal name="XTAL1" class="2">
-<contactref element="U1" pad="24"/>
+<contactref element="IC1" pad="24"/>
 <contactref element="C24" pad="2"/>
-<contactref element="8MHZ" pad="1"/>
+<contactref element="Q1" pad="1"/>
 <wire x1="37.5936" y1="10.75" x2="37.5936" y2="13.38" width="0.25" layer="1"/>
 <wire x1="39.04" y1="8.95" x2="37.9" y2="8.95" width="0.25" layer="1"/>
 <wire x1="39.04" y1="8.95" x2="39.54" y2="8.45" width="0.25" layer="1"/>
@@ -7915,9 +7915,9 @@ design rules under a new name.</description>
 <wire x1="37.9" y1="10.4436" x2="37.5936" y2="10.75" width="0.25" layer="1"/>
 </signal>
 <signal name="AVCC" class="2">
-<contactref element="U1" pad="64"/>
-<contactref element="IC1" pad="1"/>
-<contactref element="L2" pad="2"/>
+<contactref element="IC1" pad="64"/>
+<contactref element="IC2" pad="1"/>
+<contactref element="L1" pad="2"/>
 <contactref element="C29" pad="2"/>
 <wire x1="29" y1="32.05" x2="27" y2="32.05" width="0.254" layer="1"/>
 <wire x1="32.0056" y1="28.62" x2="32.0056" y2="31.3544" width="0.254" layer="1"/>
@@ -7928,11 +7928,11 @@ design rules under a new name.</description>
 <wire x1="29.05" y1="32" x2="29" y2="32.05" width="0.254" layer="1"/>
 </signal>
 <signal name="EN" class="3" airwireshidden="yes">
-<contactref element="POWER" pad="1"/>
-<contactref element="BL20" pad="20"/>
-<contactref element="ML20" pad="20"/>
-<contactref element="TL20" pad="20"/>
-<contactref element="U$9" pad="6"/>
+<contactref element="S2" pad="1"/>
+<contactref element="CONN2" pad="20"/>
+<contactref element="CONN5" pad="20"/>
+<contactref element="CONN8" pad="20"/>
+<contactref element="IC4" pad="6"/>
 <contactref element="R59" pad="2"/>
 <wire x1="71.499996875" y1="17.999996875" x2="71.999996875" y2="17.999996875" width="0.25" layer="16"/>
 <wire x1="71.999996875" y1="17.999996875" x2="73" y2="19" width="0.25" layer="16"/>
@@ -7964,12 +7964,12 @@ design rules under a new name.</description>
 <wire x1="240.6658" y1="113" x2="240.6658" y2="113.6658" width="0.25" layer="16"/>
 <wire x1="240.6658" y1="113.6658" x2="241.5" y2="114.5" width="0.25" layer="16"/>
 <wire x1="250" y1="114.5" x2="241.5" y2="114.5" width="0.25" layer="16"/>
-<contactref element="BOARD" pad="9"/>
-<contactref element="LID" pad="9"/>
+<contactref element="CONN12" pad="9"/>
+<contactref element="CONN13" pad="9"/>
 <wire x1="252.36" y1="117.46" x2="252.36" y2="116.86" width="0.25" layer="16"/>
 <wire x1="252.36" y1="116.86" x2="250" y2="114.5" width="0.25" layer="16"/>
-<contactref element="BLUETOOTH" pad="2"/>
-<contactref element="BLUETOOTH" pad="1"/>
+<contactref element="S5" pad="2"/>
+<contactref element="S5" pad="1"/>
 <wire x1="293.2488" y1="117.7606" x2="299.7512" y2="117.7606" width="0.25" layer="1"/>
 <wire x1="302.609190625" y1="117.7606" x2="299.7512" y2="117.7606" width="0.25" layer="1"/>
 <wire x1="303.788790625" y1="116.581" x2="302.609190625" y2="117.7606" width="0.25" layer="1"/>
@@ -7981,7 +7981,7 @@ design rules under a new name.</description>
 <signal name="BUTTON_RIGHT" class="2">
 <contactref element="R18" pad="1"/>
 <contactref element="R21" pad="1"/>
-<contactref element="U$12" pad="RIGHT"/>
+<contactref element="S3" pad="RIGHT"/>
 <wire x1="248.47189375" y1="119.4938625" x2="248.47189375" y2="119.52810625" width="0.25" layer="1"/>
 <wire x1="248.47189375" y1="119.52810625" x2="247.5" y2="120.5" width="0.25" layer="1"/>
 <via x="247.5" y="120.5" extent="1-16" drill="0.25"/>
@@ -7991,12 +7991,12 @@ design rules under a new name.</description>
 <wire x1="238.25" y1="115.5" x2="243.25" y2="120.5" width="0.25" layer="16"/>
 </signal>
 <signal name="V_LIION+" class="1">
-<contactref element="U7" pad="16"/>
-<contactref element="U7" pad="15"/>
-<contactref element="U7" pad="14"/>
+<contactref element="IC5" pad="16"/>
+<contactref element="IC5" pad="15"/>
+<contactref element="IC5" pad="14"/>
 <contactref element="R34" pad="1"/>
 <contactref element="C13" pad="1"/>
-<contactref element="LIION" pad="2"/>
+<contactref element="CONN16" pad="2"/>
 <wire x1="73.95" y1="32" x2="72" y2="32" width="0.3" layer="16"/>
 <wire x1="73.95" y1="32" x2="74" y2="31.95" width="0.4064" layer="16"/>
 <wire x1="60.508" y1="30.8796" x2="60.9906" y2="30.8796" width="0.3" layer="16"/>
@@ -8008,13 +8008,13 @@ design rules under a new name.</description>
 <wire x1="63" y1="32" x2="67" y2="32" width="0.3" layer="16"/>
 </signal>
 <signal name="VGPS" class="1">
-<contactref element="GND" pad="VCC"/>
+<contactref element="IC10" pad="VCC"/>
 <contactref element="C1" pad="1"/>
 <contactref element="R48" pad="1"/>
 <via x="-2.2942" y="178.04" extent="1-16" drill="0.25"/>
-<contactref element="T10" pad="8"/>
-<contactref element="M10" pad="8"/>
-<contactref element="B10" pad="8"/>
+<contactref element="CONN7" pad="8"/>
+<contactref element="CONN4" pad="8"/>
+<contactref element="CONN1" pad="8"/>
 <wire x1="3.35" y1="27.35" x2="4.35" y2="27.35" width="0.3048" layer="1"/>
 <wire x1="4.35" y1="27.35" x2="6" y2="29" width="0.3048" layer="1"/>
 <wire x1="6" y1="29" x2="7.05" y2="29" width="0.3048" layer="1"/>
@@ -8022,11 +8022,11 @@ design rules under a new name.</description>
 <wire x1="-8.51" y1="172.39" x2="-11.66" y2="172.39" width="0.3" layer="1"/>
 <wire x1="-2.2942" y1="178.04" x2="-1.01" y2="178.04" width="0.3" layer="1"/>
 <wire x1="-1.01" y1="178.04" x2="-1.01" y2="172.39" width="0.3" layer="1"/>
-<contactref element="V_GPS" pad="TP"/>
+<contactref element="TP10" pad="TP"/>
 <wire x1="-8.26" y1="172.04" x2="-8.51" y2="172.39" width="0.3" layer="1"/>
-<contactref element="V_GPS1" pad="TP"/>
+<contactref element="TP11" pad="TP"/>
 <wire x1="199.668265625" y1="127.77" x2="202.5" y2="127.77" width="0.3" layer="1"/>
-<contactref element="U$6" pad="VBACK"/>
+<contactref element="IC19" pad="VBACK"/>
 <via x="-1" y="155" extent="1-16" drill="0.25"/>
 <wire x1="-2.5" y1="155.25" x2="-1.25" y2="155.25" width="0.2" layer="16"/>
 <wire x1="-1.25" y1="155.25" x2="-1" y2="155" width="0.2" layer="16"/>
@@ -8034,7 +8034,7 @@ design rules under a new name.</description>
 <via x="3" y="164.25" extent="1-16" drill="0.25"/>
 <wire x1="3" y1="173.03" x2="3" y2="164.25" width="0.3" layer="16"/>
 <wire x1="3" y1="164.25" x2="3" y2="159" width="0.3" layer="1"/>
-<contactref element="U6" pad="5"/>
+<contactref element="IC11" pad="5"/>
 <contactref element="C35" pad="1"/>
 <wire x1="196.5" y1="115.5" x2="196.5" y2="116.95" width="0.3" layer="1"/>
 <wire x1="196.5" y1="116.95" x2="196.45" y2="117" width="0.3" layer="1"/>
@@ -8055,9 +8055,9 @@ design rules under a new name.</description>
 <wire x1="191.33" y1="134.67" x2="192.5" y2="133.5" width="0.3" layer="1"/>
 <wire x1="192.5" y1="133.5" x2="201" y2="133.5" width="0.3" layer="1"/>
 <wire x1="201" y1="133.5" x2="202.5" y2="132" width="0.3" layer="1"/>
-<contactref element="SUPERCAP" pad="+"/>
-<contactref element="IC3" pad="VOUT1"/>
-<contactref element="IC3" pad="VOUT2"/>
+<contactref element="C43" pad="+"/>
+<contactref element="IC12" pad="VOUT1"/>
+<contactref element="IC12" pad="VOUT2"/>
 <wire x1="-3.61" y1="178.29" x2="-3.61" y2="177.865" width="0.3" layer="16"/>
 <wire x1="-3.36" y1="178.04" x2="-3.535" y2="177.865" width="0.3" layer="16"/>
 <wire x1="-2.2942" y1="178.04" x2="-3.36" y2="178.04" width="0.3" layer="16"/>
@@ -8072,20 +8072,20 @@ design rules under a new name.</description>
 <signal name="PFI" class="2">
 <contactref element="R37" pad="2"/>
 <contactref element="R38" pad="1"/>
-<contactref element="IC3" pad="PFI"/>
+<contactref element="IC12" pad="PFI"/>
 <wire x1="-9.01" y1="176.99" x2="-9.01" y2="179.09" width="0.254" layer="16"/>
 <wire x1="-6.41" y1="176.79" x2="-8.81" y2="176.79" width="0.254" layer="16"/>
 <wire x1="-8.81" y1="176.79" x2="-9.01" y2="176.99" width="0.254" layer="16"/>
 </signal>
 <signal name="LTC4425_PROG" class="2">
 <contactref element="R40" pad="2"/>
-<contactref element="IC3" pad="PROG"/>
+<contactref element="IC12" pad="PROG"/>
 <wire x1="-3.61" y1="177.29" x2="-1.71" y2="177.29" width="0.25" layer="16"/>
 <wire x1="-1.71" y1="177.29" x2="-0.96" y2="178.04" width="0.25" layer="16"/>
 </signal>
 <signal name="VMID" class="2">
 <contactref element="C19" pad="2"/>
-<contactref element="IC3" pad="VMID"/>
+<contactref element="IC12" pad="VMID"/>
 <contactref element="C20" pad="2"/>
 <wire x1="-6.41" y1="177.29" x2="-7.19158125" y2="177.29" width="0.254" layer="16"/>
 <wire x1="-7.475790625" y1="177.574209375" x2="-7.19158125" y2="177.29" width="0.254" layer="16"/>
@@ -8099,7 +8099,7 @@ design rules under a new name.</description>
 </signal>
 <signal name="PFI_RET" class="2">
 <contactref element="R37" pad="1"/>
-<contactref element="IC3" pad="PFI_RET"/>
+<contactref element="IC12" pad="PFI_RET"/>
 <wire x1="-6.41" y1="175.79" x2="-7.26" y2="175.79" width="0.254" layer="16"/>
 <wire x1="-7.26" y1="175.79" x2="-8.01" y2="175.04" width="0.254" layer="16"/>
 <wire x1="-8.01" y1="175.04" x2="-8.96" y2="175.04" width="0.254" layer="16"/>
@@ -8107,7 +8107,7 @@ design rules under a new name.</description>
 </signal>
 <signal name="GPIO7" class="2">
 <contactref element="R42" pad="2"/>
-<contactref element="U$3" pad="GPIO7"/>
+<contactref element="IC13" pad="GPIO7"/>
 <wire x1="52.99" y1="170.04" x2="52.99" y2="165.75" width="0.254" layer="1"/>
 <wire x1="52.99" y1="170.04" x2="47.99" y2="175.04" width="0.254" layer="1"/>
 <wire x1="47.99" y1="175.04" x2="47.99" y2="178.1" width="0.254" layer="1"/>
@@ -8117,7 +8117,7 @@ design rules under a new name.</description>
 <wire x1="52.99" y1="165.13104375" x2="55.94" y2="162.18104375" width="0.25" layer="1"/>
 </signal>
 <signal name="BLUE_LED" class="3" airwireshidden="yes">
-<contactref element="U$3" pad="VDD"/>
+<contactref element="IC13" pad="VDD"/>
 <contactref element="C6" pad="2"/>
 <wire x1="39.61" y1="179.56" x2="39.61" y2="178.24" width="0.254" layer="1"/>
 <wire x1="39.61" y1="178.24" x2="39.53" y2="178.16" width="0.254" layer="1"/>
@@ -8127,22 +8127,22 @@ design rules under a new name.</description>
 <wire x1="34.53" y1="181.04" x2="39.49" y2="181.04" width="0.25" layer="1"/>
 <wire x1="39.53" y1="178.16" x2="39.53" y2="181" width="0.25" layer="1"/>
 <wire x1="39.53" y1="181" x2="39.49" y2="181.04" width="0.25" layer="1"/>
-<contactref element="BOARD" pad="3"/>
-<contactref element="LID" pad="3"/>
+<contactref element="CONN12" pad="3"/>
+<contactref element="CONN13" pad="3"/>
 <wire x1="252.36" y1="121.27" x2="251.23" y2="121.27" width="0.25" layer="16"/>
 <wire x1="251.23" y1="121.27" x2="247.2937" y2="125.2063" width="0.25" layer="16"/>
-<contactref element="Q1" pad="3"/>
+<contactref element="T1" pad="3"/>
 <wire x1="25.4" y1="179.5" x2="32.99" y2="179.5" width="0.25" layer="1"/>
 <wire x1="34.42" y1="180.93" x2="32.99" y2="179.5" width="0.25" layer="1"/>
-<contactref element="BT_LED" pad="A"/>
+<contactref element="LED5" pad="A"/>
 <wire x1="34.42" y1="180.93" x2="34.53" y2="181.04" width="0.25" layer="1"/>
 <wire x1="313.23" y1="123.75" x2="312" y2="123.75" width="0.25" layer="1"/>
 <wire x1="312" y1="123.75" x2="309.5" y2="121.25" width="0.25" layer="1"/>
 <wire x1="309.5" y1="121.25" x2="305.66" y2="121.25" width="0.25" layer="1"/>
 <wire x1="305.66" y1="121.25" x2="305.64" y2="121.27" width="0.3" layer="1"/>
-<contactref element="BL20" pad="15"/>
-<contactref element="ML20" pad="15"/>
-<contactref element="TL20" pad="15"/>
+<contactref element="CONN2" pad="15"/>
+<contactref element="CONN5" pad="15"/>
+<contactref element="CONN8" pad="15"/>
 <wire x1="230.43" y1="138.07" x2="230.43" y2="140.65" width="0.25" layer="16"/>
 <wire x1="34.42" y1="183.69" x2="34.42" y2="180.93" width="0.25" layer="1"/>
 <wire x1="247.2937" y1="125.2063" x2="243.2937" y2="125.2063" width="0.25" layer="16"/>
@@ -8152,14 +8152,14 @@ design rules under a new name.</description>
 <wire x1="305.64" y1="121.27" x2="252.36" y2="121.27" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="GPIO4" class="2">
-<contactref element="U$3" pad="GPIO4"/>
+<contactref element="IC13" pad="GPIO4"/>
 <contactref element="R14" pad="1"/>
 <wire x1="49.13" y1="164.76" x2="49.13" y2="162.95" width="0.254" layer="1"/>
 <wire x1="49.13" y1="162.95" x2="50.04" y2="161.79" width="0.254" layer="1"/>
 </signal>
 <signal name="BLUETOOTH_RX" class="2">
-<contactref element="U$3" pad="UART_RX"/>
-<contactref element="BT-SW" pad="4"/>
+<contactref element="IC13" pad="UART_RX"/>
+<contactref element="IC8" pad="4"/>
 <via x="22.99" y="164.04" extent="1-16" drill="0.25"/>
 <via x="17.99" y="166.1466" extent="1-16" drill="0.25"/>
 <wire x1="17.99" y1="166.1466" x2="17.99" y2="167.6844" width="0.25" layer="1"/>
@@ -8173,8 +8173,8 @@ design rules under a new name.</description>
 <wire x1="38.33" y1="164.38" x2="37.99" y2="164.04" width="0.25" layer="1"/>
 </signal>
 <signal name="ADXL345SDA" class="2">
-<contactref element="U$4" pad="SDA"/>
-<contactref element="IC5" pad="Y"/>
+<contactref element="IC14" pad="SDA"/>
+<contactref element="IC15" pad="Y"/>
 <via x="17.9" y="13.1" extent="1-16" drill="0.25"/>
 <via x="12" y="13.1" extent="1-16" drill="0.25"/>
 <wire x1="12" y1="13.1" x2="12.5" y2="13.1" width="0.25" layer="1"/>
@@ -8189,12 +8189,12 @@ design rules under a new name.</description>
 </signal>
 <signal name="GREEN_LED" class="3">
 <contactref element="R46" pad="2"/>
-<contactref element="GPS_GREEN_LED" pad="K"/>
+<contactref element="LED1" pad="K"/>
 <wire x1="249.6627" y1="125.8373" x2="245.4034375" y2="125.8373" width="0.25" layer="16"/>
 <wire x1="235.5" y1="135.55" x2="235.6907375" y2="135.55" width="0.25" layer="16"/>
 <wire x1="235.6907375" y1="135.55" x2="245.4034375" y2="125.8373" width="0.25" layer="16"/>
-<contactref element="BOARD" pad="1"/>
-<contactref element="LID" pad="1"/>
+<contactref element="CONN12" pad="1"/>
+<contactref element="CONN13" pad="1"/>
 <wire x1="252.36" y1="122.54" x2="252.36" y2="123.14" width="0.25" layer="16"/>
 <wire x1="252.36" y1="123.14" x2="249.6627" y2="125.8373" width="0.25" layer="16"/>
 <wire x1="305.33" y1="122.93765" x2="305.33" y2="122.85" width="0.25" layer="1"/>
@@ -8204,14 +8204,14 @@ design rules under a new name.</description>
 <wire x1="252.36" y1="123.14" x2="300.27" y2="124" width="0" layer="19" extent="16-16"/>
 </signal>
 <signal name="RED_LED" class="3" airwireshidden="yes">
-<contactref element="GPS_RED_LED" pad="K"/>
+<contactref element="LED2" pad="K"/>
 <contactref element="R45" pad="2"/>
 <wire x1="250.5317" y1="126.4683" x2="245.6648125" y2="126.4683" width="0.25" layer="16"/>
 <wire x1="238" y1="135.55" x2="243.6908" y2="129.8592" width="0.25" layer="16"/>
 <wire x1="243.6908" y1="129.8592" x2="243.6908" y2="128.4423125" width="0.25" layer="16"/>
 <wire x1="243.6908" y1="128.4423125" x2="245.6648125" y2="126.4683" width="0.25" layer="16"/>
-<contactref element="BOARD" pad="2"/>
-<contactref element="LID" pad="2"/>
+<contactref element="CONN12" pad="2"/>
+<contactref element="CONN13" pad="2"/>
 <wire x1="253.63" y1="122.54" x2="253.63" y2="123.37" width="0.25" layer="16"/>
 <wire x1="253.63" y1="123.37" x2="250.5317" y2="126.4683" width="0.25" layer="16"/>
 <wire x1="300.27" y1="120.5" x2="301.5" y2="120.5" width="0.25" layer="1"/>
@@ -8231,8 +8231,8 @@ design rules under a new name.</description>
 <wire x1="31" y1="6" x2="32.05" y2="6" width="0.254" layer="1"/>
 </signal>
 <signal name="BT_GPIO6" class="2">
-<contactref element="U$3" pad="GPIO6"/>
-<contactref element="SJ1" pad="2"/>
+<contactref element="IC13" pad="GPIO6"/>
+<contactref element="JP2" pad="2"/>
 <wire x1="49.13" y1="179.18" x2="49.13" y2="178.16" width="0.25" layer="1"/>
 <wire x1="53.99" y1="181.04" x2="52.99" y2="180.04" width="0.25" layer="1"/>
 <wire x1="53.99" y1="181.04" x2="53.99" y2="181.77" width="0.25" layer="1"/>
@@ -8241,20 +8241,20 @@ design rules under a new name.</description>
 <wire x1="49.3" y1="180.04" x2="49.13" y2="179.87" width="0.25" layer="1"/>
 </signal>
 <signal name="BT_RST" class="2">
-<contactref element="U$3" pad="RESET"/>
-<contactref element="SJ2" pad="2"/>
+<contactref element="IC13" pad="RESET"/>
+<contactref element="JP3" pad="2"/>
 <wire x1="46.73" y1="178.16" x2="46.73" y2="179.78" width="0.254" layer="1"/>
 <wire x1="46.73" y1="179.78" x2="47.99" y2="181.04" width="0.254" layer="1"/>
 <wire x1="47.99" y1="181.04" x2="49.26" y2="181.04" width="0.254" layer="1"/>
 <wire x1="49.26" y1="181.04" x2="49.99" y2="181.77" width="0.254" layer="1"/>
 </signal>
 <signal name="GPRS_NETLIGHT" class="3" airwireshidden="yes">
-<contactref element="U8" pad="NETLIGHT"/>
-<contactref element="MR20" pad="18"/>
-<contactref element="TR20" pad="18"/>
-<contactref element="BR20" pad="18"/>
-<contactref element="BOARD" pad="10"/>
-<contactref element="LID" pad="10"/>
+<contactref element="IC21" pad="NETLIGHT"/>
+<contactref element="CONN6" pad="18"/>
+<contactref element="CONN9" pad="18"/>
+<contactref element="CONN3" pad="18"/>
+<contactref element="CONN12" pad="10"/>
+<contactref element="CONN13" pad="10"/>
 <wire x1="42.04" y1="148.44" x2="42.04" y2="148.38" width="0.25" layer="16"/>
 <wire x1="48.6" y1="155" x2="42.04" y2="148.44" width="0.25" layer="16"/>
 <wire x1="50.74" y1="162.65" x2="48.95" y2="162.65" width="0.25" layer="16"/>
@@ -8280,7 +8280,7 @@ design rules under a new name.</description>
 </signal>
 <signal name="ANTENNA" class="2">
 <contactref element="C28" pad="2"/>
-<contactref element="ANT" pad="SIGNAL"/>
+<contactref element="CONN15" pad="SIGNAL"/>
 <contactref element="R52" pad="2"/>
 <wire x1="55.21" y1="181.04" x2="55.21" y2="182.36" width="0.25" layer="16"/>
 <wire x1="55.21" y1="181.04" x2="55.21" y2="179.6" width="0.25" layer="16"/>
@@ -8288,17 +8288,17 @@ design rules under a new name.</description>
 <wire x1="57.04" y1="181.04" x2="55.21" y2="181.04" width="0.25" layer="16"/>
 </signal>
 <signal name="SIM_DETECT" class="2">
-<contactref element="U8" pad="SIM_DET"/>
-<contactref element="U$7" pad="CD"/>
+<contactref element="IC21" pad="SIM_DET"/>
+<contactref element="IC20" pad="CD"/>
 <wire x1="32.04" y1="162.65" x2="29.6" y2="162.65" width="0.25" layer="16"/>
 <wire x1="29.6" y1="162.65" x2="26.99" y2="160.04" width="0.25" layer="16"/>
 <wire x1="26.99" y1="160.04" x2="25.34" y2="160.04" width="0.25" layer="16"/>
 <wire x1="25.34" y1="160.04" x2="25.28" y2="159.98" width="0.3048" layer="16"/>
 </signal>
 <signal name="SIM_DATA" class="2">
-<contactref element="U8" pad="SIM_DATA"/>
+<contactref element="IC21" pad="SIM_DATA"/>
 <contactref element="C25" pad="1"/>
-<contactref element="U$7" pad="I/O"/>
+<contactref element="IC20" pad="I/O"/>
 <wire x1="26.99" y1="163.75" x2="32.04" y2="163.75" width="0.25" layer="16"/>
 <wire x1="26.99" y1="163.75" x2="25.32" y2="163.75" width="0.25" layer="16"/>
 <wire x1="25.32" y1="163.75" x2="25.28" y2="163.79" width="0.3048" layer="16"/>
@@ -8310,22 +8310,22 @@ design rules under a new name.</description>
 <wire x1="26.828434375" y1="158.701565625" x2="26.99" y2="158.54" width="0.25" layer="1"/>
 </signal>
 <signal name="SIM_CLOCK" class="2">
-<contactref element="U8" pad="SIM_CLK"/>
-<contactref element="U$7" pad="CLK"/>
+<contactref element="IC21" pad="SIM_CLK"/>
+<contactref element="IC20" pad="CLK"/>
 <wire x1="32.04" y1="164.85" x2="25.49" y2="164.85" width="0.25" layer="16"/>
 <wire x1="25.49" y1="164.85" x2="25.28" y2="165.06" width="0.25" layer="16"/>
 </signal>
 <signal name="SIM_RESET" class="2">
-<contactref element="U8" pad="SIM_RST"/>
-<contactref element="U$7" pad="RST"/>
+<contactref element="IC21" pad="SIM_RST"/>
+<contactref element="IC20" pad="RST"/>
 <wire x1="25.28" y1="167.6" x2="27.43" y2="167.6" width="0.25" layer="16"/>
 <wire x1="27.43" y1="167.6" x2="28.99" y2="166.04" width="0.25" layer="16"/>
 <wire x1="28.99" y1="166.04" x2="31.95" y2="166.04" width="0.25" layer="16"/>
 <wire x1="31.95" y1="166.04" x2="32.04" y2="165.95" width="0.25" layer="16"/>
 </signal>
 <signal name="SIM_VDD" class="2">
-<contactref element="U8" pad="SIM_VDD"/>
-<contactref element="U$7" pad="VPP"/>
+<contactref element="IC21" pad="SIM_VDD"/>
+<contactref element="IC20" pad="VPP"/>
 <wire x1="32.04" y1="167.05" x2="29.1272125" y2="167.05" width="0.25" layer="16"/>
 <wire x1="29.1272125" y1="167.05" x2="29.06360625" y2="167.11360625" width="0.254" layer="16"/>
 <via x="29.06360625" y="167.11360625" extent="1-16" drill="0.25"/>
@@ -8338,7 +8338,7 @@ design rules under a new name.</description>
 <signal name="VUSB" class="1">
 <contactref element="R4" pad="1"/>
 <contactref element="R5" pad="1"/>
-<contactref element="U$11" pad="VBUS"/>
+<contactref element="CONN14" pad="VBUS"/>
 <contactref element="L3" pad="P$1"/>
 <wire x1="253.02735" y1="142.2032" x2="254.27265" y2="142.2032" width="0.3" layer="16"/>
 <wire x1="254.27265" y1="142.2032" x2="254.987925" y2="141.487925" width="0.3" layer="16"/>
@@ -8360,8 +8360,8 @@ design rules under a new name.</description>
 <wire x1="256" y1="112" x2="254.5" y2="110.5" width="0.3" layer="16"/>
 </signal>
 <signal name="CBUS1" class="2">
-<contactref element="USB_TX_LED" pad="C"/>
-<contactref element="IC2" pad="14"/>
+<contactref element="LED4" pad="C"/>
+<contactref element="IC7" pad="14"/>
 <wire x1="253.2178" y1="128.5475" x2="253.9525" y2="128.5475" width="0.25" layer="16"/>
 <wire x1="253.9525" y1="128.5475" x2="254.33" y2="128.51" width="0.25" layer="16"/>
 <via x="254.33" y="128.51" extent="1-16" drill="0.25"/>
@@ -8370,10 +8370,10 @@ design rules under a new name.</description>
 </signal>
 <signal name="RXD" class="3" airwireshidden="yes">
 <contactref element="R3" pad="2"/>
-<contactref element="IC2" pad="4"/>
-<contactref element="ML20" pad="1"/>
-<contactref element="BL20" pad="1"/>
-<contactref element="TL20" pad="1"/>
+<contactref element="IC7" pad="4"/>
+<contactref element="CONN5" pad="1"/>
+<contactref element="CONN2" pad="1"/>
+<contactref element="CONN8" pad="1"/>
 <wire x1="13.87" y1="38.65" x2="13.87" y2="35.6" width="0.25" layer="1"/>
 <via x="244.5" y="130" extent="1-16" drill="0.25"/>
 <wire x1="244.5" y1="130" x2="244.5" y2="131.5" width="0.25" layer="1"/>
@@ -8394,9 +8394,9 @@ design rules under a new name.</description>
 <wire x1="194.87" y1="140.65" x2="-1.14" y2="183.69" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="GPS_ON_OFF" class="3">
-<contactref element="GND" pad="ON_OFF"/>
+<contactref element="IC10" pad="ON_OFF"/>
 <contactref element="R36" pad="1"/>
-<contactref element="U6" pad="1"/>
+<contactref element="IC11" pad="1"/>
 <contactref element="R56" pad="1"/>
 <wire x1="199.668265625" y1="123.96" x2="202" y2="123.96" width="0.25" layer="1"/>
 <wire x1="202" y1="123.96" x2="202" y2="124" width="0.25" layer="1"/>
@@ -8409,7 +8409,7 @@ design rules under a new name.</description>
 <wire x1="203" y1="119.5" x2="203" y2="117.95" width="0.25" layer="1"/>
 </signal>
 <signal name="GSM_ANT" class="2">
-<contactref element="U8" pad="GSM_ANT"/>
+<contactref element="IC21" pad="GSM_ANT"/>
 <contactref element="C27" pad="2"/>
 <contactref element="R52" pad="1"/>
 <wire x1="53.35" y1="179.56" x2="52.25" y2="179.56" width="0.3048" layer="16"/>
@@ -8423,7 +8423,7 @@ design rules under a new name.</description>
 <contactref element="R48" pad="2"/>
 <contactref element="R58" pad="1"/>
 <wire x1="8.95" y1="30" x2="8.95" y2="29" width="0.254" layer="1"/>
-<contactref element="U1" pad="59"/>
+<contactref element="IC1" pad="59"/>
 <wire x1="8.95" y1="30" x2="8.95" y2="31" width="0.254" layer="1"/>
 <wire x1="35.429496875" y1="26.929496875" x2="35.4823" y2="26.9823" width="0.254" layer="1"/>
 <via x="35.429496875" y="26.929496875" extent="1-16" drill="0.25"/>
@@ -8436,28 +8436,28 @@ design rules under a new name.</description>
 <wire x1="35.9934" y1="27.4934" x2="35.429496875" y2="26.929496875" width="0.25" layer="1"/>
 </signal>
 <signal name="USB_TX_LED" class="2">
-<contactref element="USB_TX_LED" pad="A"/>
+<contactref element="LED4" pad="A"/>
 <contactref element="R5" pad="2"/>
 <wire x1="252" y1="131.75" x2="252" y2="133.05" width="0.25" layer="1"/>
 <wire x1="252" y1="133.05" x2="251.5" y2="133.55" width="0.25" layer="1"/>
 </signal>
 <signal name="V_LIION_REGULATED" class="1">
-<contactref element="U7" pad="1"/>
-<contactref element="U7" pad="20"/>
+<contactref element="IC5" pad="1"/>
+<contactref element="IC5" pad="20"/>
 <contactref element="C11" pad="1"/>
-<contactref element="POWER" pad="2"/>
-<contactref element="U8" pad="VBAT2"/>
-<contactref element="U8" pad="VBAT1"/>
+<contactref element="S2" pad="2"/>
+<contactref element="IC21" pad="VBAT2"/>
+<contactref element="IC21" pad="VBAT1"/>
 <contactref element="C26" pad="2"/>
 <contactref element="R51" pad="2"/>
-<contactref element="U8" pad="VRTC"/>
+<contactref element="IC21" pad="VRTC"/>
 <wire x1="61.8796" y1="27.1204" x2="60.9906" y2="27.1204" width="0.3" layer="16"/>
 <wire x1="63" y1="27.1204" x2="61.8796" y2="27.1204" width="0.3" layer="16"/>
 <wire x1="61.8796" y1="28.0094" x2="61.8796" y2="27.1204" width="0.3" layer="16"/>
 <wire x1="63" y1="27.1204" x2="63" y2="25.95" width="0.3" layer="16"/>
-<contactref element="BL20" pad="19"/>
-<contactref element="ML20" pad="19"/>
-<contactref element="TL20" pad="19"/>
+<contactref element="CONN2" pad="19"/>
+<contactref element="CONN5" pad="19"/>
+<contactref element="CONN8" pad="19"/>
 <wire x1="59.58" y1="38.67" x2="59.59" y2="38.65" width="0.3048" layer="1"/>
 <wire x1="50.99" y1="170.35" x2="54.99" y2="170.35" width="0.4064" layer="16"/>
 <wire x1="50.99" y1="170.35" x2="50.74" y2="170.35" width="0.4064" layer="16"/>
@@ -8473,16 +8473,16 @@ design rules under a new name.</description>
 <wire x1="41.99" y1="174.4" x2="41.99" y2="176.04" width="0.4064" layer="16"/>
 <wire x1="41.99" y1="176.04" x2="44.58" y2="178.63" width="0.4064" layer="16"/>
 <wire x1="44.58" y1="178.63" x2="44.58" y2="183.69" width="0.4064" layer="16"/>
-<contactref element="U$9" pad="5"/>
-<contactref element="U$9" pad="8"/>
-<contactref element="U$9" pad="7"/>
+<contactref element="IC4" pad="5"/>
+<contactref element="IC4" pad="8"/>
+<contactref element="IC4" pad="7"/>
 <contactref element="C42" pad="2"/>
 <wire x1="68.500003125" y1="19.449996875" x2="68.500003125" y2="17.999996875" width="0.3" layer="16"/>
 <wire x1="67.05" y1="22" x2="67.05" y2="20.9" width="0.4064" layer="16"/>
 <wire x1="67.05" y1="20.9" x2="68.500003125" y2="19.449996875" width="0.3" layer="16"/>
 <wire x1="71.499996875" y1="17" x2="71.499996875" y2="17.5" width="0.3" layer="16"/>
-<contactref element="V_LIION" pad="TP"/>
-<contactref element="OLED" pad="6"/>
+<contactref element="TP8" pad="TP"/>
+<contactref element="IC18" pad="6"/>
 <contactref element="C38" pad="2"/>
 <wire x1="236.5042" y1="136.5" x2="238.5" y2="136.5" width="0.3048" layer="1"/>
 <wire x1="238.5" y1="136.5" x2="240.5" y2="138.5" width="0.3048" layer="1"/>
@@ -8517,30 +8517,30 @@ design rules under a new name.</description>
 </signal>
 <signal name="LTC4425_EN" class="2">
 <contactref element="R39" pad="2"/>
-<contactref element="IC3" pad="EN"/>
+<contactref element="IC12" pad="EN"/>
 <wire x1="-3.61" y1="175.79" x2="-1.21" y2="175.79" width="0.254" layer="16"/>
 <wire x1="-1.21" y1="175.79" x2="-0.96" y2="176.04" width="0.254" layer="16"/>
 </signal>
 <signal name="N$5">
 </signal>
 <signal name="L1" class="2">
-<contactref element="U$9" pad="4"/>
-<contactref element="U$10" pad="P$1"/>
+<contactref element="IC4" pad="4"/>
+<contactref element="L2" pad="P$1"/>
 <wire x1="67" y1="18" x2="66.34" y2="18" width="0.25" layer="16"/>
 <wire x1="66.34" y1="18" x2="65.99" y2="18.35" width="0.25" layer="16"/>
 <wire x1="68.500003125" y1="17.5" x2="67.5" y2="17.5" width="0.25" layer="16"/>
 <wire x1="67.5" y1="17.5" x2="67" y2="18" width="0.25" layer="16"/>
 </signal>
 <signal name="L2" class="2">
-<contactref element="U$9" pad="2"/>
-<contactref element="U$10" pad="P$2"/>
+<contactref element="IC4" pad="2"/>
+<contactref element="L2" pad="P$2"/>
 <wire x1="67" y1="16" x2="66.36" y2="16" width="0.25" layer="16"/>
 <wire x1="66.36" y1="16" x2="66.01" y2="15.65" width="0.25" layer="16"/>
 <wire x1="68.500003125" y1="16.5" x2="67.5" y2="16.5" width="0.25" layer="16"/>
 <wire x1="67.5" y1="16.5" x2="67" y2="16" width="0.25" layer="16"/>
 </signal>
 <signal name="BUTTON_CENTER" class="2">
-<contactref element="U$12" pad="CENTER"/>
+<contactref element="S3" pad="CENTER"/>
 <contactref element="R19" pad="1"/>
 <contactref element="R16" pad="1"/>
 <wire x1="237.7" y1="107.8" x2="237.7" y2="109.99" width="0.25" layer="1"/>
@@ -8553,7 +8553,7 @@ design rules under a new name.</description>
 <wire x1="240.5" y1="110" x2="241.5" y2="111" width="0.25" layer="1"/>
 </signal>
 <signal name="IREF" class="2">
-<contactref element="OLED" pad="26"/>
+<contactref element="IC18" pad="26"/>
 <contactref element="R57" pad="2"/>
 <wire x1="214.26" y1="110.76" x2="214.25" y2="110.75" width="0.25" layer="1"/>
 <wire x1="214.25" y1="110.75" x2="214.25" y2="120.5" width="0.25" layer="1"/>
@@ -8562,7 +8562,7 @@ design rules under a new name.</description>
 <wire x1="216.77" y1="123.02" x2="216.77" y2="125.51" width="0.25" layer="16"/>
 </signal>
 <signal name="VCOMH" class="2">
-<contactref element="OLED" pad="27"/>
+<contactref element="IC18" pad="27"/>
 <contactref element="C12" pad="2"/>
 <wire x1="213.75" y1="110.75" x2="213.75" y2="123.4" width="0.25" layer="1"/>
 <via x="213.75" y="123.4" extent="1-16" drill="0.25" shape="octagon"/>
@@ -8570,7 +8570,7 @@ design rules under a new name.</description>
 <wire x1="213.75" y1="125.53" x2="213.73" y2="125.55" width="0.25" layer="16"/>
 </signal>
 <signal name="CAP1N" class="2">
-<contactref element="OLED" pad="5"/>
+<contactref element="IC18" pad="5"/>
 <contactref element="C40" pad="1"/>
 <via x="222.5" y="123" extent="1-16" drill="0.25"/>
 <wire x1="222.5" y1="123" x2="222.5" y2="124.7" width="0.25" layer="16"/>
@@ -8580,7 +8580,7 @@ design rules under a new name.</description>
 <wire x1="224.74" y1="110.76" x2="224.74" y2="120.76" width="0.25" layer="1"/>
 </signal>
 <signal name="CAP1P" class="2">
-<contactref element="OLED" pad="4"/>
+<contactref element="IC18" pad="4"/>
 <contactref element="C40" pad="2"/>
 <wire x1="225.25" y1="110.75" x2="225.25" y2="122.25" width="0.25" layer="1"/>
 <wire x1="225.25" y1="122.25" x2="224.5" y2="123" width="0.25" layer="1"/>
@@ -8589,7 +8589,7 @@ design rules under a new name.</description>
 <wire x1="224.5" y1="124.8" x2="224.7" y2="125" width="0.25" layer="16"/>
 </signal>
 <signal name="CAP2N" class="2">
-<contactref element="OLED" pad="3"/>
+<contactref element="IC18" pad="3"/>
 <contactref element="C36" pad="1"/>
 <via x="226.5" y="123" extent="1-16" drill="0.25"/>
 <wire x1="226.5" y1="123" x2="226.5" y2="124.7" width="0.25" layer="16"/>
@@ -8599,7 +8599,7 @@ design rules under a new name.</description>
 <wire x1="225.76" y1="110.76" x2="225.76" y2="122.26" width="0.25" layer="1"/>
 </signal>
 <signal name="CAP2P" class="2">
-<contactref element="OLED" pad="2"/>
+<contactref element="IC18" pad="2"/>
 <contactref element="C36" pad="2"/>
 <via x="228.5" y="123" extent="1-16" drill="0.25"/>
 <wire x1="228.5" y1="123" x2="228.5" y2="124.8" width="0.25" layer="16"/>
@@ -8609,7 +8609,7 @@ design rules under a new name.</description>
 <wire x1="226.27" y1="110.77" x2="226.27" y2="120.77" width="0.25" layer="1"/>
 </signal>
 <signal name="OLED_VCC" class="2">
-<contactref element="OLED" pad="28"/>
+<contactref element="IC18" pad="28"/>
 <contactref element="C39" pad="2"/>
 <wire x1="213.25" y1="110.75" x2="213.25" y2="120.48" width="0.25" layer="1"/>
 <wire x1="213.25" y1="120.48" x2="210.75" y2="122.98" width="0.25" layer="1"/>
@@ -8617,13 +8617,13 @@ design rules under a new name.</description>
 <wire x1="210.75" y1="122.98" x2="210.75" y2="125.55" width="0.25" layer="16"/>
 </signal>
 <signal name="CENTER" class="3" airwireshidden="yes">
-<contactref element="U2" pad="9"/>
+<contactref element="IC6" pad="9"/>
 <contactref element="R16" pad="2"/>
 <contactref element="C9" pad="2"/>
 <wire x1="233.7" y1="107.8" x2="235.8" y2="107.8" width="0.25" layer="1"/>
-<contactref element="BR20" pad="16"/>
-<contactref element="MR20" pad="16"/>
-<contactref element="TR20" pad="16"/>
+<contactref element="CONN3" pad="16"/>
+<contactref element="CONN6" pad="16"/>
+<contactref element="CONN9" pad="16"/>
 <wire x1="52" y1="5" x2="52" y2="3.38" width="0.25" layer="16"/>
 <wire x1="52" y1="3.38" x2="51.97" y2="3.35" width="0.25" layer="16"/>
 <wire x1="232.97" y1="105.35" x2="232.97" y2="106.17" width="0.25" layer="1"/>
@@ -8638,8 +8638,8 @@ design rules under a new name.</description>
 <wire x1="232.97" y1="105.35" x2="57.25" y2="18.25" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="MENU_CENTER_BUTTON_PIN" class="2">
-<contactref element="U2" pad="8"/>
-<contactref element="U1" pad="40"/>
+<contactref element="IC6" pad="8"/>
+<contactref element="IC1" pad="40"/>
 <wire x1="58.5" y1="16" x2="58.5" y2="19.25" width="0.25" layer="1"/>
 <wire x1="57.875" y1="19.875" x2="58.5" y2="19.25" width="0.25" layer="1"/>
 <wire x1="57.875" y1="19.875" x2="57.5" y2="20.25" width="0.25" layer="1"/>
@@ -8647,12 +8647,12 @@ design rules under a new name.</description>
 <wire x1="45.62" y1="20.5936" x2="57.1564" y2="20.5936" width="0.25" layer="1"/>
 </signal>
 <signal name="MENU_GPRS_PUSH_BUTTON_PIN" class="3" airwireshidden="yes">
-<contactref element="U1" pad="43"/>
+<contactref element="IC1" pad="43"/>
 <contactref element="C30" pad="2"/>
 <contactref element="R22" pad="2"/>
-<contactref element="BL20" pad="16"/>
-<contactref element="ML20" pad="16"/>
-<contactref element="TL20" pad="16"/>
+<contactref element="CONN2" pad="16"/>
+<contactref element="CONN5" pad="16"/>
+<contactref element="CONN8" pad="16"/>
 <wire x1="232.97" y1="140.65" x2="232.97" y2="137.97" width="0.25" layer="1"/>
 <wire x1="232.97" y1="137.97" x2="232.5" y2="137.5" width="0.25" layer="1"/>
 <via x="232.5" y="137.5" extent="1-16" drill="0.6"/>
@@ -8675,11 +8675,11 @@ design rules under a new name.</description>
 <signal name="GPRS_BUTTON" class="3" airwireshidden="yes">
 <contactref element="R22" pad="1"/>
 <contactref element="R54" pad="1"/>
-<contactref element="BOARD" pad="7"/>
-<contactref element="LID" pad="7"/>
+<contactref element="CONN12" pad="7"/>
+<contactref element="CONN13" pad="7"/>
 <wire x1="250.264475" y1="118.73" x2="252.36" y2="118.73" width="0.25" layer="16"/>
-<contactref element="GPRS" pad="2"/>
-<contactref element="GPRS" pad="1"/>
+<contactref element="S4" pad="2"/>
+<contactref element="S4" pad="1"/>
 <wire x1="317.7512" y1="117.7606" x2="311.2488" y2="117.7606" width="0.25" layer="1"/>
 <wire x1="306.27" y1="118.73" x2="305.64" y2="118.73" width="0.25" layer="1"/>
 <wire x1="311.2488" y1="117.7606" x2="307.2394" y2="117.7606" width="0.25" layer="1"/>
@@ -8700,12 +8700,12 @@ design rules under a new name.</description>
 <signal name="GND1">
 </signal>
 <signal name="SPI_SS_RTC_PIN" class="3" airwireshidden="yes">
-<contactref element="U$6" pad="!CS!"/>
+<contactref element="IC19" pad="!CS!"/>
 <contactref element="R55" pad="2"/>
-<contactref element="U1" pad="4"/>
-<contactref element="T10" pad="7"/>
-<contactref element="M10" pad="7"/>
-<contactref element="B10" pad="7"/>
+<contactref element="IC1" pad="4"/>
+<contactref element="CONN7" pad="7"/>
+<contactref element="CONN4" pad="7"/>
+<contactref element="CONN1" pad="7"/>
 <wire x1="30.38" y1="24.6068" x2="29.44445625" y2="24.6068" width="0.25" layer="1"/>
 <wire x1="29.44445625" y1="24.6068" x2="26.650628125" y2="27.400628125" width="0.25" layer="1"/>
 <wire x1="5.06" y1="24.81" x2="3.35" y2="24.81" width="0.25" layer="1"/>
@@ -8724,11 +8724,11 @@ design rules under a new name.</description>
 <wire x1="184.35" y1="126.81" x2="30.38" y2="24.6068" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="RTC_INT_INTERRUPT_PIN" class="3" airwireshidden="yes">
-<contactref element="U$6" pad="!INT!"/>
-<contactref element="U1" pad="8"/>
-<contactref element="T10" pad="6"/>
-<contactref element="M10" pad="6"/>
-<contactref element="B10" pad="6"/>
+<contactref element="IC19" pad="!INT!"/>
+<contactref element="IC1" pad="8"/>
+<contactref element="CONN7" pad="6"/>
+<contactref element="CONN4" pad="6"/>
+<contactref element="CONN1" pad="6"/>
 <wire x1="30.38" y1="21.4064" x2="28.1564" y2="21.4064" width="0.25" layer="1"/>
 <wire x1="28.1564" y1="21.4064" x2="28" y2="21.25" width="0.25" layer="1"/>
 <via x="28" y="21.25" extent="1-16" drill="0.25"/>
@@ -8747,29 +8747,29 @@ design rules under a new name.</description>
 <wire x1="184.35" y1="124.27" x2="30.38" y2="21.4064" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="RTC_XTAL2" class="2">
-<contactref element="U$6" pad="X2"/>
-<contactref element="U$13" pad="XTAL2"/>
+<contactref element="IC19" pad="X2"/>
+<contactref element="Q2" pad="XTAL2"/>
 <wire x1="-2.5" y1="155.75" x2="0" y2="155.75" width="0.2" layer="16"/>
 <wire x1="0" y1="155.75" x2="0.75" y2="155" width="0.2" layer="16"/>
 <wire x1="0.75" y1="155" x2="1.35" y2="155" width="0.2" layer="16"/>
 <wire x1="1.35" y1="155" x2="1.5" y2="154.85" width="0.2" layer="16"/>
 </signal>
 <signal name="RTC_XTAL1" class="2">
-<contactref element="U$6" pad="X1"/>
-<contactref element="U$13" pad="XTAL1"/>
+<contactref element="IC19" pad="X1"/>
+<contactref element="Q2" pad="XTAL1"/>
 <wire x1="-2.5" y1="156.25" x2="0" y2="156.25" width="0.2" layer="16"/>
 <wire x1="0" y1="156.25" x2="0.75" y2="157" width="0.2" layer="16"/>
 <wire x1="0.75" y1="157" x2="1.35" y2="157" width="0.2" layer="16"/>
 <wire x1="1.35" y1="157" x2="1.5" y2="157.15" width="0.2" layer="16"/>
 </signal>
 <signal name="GND">
-<contactref element="U1" pad="53"/>
-<contactref element="U1" pad="22"/>
-<contactref element="U1" pad="63"/>
-<contactref element="U8" pad="GND10"/>
-<contactref element="U8" pad="GND9"/>
-<contactref element="U8" pad="GND7"/>
-<contactref element="U8" pad="GND6"/>
+<contactref element="IC1" pad="53"/>
+<contactref element="IC1" pad="22"/>
+<contactref element="IC1" pad="63"/>
+<contactref element="IC21" pad="GND10"/>
+<contactref element="IC21" pad="GND9"/>
+<contactref element="IC21" pad="GND7"/>
+<contactref element="IC21" pad="GND6"/>
 <wire x1="40.794" y1="28.62" x2="40.79" y2="28.62" width="0.4064" layer="1"/>
 <wire x1="40.79" y1="26.1" x2="40.79" y2="28.62" width="0.4064" layer="1"/>
 <wire x1="40.79" y1="20.94" x2="40.79" y2="26.1" width="0.4064" layer="1"/>
@@ -8783,46 +8783,46 @@ design rules under a new name.</description>
 <wire x1="36" y1="15.8" x2="36" y2="20.98" width="0.4064" layer="1"/>
 <wire x1="36" y1="15.8" x2="36" y2="15.5" width="0.4064" layer="1"/>
 <wire x1="50.99" y1="182.04" x2="51.67" y2="182.04" width="0.4064" layer="16"/>
-<contactref element="T10" pad="9"/>
-<contactref element="M10" pad="9"/>
-<contactref element="B10" pad="9"/>
-<contactref element="TR20" pad="5"/>
-<contactref element="MR20" pad="5"/>
-<contactref element="BR20" pad="5"/>
+<contactref element="CONN7" pad="9"/>
+<contactref element="CONN4" pad="9"/>
+<contactref element="CONN1" pad="9"/>
+<contactref element="CONN9" pad="5"/>
+<contactref element="CONN6" pad="5"/>
+<contactref element="CONN3" pad="5"/>
 <contactref element="R59" pad="1"/>
-<contactref element="U$9" pad="9"/>
-<contactref element="U$9" pad="3"/>
+<contactref element="IC4" pad="9"/>
+<contactref element="IC4" pad="3"/>
 <contactref element="C18" pad="1"/>
 <contactref element="C42" pad="1"/>
 <wire x1="72.5" y1="16.5" x2="74" y2="15" width="0.4" layer="16"/>
-<contactref element="U$7" pad="GND1"/>
-<contactref element="TL20" pad="5"/>
-<contactref element="ML20" pad="5"/>
-<contactref element="BL20" pad="5"/>
+<contactref element="IC20" pad="GND1"/>
+<contactref element="CONN8" pad="5"/>
+<contactref element="CONN5" pad="5"/>
+<contactref element="CONN2" pad="5"/>
 <wire x1="35.998328125" y1="14.50000625" x2="35.998328125" y2="15.498328125" width="0.4064" layer="1"/>
 <wire x1="35.998328125" y1="15.498328125" x2="36" y2="15.5" width="0.4064" layer="1"/>
 <via x="32.82" y="25.99" extent="1-16" drill="0.25"/>
 <wire x1="72.5" y1="16.5" x2="71.499996875" y2="16.5" width="0.25" layer="16"/>
 <wire x1="74" y1="15" x2="74" y2="14.05" width="0.4064" layer="16"/>
 <wire x1="74" y1="14.05" x2="73.95" y2="14" width="0.4064" layer="16"/>
-<contactref element="TP6" pad="TP"/>
+<contactref element="TP1" pad="TP"/>
 <wire x1="44.14" y1="174.35" x2="45.24" y2="174.35" width="0.4064" layer="16"/>
 <wire x1="50.74" y1="168.15" x2="50.74" y2="167.05" width="0.4064" layer="16"/>
 <contactref element="C10" pad="1"/>
-<contactref element="U$11" pad="GND1"/>
-<contactref element="U$12" pad="GND1"/>
-<contactref element="OLED" pad="11"/>
-<contactref element="OLED" pad="12"/>
-<contactref element="OLED" pad="16"/>
-<contactref element="OLED" pad="17"/>
-<contactref element="OLED" pad="21"/>
-<contactref element="OLED" pad="25"/>
-<contactref element="OLED" pad="24"/>
-<contactref element="OLED" pad="23"/>
-<contactref element="OLED" pad="22"/>
-<contactref element="OLED" pad="29"/>
-<contactref element="OLED" pad="10"/>
-<contactref element="OLED" pad="8"/>
+<contactref element="CONN14" pad="GND1"/>
+<contactref element="S3" pad="GND1"/>
+<contactref element="IC18" pad="11"/>
+<contactref element="IC18" pad="12"/>
+<contactref element="IC18" pad="16"/>
+<contactref element="IC18" pad="17"/>
+<contactref element="IC18" pad="21"/>
+<contactref element="IC18" pad="25"/>
+<contactref element="IC18" pad="24"/>
+<contactref element="IC18" pad="23"/>
+<contactref element="IC18" pad="22"/>
+<contactref element="IC18" pad="29"/>
+<contactref element="IC18" pad="10"/>
+<contactref element="IC18" pad="8"/>
 <contactref element="C38" pad="1"/>
 <contactref element="C37" pad="1"/>
 <contactref element="C39" pad="1"/>
@@ -8859,74 +8859,74 @@ design rules under a new name.</description>
 <wire x1="212.75" y1="112.25" x2="212.5" y2="112.5" width="0.25" layer="1"/>
 <wire x1="216.75" y1="110.75" x2="216.75" y2="111.75" width="0.25" layer="1"/>
 <wire x1="216.75" y1="111.75" x2="216.5" y2="112" width="0.25" layer="1"/>
-<contactref element="JTAG" pad="GND1"/>
-<contactref element="JTAG" pad="GND2"/>
-<contactref element="BOARD" pad="5"/>
-<contactref element="LID" pad="5"/>
+<contactref element="CONN10" pad="GND1"/>
+<contactref element="CONN10" pad="GND2"/>
+<contactref element="CONN12" pad="5"/>
+<contactref element="CONN13" pad="5"/>
 <contactref element="C30" pad="1"/>
 <contactref element="C8" pad="1"/>
 <contactref element="R58" pad="2"/>
 <contactref element="C29" pad="1"/>
 <contactref element="C23" pad="1"/>
 <contactref element="C24" pad="1"/>
-<contactref element="RESET" pad="3"/>
-<contactref element="RESET" pad="4"/>
+<contactref element="S1" pad="3"/>
+<contactref element="S1" pad="4"/>
 <contactref element="C22" pad="1"/>
-<contactref element="IC1" pad="3"/>
+<contactref element="IC2" pad="3"/>
 <contactref element="R35" pad="2"/>
-<contactref element="U5" pad="5"/>
+<contactref element="IC3" pad="5"/>
 <contactref element="C14" pad="2"/>
 <contactref element="R24" pad="2"/>
 <contactref element="C11" pad="2"/>
-<contactref element="U7" pad="11"/>
-<contactref element="U7" pad="10"/>
+<contactref element="IC5" pad="11"/>
+<contactref element="IC5" pad="10"/>
 <contactref element="R31" pad="2"/>
 <contactref element="R32" pad="2"/>
-<contactref element="NTC" pad="2"/>
-<contactref element="LIION" pad="1"/>
+<contactref element="R1" pad="2"/>
+<contactref element="CONN16" pad="1"/>
 <contactref element="R33" pad="2"/>
 <contactref element="C13" pad="2"/>
 <contactref element="C7" pad="1"/>
 <contactref element="C5" pad="1"/>
 <contactref element="C4" pad="1"/>
 <contactref element="C2" pad="1"/>
-<contactref element="U2" pad="7"/>
+<contactref element="IC6" pad="7"/>
 <contactref element="C3" pad="2"/>
-<contactref element="IC2" pad="13"/>
-<contactref element="IC2" pad="5"/>
-<contactref element="BT-SW" pad="2"/>
-<contactref element="GPS-SW" pad="2"/>
+<contactref element="IC7" pad="13"/>
+<contactref element="IC7" pad="5"/>
+<contactref element="IC8" pad="2"/>
+<contactref element="IC9" pad="2"/>
 <contactref element="R36" pad="2"/>
 <contactref element="C15" pad="1"/>
 <contactref element="C16" pad="2"/>
 <contactref element="C1" pad="2"/>
-<contactref element="GND" pad="GND1"/>
-<contactref element="IC3" pad="GND"/>
+<contactref element="IC10" pad="GND1"/>
+<contactref element="IC12" pad="GND"/>
 <contactref element="C21" pad="1"/>
 <contactref element="C20" pad="1"/>
-<contactref element="U$3" pad="GPIO3"/>
-<contactref element="U$3" pad="GND4"/>
-<contactref element="U$3" pad="GND2"/>
+<contactref element="IC13" pad="GPIO3"/>
+<contactref element="IC13" pad="GND4"/>
+<contactref element="IC13" pad="GND2"/>
 <contactref element="C6" pad="1"/>
-<contactref element="U$3" pad="GND1"/>
-<contactref element="SJ2" pad="1"/>
-<contactref element="SJ1" pad="1"/>
-<contactref element="U$5" pad="VSS"/>
-<contactref element="U$5" pad="GND2"/>
-<contactref element="U$5" pad="POL"/>
-<contactref element="U$5" pad="GND4"/>
+<contactref element="IC13" pad="GND1"/>
+<contactref element="JP3" pad="1"/>
+<contactref element="JP2" pad="1"/>
+<contactref element="IC17" pad="VSS"/>
+<contactref element="IC17" pad="GND2"/>
+<contactref element="IC17" pad="POL"/>
+<contactref element="IC17" pad="GND4"/>
 <contactref element="C31" pad="2"/>
-<contactref element="IC4" pad="GND"/>
+<contactref element="IC16" pad="GND"/>
 <contactref element="C41" pad="2"/>
-<contactref element="IC5" pad="GND"/>
+<contactref element="IC15" pad="GND"/>
 <contactref element="C17" pad="2"/>
-<contactref element="U$4" pad="GND1"/>
-<contactref element="U$4" pad="GND3"/>
-<contactref element="U$4" pad="GND2"/>
-<contactref element="U8" pad="GND4"/>
-<contactref element="U8" pad="GND3"/>
+<contactref element="IC14" pad="GND1"/>
+<contactref element="IC14" pad="GND3"/>
+<contactref element="IC14" pad="GND2"/>
+<contactref element="IC21" pad="GND4"/>
+<contactref element="IC21" pad="GND3"/>
 <contactref element="C25" pad="2"/>
-<contactref element="U8" pad="GND2"/>
+<contactref element="IC21" pad="GND2"/>
 <contactref element="C27" pad="1"/>
 <contactref element="C28" pad="1"/>
 <contactref element="C26" pad="1"/>
@@ -8994,16 +8994,16 @@ design rules under a new name.</description>
 <wire x1="246.1825" y1="129.8175" x2="246.01" y2="129.84" width="0.4064" layer="16"/>
 <via x="229" y="121" extent="1-16" drill="0.25"/>
 <via x="233.25" y="131" extent="1-16" drill="0.25"/>
-<contactref element="U8" pad="GND8"/>
-<contactref element="ANT" pad="GND2"/>
+<contactref element="IC21" pad="GND8"/>
+<contactref element="CONN15" pad="GND2"/>
 <via x="23.49" y="167.04" extent="1-16" drill="0.25"/>
 <via x="31.49" y="160.04" extent="1-16" drill="0.25"/>
-<contactref element="ANT" pad="GND1"/>
+<contactref element="CONN15" pad="GND1"/>
 <via x="57.5" y="32.5" extent="1-16" drill="0.25" diameter="0.4064"/>
-<contactref element="GPRS" pad="3"/>
-<contactref element="GPRS" pad="4"/>
-<contactref element="BLUETOOTH" pad="3"/>
-<contactref element="BLUETOOTH" pad="4"/>
+<contactref element="S4" pad="3"/>
+<contactref element="S4" pad="4"/>
+<contactref element="S5" pad="3"/>
+<contactref element="S5" pad="4"/>
 <via x="42.5" y="33.5" extent="1-16" drill="0.25"/>
 <wire x1="70" y1="16.5" x2="69.5" y2="17" width="0.4" layer="16"/>
 <wire x1="69.5" y1="17" x2="68.500003125" y2="17" width="0.25" layer="16"/>
@@ -9030,25 +9030,25 @@ design rules under a new name.</description>
 <wire x1="222.25" y1="112.25" x2="222" y2="112.5" width="0.25" layer="1"/>
 <contactref element="R27" pad="2"/>
 <contactref element="C32" pad="2"/>
-<contactref element="U$6" pad="GND"/>
+<contactref element="IC19" pad="GND"/>
 <contactref element="C33" pad="2"/>
-<contactref element="GPRS_LED" pad="K"/>
+<contactref element="LED6" pad="K"/>
 <contactref element="R41" pad="1"/>
-<contactref element="U$9" pad="11"/>
-<contactref element="U7" pad="21"/>
+<contactref element="IC4" pad="11"/>
+<contactref element="IC5" pad="21"/>
 <wire x1="58.1204" y1="29.9906" x2="59.0094" y2="29.9906" width="0.3" layer="16"/>
 <wire x1="59.0094" y1="30.8796" x2="59.0094" y2="30.0094" width="0.3" layer="16"/>
 <wire x1="59.0094" y1="30.0094" x2="59" y2="30" width="0.25" layer="16"/>
 <contactref element="R40" pad="1"/>
 <contactref element="R42" pad="1"/>
-<contactref element="U$3" pad="GND3"/>
+<contactref element="IC13" pad="GND3"/>
 <contactref element="R14" pad="2"/>
-<contactref element="U$7" pad="GND2"/>
-<contactref element="U$7" pad="GND3"/>
-<contactref element="U$7" pad="GND4"/>
-<contactref element="U$7" pad="GND5"/>
-<contactref element="U$7" pad="GND6"/>
-<contactref element="U$7" pad="GND7"/>
+<contactref element="IC20" pad="GND2"/>
+<contactref element="IC20" pad="GND3"/>
+<contactref element="IC20" pad="GND4"/>
+<contactref element="IC20" pad="GND5"/>
+<contactref element="IC20" pad="GND6"/>
+<contactref element="IC20" pad="GND7"/>
 <wire x1="68.500003125" y1="17" x2="67" y2="17" width="0.25" layer="16"/>
 <wire x1="221.75" y1="110.75" x2="221.75" y2="109.75" width="0.3" layer="1"/>
 <wire x1="222.25" y1="109.75" x2="221.75" y2="109.75" width="0.3" layer="1"/>
@@ -9060,24 +9060,24 @@ design rules under a new name.</description>
 <wire x1="221.25" y1="110.75" x2="221.25" y2="109.5" width="0.3" layer="1"/>
 <wire x1="223.25" y1="110.75" x2="223.25" y2="109.75" width="0.3" layer="1"/>
 <wire x1="223.25" y1="109.75" x2="223.35" y2="109.65" width="0.3" layer="1"/>
-<contactref element="U6" pad="2"/>
+<contactref element="IC11" pad="2"/>
 <contactref element="C34" pad="1"/>
 <contactref element="C35" pad="2"/>
-<contactref element="U$3" pad="GND5"/>
-<contactref element="U$3" pad="GND6"/>
-<contactref element="U$3" pad="GND7"/>
-<contactref element="U$3" pad="GND8"/>
-<contactref element="GND" pad="GND2"/>
-<contactref element="GND" pad="GND3"/>
-<contactref element="GND" pad="GND4"/>
-<contactref element="GND" pad="GND5"/>
-<contactref element="GND" pad="GND6"/>
+<contactref element="IC13" pad="GND5"/>
+<contactref element="IC13" pad="GND6"/>
+<contactref element="IC13" pad="GND7"/>
+<contactref element="IC13" pad="GND8"/>
+<contactref element="IC10" pad="GND2"/>
+<contactref element="IC10" pad="GND3"/>
+<contactref element="IC10" pad="GND4"/>
+<contactref element="IC10" pad="GND5"/>
+<contactref element="IC10" pad="GND6"/>
 <via x="189" y="121" extent="1-16" drill="0.25"/>
 <via x="200" y="121" extent="1-16" drill="0.25"/>
 <via x="200" y="132" extent="1-16" drill="0.25"/>
 <via x="189" y="132" extent="1-16" drill="0.25"/>
-<contactref element="U$12" pad="GND3"/>
-<contactref element="U$12" pad="GND2"/>
+<contactref element="S3" pad="GND3"/>
+<contactref element="S3" pad="GND2"/>
 <wire x1="189" y1="121" x2="190.27" y2="121" width="0.4" layer="1"/>
 <wire x1="190.27" y1="121" x2="191.96" y2="122.69" width="0.4" layer="1"/>
 <wire x1="200" y1="121" x2="198.73" y2="121" width="0.4" layer="1"/>
@@ -9098,7 +9098,7 @@ design rules under a new name.</description>
 <via x="54.99" y="156.29" extent="1-16" drill="0.25"/>
 <via x="50.49" y="156.29" extent="1-16" drill="0.25"/>
 <via x="-2.26" y="167.79" extent="1-16" drill="0.25"/>
-<contactref element="SUPERCAP" pad="-"/>
+<contactref element="C43" pad="-"/>
 <wire x1="60.75" y1="28.25" x2="60" y2="29" width="0" layer="19" extent="16-16"/>
 <wire x1="49.99" y1="148.54" x2="67.25" y2="39.95" width="0" layer="19" extent="1-1"/>
 <wire x1="184.96" y1="141.13" x2="54.99" y2="156.29" width="0" layer="19" extent="1-1"/>
@@ -9107,20 +9107,20 @@ design rules under a new name.</description>
 </signal>
 <signal name="GPRS_LED" class="2">
 <contactref element="R50" pad="2"/>
-<contactref element="GPRS_LED" pad="A"/>
+<contactref element="LED6" pad="A"/>
 <wire x1="313.23" y1="120.5" x2="310.2" y2="120.5" width="0.25" layer="16"/>
 </signal>
 <signal name="BT_LED" class="2">
 <contactref element="R41" pad="2"/>
-<contactref element="BT_LED" pad="K"/>
+<contactref element="LED5" pad="K"/>
 <wire x1="315.77" y1="123.75" x2="316.2" y2="123.75" width="0.3" layer="16"/>
 <wire x1="316.2" y1="123.75" x2="318.5" y2="121.45" width="0.25" layer="16"/>
 </signal>
 <signal name="BUZZER" class="3">
-<contactref element="BL20" pad="14"/>
-<contactref element="ML20" pad="14"/>
-<contactref element="TL20" pad="14"/>
-<contactref element="U1" pad="44"/>
+<contactref element="CONN2" pad="14"/>
+<contactref element="CONN5" pad="14"/>
+<contactref element="CONN8" pad="14"/>
+<contactref element="IC1" pad="44"/>
 <wire x1="45.62" y1="23.794" x2="49.794" y2="23.794" width="0.25" layer="1"/>
 <wire x1="49.794" y1="23.794" x2="51" y2="25" width="0.25" layer="1"/>
 <via x="51" y="25" extent="1-16" drill="0.5"/>
@@ -9946,6 +9946,7 @@ design rules under a new name.</description>
 <approved hash="3,16,7a0a08780fdb7da9"/>
 <approved hash="5,16,2594f422b020c367"/>
 <approved hash="21,19,e156e355e355e156"/>
+<approved hash="6,16,148343dcc2cf7d42"/>
 <approved hash="3,1,9c7aa642a61e9c26"/>
 <approved hash="3,16,e93004ca04c2e938"/>
 <approved hash="3,16,e9f0040a0402e9f8"/>
@@ -10477,7 +10478,7 @@ design rules under a new name.</description>
 <approved hash="5,16,1ccb1dbd23dbe23d"/>
 <approved hash="5,16,dbf5992be3d9daaa"/>
 <approved hash="5,16,88f7fdaa45a8fb8d"/>
-<approved hash="6,16,148343dcc2cf7d42"/>
+<approved hash="6,16,150043a342cd7cc3"/>
 </errors>
 </board>
 </drawing>
