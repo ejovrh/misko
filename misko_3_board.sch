@@ -20841,6 +20841,46 @@ www.irf.com&lt;p&gt;
 </deviceset>
 </devicesets>
 </library>
+<library name="adafruit">
+<packages>
+<package name="FIDUCIAL_1MM">
+<smd name="1" x="0" y="0" dx="1" dy="1" layer="1" roundness="100" stop="no" cream="no"/>
+<polygon width="0.127" layer="29">
+<vertex x="-1" y="0" curve="90"/>
+<vertex x="0" y="-1" curve="90"/>
+<vertex x="1" y="0" curve="90"/>
+<vertex x="0" y="1" curve="90"/>
+</polygon>
+<polygon width="0.127" layer="41">
+<vertex x="-1" y="0" curve="90"/>
+<vertex x="0" y="-1" curve="90"/>
+<vertex x="1" y="0" curve="90"/>
+<vertex x="0" y="1" curve="90"/>
+</polygon>
+</package>
+</packages>
+<symbols>
+<symbol name="DOT">
+<circle x="0" y="0" radius="2.54" width="0.254" layer="94"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="FIDUCIAL">
+<description>For use by pick and place machines to calibrate the vision/machine, 1mm
+&lt;p&gt;By microbuilder.eu&lt;/p&gt;</description>
+<gates>
+<gate name="G$1" symbol="DOT" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="FIDUCIAL_1MM">
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -21063,6 +21103,8 @@ www.irf.com&lt;p&gt;
 <part name="C34" library="rcl" deviceset="C-EU" device="C0805" value="0.1µF"/>
 <part name="C35" library="rcl" deviceset="C-EU" device="C0805" value="1nF"/>
 <part name="R56" library="resistor" deviceset="R-EU_" device="R0805" value="1M"/>
+<part name="U$2" library="adafruit" deviceset="FIDUCIAL" device=""/>
+<part name="U$3" library="adafruit" deviceset="FIDUCIAL" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -21311,6 +21353,8 @@ www.irf.com&lt;p&gt;
 <instance part="C34" gate="G$1" x="162.56" y="68.58"/>
 <instance part="C35" gate="G$1" x="154.94" y="50.8"/>
 <instance part="R56" gate="G$1" x="213.36" y="68.58" rot="R90"/>
+<instance part="U$2" gate="G$1" x="396.24" y="525.78"/>
+<instance part="U$3" gate="G$1" x="421.64" y="525.78"/>
 </instances>
 <busses>
 <bus name="B$1">
