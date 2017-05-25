@@ -28335,9 +28335,6 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <wire x1="195.58" y1="417.83" x2="205.74" y2="417.83" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<wire x1="284.48" y1="810.24" x2="284.48" y2="810.26" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <pinref part="CONN12" gate="G$1" pin="6"/>
 <wire x1="417.83" y1="610.87" x2="424.18" y2="610.87" width="0.1524" layer="91"/>
 <label x="424.18" y="610.87" size="1.778" layer="95" ratio="9"/>
