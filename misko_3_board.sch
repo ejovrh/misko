@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="1.27" unitdist="mm" unit="mm" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -26870,16 +26870,16 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <library name="1.27mm 10pin header">
 <packages>
 <package name="TH">
-<pad name="2" x="-2.54" y="0.63" drill="0.4"/>
-<pad name="4" x="-1.27" y="0.63" drill="0.4"/>
-<pad name="6" x="0" y="0.63" drill="0.4"/>
-<pad name="8" x="1.27" y="0.63" drill="0.4"/>
-<pad name="10" x="2.54" y="0.63" drill="0.4"/>
-<pad name="9" x="2.54" y="-0.64" drill="0.4"/>
-<pad name="7" x="1.27" y="-0.64" drill="0.4"/>
-<pad name="5" x="0" y="-0.64" drill="0.4"/>
-<pad name="3" x="-1.27" y="-0.64" drill="0.4"/>
-<pad name="1" x="-2.54" y="-0.64" drill="0.4"/>
+<pad name="2" x="-2.54" y="0.63" drill="0.5" diameter="0.9"/>
+<pad name="4" x="-1.27" y="0.63" drill="0.5" diameter="0.9"/>
+<pad name="6" x="0" y="0.63" drill="0.5" diameter="0.9"/>
+<pad name="8" x="1.27" y="0.63" drill="0.5" diameter="0.9"/>
+<pad name="10" x="2.54" y="0.63" drill="0.5" diameter="0.9"/>
+<pad name="9" x="2.54" y="-0.64" drill="0.5" diameter="0.9"/>
+<pad name="7" x="1.27" y="-0.64" drill="0.5" diameter="0.9"/>
+<pad name="5" x="0" y="-0.64" drill="0.5" diameter="0.9"/>
+<pad name="3" x="-1.27" y="-0.64" drill="0.5" diameter="0.9"/>
+<pad name="1" x="-2.54" y="-0.64" drill="0.5" diameter="0.9"/>
 <wire x1="-5.5" y1="1.6" x2="5.5" y2="1.6" width="0.127" layer="21"/>
 <wire x1="5.5" y1="-1.6" x2="-5.5" y2="-1.6" width="0.127" layer="21"/>
 <wire x1="5.5" y1="1.6" x2="5.5" y2="-1.6" width="0.127" layer="21"/>
@@ -26932,76 +26932,6 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <connect gate="G$1" pin="7" pad="7"/>
 <connect gate="G$1" pin="8" pad="8"/>
 <connect gate="G$1" pin="9" pad="9"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
-<library name="JTAG 1.27mm 10pin header">
-<packages>
-<package name="TH-JTAG">
-<pad name="GND1" x="-2.54" y="0.63" drill="0.4"/>
-<pad name="VCC" x="-1.27" y="0.63" drill="0.4"/>
-<pad name="RESET" x="0" y="0.63" drill="0.4"/>
-<pad name="P$4" x="1.27" y="0.63" drill="0.4"/>
-<pad name="GND2" x="2.54" y="0.63" drill="0.4"/>
-<pad name="TDI" x="2.54" y="-0.64" drill="0.4"/>
-<pad name="P$7" x="1.27" y="-0.64" drill="0.4"/>
-<pad name="TMS" x="0" y="-0.64" drill="0.4"/>
-<pad name="TDO" x="-1.27" y="-0.64" drill="0.4"/>
-<pad name="TCK" x="-2.54" y="-0.64" drill="0.4"/>
-<wire x1="-5.5" y1="1.6" x2="5.5" y2="1.6" width="0.127" layer="21"/>
-<wire x1="5.5" y1="-1.6" x2="-5.5" y2="-1.6" width="0.127" layer="21"/>
-<wire x1="5.5" y1="1.6" x2="5.5" y2="-1.6" width="0.127" layer="21"/>
-<wire x1="-5.5" y1="1.6" x2="-5.5" y2="-1.6" width="0.127" layer="21"/>
-<polygon width="0.127" layer="21">
-<vertex x="-2" y="2"/>
-<vertex x="2" y="2"/>
-<vertex x="2" y="1.6"/>
-<vertex x="-2" y="1.6"/>
-</polygon>
-<text x="-4" y="3" size="1.27" layer="21">&gt;NAME</text>
-<text x="-4" y="-4" size="1.27" layer="21">&gt;VALUE</text>
-</package>
-</packages>
-<symbols>
-<symbol name="10-PIN-JTAG">
-<pin name="TCK" x="10.16" y="22.86" length="middle" rot="R180"/>
-<pin name="GND1" x="10.16" y="-17.78" length="middle" direction="pwr" rot="R180"/>
-<pin name="TDO" x="10.16" y="12.7" length="middle" rot="R180"/>
-<pin name="VCC" x="10.16" y="-12.7" length="middle" rot="R180"/>
-<pin name="TMS" x="10.16" y="7.62" length="middle" rot="R180"/>
-<pin name="RESET" x="10.16" y="2.54" length="middle" rot="R180"/>
-<pin name="TDI" x="10.16" y="17.78" length="middle" rot="R180"/>
-<pin name="GND2" x="10.16" y="-22.86" length="middle" direction="pwr" rot="R180"/>
-<wire x1="5.08" y1="27.94" x2="-5.08" y2="27.94" width="0.254" layer="94"/>
-<wire x1="-5.08" y1="27.94" x2="-5.08" y2="-27.94" width="0.254" layer="94"/>
-<wire x1="-5.08" y1="-27.94" x2="5.08" y2="-27.94" width="0.254" layer="94"/>
-<wire x1="5.08" y1="-27.94" x2="5.08" y2="27.94" width="0.254" layer="94"/>
-<text x="-5.08" y="30.48" size="1.778" layer="94">&gt;NAME</text>
-<text x="-5.08" y="-30.48" size="1.778" layer="94">&gt;VALUE</text>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="JTAG-1.27-10-PIN-HEADER">
-<gates>
-<gate name="G$1" symbol="10-PIN-JTAG" x="20.32" y="5.08"/>
-</gates>
-<devices>
-<device name="" package="TH-JTAG">
-<connects>
-<connect gate="G$1" pin="GND1" pad="GND1"/>
-<connect gate="G$1" pin="GND2" pad="GND2"/>
-<connect gate="G$1" pin="RESET" pad="RESET"/>
-<connect gate="G$1" pin="TCK" pad="TCK"/>
-<connect gate="G$1" pin="TDI" pad="TDI"/>
-<connect gate="G$1" pin="TDO" pad="TDO"/>
-<connect gate="G$1" pin="TMS" pad="TMS"/>
-<connect gate="G$1" pin="VCC" pad="VCC"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -27727,7 +27657,7 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <part name="R22" library="rcl" deviceset="R-EU_" device="R0805" value="47k"/>
 <part name="R54" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
 <part name="C30" library="resistor" deviceset="C-EU" device="C0805" value="0.47µF"/>
-<part name="CONN10" library="JTAG 1.27mm 10pin header" deviceset="JTAG-1.27-10-PIN-HEADER" device="" value="JTAG"/>
+<part name="CONN10" library="1.27mm 10pin header" deviceset="1.27-10-PIN-HEADER" device="" value="JTAG"/>
 <part name="CONN12" library="1.27mm 10pin header" deviceset="1.27-10-PIN-HEADER" device="" value="board"/>
 <part name="CONN13" library="1.27mm 10pin header" deviceset="1.27-10-PIN-HEADER" device="" value="lid"/>
 <part name="S5" library="switch-omron" deviceset="10-XX" device="" value="bt"/>
@@ -28405,10 +28335,7 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <wire x1="195.58" y1="417.83" x2="205.74" y2="417.83" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="CONN10" gate="G$1" pin="VCC"/>
-<wire x1="278.13" y1="810.24" x2="284.48" y2="810.26" width="0.1524" layer="91"/>
 <wire x1="284.48" y1="810.24" x2="284.48" y2="810.26" width="0.1524" layer="91"/>
-<label x="284.48" y="810.26" size="1.778" layer="95" ratio="9"/>
 </segment>
 <segment>
 <pinref part="CONN12" gate="G$1" pin="6"/>
@@ -28450,6 +28377,12 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <pinref part="R56" gate="G$1" pin="2"/>
 <wire x1="213.36" y1="73.66" x2="213.36" y2="76.2" width="0.1524" layer="91"/>
 <label x="213.36" y="76.2" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="CONN10" gate="G$1" pin="4"/>
+<wire x1="278.13" y1="830.56" x2="284.48" y2="830.58" width="0.1524" layer="91"/>
+<wire x1="284.48" y1="830.56" x2="284.48" y2="830.58" width="0.1524" layer="91"/>
+<label x="284.48" y="830.58" size="1.778" layer="95" ratio="9"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -28665,13 +28598,7 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <label x="185.42" y="-223.52" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="CONN10" gate="G$1" pin="GND1"/>
-<wire x1="278.13" y1="805.16" x2="284.48" y2="805.18" width="0.1524" layer="91"/>
-<wire x1="284.48" y1="805.16" x2="284.48" y2="805.18" width="0.1524" layer="91"/>
-<label x="284.48" y="805.18" size="1.778" layer="95" ratio="9"/>
-</segment>
-<segment>
-<pinref part="CONN10" gate="G$1" pin="GND2"/>
+<pinref part="CONN10" gate="G$1" pin="10"/>
 <wire x1="278.13" y1="800.08" x2="284.48" y2="800.1" width="0.1524" layer="91"/>
 <wire x1="284.48" y1="800.08" x2="284.48" y2="800.1" width="0.1524" layer="91"/>
 <label x="284.48" y="800.1" size="1.778" layer="95" ratio="9"/>
@@ -29225,6 +29152,12 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <junction x="485.14" y="467.36"/>
 <pinref part="C47" gate="G$1" pin="-"/>
 </segment>
+<segment>
+<pinref part="CONN10" gate="G$1" pin="2"/>
+<wire x1="278.13" y1="840.72" x2="284.48" y2="840.74" width="0.1524" layer="91"/>
+<wire x1="284.48" y1="840.72" x2="284.48" y2="840.74" width="0.1524" layer="91"/>
+<label x="284.48" y="840.74" size="1.778" layer="95" ratio="9"/>
+</segment>
 </net>
 <net name="5V0" class="1">
 <segment>
@@ -29495,10 +29428,10 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <label x="535.94" y="782.32" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="CONN10" gate="G$1" pin="TDI"/>
-<wire x1="278.13" y1="840.72" x2="284.48" y2="840.74" width="0.1524" layer="91"/>
-<wire x1="284.48" y1="840.72" x2="284.48" y2="840.74" width="0.1524" layer="91"/>
-<label x="284.48" y="840.74" size="1.778" layer="95" ratio="9"/>
+<pinref part="CONN10" gate="G$1" pin="9"/>
+<wire x1="278.13" y1="805.16" x2="284.48" y2="805.18" width="0.1524" layer="91"/>
+<wire x1="284.48" y1="805.16" x2="284.48" y2="805.18" width="0.1524" layer="91"/>
+<label x="284.48" y="805.18" size="1.778" layer="95" ratio="9"/>
 </segment>
 </net>
 <net name="JTAG_TDO_PIN" class="3">
@@ -29523,7 +29456,7 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <label x="535.94" y="779.78" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="CONN10" gate="G$1" pin="TDO"/>
+<pinref part="CONN10" gate="G$1" pin="3"/>
 <wire x1="278.13" y1="835.64" x2="284.48" y2="835.66" width="0.1524" layer="91"/>
 <wire x1="284.48" y1="835.64" x2="284.48" y2="835.66" width="0.1524" layer="91"/>
 <label x="284.48" y="835.66" size="1.778" layer="95" ratio="9"/>
@@ -29551,10 +29484,10 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <label x="535.94" y="777.24" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="CONN10" gate="G$1" pin="TMS"/>
-<wire x1="278.13" y1="830.56" x2="284.48" y2="830.58" width="0.1524" layer="91"/>
-<wire x1="284.48" y1="830.56" x2="284.48" y2="830.58" width="0.1524" layer="91"/>
-<label x="284.48" y="830.58" size="1.778" layer="95" ratio="9"/>
+<pinref part="CONN10" gate="G$1" pin="5"/>
+<wire x1="278.13" y1="825.48" x2="284.48" y2="825.5" width="0.1524" layer="91"/>
+<wire x1="284.48" y1="825.48" x2="284.48" y2="825.5" width="0.1524" layer="91"/>
+<label x="284.48" y="825.5" size="1.778" layer="95" ratio="9"/>
 </segment>
 </net>
 <net name="JTAG_TCL_PIN" class="3">
@@ -29579,7 +29512,7 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <label x="535.94" y="774.7" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="CONN10" gate="G$1" pin="TCK"/>
+<pinref part="CONN10" gate="G$1" pin="1"/>
 <wire x1="278.13" y1="845.8" x2="284.48" y2="845.82" width="0.1524" layer="91"/>
 <wire x1="284.48" y1="845.8" x2="284.48" y2="845.82" width="0.1524" layer="91"/>
 <label x="284.48" y="845.82" size="1.778" layer="95" ratio="9"/>
@@ -30772,10 +30705,10 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <label x="535.94" y="726.44" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="CONN10" gate="G$1" pin="RESET"/>
-<wire x1="278.13" y1="825.48" x2="284.48" y2="825.5" width="0.1524" layer="91"/>
-<wire x1="284.48" y1="825.48" x2="284.48" y2="825.5" width="0.1524" layer="91"/>
-<label x="284.48" y="825.5" size="1.778" layer="95" ratio="9"/>
+<pinref part="CONN10" gate="G$1" pin="6"/>
+<wire x1="278.13" y1="820.4" x2="284.48" y2="820.4" width="0.1524" layer="91"/>
+<wire x1="284.48" y1="820.4" x2="284.48" y2="820.42" width="0.1524" layer="91"/>
+<label x="284.48" y="820.42" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="XTAL2" class="2">
