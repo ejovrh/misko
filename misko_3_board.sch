@@ -23325,32 +23325,33 @@ JST PH 2-pin thru-home side entry</description>
 <library name="LTC4425 Supercap Charger">
 <description>Highly Efficient 3A Synchronous Buck Regulator</description>
 <packages>
-<package name="DFN12">
+<package name="MSOP">
 <description>DFN 12 LEAD DUAL FLAT NO-LEAD PLASTIC PACKAGE</description>
-<smd name="PFI" x="0.25" y="1.4" dx="0.6" dy="0.25" layer="1" rot="R90"/>
-<smd name="!PFO!" x="0.75" y="1.4" dx="0.6" dy="0.25" layer="1" rot="R90"/>
-<smd name="PFI_RET" x="1.25" y="1.4" dx="0.6" dy="0.25" layer="1" rot="R90"/>
-<smd name="VMID" x="-0.25" y="1.4" dx="0.6" dy="0.25" layer="1" rot="R90"/>
-<smd name="VCC1" x="-0.75" y="1.4" dx="0.6" dy="0.25" layer="1" rot="R90"/>
-<smd name="VCC2" x="-1.25" y="1.4" dx="0.6" dy="0.25" layer="1" rot="R90"/>
-<smd name="VOUT1" x="-1.25" y="-1.4" dx="0.6" dy="0.25" layer="1" rot="R90"/>
-<smd name="VOUT2" x="-0.75" y="-1.4" dx="0.6" dy="0.25" layer="1" rot="R90"/>
-<smd name="PROG" x="-0.25" y="-1.4" dx="0.6" dy="0.25" layer="1" rot="R90"/>
-<smd name="SEL" x="0.25" y="-1.4" dx="0.6" dy="0.25" layer="1" rot="R90"/>
-<smd name="FB" x="0.75" y="-1.4" dx="0.6" dy="0.25" layer="1" rot="R90"/>
-<smd name="EN" x="1.25" y="-1.4" dx="0.6" dy="0.25" layer="1" rot="R90"/>
-<smd name="GND" x="-1.27" y="0" dx="5.84" dy="1.7" layer="1"/>
-<wire x1="-2" y1="1.5" x2="2" y2="1.5" width="0.15" layer="21"/>
-<wire x1="2" y1="1.5" x2="2" y2="-1.5" width="0.15" layer="21"/>
-<wire x1="2" y1="-1.5" x2="-2" y2="-1.5" width="0.15" layer="21"/>
-<wire x1="-2" y1="-1.5" x2="-2" y2="1.5" width="0.15" layer="21"/>
-<rectangle x1="-2" y1="-1.5" x2="-1" y2="-0.5" layer="21"/>
-<text x="-2.25" y="-1.25" size="0.5" layer="25" rot="R90">&gt;NAME</text>
 <text x="2.75" y="-1.35" size="0.5" layer="27" rot="R90">&gt;VALUE</text>
 <wire x1="-2" y1="1.65" x2="2" y2="1.65" width="0.15" layer="39"/>
 <wire x1="2" y1="1.65" x2="2" y2="-1.65" width="0.15" layer="39"/>
 <wire x1="2" y1="-1.65" x2="-2" y2="-1.65" width="0.15" layer="39"/>
 <wire x1="-2" y1="-1.65" x2="-2" y2="1.65" width="0.15" layer="39"/>
+<smd name="VOUT1" x="-1.6" y="-2.15" dx="0.4" dy="0.9" layer="1" rot="R180"/>
+<smd name="VOUT2" x="-0.95" y="-2.15" dx="0.4" dy="0.9" layer="1" rot="R180"/>
+<smd name="PROG" x="-0.3" y="-2.15" dx="0.4" dy="0.9" layer="1" rot="R180"/>
+<smd name="SEL" x="0.35" y="-2.15" dx="0.4" dy="0.9" layer="1" rot="R180"/>
+<smd name="FB" x="1" y="-2.15" dx="0.4" dy="0.9" layer="1" rot="R180"/>
+<smd name="EN" x="1.65" y="-2.15" dx="0.4" dy="0.9" layer="1" rot="R180"/>
+<smd name="PFI_RET" x="1.66" y="2.05" dx="0.4" dy="0.9" layer="1"/>
+<smd name="!PFO!" x="1.01" y="2.05" dx="0.4" dy="0.9" layer="1"/>
+<smd name="PFI" x="0.36" y="2.05" dx="0.4" dy="0.9" layer="1"/>
+<smd name="VMID" x="-0.29" y="2.05" dx="0.4" dy="0.9" layer="1"/>
+<smd name="VIN1" x="-0.94" y="2.05" dx="0.4" dy="0.9" layer="1"/>
+<smd name="VIN2" x="-1.59" y="2.05" dx="0.4" dy="0.9" layer="1"/>
+<smd name="GND" x="0.05" y="-0.05" dx="1.6" dy="2.9" layer="1" rot="R90"/>
+<wire x1="-1.9" y1="1.7" x2="2" y2="1.7" width="0.127" layer="21"/>
+<wire x1="2" y1="1.7" x2="2" y2="-1.8" width="0.127" layer="21"/>
+<wire x1="2" y1="-1.8" x2="-1.2" y2="-1.8" width="0.127" layer="21"/>
+<wire x1="-1.2" y1="-1.8" x2="-1.9" y2="-1.1" width="0.127" layer="21"/>
+<wire x1="-1.9" y1="-1.1" x2="-1.9" y2="1.7" width="0.127" layer="21"/>
+<text x="-2.5" y="-3.3" size="1.27" layer="25" rot="R90">&gt;NAME</text>
+<text x="3.9" y="-3.9" size="1.27" layer="27" rot="R90">&gt;VALUE</text>
 </package>
 </packages>
 <symbols>
@@ -23387,7 +23388,7 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <gate name="G$1" symbol="LTC4425" x="0" y="0"/>
 </gates>
 <devices>
-<device name="" package="DFN12">
+<device name="" package="MSOP">
 <connects>
 <connect gate="G$1" pin="!PFO!" pad="!PFO!"/>
 <connect gate="G$1" pin="EN" pad="EN"/>
@@ -23397,8 +23398,8 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <connect gate="G$1" pin="PFI_RET" pad="PFI_RET"/>
 <connect gate="G$1" pin="PROG" pad="PROG"/>
 <connect gate="G$1" pin="SEL" pad="SEL"/>
-<connect gate="G$1" pin="VCC1" pad="VCC1"/>
-<connect gate="G$1" pin="VCC2" pad="VCC2"/>
+<connect gate="G$1" pin="VCC1" pad="VIN1"/>
+<connect gate="G$1" pin="VCC2" pad="VIN2"/>
 <connect gate="G$1" pin="VMID" pad="VMID"/>
 <connect gate="G$1" pin="VOUT1" pad="VOUT1"/>
 <connect gate="G$1" pin="VOUT2" pad="VOUT2"/>
