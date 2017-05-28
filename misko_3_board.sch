@@ -27071,8 +27071,8 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 &lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
 <packages>
 <package name="F/UCW03LF">
-<pad name="GND" x="0" y="0" drill="0.6" shape="square"/>
-<pad name="SIGNAL" x="7.6" y="0" drill="0.6"/>
+<pad name="GND" x="0" y="0" drill="0.9" shape="square"/>
+<pad name="SIGNAL" x="7.6" y="0" drill="0.9"/>
 <circle x="3.8" y="0" radius="8.2" width="0.127" layer="21"/>
 <text x="0" y="2.54" size="1.27" layer="21">&gt;NAME</text>
 <text x="0" y="-3.81" size="1.27" layer="21">&gt;VALUE</text>
