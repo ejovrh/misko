@@ -27774,7 +27774,7 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <instance part="R35" gate="G$1" x="88.9" y="576.58" rot="R270"/>
 <instance part="S2" gate="G$1" x="40.64" y="467.36" rot="R90"/>
 <instance part="C14" gate="G$1" x="182.88" y="596.9" rot="R180"/>
-<instance part="CONN16" gate="G$1" x="320.04" y="510.54"/>
+<instance part="CONN16" gate="G$1" x="314.96" y="513.08" rot="R180"/>
 <instance part="IC10" gate="G$1" x="48.26" y="38.1"/>
 <instance part="R36" gate="G$1" x="35.56" y="68.58" rot="R90"/>
 <instance part="C1" gate="G$1" x="24.13" y="43.18"/>
@@ -28711,13 +28711,13 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <wire x1="317.5" y1="500.38" x2="317.5" y2="505.46" width="0.1524" layer="91"/>
 <pinref part="R1" gate="G$1" pin="2"/>
 <wire x1="309.88" y1="505.46" x2="317.5" y2="505.46" width="0.1524" layer="91"/>
-<pinref part="CONN16" gate="G$1" pin="2"/>
-<wire x1="317.5" y1="510.54" x2="317.5" y2="505.46" width="0.1524" layer="91"/>
-<junction x="317.5" y="505.46"/>
-<wire x1="317.5" y1="510.54" x2="304.8" y2="510.54" width="0.1524" layer="91"/>
-<junction x="317.5" y="510.54"/>
-<label x="304.8" y="510.54" size="1.778" layer="95"/>
 <label x="317.5" y="500.38" size="1.778" layer="95" ratio="9"/>
+<pinref part="CONN16" gate="G$1" pin="1"/>
+<wire x1="317.5" y1="505.46" x2="317.5" y2="510.54" width="0.1524" layer="91"/>
+<junction x="317.5" y="505.46"/>
+<wire x1="317.5" y1="510.54" x2="307.34" y2="510.54" width="0.1524" layer="91"/>
+<junction x="317.5" y="510.54"/>
+<label x="307.34" y="510.54" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="R33" gate="G$1" pin="2"/>
@@ -30845,11 +30845,11 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <pinref part="C13" gate="G$1" pin="1"/>
 <wire x1="317.5" y1="528.32" x2="317.5" y2="520.7" width="0.1524" layer="91"/>
 <junction x="327.66" y="520.7"/>
-<pinref part="CONN16" gate="G$1" pin="1"/>
+<pinref part="CONN16" gate="G$1" pin="2"/>
 <wire x1="317.5" y1="513.08" x2="317.5" y2="520.7" width="0.1524" layer="91"/>
-<wire x1="317.5" y1="513.08" x2="304.8" y2="513.08" width="0.1524" layer="91"/>
+<wire x1="317.5" y1="513.08" x2="307.34" y2="513.08" width="0.1524" layer="91"/>
 <junction x="317.5" y="513.08"/>
-<label x="304.8" y="513.08" size="1.778" layer="95"/>
+<label x="307.34" y="513.08" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="VGPS" class="1">
