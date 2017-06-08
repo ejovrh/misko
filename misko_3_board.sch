@@ -27552,8 +27552,8 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <part name="R33" library="rcl" deviceset="R-EU_" device="R0805" value="150k"/>
 <part name="R34" library="rcl" deviceset="R-EU_" device="R0805" value="150k"/>
 <part name="GND1" library="supply1" deviceset="GND" device=""/>
-<part name="R25" library="rcl" deviceset="R-EU_" device="R0805" value="200k"/>
-<part name="R35" library="rcl" deviceset="R-EU_" device="R0805" value="200k"/>
+<part name="R25" library="rcl" deviceset="R-EU_" device="R0805" value="150k"/>
+<part name="R35" library="rcl" deviceset="R-EU_" device="R0805" value="150k"/>
 <part name="S2" library="smd-special" deviceset="SWS001" device="" value="POWER_SWITCH"/>
 <part name="C14" library="resistor" deviceset="C-EU" device="C0805" value="0.1µF"/>
 <part name="CONN16" library="SIM800C" deviceset="JST_2PIN" device="-THM-RA" value="LiPo Battery"/>
@@ -27564,8 +27564,8 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <part name="C16" library="rcl" deviceset="C-EU" device="C0805" value="18pF"/>
 <part name="IC13" library="EN42-I Bluetooth Module" deviceset="RN-42" device=""/>
 <part name="IC12" library="LTC4425 Supercap Charger" deviceset="LTC4425" device=""/>
-<part name="R37" library="resistor" deviceset="R-EU_" device="R0805" value="100k"/>
-<part name="R38" library="resistor" deviceset="R-EU_" device="R0805" value="100k"/>
+<part name="R37" library="resistor" deviceset="R-EU_" device="R0805" value="150k"/>
+<part name="R38" library="resistor" deviceset="R-EU_" device="R0805" value="150k"/>
 <part name="R39" library="resistor" deviceset="R-EU_" device="R0805" value="1k"/>
 <part name="R40" library="resistor" deviceset="R-EU_" device="R0805" value="10k"/>
 <part name="C19" library="rcl" deviceset="C-EU" device="C0805" value="100µF"/>
@@ -27650,7 +27650,7 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <part name="TP1" library="testpad" deviceset="TP" device="PAD1-17Y" value="GND"/>
 <part name="CONN14" library="MX500075-1517 USB Mini-B straight socket" deviceset="MX500075-1517USB_MINI-B" device=""/>
 <part name="L3" library="DJNR6045-100S Power Inductor" deviceset="DJNR6045-100-S" device=""/>
-<part name="C10" library="resistor" deviceset="C-EU" device="C0805" value="100nF"/>
+<part name="C10" library="resistor" deviceset="C-EU" device="C0805" value="0.1µF"/>
 <part name="S3" library="micro joystick" deviceset="MICROJOYSTICK" device=""/>
 <part name="TP11" library="testpad" deviceset="PTR1" device="TP14R" value="VGPS"/>
 <part name="IC18" library="con-hirose" deviceset="FH12-30S-0.5S" device="H"/>
@@ -27932,12 +27932,12 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <instance part="R56" gate="G$1" x="213.36" y="68.58" rot="R90"/>
 <instance part="FI1" gate="G$1" x="396.24" y="525.78"/>
 <instance part="FI2" gate="G$1" x="421.64" y="525.78"/>
-<instance part="C49" gate="G$1" x="447.04" y="472.44"/>
-<instance part="C44" gate="G$1" x="459.74" y="472.44"/>
-<instance part="C45" gate="G$1" x="472.44" y="472.44"/>
-<instance part="C46" gate="G$1" x="485.14" y="472.44"/>
-<instance part="C47" gate="G$1" x="497.84" y="472.44"/>
-<instance part="D2" gate="G$1" x="436.88" y="474.98" rot="R270"/>
+<instance part="C49" gate="G$1" x="274.32" y="472.44"/>
+<instance part="C44" gate="G$1" x="287.02" y="472.44"/>
+<instance part="C45" gate="G$1" x="299.72" y="472.44"/>
+<instance part="C46" gate="G$1" x="312.42" y="472.44"/>
+<instance part="C47" gate="G$1" x="325.12" y="472.44"/>
+<instance part="D2" gate="G$1" x="264.16" y="474.98" rot="R270"/>
 </instances>
 <busses>
 <bus name="B$1">
@@ -29134,20 +29134,20 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <label x="264.16" y="81.28" size="1.778" layer="95"/>
 </segment>
 <segment>
-<wire x1="447.04" y1="467.36" x2="459.74" y2="467.36" width="0.1524" layer="91"/>
-<wire x1="459.74" y1="467.36" x2="472.44" y2="467.36" width="0.1524" layer="91"/>
-<wire x1="472.44" y1="467.36" x2="485.14" y2="467.36" width="0.1524" layer="91"/>
-<wire x1="485.14" y1="467.36" x2="497.84" y2="467.36" width="0.1524" layer="91"/>
-<wire x1="447.04" y1="467.36" x2="424.18" y2="467.36" width="0.1524" layer="91"/>
-<label x="424.18" y="467.36" size="1.778" layer="95"/>
+<wire x1="274.32" y1="467.36" x2="287.02" y2="467.36" width="0.1524" layer="91"/>
+<wire x1="287.02" y1="467.36" x2="299.72" y2="467.36" width="0.1524" layer="91"/>
+<wire x1="299.72" y1="467.36" x2="312.42" y2="467.36" width="0.1524" layer="91"/>
+<wire x1="312.42" y1="467.36" x2="325.12" y2="467.36" width="0.1524" layer="91"/>
+<wire x1="274.32" y1="467.36" x2="251.46" y2="467.36" width="0.1524" layer="91"/>
+<label x="251.46" y="467.36" size="1.778" layer="95"/>
 <pinref part="C49" gate="G$1" pin="-"/>
-<junction x="447.04" y="467.36"/>
+<junction x="274.32" y="467.36"/>
 <pinref part="C44" gate="G$1" pin="-"/>
-<junction x="459.74" y="467.36"/>
+<junction x="287.02" y="467.36"/>
 <pinref part="C45" gate="G$1" pin="-"/>
-<junction x="472.44" y="467.36"/>
+<junction x="299.72" y="467.36"/>
 <pinref part="C46" gate="G$1" pin="-"/>
-<junction x="485.14" y="467.36"/>
+<junction x="312.42" y="467.36"/>
 <pinref part="C47" gate="G$1" pin="-"/>
 </segment>
 <segment>
@@ -29223,8 +29223,8 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 </segment>
 <segment>
 <pinref part="D2" gate="G$1" pin="C"/>
-<wire x1="434.34" y1="474.98" x2="424.18" y2="474.98" width="0.1524" layer="91"/>
-<label x="424.18" y="474.98" size="1.778" layer="95"/>
+<wire x1="261.62" y1="474.98" x2="251.46" y2="474.98" width="0.1524" layer="91"/>
+<label x="251.46" y="474.98" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="MENU_LEFT_BUTTON_PIN" class="2">
@@ -31732,21 +31732,21 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 </net>
 <net name="N$6" class="0">
 <segment>
-<wire x1="447.04" y1="474.98" x2="459.74" y2="474.98" width="0.1524" layer="91"/>
+<wire x1="274.32" y1="474.98" x2="287.02" y2="474.98" width="0.1524" layer="91"/>
 <pinref part="C49" gate="G$1" pin="+"/>
 <pinref part="C44" gate="G$1" pin="+"/>
-<wire x1="459.74" y1="474.98" x2="472.44" y2="474.98" width="0.1524" layer="91"/>
-<junction x="459.74" y="474.98"/>
+<wire x1="287.02" y1="474.98" x2="299.72" y2="474.98" width="0.1524" layer="91"/>
+<junction x="287.02" y="474.98"/>
 <pinref part="C45" gate="G$1" pin="+"/>
-<wire x1="472.44" y1="474.98" x2="485.14" y2="474.98" width="0.1524" layer="91"/>
-<junction x="472.44" y="474.98"/>
+<wire x1="299.72" y1="474.98" x2="312.42" y2="474.98" width="0.1524" layer="91"/>
+<junction x="299.72" y="474.98"/>
 <pinref part="C46" gate="G$1" pin="+"/>
-<wire x1="485.14" y1="474.98" x2="497.84" y2="474.98" width="0.1524" layer="91"/>
-<junction x="485.14" y="474.98"/>
+<wire x1="312.42" y1="474.98" x2="325.12" y2="474.98" width="0.1524" layer="91"/>
+<junction x="312.42" y="474.98"/>
 <pinref part="C47" gate="G$1" pin="+"/>
 <pinref part="D2" gate="G$1" pin="A"/>
-<wire x1="439.42" y1="474.98" x2="447.04" y2="474.98" width="0.1524" layer="91"/>
-<junction x="447.04" y="474.98"/>
+<wire x1="266.7" y1="474.98" x2="274.32" y2="474.98" width="0.1524" layer="91"/>
+<junction x="274.32" y="474.98"/>
 </segment>
 </net>
 </nets>

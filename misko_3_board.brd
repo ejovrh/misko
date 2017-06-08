@@ -5804,7 +5804,7 @@ design rules under a new name.</description>
 <attribute name="NAME" x="60" y="20" size="0.75" layer="26" rot="MR0"/>
 <attribute name="VALUE" x="58.365" y="24.54" size="1.27" layer="28" rot="MR180"/>
 </element>
-<element name="R25" library="rcl" package="R0805" value="200k" x="23" y="32" smashed="yes" rot="R270">
+<element name="R25" library="rcl" package="R0805" value="150k" x="23" y="32" smashed="yes" rot="R270">
 <attribute name="NAME" x="23.5" y="34" size="0.75" layer="25" rot="R90"/>
 <attribute name="VALUE" x="20.46" y="32.635" size="1.27" layer="27" rot="R270"/>
 </element>
@@ -5848,7 +5848,7 @@ design rules under a new name.</description>
 <attribute name="NAME" x="67.25" y="34" size="0.75" layer="26" rot="MR90"/>
 <attribute name="VALUE" x="63.46" y="34.365" size="1.27" layer="28" rot="MR90"/>
 </element>
-<element name="R35" library="rcl" package="R0805" value="200k" x="21" y="32" smashed="yes" rot="R90">
+<element name="R35" library="rcl" package="R0805" value="150k" x="21" y="32" smashed="yes" rot="R90">
 <attribute name="NAME" x="21.5" y="34" size="0.75" layer="25" rot="R90"/>
 <attribute name="VALUE" x="23.54" y="31.365" size="1.27" layer="27" rot="R90"/>
 </element>
@@ -5856,11 +5856,11 @@ design rules under a new name.</description>
 <attribute name="NAME" x="21.865" y="63.73" size="0.75" layer="26" rot="MR180"/>
 <attribute name="VALUE" x="21.865" y="67.54" size="1.27" layer="28" rot="MR180"/>
 </element>
-<element name="R37" library="resistor" package="R0805" value="100k" x="4.99" y="118.04" smashed="yes" rot="MR90">
+<element name="R37" library="resistor" package="R0805" value="150k" x="4.99" y="118.04" smashed="yes" rot="MR90">
 <attribute name="NAME" x="6.25" y="117" size="0.75" layer="26" rot="MR90"/>
 <attribute name="VALUE" x="2.45" y="117.405" size="1.27" layer="28" rot="MR90"/>
 </element>
-<element name="R38" library="resistor" package="R0805" value="100k" x="4.99" y="122.04" smashed="yes" rot="MR90">
+<element name="R38" library="resistor" package="R0805" value="150k" x="4.99" y="122.04" smashed="yes" rot="MR90">
 <attribute name="NAME" x="6.25" y="121.25" size="0.75" layer="26" rot="MR90"/>
 <attribute name="VALUE" x="2.45" y="121.405" size="1.27" layer="28" rot="MR90"/>
 </element>
@@ -6155,7 +6155,7 @@ design rules under a new name.</description>
 <element name="L3" library="DJNR6045-100S Power Inductor" package="DJNR6045-100-S" value="DJNR6045-100-S" x="67" y="51.5" smashed="yes" rot="MR0">
 <attribute name="NAME" x="67.5" y="51" size="0.75" layer="22" rot="MR0"/>
 </element>
-<element name="C10" library="resistor" package="C0805" value="100nF" x="64.5" y="46.5" smashed="yes" rot="MR90">
+<element name="C10" library="resistor" package="C0805" value="0.1µF" x="64.5" y="46.5" smashed="yes" rot="MR90">
 <attribute name="NAME" x="65.77" y="45.73" size="0.75" layer="26" rot="MR90"/>
 <attribute name="VALUE" x="61.96" y="45.23" size="1.27" layer="28" rot="MR90"/>
 </element>
