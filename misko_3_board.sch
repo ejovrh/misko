@@ -27568,8 +27568,6 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <part name="R38" library="resistor" deviceset="R-EU_" device="R0805" value="150k"/>
 <part name="R39" library="resistor" deviceset="R-EU_" device="R0805" value="1k"/>
 <part name="R40" library="resistor" deviceset="R-EU_" device="R0805" value="10k"/>
-<part name="C19" library="rcl" deviceset="C-EU" device="C0805" value="100µF"/>
-<part name="C20" library="rcl" deviceset="C-EU" device="C0805" value="100µF"/>
 <part name="C21" library="rcl" deviceset="C-EU" device="C0805" value="0.1µF"/>
 <part name="IC16" library="FM25W256 FERAM" deviceset="FM25W256" device="-SOIC"/>
 <part name="R14" library="rcl" deviceset="R-EU_" device="R0805" value="100k"/>
@@ -27682,6 +27680,8 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <part name="C46" library="rcl" deviceset="CPOL-EU" device="E22-10AXIAL" value="1000µF"/>
 <part name="C47" library="rcl" deviceset="CPOL-EU" device="E22-10AXIAL" value="1000µF"/>
 <part name="D2" library="eagle-ltspice" deviceset="SCHOTTKY-DIODE" device="F126Z12"/>
+<part name="R60" library="resistor" deviceset="R-EU_" device="R0805" value="470k"/>
+<part name="R61" library="resistor" deviceset="R-EU_" device="R0805" value="470k"/>
 </parts>
 <sheets>
 <sheet>
@@ -27786,8 +27786,6 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <instance part="R38" gate="G$1" x="350.52" y="58.42" rot="R90"/>
 <instance part="R39" gate="G$1" x="266.7" y="48.26"/>
 <instance part="R40" gate="G$1" x="269.24" y="55.88"/>
-<instance part="C19" gate="G$1" x="325.12" y="60.96"/>
-<instance part="C20" gate="G$1" x="337.82" y="55.88" rot="R270"/>
 <instance part="C21" gate="G$1" x="350.52" y="68.58"/>
 <instance part="IC16" gate="G$1" x="198.12" y="-132.08"/>
 <instance part="R14" gate="G$1" x="167.64" y="-22.86"/>
@@ -27938,6 +27936,8 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <instance part="C46" gate="G$1" x="312.42" y="472.44"/>
 <instance part="C47" gate="G$1" x="325.12" y="472.44"/>
 <instance part="D2" gate="G$1" x="264.16" y="474.98" rot="R270"/>
+<instance part="R60" gate="G$1" x="325.12" y="88.9" rot="R90"/>
+<instance part="R61" gate="G$1" x="325.12" y="78.74" rot="R90"/>
 </instances>
 <busses>
 <bus name="B$1">
@@ -28171,13 +28171,10 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <wire x1="320.04" y1="60.96" x2="320.04" y2="58.42" width="0.1524" layer="91"/>
 <pinref part="IC12" gate="G$1" pin="VCC1"/>
 <wire x1="320.04" y1="58.42" x2="314.96" y2="58.42" width="0.1524" layer="91"/>
-<pinref part="C19" gate="G$1" pin="1"/>
-<wire x1="325.12" y1="63.5" x2="322.58" y2="63.5" width="0.1524" layer="91"/>
 <wire x1="322.58" y1="63.5" x2="322.58" y2="60.96" width="0.1524" layer="91"/>
 <wire x1="322.58" y1="60.96" x2="320.04" y2="60.96" width="0.1524" layer="91"/>
 <junction x="320.04" y="60.96"/>
-<wire x1="325.12" y1="63.5" x2="350.52" y2="63.5" width="0.1524" layer="91"/>
-<junction x="325.12" y="63.5"/>
+<wire x1="322.58" y1="63.5" x2="350.52" y2="63.5" width="0.1524" layer="91"/>
 <pinref part="R38" gate="G$1" pin="2"/>
 <pinref part="C21" gate="G$1" pin="2"/>
 <junction x="350.52" y="63.5"/>
@@ -28381,6 +28378,11 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <wire x1="278.13" y1="830.56" x2="284.48" y2="830.58" width="0.1524" layer="91"/>
 <wire x1="284.48" y1="830.56" x2="284.48" y2="830.58" width="0.1524" layer="91"/>
 <label x="284.48" y="830.58" size="1.778" layer="95" ratio="9"/>
+</segment>
+<segment>
+<pinref part="R60" gate="G$1" pin="2"/>
+<wire x1="325.12" y1="93.98" x2="337.82" y2="93.98" width="0.1524" layer="91"/>
+<label x="337.82" y="93.98" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -28817,11 +28819,6 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <label x="350.52" y="73.66" size="1.778" layer="95" ratio="9"/>
 </segment>
 <segment>
-<pinref part="C20" gate="G$1" pin="1"/>
-<wire x1="340.36" y1="59.69" x2="340.36" y2="55.88" width="0.1524" layer="91"/>
-<label x="340.36" y="59.69" size="1.778" layer="95" ratio="9"/>
-</segment>
-<segment>
 <pinref part="IC13" gate="G$1" pin="GPIO3"/>
 <wire x1="177.8" y1="-27.94" x2="154.94" y2="-27.94" width="0.1524" layer="91"/>
 <label x="177.8" y="-27.94" size="1.778" layer="95"/>
@@ -29155,6 +29152,11 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <wire x1="278.13" y1="840.72" x2="284.48" y2="840.74" width="0.1524" layer="91"/>
 <wire x1="284.48" y1="840.72" x2="284.48" y2="840.74" width="0.1524" layer="91"/>
 <label x="284.48" y="840.74" size="1.778" layer="95" ratio="9"/>
+</segment>
+<segment>
+<pinref part="R61" gate="G$1" pin="1"/>
+<wire x1="325.12" y1="73.66" x2="337.82" y2="73.66" width="0.1524" layer="91"/>
+<label x="337.82" y="73.66" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="5V0" class="1">
@@ -30939,12 +30941,16 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 </net>
 <net name="VMID" class="2">
 <segment>
-<pinref part="C19" gate="G$1" pin="2"/>
 <pinref part="IC12" gate="G$1" pin="VMID"/>
 <wire x1="325.12" y1="55.88" x2="314.96" y2="55.88" width="0.1524" layer="91"/>
-<junction x="325.12" y="55.88"/>
-<pinref part="C20" gate="G$1" pin="2"/>
-<wire x1="325.12" y1="55.88" x2="332.74" y2="55.88" width="0.1524" layer="91"/>
+<label x="325.12" y="55.88" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="R60" gate="G$1" pin="1"/>
+<pinref part="R61" gate="G$1" pin="2"/>
+<wire x1="325.12" y1="83.82" x2="337.82" y2="83.82" width="0.1524" layer="91"/>
+<junction x="325.12" y="83.82"/>
+<label x="337.82" y="83.82" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="PFI_RET" class="2">
