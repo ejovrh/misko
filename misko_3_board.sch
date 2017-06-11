@@ -27452,6 +27452,70 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="DTSM-32N-B">
+<description>&lt;b&gt;Omron Switches&lt;/b&gt;&lt;p&gt;
+&lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
+<packages>
+<package name="DTSM-32N-B">
+<description>&lt;b&gt;OMRON SWITCH&lt;/b&gt;</description>
+<text x="-3.548" y="2.183" size="1.27" layer="25" ratio="10">&gt;NAME</text>
+<text x="-3.548" y="-3.08" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
+<smd name="1" x="-4.6" y="0" dx="1.6" dy="2" layer="1" rot="R90"/>
+<smd name="2" x="4.6" y="0" dx="1.6" dy="2" layer="1" rot="R90"/>
+<wire x1="-3.5" y1="1.5" x2="3.5" y2="1.5" width="0.127" layer="21"/>
+<wire x1="3.5" y1="1.5" x2="3.5" y2="-1.5" width="0.127" layer="21"/>
+<wire x1="3.5" y1="-1.5" x2="-3.5" y2="-1.5" width="0.127" layer="21"/>
+<wire x1="-3.5" y1="-1.5" x2="-3.5" y2="1.5" width="0.127" layer="21"/>
+<wire x1="-1.5" y1="0.5" x2="1.5" y2="0.5" width="0.127" layer="21"/>
+<wire x1="1.5" y1="0.5" x2="1.5" y2="-0.5" width="0.127" layer="21"/>
+<wire x1="1.5" y1="-0.5" x2="-1.5" y2="-0.5" width="0.127" layer="21"/>
+<wire x1="-1.5" y1="-0.5" x2="-1.5" y2="0.5" width="0.127" layer="21"/>
+</package>
+</packages>
+<symbols>
+<symbol name="SMD">
+<wire x1="0" y1="1.905" x2="0" y2="2.54" width="0.254" layer="94"/>
+<wire x1="-4.445" y1="1.905" x2="-3.175" y2="1.905" width="0.254" layer="94"/>
+<wire x1="-4.445" y1="-1.905" x2="-3.175" y2="-1.905" width="0.254" layer="94"/>
+<wire x1="-4.445" y1="1.905" x2="-4.445" y2="0" width="0.254" layer="94"/>
+<wire x1="-4.445" y1="0" x2="-4.445" y2="-1.905" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="0" x2="-1.905" y2="0" width="0.1524" layer="94"/>
+<wire x1="-1.27" y1="0" x2="-0.635" y2="0" width="0.1524" layer="94"/>
+<wire x1="-4.445" y1="0" x2="-3.175" y2="0" width="0.1524" layer="94"/>
+<wire x1="0" y1="-2.54" x2="-1.27" y2="1.905" width="0.254" layer="94"/>
+<circle x="0" y="-2.54" radius="0.127" width="0.4064" layer="94"/>
+<circle x="0" y="2.54" radius="0.127" width="0.4064" layer="94"/>
+<text x="-6.35" y="-2.54" size="1.778" layer="95" rot="R90">&gt;NAME</text>
+<text x="-3.81" y="3.175" size="1.778" layer="96" rot="R90">&gt;VALUE</text>
+<pin name="1" x="0" y="-5.08" visible="pad" length="short" direction="pas" swaplevel="2" rot="R90"/>
+<pin name="2" x="0" y="5.08" visible="pad" length="short" direction="pas" swaplevel="1" rot="R270"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="DTSM-32N-B" prefix="S" uservalue="yes">
+<description>&lt;b&gt;OMRON SWITCH&lt;/b&gt;</description>
+<gates>
+<gate name="1" symbol="SMD" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="DTSM-32N-B">
+<connects>
+<connect gate="1" pin="1" pad="1"/>
+<connect gate="1" pin="2" pad="2"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="MF" value="" constant="no"/>
+<attribute name="MPN" value="B3F-1000" constant="no"/>
+<attribute name="OC_FARNELL" value="176432" constant="no"/>
+<attribute name="OC_NEWARK" value="36M3542" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -27585,7 +27649,6 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <part name="LED1" library="led" deviceset="LED" device="SQR2X5" value="green"/>
 <part name="R45" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
 <part name="R46" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
-<part name="S1" library="switch-omron" deviceset="10-XX" device="" value="RESET"/>
 <part name="R47" library="rcl" deviceset="R-EU_" device="R0805" value="47k"/>
 <part name="R49" library="rcl" deviceset="R-EU_" device="R0805" value="4k7"/>
 <part name="C22" library="resistor" deviceset="C-EU" device="C0805" value="0.1µF"/>
@@ -27682,6 +27745,7 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <part name="D2" library="eagle-ltspice" deviceset="SCHOTTKY-DIODE" device="F126Z12"/>
 <part name="R60" library="resistor" deviceset="R-EU_" device="R0805" value="470k"/>
 <part name="R61" library="resistor" deviceset="R-EU_" device="R0805" value="470k"/>
+<part name="S1" library="DTSM-32N-B" deviceset="DTSM-32N-B" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -27803,7 +27867,6 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <instance part="LED1" gate="G$1" x="175.26" y="645.16" rot="R270"/>
 <instance part="R45" gate="G$1" x="162.56" y="635"/>
 <instance part="R46" gate="G$1" x="162.56" y="645.16"/>
-<instance part="S1" gate="1" x="22.86" y="647.7" rot="R270"/>
 <instance part="R47" gate="G$1" x="33.02" y="640.08" rot="R90"/>
 <instance part="R49" gate="G$1" x="50.8" y="640.08" rot="R90"/>
 <instance part="C22" gate="G$1" x="33.02" y="629.92" rot="R180"/>
@@ -27938,6 +28001,7 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <instance part="D2" gate="G$1" x="264.16" y="474.98" rot="R270"/>
 <instance part="R60" gate="G$1" x="325.12" y="88.9" rot="R90"/>
 <instance part="R61" gate="G$1" x="325.12" y="78.74" rot="R90"/>
+<instance part="S1" gate="1" x="22.86" y="645.16" rot="R270"/>
 </instances>
 <busses>
 <bus name="B$1">
@@ -28644,12 +28708,9 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <label x="114.3" y="622.3" size="1.778" layer="95" ratio="9"/>
 </segment>
 <segment>
-<pinref part="S1" gate="1" pin="P"/>
-<pinref part="S1" gate="1" pin="P1"/>
 <wire x1="6.35" y1="645.16" x2="17.78" y2="645.16" width="0.1524" layer="91"/>
-<wire x1="17.78" y1="647.7" x2="17.78" y2="645.16" width="0.1524" layer="91"/>
-<junction x="17.78" y="645.16"/>
 <label x="6.35" y="645.16" size="1.778" layer="95" ratio="9"/>
+<pinref part="S1" gate="1" pin="1"/>
 </segment>
 <segment>
 <pinref part="C22" gate="G$1" pin="1"/>
@@ -30677,8 +30738,6 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <label x="33.02" y="805.18" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="S1" gate="1" pin="S"/>
-<pinref part="S1" gate="1" pin="S1"/>
 <pinref part="R47" gate="G$1" pin="2"/>
 <wire x1="27.94" y1="645.16" x2="33.02" y2="645.16" width="0.1524" layer="91"/>
 <junction x="33.02" y="645.16"/>
@@ -30686,8 +30745,7 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <wire x1="33.02" y1="645.16" x2="50.8" y2="645.16" width="0.1524" layer="91"/>
 <wire x1="33.02" y1="645.16" x2="33.02" y2="657.86" width="0.1524" layer="91"/>
 <label x="33.02" y="657.86" size="1.778" layer="95"/>
-<wire x1="27.94" y1="647.7" x2="27.94" y2="645.16" width="0.1524" layer="91"/>
-<junction x="27.94" y="645.16"/>
+<pinref part="S1" gate="1" pin="2"/>
 </segment>
 <segment>
 <pinref part="CONN3" gate="G$1" pin="17"/>
