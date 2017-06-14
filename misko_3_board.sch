@@ -27628,8 +27628,6 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <part name="C16" library="rcl" deviceset="C-EU" device="C0805" value="18pF"/>
 <part name="IC13" library="EN42-I Bluetooth Module" deviceset="RN-42" device=""/>
 <part name="IC12" library="LTC4425 Supercap Charger" deviceset="LTC4425" device=""/>
-<part name="R37" library="resistor" deviceset="R-EU_" device="R0805" value="150k"/>
-<part name="R38" library="resistor" deviceset="R-EU_" device="R0805" value="150k"/>
 <part name="R39" library="resistor" deviceset="R-EU_" device="R0805" value="1k"/>
 <part name="R40" library="resistor" deviceset="R-EU_" device="R0805" value="10k"/>
 <part name="C21" library="rcl" deviceset="C-EU" device="C0805" value="0.1µF"/>
@@ -27846,8 +27844,6 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <instance part="C16" gate="G$1" x="7.62" y="48.26"/>
 <instance part="IC13" gate="G$1" x="144.78" y="-35.56"/>
 <instance part="IC12" gate="G$1" x="297.18" y="53.34"/>
-<instance part="R37" gate="G$1" x="350.52" y="48.26" rot="R90"/>
-<instance part="R38" gate="G$1" x="350.52" y="58.42" rot="R90"/>
 <instance part="R39" gate="G$1" x="266.7" y="48.26"/>
 <instance part="R40" gate="G$1" x="269.24" y="55.88"/>
 <instance part="C21" gate="G$1" x="350.52" y="68.58"/>
@@ -28239,7 +28235,6 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <wire x1="322.58" y1="60.96" x2="320.04" y2="60.96" width="0.1524" layer="91"/>
 <junction x="320.04" y="60.96"/>
 <wire x1="322.58" y1="63.5" x2="350.52" y2="63.5" width="0.1524" layer="91"/>
-<pinref part="R38" gate="G$1" pin="2"/>
 <pinref part="C21" gate="G$1" pin="2"/>
 <junction x="350.52" y="63.5"/>
 <wire x1="350.52" y1="63.5" x2="360.68" y2="63.5" width="0.1524" layer="91"/>
@@ -30981,15 +30976,6 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <label x="337.82" y="93.98" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="PFI" class="2">
-<segment>
-<pinref part="R37" gate="G$1" pin="2"/>
-<pinref part="R38" gate="G$1" pin="1"/>
-<junction x="350.52" y="53.34"/>
-<wire x1="350.52" y1="53.34" x2="314.96" y2="53.34" width="0.1524" layer="91"/>
-<pinref part="IC12" gate="G$1" pin="PFI"/>
-</segment>
-</net>
 <net name="LTC4425_PROG" class="2">
 <segment>
 <pinref part="R40" gate="G$1" pin="2"/>
@@ -31009,15 +30995,6 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <wire x1="325.12" y1="83.82" x2="337.82" y2="83.82" width="0.1524" layer="91"/>
 <junction x="325.12" y="83.82"/>
 <label x="337.82" y="83.82" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="PFI_RET" class="2">
-<segment>
-<pinref part="R37" gate="G$1" pin="1"/>
-<wire x1="350.52" y1="43.18" x2="322.58" y2="43.18" width="0.1524" layer="91"/>
-<wire x1="322.58" y1="43.18" x2="322.58" y2="48.26" width="0.1524" layer="91"/>
-<pinref part="IC12" gate="G$1" pin="PFI_RET"/>
-<wire x1="322.58" y1="48.26" x2="314.96" y2="48.26" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="GPIO7" class="2">
