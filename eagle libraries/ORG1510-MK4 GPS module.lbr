@@ -6,7 +6,7 @@
 <setting alwaysvectorfont="no"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.05" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.025" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="yes" active="yes"/>
@@ -73,7 +73,6 @@
 <packages>
 <package name="PACKAGE">
 <wire x1="-5" y1="5" x2="5" y2="5" width="0.127" layer="21"/>
-<wire x1="5" y1="5" x2="5" y2="-5" width="0.127" layer="21"/>
 <wire x1="5" y1="-5" x2="-5" y2="-5" width="0.127" layer="21"/>
 <circle x="0" y="0.5" radius="0.5" width="1.27" layer="22"/>
 <text x="6.07008125" y="4" size="0.6096" layer="21" align="center">5</text>
@@ -91,7 +90,6 @@
 <smd name="VCC" x="5.168265625" y="1.27" dx="2.5908" dy="0.8636" layer="1"/>
 <smd name="GND3" x="5.1682625" y="2.54" dx="2.5908" dy="0.8636" layer="1"/>
 <text x="6.07008125" y="-4.29818125" size="0.6096" layer="21" align="center">1</text>
-<wire x1="-5" y1="5" x2="-5" y2="-5" width="0.127" layer="21"/>
 <smd name="GND1" x="0" y="0" dx="12" dy="12" layer="16"/>
 <smd name="GND2" x="0" y="0" dx="6.4" dy="10" layer="1"/>
 <pad name="GND6" x="0" y="3.81" drill="0.25"/>
@@ -99,6 +97,10 @@
 <pad name="GND5" x="2.54" y="-3.81" drill="0.25"/>
 <text x="-3.81" y="7.62" size="1.27" layer="25">&gt;NAME</text>
 <text x="-3.81" y="-8.89" size="1.27" layer="27">&gt;VALUE</text>
+<wire x1="-5" y1="5" x2="-5" y2="3.2" width="0.127" layer="21"/>
+<wire x1="5" y1="5" x2="5" y2="3.2" width="0.127" layer="21"/>
+<wire x1="-5" y1="-5" x2="-5" y2="-3.2" width="0.127" layer="21"/>
+<wire x1="5" y1="-5" x2="5" y2="-3.2" width="0.127" layer="21"/>
 </package>
 </packages>
 <symbols>
