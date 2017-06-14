@@ -28443,11 +28443,6 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <wire x1="284.48" y1="830.56" x2="284.48" y2="830.58" width="0.1524" layer="91"/>
 <label x="284.48" y="830.58" size="1.778" layer="95" ratio="9"/>
 </segment>
-<segment>
-<pinref part="R60" gate="G$1" pin="2"/>
-<wire x1="325.12" y1="93.98" x2="337.82" y2="93.98" width="0.1524" layer="91"/>
-<label x="337.82" y="93.98" size="1.778" layer="95"/>
-</segment>
 </net>
 <net name="GND" class="0">
 <segment>
@@ -30979,6 +30974,11 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <pinref part="IC12" gate="G$1" pin="VOUT2"/>
 <wire x1="279.4" y1="58.42" x2="279.4" y2="60.96" width="0.1524" layer="91"/>
 <junction x="279.4" y="60.96"/>
+</segment>
+<segment>
+<pinref part="R60" gate="G$1" pin="2"/>
+<wire x1="325.12" y1="93.98" x2="337.82" y2="93.98" width="0.1524" layer="91"/>
+<label x="337.82" y="93.98" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="PFI" class="2">
