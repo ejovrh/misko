@@ -23063,7 +23063,6 @@ JST PH 2-pin thru-home side entry</description>
 <packages>
 <package name="PACKAGE">
 <wire x1="-5" y1="5" x2="5" y2="5" width="0.127" layer="21"/>
-<wire x1="5" y1="5" x2="5" y2="-5" width="0.127" layer="21"/>
 <wire x1="5" y1="-5" x2="-5" y2="-5" width="0.127" layer="21"/>
 <circle x="0" y="0.5" radius="0.5" width="1.27" layer="22"/>
 <text x="6.07008125" y="4" size="0.6096" layer="21" align="center">5</text>
@@ -23081,7 +23080,6 @@ JST PH 2-pin thru-home side entry</description>
 <smd name="VCC" x="5.168265625" y="1.27" dx="2.5908" dy="0.8636" layer="1"/>
 <smd name="GND3" x="5.1682625" y="2.54" dx="2.5908" dy="0.8636" layer="1"/>
 <text x="6.07008125" y="-4.29818125" size="0.6096" layer="21" align="center">1</text>
-<wire x1="-5" y1="5" x2="-5" y2="-5" width="0.127" layer="21"/>
 <smd name="GND1" x="0" y="0" dx="12" dy="12" layer="16"/>
 <smd name="GND2" x="0" y="0" dx="6.4" dy="10" layer="1"/>
 <pad name="GND6" x="0" y="3.81" drill="0.25"/>
@@ -23089,6 +23087,10 @@ JST PH 2-pin thru-home side entry</description>
 <pad name="GND5" x="2.54" y="-3.81" drill="0.25"/>
 <text x="-3.81" y="7.62" size="1.27" layer="25">&gt;NAME</text>
 <text x="-3.81" y="-8.89" size="1.27" layer="27">&gt;VALUE</text>
+<wire x1="-5" y1="5" x2="-5" y2="3.2" width="0.127" layer="21"/>
+<wire x1="5" y1="5" x2="5" y2="3.2" width="0.127" layer="21"/>
+<wire x1="-5" y1="-5" x2="-5" y2="-3.2" width="0.127" layer="21"/>
+<wire x1="5" y1="-5" x2="5" y2="-3.2" width="0.127" layer="21"/>
 </package>
 </packages>
 <symbols>
@@ -23151,10 +23153,7 @@ JST PH 2-pin thru-home side entry</description>
 <library name="EN42-I Bluetooth Module">
 <packages>
 <package name="RN-42">
-<wire x1="0" y1="0" x2="0" y2="25.6" width="0.127" layer="21"/>
 <wire x1="0" y1="25.6" x2="13.4" y2="25.6" width="0.127" layer="21"/>
-<wire x1="13.4" y1="25.6" x2="13.4" y2="0" width="0.127" layer="21"/>
-<wire x1="13.4" y1="0" x2="0" y2="0" width="0.127" layer="21"/>
 <smd name="AIO1" x="2.6" y="0" dx="2.6" dy="0.8" layer="1" rot="R90"/>
 <smd name="GND4" x="3.6" y="0" dx="2.6" dy="0.8" layer="1" rot="R90"/>
 <smd name="GPIO11" x="4.9" y="0" dx="2.6" dy="0.8" layer="1" rot="R90"/>
@@ -23221,6 +23220,12 @@ JST PH 2-pin thru-home side entry</description>
 </polygon>
 <text x="3.81" y="13.97" size="1.27" layer="21">&gt;NAME</text>
 <text x="3.81" y="10.16" size="1.27" layer="21">&gt;VALUE</text>
+<wire x1="0" y1="25.6" x2="0" y2="16.5" width="0.127" layer="21"/>
+<wire x1="13.4" y1="25.6" x2="13.4" y2="16.5" width="0.127" layer="21"/>
+<wire x1="0" y1="0" x2="0" y2="2.3" width="0.127" layer="21"/>
+<wire x1="13.4" y1="0" x2="13.4" y2="2.3" width="0.127" layer="21"/>
+<wire x1="13.4" y1="0" x2="11.3" y2="0" width="0.127" layer="21"/>
+<wire x1="0" y1="0" x2="2.1" y2="0" width="0.127" layer="21"/>
 </package>
 </packages>
 <symbols>
@@ -26686,18 +26691,8 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <wire x1="3.4" y1="-1.4" x2="2.8" y2="-2" width="0.127" layer="21" curve="-90"/>
 <text x="-3.2" y="2.8" size="1.27" layer="25">&gt;NAME</text>
 <text x="-3.2" y="-3.8" size="1.27" layer="27">&gt;VALUE</text>
-<wire x1="-3.4" y1="1.2" x2="-3.4" y2="-1.2" width="0.1" layer="46"/>
-<wire x1="-3.4" y1="-1.2" x2="-3.64" y2="-1.46" width="0.1" layer="46" curve="-90"/>
-<wire x1="-3.64" y1="-1.46" x2="-3.9" y2="-1.2" width="0.1" layer="46" curve="-90"/>
-<wire x1="-3.9" y1="-1.2" x2="-3.9" y2="1.2" width="0.1" layer="46"/>
-<wire x1="-3.9" y1="1.2" x2="-3.64" y2="1.46" width="0.1" layer="46" curve="-90"/>
-<wire x1="-3.64" y1="1.46" x2="-3.4" y2="1.2" width="0.1" layer="46" curve="-90"/>
-<wire x1="3.4" y1="1.2" x2="3.4" y2="-1.22" width="0.1" layer="46"/>
-<wire x1="3.4" y1="-1.22" x2="3.64" y2="-1.44" width="0.1" layer="46" curve="90"/>
-<wire x1="3.64" y1="-1.44" x2="3.9" y2="-1.2" width="0.1" layer="46" curve="107.492571"/>
-<wire x1="3.9" y1="-1.2" x2="3.9" y2="1.2" width="0.1" layer="46"/>
-<wire x1="3.9" y1="1.2" x2="3.66" y2="1.46" width="0.1" layer="46" curve="90"/>
-<wire x1="3.4" y1="1.2" x2="3.66" y2="1.46" width="0.1" layer="46" curve="-90"/>
+<wire x1="-3.65" y1="-1.2" x2="-3.65" y2="1.2" width="0.65" layer="44"/>
+<wire x1="3.65" y1="-1.2" x2="3.65" y2="1.2" width="0.65" layer="44"/>
 </package>
 </packages>
 <symbols>
@@ -26754,7 +26749,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <package name="TH">
 <pad name="-" x="0" y="0" drill="1" rot="R90"/>
 <pad name="+" x="20" y="0" drill="1" rot="R90"/>
-<circle x="10" y="0" radius="11.661903125" width="0.127" layer="21"/>
+<circle x="10" y="0" radius="9" width="0.127" layer="21"/>
 <text x="1.89" y="-3" size="6.4516" layer="21">-</text>
 <text x="12.84" y="-3" size="6.4516" layer="21">+</text>
 <text x="0" y="3.24" size="1.27" layer="21">&gt;NAME</text>
