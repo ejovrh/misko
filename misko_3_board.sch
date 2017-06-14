@@ -27452,6 +27452,70 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="DTSM-32N-B">
+<description>&lt;b&gt;Omron Switches&lt;/b&gt;&lt;p&gt;
+&lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
+<packages>
+<package name="DTSM-32N-B">
+<description>&lt;b&gt;OMRON SWITCH&lt;/b&gt;</description>
+<text x="-3.548" y="2.183" size="1.27" layer="25" ratio="10">&gt;NAME</text>
+<text x="-3.548" y="-3.08" size="1.27" layer="27" ratio="10">&gt;VALUE</text>
+<smd name="1" x="-4.6" y="0" dx="1.6" dy="2" layer="1" rot="R90"/>
+<smd name="2" x="4.6" y="0" dx="1.6" dy="2" layer="1" rot="R90"/>
+<wire x1="-3.5" y1="1.5" x2="3.5" y2="1.5" width="0.127" layer="21"/>
+<wire x1="3.5" y1="1.5" x2="3.5" y2="-1.5" width="0.127" layer="21"/>
+<wire x1="3.5" y1="-1.5" x2="-3.5" y2="-1.5" width="0.127" layer="21"/>
+<wire x1="-3.5" y1="-1.5" x2="-3.5" y2="1.5" width="0.127" layer="21"/>
+<wire x1="-1.5" y1="0.5" x2="1.5" y2="0.5" width="0.127" layer="21"/>
+<wire x1="1.5" y1="0.5" x2="1.5" y2="-0.5" width="0.127" layer="21"/>
+<wire x1="1.5" y1="-0.5" x2="-1.5" y2="-0.5" width="0.127" layer="21"/>
+<wire x1="-1.5" y1="-0.5" x2="-1.5" y2="0.5" width="0.127" layer="21"/>
+</package>
+</packages>
+<symbols>
+<symbol name="SMD">
+<wire x1="0" y1="1.905" x2="0" y2="2.54" width="0.254" layer="94"/>
+<wire x1="-4.445" y1="1.905" x2="-3.175" y2="1.905" width="0.254" layer="94"/>
+<wire x1="-4.445" y1="-1.905" x2="-3.175" y2="-1.905" width="0.254" layer="94"/>
+<wire x1="-4.445" y1="1.905" x2="-4.445" y2="0" width="0.254" layer="94"/>
+<wire x1="-4.445" y1="0" x2="-4.445" y2="-1.905" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="0" x2="-1.905" y2="0" width="0.1524" layer="94"/>
+<wire x1="-1.27" y1="0" x2="-0.635" y2="0" width="0.1524" layer="94"/>
+<wire x1="-4.445" y1="0" x2="-3.175" y2="0" width="0.1524" layer="94"/>
+<wire x1="0" y1="-2.54" x2="-1.27" y2="1.905" width="0.254" layer="94"/>
+<circle x="0" y="-2.54" radius="0.127" width="0.4064" layer="94"/>
+<circle x="0" y="2.54" radius="0.127" width="0.4064" layer="94"/>
+<text x="-6.35" y="-2.54" size="1.778" layer="95" rot="R90">&gt;NAME</text>
+<text x="-3.81" y="3.175" size="1.778" layer="96" rot="R90">&gt;VALUE</text>
+<pin name="1" x="0" y="-5.08" visible="pad" length="short" direction="pas" swaplevel="2" rot="R90"/>
+<pin name="2" x="0" y="5.08" visible="pad" length="short" direction="pas" swaplevel="1" rot="R270"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="DTSM-32N-B" prefix="S" uservalue="yes">
+<description>&lt;b&gt;OMRON SWITCH&lt;/b&gt;</description>
+<gates>
+<gate name="1" symbol="SMD" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="DTSM-32N-B">
+<connects>
+<connect gate="1" pin="1" pad="1"/>
+<connect gate="1" pin="2" pad="2"/>
+</connects>
+<technologies>
+<technology name="">
+<attribute name="MF" value="" constant="no"/>
+<attribute name="MPN" value="B3F-1000" constant="no"/>
+<attribute name="OC_FARNELL" value="176432" constant="no"/>
+<attribute name="OC_NEWARK" value="36M3542" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -27568,8 +27632,6 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <part name="R38" library="resistor" deviceset="R-EU_" device="R0805" value="150k"/>
 <part name="R39" library="resistor" deviceset="R-EU_" device="R0805" value="1k"/>
 <part name="R40" library="resistor" deviceset="R-EU_" device="R0805" value="10k"/>
-<part name="C19" library="rcl" deviceset="C-EU" device="C0805" value="100µF"/>
-<part name="C20" library="rcl" deviceset="C-EU" device="C0805" value="100µF"/>
 <part name="C21" library="rcl" deviceset="C-EU" device="C0805" value="0.1µF"/>
 <part name="IC16" library="FM25W256 FERAM" deviceset="FM25W256" device="-SOIC"/>
 <part name="R14" library="rcl" deviceset="R-EU_" device="R0805" value="100k"/>
@@ -27587,7 +27649,6 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <part name="LED1" library="led" deviceset="LED" device="SQR2X5" value="green"/>
 <part name="R45" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
 <part name="R46" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
-<part name="S1" library="switch-omron" deviceset="10-XX" device="" value="RESET"/>
 <part name="R47" library="rcl" deviceset="R-EU_" device="R0805" value="47k"/>
 <part name="R49" library="rcl" deviceset="R-EU_" device="R0805" value="4k7"/>
 <part name="C22" library="resistor" deviceset="C-EU" device="C0805" value="0.1µF"/>
@@ -27682,6 +27743,9 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <part name="C46" library="rcl" deviceset="CPOL-EU" device="E22-10AXIAL" value="1000µF"/>
 <part name="C47" library="rcl" deviceset="CPOL-EU" device="E22-10AXIAL" value="1000µF"/>
 <part name="D2" library="eagle-ltspice" deviceset="SCHOTTKY-DIODE" device="F126Z12"/>
+<part name="R60" library="resistor" deviceset="R-EU_" device="R0805" value="470k"/>
+<part name="R61" library="resistor" deviceset="R-EU_" device="R0805" value="470k"/>
+<part name="S1" library="DTSM-32N-B" deviceset="DTSM-32N-B" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -27786,8 +27850,6 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <instance part="R38" gate="G$1" x="350.52" y="58.42" rot="R90"/>
 <instance part="R39" gate="G$1" x="266.7" y="48.26"/>
 <instance part="R40" gate="G$1" x="269.24" y="55.88"/>
-<instance part="C19" gate="G$1" x="325.12" y="60.96"/>
-<instance part="C20" gate="G$1" x="337.82" y="55.88" rot="R270"/>
 <instance part="C21" gate="G$1" x="350.52" y="68.58"/>
 <instance part="IC16" gate="G$1" x="198.12" y="-132.08"/>
 <instance part="R14" gate="G$1" x="167.64" y="-22.86"/>
@@ -27805,7 +27867,6 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <instance part="LED1" gate="G$1" x="175.26" y="645.16" rot="R270"/>
 <instance part="R45" gate="G$1" x="162.56" y="635"/>
 <instance part="R46" gate="G$1" x="162.56" y="645.16"/>
-<instance part="S1" gate="1" x="22.86" y="647.7" rot="R270"/>
 <instance part="R47" gate="G$1" x="33.02" y="640.08" rot="R90"/>
 <instance part="R49" gate="G$1" x="50.8" y="640.08" rot="R90"/>
 <instance part="C22" gate="G$1" x="33.02" y="629.92" rot="R180"/>
@@ -27938,6 +27999,9 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <instance part="C46" gate="G$1" x="312.42" y="472.44"/>
 <instance part="C47" gate="G$1" x="325.12" y="472.44"/>
 <instance part="D2" gate="G$1" x="264.16" y="474.98" rot="R270"/>
+<instance part="R60" gate="G$1" x="325.12" y="88.9" rot="R90"/>
+<instance part="R61" gate="G$1" x="325.12" y="78.74" rot="R90"/>
+<instance part="S1" gate="1" x="22.86" y="645.16" rot="R270"/>
 </instances>
 <busses>
 <bus name="B$1">
@@ -28171,13 +28235,10 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <wire x1="320.04" y1="60.96" x2="320.04" y2="58.42" width="0.1524" layer="91"/>
 <pinref part="IC12" gate="G$1" pin="VCC1"/>
 <wire x1="320.04" y1="58.42" x2="314.96" y2="58.42" width="0.1524" layer="91"/>
-<pinref part="C19" gate="G$1" pin="1"/>
-<wire x1="325.12" y1="63.5" x2="322.58" y2="63.5" width="0.1524" layer="91"/>
 <wire x1="322.58" y1="63.5" x2="322.58" y2="60.96" width="0.1524" layer="91"/>
 <wire x1="322.58" y1="60.96" x2="320.04" y2="60.96" width="0.1524" layer="91"/>
 <junction x="320.04" y="60.96"/>
-<wire x1="325.12" y1="63.5" x2="350.52" y2="63.5" width="0.1524" layer="91"/>
-<junction x="325.12" y="63.5"/>
+<wire x1="322.58" y1="63.5" x2="350.52" y2="63.5" width="0.1524" layer="91"/>
 <pinref part="R38" gate="G$1" pin="2"/>
 <pinref part="C21" gate="G$1" pin="2"/>
 <junction x="350.52" y="63.5"/>
@@ -28381,6 +28442,11 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <wire x1="278.13" y1="830.56" x2="284.48" y2="830.58" width="0.1524" layer="91"/>
 <wire x1="284.48" y1="830.56" x2="284.48" y2="830.58" width="0.1524" layer="91"/>
 <label x="284.48" y="830.58" size="1.778" layer="95" ratio="9"/>
+</segment>
+<segment>
+<pinref part="R60" gate="G$1" pin="2"/>
+<wire x1="325.12" y1="93.98" x2="337.82" y2="93.98" width="0.1524" layer="91"/>
+<label x="337.82" y="93.98" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -28642,12 +28708,9 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <label x="114.3" y="622.3" size="1.778" layer="95" ratio="9"/>
 </segment>
 <segment>
-<pinref part="S1" gate="1" pin="P"/>
-<pinref part="S1" gate="1" pin="P1"/>
 <wire x1="6.35" y1="645.16" x2="17.78" y2="645.16" width="0.1524" layer="91"/>
-<wire x1="17.78" y1="647.7" x2="17.78" y2="645.16" width="0.1524" layer="91"/>
-<junction x="17.78" y="645.16"/>
 <label x="6.35" y="645.16" size="1.778" layer="95" ratio="9"/>
+<pinref part="S1" gate="1" pin="1"/>
 </segment>
 <segment>
 <pinref part="C22" gate="G$1" pin="1"/>
@@ -28815,11 +28878,6 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <pinref part="C21" gate="G$1" pin="1"/>
 <wire x1="350.52" y1="73.66" x2="350.52" y2="71.12" width="0.1524" layer="91"/>
 <label x="350.52" y="73.66" size="1.778" layer="95" ratio="9"/>
-</segment>
-<segment>
-<pinref part="C20" gate="G$1" pin="1"/>
-<wire x1="340.36" y1="59.69" x2="340.36" y2="55.88" width="0.1524" layer="91"/>
-<label x="340.36" y="59.69" size="1.778" layer="95" ratio="9"/>
 </segment>
 <segment>
 <pinref part="IC13" gate="G$1" pin="GPIO3"/>
@@ -29155,6 +29213,11 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <wire x1="278.13" y1="840.72" x2="284.48" y2="840.74" width="0.1524" layer="91"/>
 <wire x1="284.48" y1="840.72" x2="284.48" y2="840.74" width="0.1524" layer="91"/>
 <label x="284.48" y="840.74" size="1.778" layer="95" ratio="9"/>
+</segment>
+<segment>
+<pinref part="R61" gate="G$1" pin="1"/>
+<wire x1="325.12" y1="73.66" x2="337.82" y2="73.66" width="0.1524" layer="91"/>
+<label x="337.82" y="73.66" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="5V0" class="1">
@@ -30675,8 +30738,6 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <label x="33.02" y="805.18" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="S1" gate="1" pin="S"/>
-<pinref part="S1" gate="1" pin="S1"/>
 <pinref part="R47" gate="G$1" pin="2"/>
 <wire x1="27.94" y1="645.16" x2="33.02" y2="645.16" width="0.1524" layer="91"/>
 <junction x="33.02" y="645.16"/>
@@ -30684,8 +30745,7 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 <wire x1="33.02" y1="645.16" x2="50.8" y2="645.16" width="0.1524" layer="91"/>
 <wire x1="33.02" y1="645.16" x2="33.02" y2="657.86" width="0.1524" layer="91"/>
 <label x="33.02" y="657.86" size="1.778" layer="95"/>
-<wire x1="27.94" y1="647.7" x2="27.94" y2="645.16" width="0.1524" layer="91"/>
-<junction x="27.94" y="645.16"/>
+<pinref part="S1" gate="1" pin="2"/>
 </segment>
 <segment>
 <pinref part="CONN3" gate="G$1" pin="17"/>
@@ -30939,12 +30999,16 @@ diameter 3 mm, horizontal, grid 12.7 mm</description>
 </net>
 <net name="VMID" class="2">
 <segment>
-<pinref part="C19" gate="G$1" pin="2"/>
 <pinref part="IC12" gate="G$1" pin="VMID"/>
 <wire x1="325.12" y1="55.88" x2="314.96" y2="55.88" width="0.1524" layer="91"/>
-<junction x="325.12" y="55.88"/>
-<pinref part="C20" gate="G$1" pin="2"/>
-<wire x1="325.12" y1="55.88" x2="332.74" y2="55.88" width="0.1524" layer="91"/>
+<label x="325.12" y="55.88" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="R60" gate="G$1" pin="1"/>
+<pinref part="R61" gate="G$1" pin="2"/>
+<wire x1="325.12" y1="83.82" x2="337.82" y2="83.82" width="0.1524" layer="91"/>
+<junction x="325.12" y="83.82"/>
+<label x="337.82" y="83.82" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="PFI_RET" class="2">
