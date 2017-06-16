@@ -5,13 +5,14 @@
 #define BUFFER_DEBUG_PRINT 0 // SD write debug printout
 #define AREF_VOLTAGE 2.50
 #define GPSRATE 4800
-#define SERIALRATE 115200
+#define SERIALRATE 9600
 #define NMEA_BUFFERSIZE 82 // officially, NMEA sentences are at maximum 82 characters long (80 readable characters + \r\n)
 #define SD_BUFFERSIZE 1024 // cyclical buffer for NMEA sentences to be written to SD card
 #define GPS_FITNESS_MODE_THRESHOLD 10 // theshold in knots/h for transition from fitness mode <-> normal mode
 
 // GPS variables
 char NMEA_buffer[NMEA_BUFFERSIZE] = "";	// string buffer for the NMEA sentence
+char FERAM_GPS_LAST_GOOD_POSITION[82] = ""; // stores last good position
 uint8_t bufferid = 0; // holds the current position in the NMEA_buffer array, used for walk through the buffer
 char gps_command_buffer[24];
 char gps_date[9] = "20------"; // YYYYMMDD derived from NMEA sentence
