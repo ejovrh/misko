@@ -106,7 +106,7 @@ void get_nmea_sentences()
 			if (!gpslogfile) // run only on initialization, not on every loop iteration
 				gpslogfile = SD.open(gps_logfile, FILE_WRITE);
 
-			sd_buffer_write(NMEA_buffer, bufferid); // write NMEA data into buffer
+			sd_buffer_write(sd_buffer_nmea, NMEA_buffer, bufferid, gpslogfile); // write NMEA data into SD card buffer and eventually onto SD
 		}
 
 		if (strlen(gps_logfile) != 1) // check if the gps_logfile is of proper lenght (== likely to be initialized)

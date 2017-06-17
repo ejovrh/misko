@@ -41,8 +41,8 @@ char gsm_http_cred[11] = ""; // HTTP server credentials (arbitrary lenght)
 // device variables
 char bat_a_pct[9] = "batAxxx%";
 char bat_b_pct[9] = "batBxxx%";
-char sd_buffer[SD_BUFFERSIZE]; // buffer holding 2x 512byte blocks of NMEA sentences for buffered write of 512byte blocks
-char statistics_buffer[SD_BUFFERSIZE] = ""; // buffer for statistical data which ends up written to SD
+char sd_buffer_nmea[SD_BUFFERSIZE]; // buffer holding 2x 512byte blocks of NMEA sentences for buffered write of 512byte blocks
+char sd_buffer_stats[SD_BUFFERSIZE] = ""; // buffer for statistical data which ends up written to SD
 byte adxl345_irq_src; // holds INT_SRC - a register in the ADXL345 via which it is determined which interrupt was triggered
 
 // Bluetooth flags
@@ -70,6 +70,8 @@ SoftwareSerial gps(GPS_sw_serial_rx, GPS_sw_serial_tx);
 
 // set up variables using the SD utility library functions:
 File gpslogfile; // file object for the log file
+File statfile; // file object for statistics
+
 bool flag_sd_write_enable = 0; // flag if a write shall be allowed or not - is controlled by log file name initialization
 uint8_t fs_m2tk_first = 0; // helper variable for the strlist element
 uint8_t fs_m2tk_cnt = 0; // helper variable for the strlist element
