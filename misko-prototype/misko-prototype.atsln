@@ -12,7 +12,6 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{E06790A0-2F7D-44DB-98E5-7F89238BE451}.Debug|AVR.ActiveCfg = Debug|AVR
-		{E06790A0-2F7D-44DB-98E5-7F89238BE451}.Debug|AVR.Build.0 = Debug|AVR
 		{E06790A0-2F7D-44DB-98E5-7F89238BE451}.Release|AVR.ActiveCfg = Release|AVR
 		{E06790A0-2F7D-44DB-98E5-7F89238BE451}.Release|AVR.Build.0 = Release|AVR
 	EndGlobalSection
