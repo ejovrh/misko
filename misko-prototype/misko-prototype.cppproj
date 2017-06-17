@@ -374,28 +374,6 @@
     <Folder Include="misko-prototype\src\_micro-api-readonly\libraries\U8glib\src\clib\" />
     <Folder Include="misko-prototype\src\_micro-api-readonly\variants\" />
     <Folder Include="misko-prototype\src\_micro-api-readonly\variants\mega\" />
-    <Folder Include="src\" />
-    <Folder Include="src\_micro-api-readonly\" />
-    <Folder Include="src\_micro-api-readonly\core\" />
-    <Folder Include="src\_micro-api-readonly\libraries\" />
-    <Folder Include="src\_micro-api-readonly\libraries\EEPROM\" />
-    <Folder Include="src\_micro-api-readonly\libraries\EEPROM\src\" />
-    <Folder Include="src\_micro-api-readonly\libraries\M2tklib\" />
-    <Folder Include="src\_micro-api-readonly\libraries\M2tklib\utility\" />
-    <Folder Include="src\_micro-api-readonly\libraries\SD\" />
-    <Folder Include="src\_micro-api-readonly\libraries\SD\src\" />
-    <Folder Include="src\_micro-api-readonly\libraries\SD\src\utility\" />
-    <Folder Include="src\_micro-api-readonly\libraries\Seeeduino_GPRS-master\" />
-    <Folder Include="src\_micro-api-readonly\libraries\SoftwareSerial\" />
-    <Folder Include="src\_micro-api-readonly\libraries\SoftwareSerial\src\" />
-    <Folder Include="src\_micro-api-readonly\libraries\SPI\" />
-    <Folder Include="src\_micro-api-readonly\libraries\SPI\src\" />
-    <Folder Include="src\_micro-api-readonly\libraries\U8glib\" />
-    <Folder Include="src\_micro-api-readonly\libraries\U8glib\extras\" />
-    <Folder Include="src\_micro-api-readonly\libraries\U8glib\src\" />
-    <Folder Include="src\_micro-api-readonly\libraries\U8glib\src\clib\" />
-    <Folder Include="src\_micro-api-readonly\variants\" />
-    <Folder Include="src\_micro-api-readonly\variants\mega\" />
     <Folder Include="__vm\" />
   </ItemGroup>
   <ItemGroup>
