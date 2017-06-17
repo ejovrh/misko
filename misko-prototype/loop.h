@@ -92,3 +92,62 @@
 		if(Serial.available()) //read arduino IDE serial monitor inputs (if available) and send them to SIM800
 			Serial1.write(Serial.read()); // NL & CR need to be enabled
 	}
+
+	if (flag_timer5_handler_execute)
+	{
+		flag_timer5_handler_execute = 0;
+
+		if (uptime % DEVICE_STATISTICS_FREQUENCY == 0)
+			flag_device_do_write_stats = 1;
+
+			// statistical data (voltages, temperatures, etc.)
+		val_Vcc = 2 * calculate_voltage(Vcc_sense_pin); // measures Vcc across a voltage divider
+		val_temperature = calculate_temperature(); // reads out temperature-dependant voltage
+
+		/* the percentage calculation
+			union battery datasheet: charge cutoff voltage: Vbat 4.20V, discharge cutoff voltage: Vbat 2.70V
+				over the voltage divider this gives 2.10V and 1.3V
+				our voltage divider gives 0.5 Vbat
+
+		 percentage calculation see https://racelogic.support/02VBOX_Motorsport/Video_Data_Loggers/Video_VBOX_Range/Video_VBOX_-_User_manual/24_-_Calculating_Scale_and_Offset
+
+			dX is 2.1 - 1.35 = 0.75
+			dY is 100 - 0 = 100
+		 the gradient is dX/dY = 133
+
+		 Y = percent = 0, X = Voltage = 1.35V
+	 		0 = ((dX/dY)* voltage) + c
+			0 = (133 * 1.35) + c <=> 0 = 180 + c <=> c = -180
+			our equation is: y = 133 * x - 180
+
+		elementary, dr. watson!
+ 		*/
+		val_batA_pct = (133 * calculate_voltage(bat_A_pin)) - 180; // calculus...
+		val_batB_pct = 000;
+
+		// set and unset of the fitness mode ( a MTK3333 chipset feature which depends on velocity of the GPS receiver)
+		if (flag_gps_fitness_is_set && gps_speed >= GPS_FITNESS_MODE_THRESHOLD ) // 10 knots == 5.1m/s ( 18,.5km/h ) or faster - 5m/s is the threshold reported in the datasheet
+		{
+			gps.println("$PMTK886,0*28"); // set to normal mode
+			flag_gps_fitness_is_set = 0; // flag fitness mode off
+		}
+
+		if (!flag_gps_fitness_is_set && gps_speed < GPS_FITNESS_MODE_THRESHOLD) // lower speed
+		{
+			gps.println("$PMTK886,1*29"); // enable fitness mode (good for speeds up to 5m/s (== 9.72 knots), for faster speeds normal mode is better)
+			flag_gps_fitness_is_set = 1; // flag fitness mode on
+		}
+	}
+
+	if ( flag_device_do_write_stats && (FeRAMReadByte(FERAM_DEVICE_MISC_CFG1) >> FERAM_DEVICE_MISC_CFG1_STAT_WRITE) & 0x01)
+	{
+		flag_device_do_write_stats = 0;
+
+		static char tmp_vcc[5] = "";
+		static char tmp_tz[4] = "";
+
+		itoa((int8_t) FeRAMReadByte(FERAM_DEVICE_TIMEZONE), tmp_tz, 10);
+		dtostrf(val_Vcc, 3, 2, tmp_vcc); // convert the float into a string
+		sprintf(statistics_buffer, "%sUTC+%s,%s,%+02d", gps_time, tmp_tz, tmp_vcc, (int8_t) round(val_temperature) );
+		Serial.println(statistics_buffer);
+	}
