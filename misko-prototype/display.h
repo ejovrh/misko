@@ -241,7 +241,7 @@ m2_menu_entry m2_2lmenu_data[] =
 uint8_t m2_2lmenu_first; // first visible line
 uint8_t m2_2lmenu_cnt; // total visible lines
 
-M2_2LMENU(el_2lmenu,"l5f0e0W55",&m2_2lmenu_first,&m2_2lmenu_cnt, m2_2lmenu_data,NULL,NULL,'\0');
+M2_2LMENU(el_2lmenu, "l5f0e0W55", &m2_2lmenu_first, &m2_2lmenu_cnt, m2_2lmenu_data, ' ', ' ', '\0');
 M2_SPACE(el_space, "W1h1");
 M2_VSB(el_vsb, "l5w4r1", &m2_2lmenu_first, &m2_2lmenu_cnt);
 M2_LIST(list_2lmenu) = { &el_2lmenu, &el_space, &el_vsb };
