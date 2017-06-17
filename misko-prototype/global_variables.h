@@ -7,12 +7,12 @@
 #define GPSRATE 4800
 #define SERIALRATE 9600
 #define NMEA_BUFFERSIZE 82 // officially, NMEA sentences are at maximum 82 characters long (80 readable characters + \r\n)
-#define SD_BUFFERSIZE 1024 // cyclical buffer for NMEA sentences to be written to SD card
+#define SD_BUFFERSIZE 2048 // cyclical buffer for NMEA sentences to be written to SD card
 #define GPS_FITNESS_MODE_THRESHOLD 10 // theshold in knots/h for transition from fitness mode <-> normal mode
+#define DEVICE_STATISTICS_FREQUENCY 5 // write device statistics every 5 seconds
 
 // GPS variables
 char NMEA_buffer[NMEA_BUFFERSIZE] = "";	// string buffer for the NMEA sentence
-char FERAM_GPS_LAST_GOOD_POSITION[82] = ""; // stores last good position
 uint8_t bufferid = 0; // holds the current position in the NMEA_buffer array, used for walk through the buffer
 char gps_command_buffer[24];
 char gps_date[9] = "20------"; // YYYYMMDD derived from NMEA sentence
@@ -42,8 +42,12 @@ char gsm_http_cred[11] = ""; // HTTP server credentials (arbitrary lenght)
 char bat_a_pct[9] = "batAxxx%";
 char bat_b_pct[9] = "batBxxx%";
 char sd_buffer_nmea[SD_BUFFERSIZE]; // buffer holding 2x 512byte blocks of NMEA sentences for buffered write of 512byte blocks
-char sd_buffer_stats[SD_BUFFERSIZE] = ""; // buffer for statistical data which ends up written to SD
+char sd_buffer_stats[SD_BUFFERSIZE]; // buffer for statistical data which ends up written to SD
 byte adxl345_irq_src; // holds INT_SRC - a register in the ADXL345 via which it is determined which interrupt was triggered
+bool flag_timer5_handler_execute = 0; // flag to get timer5 to execute stuff without having stuff in the ISR itself
+bool flag_device_do_write_stats = 0; // flag to get loop() commit dev. stats to SD card
+char devstat_logfile[22] = "";
+char statistics_buffer[82] = "";
 
 // Bluetooth flags
 uint32_t bluetooth_button_press_time = millis(); // time of button press
