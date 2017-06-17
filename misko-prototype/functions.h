@@ -1240,21 +1240,25 @@ const char *fs_strlist_getstr(uint8_t idx, uint8_t msg)
 }
 
 // buffered write onto SD card utilizing a circular buffer
-void sd_buffer_write(char *in_string, uint8_t in_size)
-// TODO add 3rd argument: the dst buffer
-//void sd_buffer_write(char *dst_buffer, char *in_string, uint8_t in_size)
-
+void sd_buffer_write(char *dst_buffer, char *in_string, uint8_t in_size, File filehandle)
 {
+	/* this function writes in_string of in_size into dst_buffer and eventually via filehandle
+	 *	onto the SD card.
+	 *	the intent is to buffer NMEA sentences / device statistics and write in bulk (as opposed to
+	 *		every e.g. second) and thus save the SD card from being burned to death by too frequent
+	 *		write operations.
+	 */
+
 	// pointer arithmetrics, beware!
-	static char *end = sd_buffer + SD_BUFFERSIZE; // end address of buffer
-	static char *target = sd_buffer; // at init time is start address of sd_buffer, otherwise is current of next free write dst. addr
+	static char *end = dst_buffer + SD_BUFFERSIZE; // end address of buffer
+	static char *target = dst_buffer; // at init time is start address of sd_buffer, otherwise is current of next free write dst. addr
 	static bool flag_flush_1st = 0; // flag 1st half of buffer for flushing
 	static bool flag_flush_2nd = 0; // flag 2nd half of buffer for flushing
 
 	#if BUFFER_DEBUG_PRINT
-		Serial.print("buffer start:");Serial.println((uint16_t)sd_buffer);
+		Serial.print("buffer start:");Serial.println((uint16_t)dst_buffer);
 		Serial.print("buffer end:");Serial.println((uint16_t) end);
-		Serial.print("target:");Serial.println((uint16_t) target - (uint16_t)sd_buffer );
+		Serial.print("target:");Serial.println((uint16_t) target - (uint16_t)dst_buffer );
 		Serial.print("space left:");Serial.println((uint16_t) end - (uint16_t)target );
 		Serial.print("in_size");Serial.println(in_size);
 	#endif
@@ -1280,10 +1284,10 @@ void sd_buffer_write(char *in_string, uint8_t in_size)
 		target = (char *) memcpy(target, in_string, in_size); // copy onto location of c and return position of destination
 		target += in_size*sizeof(char); // advance target by ammount of bytes copied to the next free space
 
-		if (!flag_flush_1st && target >= sd_buffer + 512* sizeof(char)) // if we have filled 1st 512 byte buffer
+		if (!flag_flush_1st && target >= dst_buffer + (SD_BUFFERSIZE/2)*sizeof(char)) // if we have filled 1st half of the buffer
 			flag_flush_1st = 1; // mark the 1st buffer for flushing
 
-		if (!flag_flush_2nd && target < sd_buffer + 512* sizeof(char)) // if we have filled 1st 512 byte buffer
+		if (!flag_flush_2nd && target < dst_buffer + (SD_BUFFERSIZE/2)*sizeof(char)) // if we have filled 1st half of the buffer
 			flag_flush_2nd = 1; // mark the 2nd buffer for flushing
 
 	}
@@ -1310,15 +1314,15 @@ void sd_buffer_write(char *in_string, uint8_t in_size)
 			#if BUFFER_DEBUG_PRINT
 				Serial.println("flushing 1st half");
 			#else
-				gpslogfile.write(sd_buffer, 512*sizeof(char)); // write 1st half of the buffer
-				gpslogfile.flush(); // flush all to card
+				filehandle.write(dst_buffer, (SD_BUFFERSIZE/2)*sizeof(char)); // write 1st half of the buffer
+				filehandle.flush(); // flush all to card
 			#endif
 
 			flag_flush_1st = 0; // unmark it
 		}
 
 		memcpy(target, in_string, len); // write that much into buffer
-		target = sd_buffer; // set pointer back to start
+		target = dst_buffer; // set pointer back to start
 
 		target = (char *) memcpy(target, in_string+len*sizeof(char), rest*sizeof(char)); // write the rest
 		target += rest*sizeof(char); // advance target by ammount of bytes copied to the next free space
@@ -1329,8 +1333,8 @@ void sd_buffer_write(char *in_string, uint8_t in_size)
 			#if BUFFER_DEBUG_PRINT
 				Serial.println("flushing 2nd half");
 			#else
-				gpslogfile.write(sd_buffer+512*sizeof(char), 512*sizeof(char)); // write 2nd half of the buffer
-				gpslogfile.flush(); // flush all to card
+				filehandle.write(dst_buffer+(SD_BUFFERSIZE/2)*sizeof(char), (SD_BUFFERSIZE/2)*sizeof(char)); // write 2nd half of the buffer
+				filehandle.flush(); // flush all to card
 			#endif
 
 			flag_flush_2nd = 0; // unmark it
