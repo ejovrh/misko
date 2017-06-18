@@ -13,7 +13,7 @@ M2_SPACE(el_whitespace, "W6h8");
 
 // data start
 	// datetime
-		M2_BUTTON(el_datetime_ok, format_rf0, "ok", fn_cb_datetime_ok);
+		M2_BUTTON(el_datetime_ok, format_rf0, "ok", fn_cb_button_datetime_ok);
 		M2_LABEL(el_gps_date, format_rf0, gps_date); // label for gps_date
 		M2_LABEL(el_gps_time, format_rf0, gps_time); // label for gps_time
 		M2_LIST(el_list_datetime) = {&el_gps_date, &el_whitespace, &el_gps_time};
@@ -28,7 +28,7 @@ M2_SPACE(el_whitespace, "W6h8");
 	// datetime
 
 	// position
-		M2_BUTTON(el_position_ok, format_rf0, "ok", &fn_cb_position_ok);
+		M2_BUTTON(el_position_ok, format_rf0, "ok", &fn_cb_button_position_ok);
 		M2_LABELFN(el_gps_latitude, format_rf0, fn_cb_get_gps_latitude);
 		M2_LABELFN(el_gps_longtitude, format_rf0, fn_cb_get_gps_longtitude);
 		M2_LABELFN(el_gps_altitude, format_rf0, fn_cb_get_gps_altitude);
@@ -45,7 +45,7 @@ M2_SPACE(el_whitespace, "W6h8");
 	// position
 
 	// cellular
-		M2_BUTTON(el_cellular_ok, format_rf0, "ok", &fn_cb_cellular_ok);
+		M2_BUTTON(el_cellular_ok, format_rf0, "ok", &fn_cb_button_cellular_ok);
 		M2_LABEL(el_gsm_power_str, format_rf0, "power");
 		M2_LABELFN(el_gsm_power_status, format_rf0, fn_cb_get_gsm_power_status);
 		M2_LIST(el_gsm_power_list) = {&el_gsm_power_str, &el_whitespace, &el_gsm_power_status};
@@ -72,7 +72,7 @@ M2_SPACE(el_whitespace, "W6h8");
 	// cellular
 
 	// device status
-		M2_BUTTON(el_device_status_ok, format_rf0, "ok", &fn_cb_device_status_ok);
+		M2_BUTTON(el_device_status_ok, format_rf0, "ok", &fn_cb_button_device_status_ok);
 		M2_LABELFN(el_power_good, "fr0", fn_cb_get_power_good_status);
 		M2_LABELFN(el_batt_charge, format_rf0, fn_cb_get_bat_charge_status);
 		M2_LIST(el_power_list) = {&el_power_good, &el_whitespace, &el_batt_charge};
@@ -104,7 +104,7 @@ M2_SPACE(el_whitespace, "W6h8");
 
 // settings start
 	// logging
-		M2_BUTTON(el_logging_ok, format_rf0, "ok", &fn_cb_logging_ok);
+		M2_BUTTON(el_logging_ok, format_rf0, "ok", &fn_cb_button_logging_ok);
 		M2_LABEL(el_sd_write, format_rf0, "Log position");
 		M2_COMBOFN(el_sd_write_setting, format_rf0, 2, fn_cb_set_sd_write);
 		M2_LABEL(el_stat_write, format_rf0, "Log statistics");
@@ -115,7 +115,7 @@ M2_SPACE(el_whitespace, "W6h8");
 	// logging
 
 	// serial port
-		M2_BUTTON(el_serial_ok, format_rf0, "ok", &fn_cb_serial_ok);
+		M2_BUTTON(el_serial_ok, format_rf0, "ok", &fn_cb_button_serial_ok);
 		M2_LABEL(el_serial, format_rf0, "serial port");
 		M2_COMBOFN(el_serial_setting, format_rf0, 3, fn_cb_set_serial_setting);
 		M2_LIST(el_serial_list) = { &el_serial, &el_serial_setting, &el_serial_ok };
@@ -124,7 +124,7 @@ M2_SPACE(el_whitespace, "W6h8");
 	// serial port
 
 	// timezone
-		M2_BUTTON(el_timezone_ok, format_rf0, "ok", &fn_cb_timezone_ok);
+		M2_BUTTON(el_timezone_ok, format_rf0, "ok", &fn_cb_button_timezone_ok);
 		M2_LABEL(el_timezone_utc, format_rf0, "UTC");
 		M2_S8NUMFN(el_timezone_utc_value, "+1c2", -12, 12, fn_cb_set_tz);
 		M2_LIST(el_timezone_list) = { &el_timezone_utc, &el_timezone_utc_value, &el_timezone_ok };
@@ -133,7 +133,7 @@ M2_SPACE(el_whitespace, "W6h8");
 	// timezone
 
 	// Bluetooth
-		M2_BUTTON(el_bluetooth_ok, format_rf0, "ok", &fn_cb_bluetooth_ok);
+		M2_BUTTON(el_bluetooth_ok, format_rf0, "ok", &fn_cb_button_bluetooth_ok);
 		M2_LABEL(el_bluetooth_power, format_rf0, "Power");
 		M2_COMBOFN(el_bluetooth_power_value, format_rf0, 3, fn_cb_set_bluetooth_power_setting);
 		M2_S8NUMFN(el_bluetooth_power_timeout, "+0c1f0", 1, 5, fn_cb_set_bluetooth_timeout);
@@ -143,7 +143,7 @@ M2_SPACE(el_whitespace, "W6h8");
 	// Bluetooth
 
 	// display
-		M2_BUTTON(el_display_ok, format_rf0, "ok", &fn_cb_display_ok);
+		M2_BUTTON(el_display_ok, format_rf0, "ok", &fn_cb_button_display_ok);
 		M2_LABEL(el_lcd_power, format_rf0, "Power");
 		M2_COMBOFN(el_lcd_power_value, format_rf0, 2, fn_cb_set_oled_power_setting);
 		M2_S8NUMFN(el_lcd_power_timeout, "+0c1f0", 1, 5, fn_cb_set_oled_timeout);
@@ -153,7 +153,7 @@ M2_SPACE(el_whitespace, "W6h8");
 	// display
 
 	// GPS
-		M2_BUTTON(el_gps_ok, format_rf0, "ok", &fn_cb_gps_ok);
+		M2_BUTTON(el_gps_ok, format_rf0, "ok", &fn_cb_button_gps_ok);
 		M2_LABEL(el_gps_power, format_rf0, "Power");
 		M2_COMBOFN(el_gps_power_value, "f0", 2, fn_cb_set_gps_power_setting);
 		M2_LIST(el_gps_list_power) = {&el_gps_power, &el_whitespace, &el_gps_power_value};
@@ -181,7 +181,7 @@ M2_SPACE(el_whitespace, "W6h8");
 	// GPS end
 
 	// GSM start
-		M2_BUTTON(el_gsm_ok, format_rf0, "ok", &fn_cb_gsm_ok);
+		M2_BUTTON(el_gsm_ok, format_rf0, "ok", &fn_cb_button_gsm_ok);
 		M2_LABEL(el_gsm_settings_power_str, format_rf0, "GSM Power: ");
 		M2_COMBOFN(el_gsm_power_val, format_rf0, 2, fn_cb_set_gsm_power);
 		// TODO: check!
@@ -200,7 +200,7 @@ M2_SPACE(el_whitespace, "W6h8");
 	// GSM end
 
 	// accelerometer
-	M2_BUTTON(el_accelerometer_ok, format_rf0, "ok", &fn_cb_accelerometer_ok);
+	M2_BUTTON(el_accelerometer_ok, format_rf0, "ok", &fn_cb_button_accelerometer_ok);
 	M2_LABEL(el_accel_str, format_rf0, "Trigger Sleep:");
 	M2_COMBOFN(el_accel_enable_value, format_rf0, 2, fn_cb_set_accel_enable);
 	M2_LABEL(el_accel_sleep_str, format_rf0, "Motion Timeout:");

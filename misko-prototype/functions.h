@@ -384,78 +384,76 @@ void gps_adjust_log_freq(void) // operates directly off values stored in FeRAM
 }
 
 // callback for data datetime_ok button
-void fn_cb_datetime_ok(m2_el_fnarg_p fnarg)
+void fn_cb_button_datetime_ok(m2_el_fnarg_p fnarg)
 {
 	m2_SetRootExtended(&top_el_expandable_menu, 1, 0);
 }
 
 // callback for data position_ok button
-void fn_cb_position_ok(m2_el_fnarg_p fnarg)
+void fn_cb_button_position_ok(m2_el_fnarg_p fnarg)
 {
 	m2_SetRootExtended(&top_el_expandable_menu, 2, 0);
 }
 
 // callback for data cellular_ok button
-void fn_cb_cellular_ok(m2_el_fnarg_p fnarg)
+void fn_cb_button_cellular_ok(m2_el_fnarg_p fnarg)
 {
 	m2_SetRootExtended(&top_el_expandable_menu, 3, 0);
 }
 
 // callback for data-device_status_ok button
-void fn_cb_device_status_ok(m2_el_fnarg_p fnarg)
+void fn_cb_button_device_status_ok(m2_el_fnarg_p fnarg)
 {
 	m2_SetRootExtended(&top_el_expandable_menu, 4, 0);
 }
 
 // callback for settings logging_ok button
-void fn_cb_logging_ok(m2_el_fnarg_p fnarg)
+void fn_cb_button_logging_ok(m2_el_fnarg_p fnarg)
 {
 	m2_SetRootExtended(&top_el_expandable_menu, 2, 0);
 }
 
 // callback for settings serial_ok button
-void fn_cb_serial_ok(m2_el_fnarg_p fnarg)
+void fn_cb_button_serial_ok(m2_el_fnarg_p fnarg)
 {
 	m2_SetRootExtended(&top_el_expandable_menu, 3, 0);
 }
 
 // callback for settings timezone_ok button
-void fn_cb_timezone_ok(m2_el_fnarg_p fnarg)
+void fn_cb_button_timezone_ok(m2_el_fnarg_p fnarg)
 {
 	m2_SetRootExtended(&top_el_expandable_menu, 4, 0);
 }
 
 // callback for settings bluetooth_ok button
-void fn_cb_bluetooth_ok(m2_el_fnarg_p fnarg)
+void fn_cb_button_bluetooth_ok(m2_el_fnarg_p fnarg)
 {
 	m2_SetRootExtended(&top_el_expandable_menu, 5, 0);
 }
 
 // callback for settings display_ok button
-void fn_cb_display_ok(m2_el_fnarg_p fnarg)
+void fn_cb_button_display_ok(m2_el_fnarg_p fnarg)
 {
 	m2_SetRootExtended(&top_el_expandable_menu, 6, 0);
 }
 
 // callback for settings gps_ok button
-void fn_cb_gps_ok(m2_el_fnarg_p fnarg)
+void fn_cb_button_gps_ok(m2_el_fnarg_p fnarg)
 {
 	m2_SetRootExtended(&top_el_expandable_menu, 7, 0);
 }
 
 // callback for settings gsm_ok button
-void fn_cb_gsm_ok(m2_el_fnarg_p fnarg)
+void fn_cb_button_gsm_ok(m2_el_fnarg_p fnarg)
 {
 	m2_SetRootExtended(&top_el_expandable_menu, 8, 0);
 }
 
 // callback for settings accelerometer_ok button
-void fn_cb_accelerometer_ok(m2_el_fnarg_p fnarg)
+void fn_cb_button_accelerometer_ok(m2_el_fnarg_p fnarg)
 {
 	m2_SetRootExtended(&top_el_expandable_menu, 9, 0);
 }
-
-
 
 // callback for UTC display
 const char *fn_cb_get_utc(m2_rom_void_p element)
