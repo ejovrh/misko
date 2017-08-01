@@ -70,42 +70,7 @@ ISR(TIMER5_COMPA_vect)
 {
 	uptime++; // increment every second
 
-// statistical data (voltages, temperatures, etc.)
-	val_Vcc = 2 * calculate_voltage(Vcc_sense_pin); // measures Vcc across a voltage divider
-	val_temperature = calculate_temperature(); // reads out temperature-dependant voltage
-		/* the percentage calculation
-		union battery datasheet: charge cutoff voltage: Vbat 4.20V, discharge cutoff voltage: Vbat 2.70V
-			over the voltage divider this gives 2.10V and 1.3V
-			our voltage divider gives 0.5 Vbat
-
-	 percentage calculation see https://racelogic.support/02VBOX_Motorsport/Video_Data_Loggers/Video_VBOX_Range/Video_VBOX_-_User_manual/24_-_Calculating_Scale_and_Offset
-
-		dX is 2.1 - 1.35 = 0.75
-		dY is 100 - 0 = 100
-	 the gradient is dX/dY = 133
-
-	 Y = percent = 0, X = Voltage = 1.35V
-	 	0 = ((dX/dY)* voltage) + c
-		0 = (133 * 1.35) + c <=> 0 = 180 + c <=> c = -180
-		our equation is: y = 133 * x - 180
-
-	elementary, dr. watson!
- 	*/
-	val_batA_pct = (133 * calculate_voltage(bat_A_pin)) - 180; // calculus...
-	val_batB_pct = 000;
-
-// set and unset of the fitness mode ( a MTK3333 chipset feature which depends on velocity of the GPS receiver)
-	if (flag_gps_fitness_is_set && gps_speed >= GPS_FITNESS_MODE_THRESHOLD ) // 10 knots == 5.1m/s ( 18,.5km/h ) or faster - 5m/s is the threshold reported in the datasheet
-	{
-		gps.println("$PMTK886,0*28"); // set to normal mode
-		flag_gps_fitness_is_set = 0; // flag fitness mode off
-	}
-
-	if (!flag_gps_fitness_is_set && gps_speed < GPS_FITNESS_MODE_THRESHOLD) // lower speed
-	{
-		gps.println("$PMTK886,1*29"); // enable fitness mode (good for speeds up to 5m/s (== 9.72 knots), for faster speeds normal mode is better)
-		flag_gps_fitness_is_set = 1; // flag fitness mode on
-	}
+	flag_timer5_handler_execute = 1;
 
 // construct which runs only once at power-up
 	if(!flag_run_once)

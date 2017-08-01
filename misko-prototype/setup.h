@@ -70,6 +70,8 @@
 				a supercap remedies this somewhat
 	*/
 
+	digitalWrite(GPS_power_ctl_pin, LOW); // power off
+	digitalWrite(GPS_power_ctl_pin, HIGH); // power on
 	gps.begin(9600);   // connect to the GPS at the default rate
 	gps.println("$PMTK314,0,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*34");
 	gps.println("$PMTK250,3,3,4800*15"); // set in/out data format to NMEA over 4600 baud
@@ -96,6 +98,11 @@
 
 	// TODO - works, but needs further improvement
 	gps_adjust_log_freq(); // operates directly off values stored in FeRAM
+
+	if (flag_gps_on) // see what settings we have
+		digitalWrite(GPS_power_ctl_pin, HIGH); // ...and keep on
+	else
+		digitalWrite(GPS_power_ctl_pin, LOW); // ... or turn off
 
 	// TODO: adjust dynamically for best SNR
 	// $PMTK306 - minimum satellite SNR
