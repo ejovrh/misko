@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="8.1.0">
+<eagle version="8.2.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -73,18 +73,14 @@
 &lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
 <packages>
 <package name="DJNR6045-100-S">
-<wire x1="-2" y1="3" x2="2" y2="3" width="0.127" layer="21"/>
-<wire x1="3" y1="2" x2="3" y2="-2" width="0.127" layer="21"/>
-<wire x1="2" y1="-3" x2="-2" y2="-3" width="0.127" layer="21"/>
-<wire x1="-3" y1="-2" x2="-3" y2="2" width="0.127" layer="21"/>
-<wire x1="-3" y1="2" x2="-2" y2="3" width="0.127" layer="21"/>
-<wire x1="2" y1="3" x2="3" y2="2" width="0.127" layer="21"/>
-<wire x1="3" y1="-2" x2="2" y2="-3" width="0.127" layer="21"/>
-<wire x1="-2" y1="-3" x2="-3" y2="-2" width="0.127" layer="21"/>
 <text x="-3" y="4" size="1.27" layer="21">&gt;NAME</text>
 <text x="-3" y="-5" size="1.27" layer="21">&gt;VALUE</text>
-<smd name="P$1" x="-5.5" y="0" dx="5.7" dy="3.2" layer="1" rot="R90"/>
-<smd name="P$2" x="5.5" y="0" dx="5.7" dy="3.2" layer="1" rot="R90"/>
+<smd name="2" x="2.35" y="0" dx="1.6" dy="5.7" layer="1"/>
+<smd name="1" x="-2.35" y="0" dx="1.6" dy="5.7" layer="1"/>
+<wire x1="-3" y1="3" x2="3" y2="3" width="0.127" layer="21"/>
+<wire x1="3" y1="3" x2="3" y2="-3" width="0.127" layer="21"/>
+<wire x1="3" y1="-3" x2="-3" y2="-3" width="0.127" layer="21"/>
+<wire x1="-3" y1="-3" x2="-3" y2="3" width="0.127" layer="21"/>
 </package>
 </packages>
 <symbols>
@@ -114,8 +110,8 @@ Source: http://www.farnell.com/datasheets/1681958.pdf</description>
 <devices>
 <device name="" package="DJNR6045-100-S">
 <connects>
-<connect gate="G$2" pin="1" pad="P$1"/>
-<connect gate="G$2" pin="2" pad="P$2"/>
+<connect gate="G$2" pin="1" pad="1"/>
+<connect gate="G$2" pin="2" pad="2"/>
 </connects>
 <technologies>
 <technology name=""/>
