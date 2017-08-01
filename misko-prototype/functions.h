@@ -76,7 +76,7 @@ byte FeRAMReadByte(const uint16_t addr)
 {
 	byte retval;
 	if (addr > 0x7FFF) // if we try to go past the max. RAM address
-	return -1;	// return something
+		return -1;	// return something
 
 	uint8_t addr_msb = (addr >> 8) & 0xFF;
 	uint8_t addr_lsb = addr & 0xFF;
@@ -97,7 +97,7 @@ byte FeRAMReadByte(const uint16_t addr)
 uint8_t FeRAMWriteStr(const uint16_t addr, const char *data, uint8_t len)
 {
 	if (addr > 0x7FFF) // if we try to go past the max. RAM address
-	return 1;	// return something
+		return 1;	// return something
 
 	uint8_t addr_msb = (addr >> 8) & 0xFF;
 	uint8_t addr_lsb = addr & 0xFF;
@@ -122,10 +122,12 @@ uint8_t FeRAMWriteStr(const uint16_t addr, const char *data, uint8_t len)
 }
 
 // reads a string in FeRAM at addess addr of lenght len into buff
-uint8_t FeRAMReadString(const uint16_t addr, char *buff, uint8_t len=1)
+uint8_t FeRAMReadString(const uint16_t addr, char *out_data, uint8_t len)
 {
 	if (addr > 0x7FFF) // if we try to go past the max. RAM address
-	return -1;	// return something
+		return -1;	// return something
+
+	memset(out_data, '\0', len);
 
 	uint8_t addr_msb = (addr >> 8) & 0xFF;
 	uint8_t addr_lsb = addr & 0xFF;
@@ -136,11 +138,11 @@ uint8_t FeRAMReadString(const uint16_t addr, char *buff, uint8_t len=1)
 	SPI.transfer(addr_lsb); // send address least significant byte
 
 	for(uint8_t i = 0; i < len; i++)
-		*(buff+i) = (char) SPI.transfer(0xFF); // send on byte of crap into the circular buffer, get one byte back
+	{
+		*(out_data+i) = SPI.transfer(0xFF); // send on byte of crap into the circular buffer, get one byte back
+	}
 
 	digitalWrite(SPI_FRAM_SS_pin, HIGH); // de-select the FeRAM module
-
-	return 0; // returns 0
 }
 
  // returns the external voltage reference in volts
@@ -354,7 +356,7 @@ void gps_adjust_log_freq(void) // operates directly off values stored in FeRAM
 	*->		1 NMEA_SEN_RMC, GNRMC interval - Recommended Minimum Specific GNSS Sentence
 	*			2 NMEA_SEN_VTG, GPVTG interval - Course Over Ground and Ground Speed
 	*->		3 NMEA_SEN_GGA, GPGGA interval - GPS Fix Data
-	*			4 NMEA_SEN_GSA, GPGSA interval - GNSS DOPS and Active Satellites
+	*->		4 NMEA_SEN_GSA, GPGSA interval - GNSS DOPS and Active Satellites
 	*->		5 NMEA_SEN_GSV, GPGSV interval - GNSS Satellites in View
 	*			6 NMEA_SEN_GRS, GPGRS interval - GNSS Range Residuals
 	*			7 NMEA_SEN_GST, GPGST interval - GNSS Pseudorange Errors Statistics
@@ -362,7 +364,7 @@ void gps_adjust_log_freq(void) // operates directly off values stored in FeRAM
 	*			13 NMEA_SEN_MALM, PMTKALM interval - GPS almanac information
 	*			14 NMEA_SEN_MEPH, PMTKEPH interval - GPS ephmeris information
 	*			15 NMEA_SEN_MDGP, PMTKDGP interval - GPS differential correction information
-	*			16 NMEA_SEN_MDBG, PMTKDBG interval – MTK debug information
+	*			16 NMEA_SEN_MDBG, PMTKDBG interval Â– MTK debug information
 	*			17 NMEA_SEN_ZDA, GPZDA interval - Time & Date
 	*			18 NMEA_SEN_MCHN, PMTKCHN interval - GNSS channel status
 	*			19 NMEA_SEN_DTM, GPDTM interval - Datum reference
@@ -372,13 +374,14 @@ void gps_adjust_log_freq(void) // operates directly off values stored in FeRAM
 	*
 	*/
 
-	sprintf(gps_command_buffer, "$PMTK314,0,%d,0,%d,0,%d,0,0,0,0,0,0,0,0,0,0,0,0,0,0*", // construct the command string
+	sprintf(gps_command_buffer, "$PMTK314,0,%d,0,%d,%d,%d,0,0,0,0,0,0,0,0,0,0,0,0,0,0*", // construct the command string
 		(uint8_t) ( (FeRAMReadByte(FERAM_GPS_GPRMC_GGA_GSA_FREQ) >> FERAM_GPS_GPRMC_GGA_FREQ) & 0x0F ), // RMC - index 1
 		(uint8_t) ( (FeRAMReadByte(FERAM_GPS_GPRMC_GGA_GSA_FREQ) >> FERAM_GPS_GPRMC_GGA_FREQ) & 0x0F ), // GGA - index 3
+		(uint8_t) ( (FeRAMReadByte(FERAM_GPS_GPRMC_GGA_GSA_FREQ) >> FERAM_GPS_GPGSA_FREQ) & 0x0F ), // GGA - index 4
 		(uint8_t) ( (FeRAMReadByte(FERAM_GPS_GPZDA_GSV_FREQ) >> FERAM_GPS_GPGSV_FREQ) & 0x0F )); // GSV - field 5
 
 	sprintf(gps_command_buffer + strlen(gps_command_buffer), "%02X", getCheckSum(gps_command_buffer)); // append the checksum
-	//Serial.println(gps_command_buffer);
+	Serial.println(gps_command_buffer);
 	gps.println(gps_command_buffer);
 	return;
 }
@@ -1484,7 +1487,7 @@ void gps_parse_gprmc(char *in_str)
 
 	char *p = strtok(in_str, ","); // char pointer for strtok
 
-	while (*p) // for as long as there is something to tokenize with the given delimiter...
+	while (p != NULL) // for as long as there is something to tokenize with the given delimiter...
 	{
 		if (i == 1)	// field 1 - hhmmss time data: 170942.000,A,4547.9094,N,01555.1254,E,0.13,142.38,050816,,,A*63
 			memcpy(gps_time, p, 6* sizeof(char)); // fill char gps_time[7] = "XXXXXX" by copying from one array into another
@@ -1515,6 +1518,8 @@ void gps_parse_gprmc(char *in_str)
 
 		if (i == 9)	// field 9 - date: 050816,,,A*63
 		{
+			//Serial.print("p");Serial.println(p);
+			//FIXME: needs a check if the reported time is recent (i.e. not literally the start of the GPS epoch - 1.6. 1980)
 				// fill gps_date
 				*(gps_date+2) = *(p+4);  // Y - 1
 				*(gps_date+3) = *(p+5);  // Y - 6
@@ -1522,6 +1527,7 @@ void gps_parse_gprmc(char *in_str)
 				*(gps_date+5) = *(p+3);  // M - 8
 				*(gps_date+6) = *(p+0);  // D - 0
 				*(gps_date+7) = *(p+1);  // D - 5
+				break;
 		}
 
 		p = strtok(NULL, ","); // set the tokenizer for the next iteration
@@ -1566,7 +1572,7 @@ void gps_parse_gpgga(char *in_str)
 
 	char *p = strtok(in_str, ","); // char pointer for strtok
 
-	while (*p) // for as long as there is something to tokenize with the given delimiter...
+	while (p != NULL) // for as long as there is something to tokenize with the given delimiter...
 	{
 		if (i == 6) // position fix indicator
 			gps_position_fix_indicator = *p; // it's just one char (number)
@@ -1594,6 +1600,54 @@ void gps_parse_gpgga(char *in_str)
 	}
 }
 
+// constructs a PMTK741 positin hint message based on a last good known position
+//TODO
+char *pmtk741( )
+{
+
+	/*
+	 * sample NMEA GPRMC sentence
+	 *		$GNRMC,214329.000,A,4547.9089,N,01555.1553,E,1.33,121.79,121116,,,A*7A
+	 *
+	 * fields of interest (0-indexed), irrelevant are marked with an !:
+	 *
+	 *	 #0 - talker ID
+	 *	 #1 - UTC time
+	 *	 #2 - fix indicator: A - valid, V - invalid
+	 *X	 #3 - latitude; "4547.9089" in above example
+	 *	 #4 - latitude indicator; "N" in above example
+	 *X	 #5 - longtitude; "01555.1553" in above example
+	 *	 #6 - longtitude indicator; "E" in above exmaple
+	 *	 #7 - speed over ground in knots; "1.33" in above example
+	 *	 #8 - course, ; "121.79" in above example
+	 *	 #9 - date in DDMMYY format; "121116" in above example
+	 *	 #10 - magnetic variation
+	 *	 #11 - magnetic variation indicator
+	 *
+	 *	 the PMTK741 sentence we are constructing looks like:
+	 *	 $PMTK741,45.479094,015.551375,120,2016,12,02,17,40,00*1B
+	 *
+	 *	 fields are (0-indexed):
+	 *	  0 - message type
+	 *		1 - latitude
+	 *		2 - longtitude
+	 *		3 - altitude
+	 *		4 - year
+	 *		5 - month
+	 *		6 - day
+	 *		7 - hour
+	 *		8 - minute
+	 *		9 - seconds
+	 *		10 - checksum
+	 */
+
+	char retval[61] = "";
+
+//	sprintf("$PMTK741,%s,%s,%s,%.4s,%.2s,%.2s,%.2s,%.2s,%.2s*", gps_longtitude, gps_latitude, gps_altitude, gps_date, gps_date+3, gps_date+5, gps_time, gps_time+2, gps_time+4);
+
+	return retval;
+}
+
 // primitive BT button-activated printout
 void poor_mans_debugging(void)
 {
@@ -1613,13 +1667,21 @@ void poor_mans_debugging(void)
 	// issue a factory reset to the gps device
 	//gps.println("$PMTK104*37");
 
-	Serial.print("current pos:");
-	char retval[83] = "";
+	//current pos:$GNRMC,172715.000,A,4547.9094,N,01555.1375,E,0.00,326.01,031216,,,A*74
+	//Serial.println("$PMTK741,45.479094,015.551375,120,2016,12,02,17,40,00*1B");
 
-	FeRAMReadString(FERAM_GPS_LAST_GOOD_GNRMC, retval, 82 );
-	Serial.print( retval);
+	char rmc[83] = "";
+	char gga[83] = "";
+	FeRAMReadString(FERAM_GPS_LAST_GOOD_GNRMC, rmc, 82);
+	FeRAMReadString(FERAM_GPS_LAST_GOOD_GNGGA, gga, 82);
 
-	Serial.println(":current pos");
+	if (!flag_gps_fix)
+		gps_parse_gprmc(rmc);
+	if (!flag_gps_fix)
+		gps_parse_gpgga(gga);
+
+	Serial.print("rmc:");Serial.print(rmc);Serial.println(":rmc");
+	Serial.print("gga:");Serial.print(gga);Serial.println(":gga");
 
 
 /* 		char buffer[82];
