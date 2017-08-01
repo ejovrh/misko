@@ -364,7 +364,7 @@ void gps_adjust_log_freq(void) // operates directly off values stored in FeRAM
 	*			13 NMEA_SEN_MALM, PMTKALM interval - GPS almanac information
 	*			14 NMEA_SEN_MEPH, PMTKEPH interval - GPS ephmeris information
 	*			15 NMEA_SEN_MDGP, PMTKDGP interval - GPS differential correction information
-	*			16 NMEA_SEN_MDBG, PMTKDBG interval – MTK debug information
+	*			16 NMEA_SEN_MDBG, PMTKDBG interval Â– MTK debug information
 	*			17 NMEA_SEN_ZDA, GPZDA interval - Time & Date
 	*			18 NMEA_SEN_MCHN, PMTKCHN interval - GNSS channel status
 	*			19 NMEA_SEN_DTM, GPDTM interval - Datum reference
@@ -1667,9 +1667,8 @@ void poor_mans_debugging(void)
 	// issue a factory reset to the gps device
 	//gps.println("$PMTK104*37");
 
-
-	FeRAMReadString(FERAM_GPS_LAST_GOOD_GNRMC, retval, 82 );
-	Serial.print( retval);
+	//current pos:$GNRMC,172715.000,A,4547.9094,N,01555.1375,E,0.00,326.01,031216,,,A*74
+	//Serial.println("$PMTK741,45.479094,015.551375,120,2016,12,02,17,40,00*1B");
 
 	char rmc[83] = "";
 	char gga[83] = "";
@@ -1683,10 +1682,6 @@ void poor_mans_debugging(void)
 
 	Serial.print("rmc:");Serial.print(rmc);Serial.println(":rmc");
 	Serial.print("gga:");Serial.print(gga);Serial.println(":gga");
-
-
-	//pmtk741(foostr);
-	Serial.print("pos hint:"); Serial.print(pmtk741());Serial.println(":pos hint");
 
 
 /* 		char buffer[82];
