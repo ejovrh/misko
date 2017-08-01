@@ -78,19 +78,26 @@ void get_nmea_sentences()
 			// logfile name generation - should run only once a day
 			if (strlen(gps_date) != 2 && strstr(gps_logfile, gps_date) == NULL ) // if "gps_date is initialized" and "gps_logfile does not contain the current datetime (e.g. on startup or on date change)"
 			{
-				//FIXME some weird behaviour
-/*
-				strncat(gps_logfile, gps_date, 4*sizeof(char));//Serial.println(gps_logfile);
-				strcat(gps_logfile, "/");//Serial.println(gps_logfile);
-				strncat(gps_logfile, gps_date+4*sizeof(char), 2*sizeof(char));//Serial.println(gps_logfile);
+				/* FIXME some weird behaviour
+				 * the active FS object is not visible until after a
+				 * furthermore, once selected, the FS object is not visible again until after a reset
+				 */
 
-				if (!SD.exists(gps_logfile))
-					SD.mkdir(gps_logfile);
+				/* log format:
+				 *	e.g. /2017/06/20170616.log
+				 */
 
-				strcat(gps_logfile, "/");//Serial.println(gps_logfile);
-*/
-				strcat(gps_logfile,gps_date); // constrcut the logfile
-				strcat(gps_logfile, ".log");
+				strncat(gps_logfile, gps_date, 4*sizeof(char)); // construct the year "2017"
+				strcat(gps_logfile, "/"); // directory seperator "2017/"
+				strncat(gps_logfile, gps_date+4*sizeof(char), 2*sizeof(char)); // construct the month "2017/06"
+
+				if (!SD.exists(gps_logfile)) // if e.g. /2017/06/ doesnt exist...
+					SD.mkdir(gps_logfile); // create it
+
+				strcat(gps_logfile, "/"); // add another directory seperator "2017/06/"
+
+				strcat(gps_logfile,gps_date); // constrcut the actual file "2017/06/201706"
+				strcat(gps_logfile, ".log"); // "2017/06/201706.log"
 
 				Serial.println(gps_logfile);
 			}
@@ -99,7 +106,7 @@ void get_nmea_sentences()
 			if (!gpslogfile) // run only on initialization, not on every loop iteration
 				gpslogfile = SD.open(gps_logfile, FILE_WRITE);
 
-			sd_buffer_write(NMEA_buffer, bufferid); // write NMEA data into buffer
+			sd_buffer_write(sd_buffer_nmea, NMEA_buffer, bufferid, gpslogfile); // write NMEA data into SD card buffer and eventually onto SD
 		}
 
 		if (strlen(gps_logfile) != 1) // check if the gps_logfile is of proper lenght (== likely to be initialized)
