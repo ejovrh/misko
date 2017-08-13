@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE eagle SYSTEM "eagle.dtd">
-<eagle version="8.1.0">
+<eagle version="8.2.2">
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
@@ -107,7 +107,7 @@
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="ADXL345">
+<deviceset name="ADXL345" prefix="IC">
 <description>3-Axis, ±2 g/±4 g/±8 g/±16 g Digital Accelerometer</description>
 <gates>
 <gate name="G$1" symbol="ADXL345" x="5.08" y="10.16"/>

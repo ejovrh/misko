@@ -114,7 +114,7 @@
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="MX-67503-1230">
+<deviceset name="MX-67503-1230" prefix="CONN">
 <gates>
 <gate name="G$1" symbol="USB_D" x="5.08" y="5.08"/>
 </gates>

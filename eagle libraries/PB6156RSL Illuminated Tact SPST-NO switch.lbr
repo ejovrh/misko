@@ -130,7 +130,7 @@
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="PB6156RSL">
+<deviceset name="PB6156RSL" prefix="SW">
 <gates>
 <gate name="G$1" symbol="SPST-NO" x="0" y="5.08"/>
 </gates>

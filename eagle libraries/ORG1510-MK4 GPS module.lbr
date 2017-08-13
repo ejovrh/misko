@@ -118,8 +118,8 @@
 <wire x1="20.32" y1="25.4" x2="20.32" y2="-10.16" width="0.254" layer="94"/>
 <wire x1="20.32" y1="-10.16" x2="0" y2="-10.16" width="0.254" layer="94"/>
 <wire x1="0" y1="-10.16" x2="0" y2="25.4" width="0.254" layer="94"/>
-<text x="2.54" y="25.4" size="1.778" layer="94">&gt;NAME</text>
-<text x="2.54" y="-2.54" size="1.778" layer="94">&gt;VALUE</text>
+<text x="0" y="27.94" size="1.778" layer="95">&gt;NAME</text>
+<text x="2.54" y="-2.54" size="1.778" layer="96">&gt;VALUE</text>
 <pin name="GND2" x="7.62" y="-15.24" length="middle" rot="R90"/>
 <pin name="GND3" x="10.16" y="-15.24" length="middle" rot="R90"/>
 <pin name="GND4" x="12.7" y="-15.24" length="middle" rot="R90"/>
@@ -127,7 +127,7 @@
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="ORG1510-MK4">
+<deviceset name="ORG1510-MK4" prefix="IC">
 <gates>
 <gate name="G$1" symbol="SYMBOL" x="27.94" y="-2.54"/>
 </gates>
