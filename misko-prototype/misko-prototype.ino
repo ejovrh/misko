@@ -7,6 +7,7 @@
 #include "utility/m2ghu8g.h" // U8glib graphics handler (one of many)
 #include "utility/mas.h" // mass storage handler for the SD card
 #include <gprs.h> // GPRS library for SIM800C
+#include <WiFi101.h>
 #include <avr/sleep.h> // AVR sleep management
 #include <avr/power.h> // AVR power saving
 

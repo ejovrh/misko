@@ -39,8 +39,8 @@ digitalWrite(TMP36_shutdown_pin, HIGH);						//
 	pinMode(menu_left_button_pin, INPUT);							//
 	digitalWrite(menu_left_button_pin, LOW);					//
 //PC1 - user buttons - bluetooth power toggle
-	pinMode(menu_bluetooth_power_toggle_pin, INPUT);	//
-	digitalWrite(menu_bluetooth_power_toggle_pin, LOW); //
+	pinMode(menu_bluetooth_power_button_pin, INPUT);	//
+	digitalWrite(menu_bluetooth_power_button_pin, LOW); //
 //PC2 - user buttons - down, on(high), low(off)
 	pinMode(menu_down_button_pin, INPUT);							//
 	digitalWrite(menu_down_button_pin, LOW);					//

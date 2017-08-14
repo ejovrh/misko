@@ -213,7 +213,7 @@ void handle_bluetooth_button(void)
 
 	if (!flag_bluetooth_power_toggle_pressed) // if the button is not flagged as pressed
 	{
-		if(digitalRead(menu_bluetooth_power_toggle_pin) == HIGH) // if the button gets pressed
+		if(digitalRead(menu_gprs_push_button_pin) == HIGH) // if the button gets pressed
 		{
 			flag_bluetooth_power_toggle_pressed = 1; // flag the button as pressed, prevents multiple calls
 
@@ -233,7 +233,7 @@ void handle_bluetooth_button(void)
 	if ( ( (FeRAMReadByte(FERAM_DEVICE_MISC_CFG2) >> FERAM_DEVICE_MISC_CFG2_BLUETOOTH_POWER) & 0x03 ) != 2 )
 			return;
 
-		if ( digitalRead(menu_bluetooth_power_toggle_pin) == LOW) // the button is released
+		if ( digitalRead(menu_gprs_push_button_pin) == LOW) // the button is released
 		{
 			bluetooth_button_release_time = millis(); // record time of button release
 			flag_bluetooth_power_toggle_pressed = 0; // mark button as released
