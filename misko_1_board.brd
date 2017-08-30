@@ -6119,11 +6119,11 @@ design rules under a new name.</description>
 <attribute name="VALUE" x="92.615" y="53.46" size="1.27" layer="27"/>
 </element>
 <element name="R12" library="rcl" package="R0805" value="100k" x="90.5" y="66" smashed="yes" rot="MR270">
-<attribute name="NAME" x="92.78" y="63.63" size="1" layer="26" font="vector" rot="MR270" align="center"/>
+<attribute name="NAME" x="92.28" y="66.88" size="1" layer="26" font="vector" rot="MR270" align="center"/>
 <attribute name="VALUE" x="93.04" y="66.635" size="1.27" layer="28" rot="MR270"/>
 </element>
 <element name="R13" library="rcl" package="R0805" value="270k" x="90.46" y="61.53" smashed="yes" rot="MR270">
-<attribute name="NAME" x="92.795" y="60.005" size="1" layer="26" font="vector" rot="MR90" align="center"/>
+<attribute name="NAME" x="92.295" y="61.505" size="1" layer="26" font="vector" rot="MR90" align="center"/>
 <attribute name="VALUE" x="93" y="62.165" size="1.27" layer="28" rot="MR270"/>
 </element>
 <element name="R7" library="rcl" package="R0805" value="150k" x="51" y="51" smashed="yes" rot="MR270">
