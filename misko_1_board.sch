@@ -30078,7 +30078,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <instance part="R8" gate="G$1" x="88.9" y="576.58" rot="R270"/>
 <instance part="SW2" gate="G$1" x="40.64" y="467.36" rot="R90"/>
 <instance part="C20" gate="G$1" x="182.88" y="596.9" rot="R180"/>
-<instance part="CONN3" gate="G$1" x="320.04" y="510.54"/>
+<instance part="CONN3" gate="G$1" x="314.96" y="513.08" rot="R180"/>
 <instance part="C2" gate="G$1" x="24.13" y="43.18"/>
 <instance part="C7" gate="G$1" x="78.74" y="66.04"/>
 <instance part="C1" gate="G$1" x="7.62" y="48.26"/>
@@ -30850,13 +30850,13 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <wire x1="317.5" y1="500.38" x2="317.5" y2="505.46" width="0.1524" layer="91"/>
 <pinref part="R40" gate="G$1" pin="2"/>
 <wire x1="309.88" y1="505.46" x2="317.5" y2="505.46" width="0.1524" layer="91"/>
-<pinref part="CONN3" gate="G$1" pin="2"/>
+<label x="317.5" y="500.38" size="1.778" layer="95" ratio="9"/>
+<pinref part="CONN3" gate="G$1" pin="1"/>
 <wire x1="317.5" y1="510.54" x2="317.5" y2="505.46" width="0.1524" layer="91"/>
 <junction x="317.5" y="505.46"/>
-<wire x1="317.5" y1="510.54" x2="304.8" y2="510.54" width="0.1524" layer="91"/>
+<wire x1="317.5" y1="510.54" x2="307.34" y2="510.54" width="0.1524" layer="91"/>
 <junction x="317.5" y="510.54"/>
-<label x="304.8" y="510.54" size="1.778" layer="95"/>
-<label x="317.5" y="500.38" size="1.778" layer="95" ratio="9"/>
+<label x="307.34" y="510.54" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="R45" gate="G$1" pin="2"/>
@@ -32377,14 +32377,14 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <pinref part="C37" gate="G$1" pin="1"/>
 <wire x1="317.5" y1="528.32" x2="317.5" y2="520.7" width="0.1524" layer="91"/>
 <junction x="327.66" y="520.7"/>
-<pinref part="CONN3" gate="G$1" pin="1"/>
-<wire x1="317.5" y1="513.08" x2="317.5" y2="520.7" width="0.1524" layer="91"/>
-<wire x1="317.5" y1="513.08" x2="304.8" y2="513.08" width="0.1524" layer="91"/>
-<junction x="317.5" y="513.08"/>
-<label x="304.8" y="513.08" size="1.778" layer="95"/>
 <pinref part="IC5" gate="A" pin="VBAT_SENSE"/>
 <pinref part="IC5" gate="A" pin="VBAT2"/>
 <pinref part="IC5" gate="A" pin="VBAT1"/>
+<pinref part="CONN3" gate="G$1" pin="2"/>
+<wire x1="317.5" y1="513.08" x2="307.34" y2="513.08" width="0.1524" layer="91"/>
+<wire x1="317.5" y1="513.08" x2="317.5" y2="520.7" width="0.1524" layer="91"/>
+<junction x="317.5" y="513.08"/>
+<label x="307.34" y="513.08" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="IC22" gate="G$1" pin="VRTC"/>
