@@ -9,7 +9,7 @@
 </settings>
 <grid distance="0.25" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.005" altunitdist="mm" altunit="mm"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="1" name="Top" color="4" fill="1" visible="no" active="yes"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
 <layer number="3" name="Route3" color="4" fill="3" visible="no" active="no"/>
 <layer number="4" name="Route4" color="1" fill="4" visible="no" active="no"/>
@@ -29,11 +29,11 @@
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="yes"/>
 <layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="yes"/>
 <layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
 <layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
@@ -47,19 +47,19 @@
 <layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
 <layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
 <layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
-<layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
+<layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="yes"/>
 <layer number="40" name="bKeepout" color="1" fill="11" visible="yes" active="yes"/>
-<layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
+<layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="yes"/>
 <layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="46" name="Milling" color="3" fill="1" visible="yes" active="yes"/>
-<layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="48" name="Document" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="yes"/>
 <layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
 <layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
@@ -5884,9 +5884,9 @@ design rules under a new name.</description>
 <attribute name="NAME" x="41.095" y="59.51" size="1" layer="26" font="vector" rot="MR90" align="center"/>
 <attribute name="VALUE" x="38.46" y="61.23" size="1.27" layer="28" rot="MR90"/>
 </element>
-<element name="C13" library="resistor" library_urn="urn:adsk.eagle:library:348" package="C0805" value="0.1µF" x="97.25" y="59.75" smashed="yes" rot="MR0">
-<attribute name="NAME" x="97.11" y="61.76" size="1" layer="26" font="vector" rot="MR0" align="center"/>
-<attribute name="VALUE" x="98.52" y="57.21" size="1.27" layer="28" rot="MR0"/>
+<element name="C13" library="resistor" library_urn="urn:adsk.eagle:library:348" package="C0805" value="0.1µF" x="99.25" y="59.5" smashed="yes" rot="MR180">
+<attribute name="NAME" x="99.39" y="57.49" size="1" layer="26" font="vector" rot="MR180" align="center"/>
+<attribute name="VALUE" x="97.98" y="62.04" size="1.27" layer="28" rot="MR180"/>
 </element>
 <element name="C36" library="rcl" package="C0805" value="0.1µF" x="31.1" y="52.55" smashed="yes" rot="MR90">
 <attribute name="NAME" x="28.97" y="52.535" size="1" layer="26" font="vector" rot="MR270" align="center"/>
@@ -7860,13 +7860,14 @@ design rules under a new name.</description>
 <via x="97.25" y="58.4" extent="1-16" drill="0.3"/>
 <wire x1="97.2975" y1="56.7822" x2="97.25" y2="56.8297" width="0.25" layer="1"/>
 <wire x1="97.25" y1="56.8297" x2="97.25" y2="58.4" width="0.25" layer="1"/>
-<wire x1="99.25" y1="61" x2="98.2" y2="59.95" width="0.25" layer="16"/>
-<wire x1="98.2" y1="59.95" x2="98.2" y2="59.75" width="0.25" layer="16"/>
+<wire x1="98.2" y1="59.95" x2="99.25" y2="61" width="0.25" layer="16"/>
 <wire x1="99.25" y1="61" x2="99.25" y2="61.25" width="0.25" layer="1"/>
 <wire x1="99.7928" y1="61.2929375" x2="99.7498625" y2="61.25" width="0.25" layer="1"/>
 <wire x1="99.7498625" y1="61.25" x2="99.25" y2="61.25" width="0.25" layer="1"/>
-<wire x1="98.2" y1="59.75" x2="98.2" y2="59.35" width="0.25" layer="16"/>
-<wire x1="98.2" y1="59.35" x2="97.25" y2="58.4" width="0.25" layer="16"/>
+<wire x1="98.3" y1="59.85" x2="98.3" y2="59.5" width="0.25" layer="16"/>
+<wire x1="98.3" y1="59.85" x2="98.2" y2="59.95" width="0.25" layer="16"/>
+<wire x1="98.3" y1="59.5" x2="98.3" y2="59.45" width="0.25" layer="16"/>
+<wire x1="98.3" y1="59.45" x2="97.25" y2="58.4" width="0.25" layer="16"/>
 </signal>
 <signal name="BUTTON_LEFT" class="2">
 <contactref element="SW3" pad="LEFT"/>
@@ -9103,10 +9104,10 @@ design rules under a new name.</description>
 <approved hash="4,16,17e6c0d6b9b8735f"/>
 <approved hash="4,16,81e6c1f866773a5f"/>
 <approved hash="4,16,b8f0d4d3f19f7f02"/>
-<approved hash="6,16,f195f9a075ff9e11"/>
 <approved hash="6,16,feb2fae0723d97b2"/>
-<approved hash="6,16,5e469f269cc05da0"/>
+<approved hash="6,16,f195f9a075ff9e11"/>
 <approved hash="6,16,4997bc3aa7dcb1aa"/>
+<approved hash="6,16,5e469f269cc05da0"/>
 <approved hash="6,16,454fbc6aa40cbac2"/>
 <approved hash="5,16,b135938dbd2c1fbc"/>
 <approved hash="5,16,8e7937cf3738f372"/>
@@ -9119,16 +9120,16 @@ design rules under a new name.</description>
 <approved hash="5,16,2e1a51e23a08b40a"/>
 <approved hash="5,16,fa1c4393490e7b74"/>
 <approved hash="5,16,a80d6786b3d58bb3"/>
-<approved hash="5,16,6a15923ab5e6fa3d"/>
-<approved hash="5,16,7d4f5826cc6d5ef1"/>
-<approved hash="5,16,87838940ee8fcf11"/>
-<approved hash="5,16,65838946cc89ad17"/>
 <approved hash="5,16,234752c73538f34c"/>
-<approved hash="5,16,efaec75c1cfd83fa"/>
 <approved hash="5,16,18dc83b3626ed88c"/>
 <approved hash="5,16,5ddd48b36268138a"/>
-<approved hash="5,16,4629eca7b8f34c86"/>
+<approved hash="5,16,6a15923ab5e6fa3d"/>
+<approved hash="5,16,87838940ee8fcf11"/>
+<approved hash="5,16,65838946cc89ad17"/>
+<approved hash="5,16,efaec75c1cfd83fa"/>
+<approved hash="5,16,7d4f5826cc6d5ef1"/>
 <approved hash="5,16,48b7b80ee8407a08"/>
+<approved hash="5,16,4629eca7b8f34c86"/>
 <approved hash="19,16,b3d50f02c6ee8f5f"/>
 <approved hash="4,16,7b20aa7790d40ebc"/>
 <approved hash="4,16,5af3627740239120"/>
