@@ -81,6 +81,8 @@
 <wire x1="-3.722" y1="-2.69" x2="-3.722" y2="2.91" width="0.127" layer="21"/>
 <wire x1="3.831" y1="2.91" x2="3.831" y2="-2.69" width="0.127" layer="21"/>
 <circle x="-2.96" y="-1.7375" radius="0.3175" width="0.127" layer="21"/>
+<text x="6" y="-3.5" size="1.27" layer="27" rot="R90">&gt;VALUE</text>
+<text x="-4.5" y="-3" size="1.27" layer="25" rot="R90">&gt;NAME</text>
 </package>
 </packages>
 <symbols>
