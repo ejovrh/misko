@@ -30002,7 +30002,6 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <part name="R11" library="rcl" deviceset="R-EU_" device="R0805" value="10k"/>
 <part name="IC6" library="MAX6818 CMOS Switch debouncer" deviceset="MAX6818" device=""/>
 <part name="C34" library="rcl" deviceset="C-EU" device="C0805" value="10µF"/>
-<part name="SJ2" library="jumper" deviceset="SJ" device="W" value="GPIO6"/>
 <part name="IC13" library="RN4678 Bluetooth 4.2 Dual Mode" deviceset="RN4678_BT_MODULE" device=""/>
 <part name="R43" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0805" value="10k"/>
 <part name="R42" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0805" value="10k"/>
@@ -30225,7 +30224,6 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <instance part="R11" gate="G$1" x="121.92" y="-358.14" rot="R90"/>
 <instance part="IC6" gate="G$1" x="281.94" y="353.06"/>
 <instance part="C34" gate="G$1" x="307.34" y="368.3" rot="R180"/>
-<instance part="SJ2" gate="1" x="254" y="370.84" rot="R90"/>
 <instance part="IC13" gate="G$1" x="119.38" y="-25.4"/>
 <instance part="R43" gate="G$1" x="218.44" y="-38.1"/>
 <instance part="R42" gate="G$1" x="218.44" y="-30.48"/>
@@ -31282,11 +31280,6 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <label x="309.88" y="373.38" size="1.778" layer="95"/>
 </segment>
 <segment>
-<wire x1="254" y1="375.92" x2="241.3" y2="375.92" width="0.1524" layer="91"/>
-<label x="241.3" y="375.92" size="1.778" layer="95"/>
-<pinref part="SJ2" gate="1" pin="2"/>
-</segment>
-<segment>
 <pinref part="IC13" gate="G$1" pin="GND"/>
 <wire x1="134.62" y1="-12.7" x2="142.24" y2="-12.7" width="0.1524" layer="91"/>
 <label x="142.24" y="-12.7" size="1.778" layer="95"/>
@@ -31308,6 +31301,11 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <pinref part="SJ3" gate="1" pin="2"/>
 <wire x1="154.94" y1="-40.64" x2="165.1" y2="-40.64" width="0.1524" layer="91"/>
 <label x="165.1" y="-40.64" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="IC6" gate="G$1" pin="!EN!"/>
+<wire x1="266.7" y1="365.76" x2="241.3" y2="365.76" width="0.1524" layer="91"/>
+<label x="241.3" y="365.76" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="5V0" class="1">
@@ -33056,16 +33054,6 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <pinref part="IC1" gate="A" pin="(OC3B/INT4)_PE4"/>
 <wire x1="68.58" y1="787.4" x2="33.02" y2="787.4" width="0.1524" layer="91"/>
 <label x="33.02" y="787.4" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="!EN!" class="2">
-<segment>
-<pinref part="IC6" gate="G$1" pin="!EN!"/>
-<label x="241.3" y="365.76" size="1.778" layer="95"/>
-<wire x1="266.7" y1="365.76" x2="254" y2="365.76" width="0.1524" layer="91"/>
-<pinref part="SJ2" gate="1" pin="1"/>
-<wire x1="254" y1="365.76" x2="241.3" y2="365.76" width="0.1524" layer="91"/>
-<junction x="254" y="365.76"/>
 </segment>
 </net>
 <net name="MENU_GPRS_POWER_BUTTON_PIN" class="2">
