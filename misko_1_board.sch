@@ -29573,29 +29573,29 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <library name="MAX6818 CMOS Switch debouncer">
 <packages>
 <package name="TSSOP20">
-<smd name="!EN!" x="-2.93" y="-2.825" dx="1.6" dy="0.3" layer="1" rot="R270"/>
-<smd name="IN1" x="-2.28" y="-2.825" dx="1.6" dy="0.3" layer="1" rot="R270"/>
-<smd name="IN2" x="-1.63" y="-2.825" dx="1.6" dy="0.3" layer="1" rot="R270"/>
-<smd name="IN3" x="-0.98" y="-2.825" dx="1.6" dy="0.3" layer="1" rot="R270"/>
-<smd name="IN4" x="-0.33" y="-2.825" dx="1.6" dy="0.3" layer="1" rot="R270"/>
-<smd name="IN5" x="0.32" y="-2.825" dx="1.6" dy="0.3" layer="1" rot="R270"/>
-<smd name="IN6" x="0.97" y="-2.825" dx="1.6" dy="0.3" layer="1" rot="R270"/>
-<smd name="IN7" x="1.62" y="-2.825" dx="1.6" dy="0.3" layer="1" rot="R270"/>
-<smd name="IN8" x="2.27" y="-2.825" dx="1.6" dy="0.3" layer="1" rot="R270"/>
-<smd name="GND" x="2.92" y="-2.825" dx="1.6" dy="0.3" layer="1" rot="R270"/>
-<smd name="VCC" x="-2.93" y="2.775" dx="1.6" dy="0.3" layer="1" rot="R270"/>
-<smd name="OUT1" x="-2.28" y="2.775" dx="1.6" dy="0.3" layer="1" rot="R270"/>
-<smd name="OUT2" x="-1.63" y="2.775" dx="1.6" dy="0.3" layer="1" rot="R270"/>
-<smd name="OUT3" x="-0.98" y="2.775" dx="1.6" dy="0.3" layer="1" rot="R270"/>
-<smd name="OUT4" x="-0.33" y="2.775" dx="1.6" dy="0.3" layer="1" rot="R270"/>
-<smd name="OUT5" x="0.32" y="2.775" dx="1.6" dy="0.3" layer="1" rot="R270"/>
-<smd name="OUT6" x="0.97" y="2.775" dx="1.6" dy="0.3" layer="1" rot="R270"/>
-<smd name="OUT7" x="1.62" y="2.775" dx="1.6" dy="0.3" layer="1" rot="R270"/>
-<smd name="OUT8" x="2.27" y="2.775" dx="1.6" dy="0.3" layer="1" rot="R270"/>
-<smd name="!CH!" x="2.92" y="2.775" dx="1.6" dy="0.3" layer="1" rot="R270"/>
-<wire x1="-3.595" y1="-2.825" x2="-3.595" y2="2.775" width="0.127" layer="21"/>
-<wire x1="3.45" y1="2.775" x2="3.45" y2="-2.825" width="0.127" layer="21"/>
-<circle x="-2.96" y="-1.2375" radius="0.3175" width="0.127" layer="21"/>
+<smd name="!EN!" x="-2.93" y="-3.325" dx="1.6" dy="0.3" layer="1" rot="R270"/>
+<smd name="IN1" x="-2.28" y="-3.325" dx="1.6" dy="0.3" layer="1" rot="R270"/>
+<smd name="IN2" x="-1.63" y="-3.325" dx="1.6" dy="0.3" layer="1" rot="R270"/>
+<smd name="IN3" x="-0.98" y="-3.325" dx="1.6" dy="0.3" layer="1" rot="R270"/>
+<smd name="IN4" x="-0.33" y="-3.325" dx="1.6" dy="0.3" layer="1" rot="R270"/>
+<smd name="IN5" x="0.32" y="-3.325" dx="1.6" dy="0.3" layer="1" rot="R270"/>
+<smd name="IN6" x="0.97" y="-3.325" dx="1.6" dy="0.3" layer="1" rot="R270"/>
+<smd name="IN7" x="1.62" y="-3.325" dx="1.6" dy="0.3" layer="1" rot="R270"/>
+<smd name="IN8" x="2.27" y="-3.325" dx="1.6" dy="0.3" layer="1" rot="R270"/>
+<smd name="GND" x="2.92" y="-3.325" dx="1.6" dy="0.3" layer="1" rot="R270"/>
+<smd name="VCC" x="-2.93" y="3.525" dx="1.6" dy="0.3" layer="1" rot="R270"/>
+<smd name="OUT1" x="-2.28" y="3.525" dx="1.6" dy="0.3" layer="1" rot="R270"/>
+<smd name="OUT2" x="-1.63" y="3.525" dx="1.6" dy="0.3" layer="1" rot="R270"/>
+<smd name="OUT3" x="-0.98" y="3.525" dx="1.6" dy="0.3" layer="1" rot="R270"/>
+<smd name="OUT4" x="-0.33" y="3.525" dx="1.6" dy="0.3" layer="1" rot="R270"/>
+<smd name="OUT5" x="0.32" y="3.525" dx="1.6" dy="0.3" layer="1" rot="R270"/>
+<smd name="OUT6" x="0.97" y="3.525" dx="1.6" dy="0.3" layer="1" rot="R270"/>
+<smd name="OUT7" x="1.62" y="3.525" dx="1.6" dy="0.3" layer="1" rot="R270"/>
+<smd name="OUT8" x="2.27" y="3.525" dx="1.6" dy="0.3" layer="1" rot="R270"/>
+<smd name="!CH!" x="2.92" y="3.525" dx="1.6" dy="0.3" layer="1" rot="R270"/>
+<wire x1="-3.722" y1="-2.69" x2="-3.722" y2="2.91" width="0.127" layer="21"/>
+<wire x1="3.831" y1="2.91" x2="3.831" y2="-2.69" width="0.127" layer="21"/>
+<circle x="-2.96" y="-1.7375" radius="0.3175" width="0.127" layer="21"/>
 </package>
 </packages>
 <symbols>
