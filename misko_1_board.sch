@@ -29949,8 +29949,8 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <part name="C25" library="EECS5R5H155 Supercap" deviceset="EECS5R5H155" device="" value="1.5F"/>
 <part name="IC4" library="TPS63031 - Buck Boost Voltage Regulator" deviceset="TPS63001DRCR" device="" value="TPS63031"/>
 <part name="R2" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0805" value="150k"/>
-<part name="C11" library="rcl" deviceset="C-EU" device="C0805" value="10µF"/>
-<part name="C6" library="rcl" deviceset="C-EU" device="C0805" value="4.7µF"/>
+<part name="C11" library="rcl" deviceset="C-EU" device="C0805" value="22µF"/>
+<part name="C6" library="rcl" deviceset="C-EU" device="C0805" value="10µF"/>
 <part name="L2" library="DJNR3015-1R5 Inductor" deviceset="DJNR3015-1R5" device=""/>
 <part name="TP9" library="testpad" deviceset="PTR1" device="B1,27" value="SIM800 Power CTRL Pin"/>
 <part name="TP8" library="testpad" deviceset="PTR1" device="B1,27" value="GPS Power CTRL Pin"/>
@@ -30008,6 +30008,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <part name="R43" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0805" value="10k"/>
 <part name="R42" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0805" value="10k"/>
 <part name="TP11" library="testpad" deviceset="PTR1" device="TP14R" value="Bluetooth Wakeup Pin"/>
+<part name="C45" library="rcl" deviceset="C-EU" device="C0805" value="0.1µF"/>
 </parts>
 <sheets>
 <sheet>
@@ -30133,8 +30134,8 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <instance part="C25" gate="G$1" x="264.16" y="67.056" rot="R270"/>
 <instance part="IC4" gate="A" x="76.2" y="505.46"/>
 <instance part="R2" gate="G$1" x="48.26" y="490.22" rot="R90"/>
-<instance part="C11" gate="G$1" x="109.22" y="510.54" rot="R180"/>
-<instance part="C6" gate="G$1" x="45.72" y="510.54" rot="R180"/>
+<instance part="C11" gate="G$1" x="111.76" y="510.54" rot="R180"/>
+<instance part="C6" gate="G$1" x="40.64" y="510.54" rot="R180"/>
 <instance part="L2" gate="G$1" x="76.2" y="538.48"/>
 <instance part="TP9" gate="G$1" x="266.67" y="763.35" rot="R270"/>
 <instance part="TP8" gate="G$1" x="266.67" y="768.43" rot="R270"/>
@@ -30230,6 +30231,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <instance part="R43" gate="G$1" x="218.44" y="-38.1"/>
 <instance part="R42" gate="G$1" x="218.44" y="-30.48"/>
 <instance part="TP11" gate="G$1" x="266.67" y="753.19" rot="R270"/>
+<instance part="C45" gate="G$1" x="50.8" y="502.92" rot="R270"/>
 </instances>
 <busses>
 <bus name="B$1">
@@ -30521,11 +30523,11 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </segment>
 <segment>
 <pinref part="IC4" gate="A" pin="VOUT"/>
-<wire x1="96.52" y1="515.62" x2="109.22" y2="515.62" width="0.1524" layer="91"/>
-<wire x1="109.22" y1="515.62" x2="116.84" y2="515.62" width="0.1524" layer="91"/>
+<wire x1="96.52" y1="515.62" x2="111.76" y2="515.62" width="0.1524" layer="91"/>
+<wire x1="111.76" y1="515.62" x2="116.84" y2="515.62" width="0.1524" layer="91"/>
 <label x="116.84" y="515.62" size="1.778" layer="95"/>
 <pinref part="C11" gate="G$1" pin="2"/>
-<junction x="109.22" y="515.62"/>
+<junction x="111.76" y="515.62"/>
 </segment>
 <segment>
 <pinref part="TP4" gate="G$1" pin="TP"/>
@@ -30689,13 +30691,13 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </segment>
 <segment>
 <pinref part="C11" gate="G$1" pin="1"/>
-<wire x1="109.22" y1="508" x2="116.84" y2="508" width="0.1524" layer="91"/>
+<wire x1="111.76" y1="508" x2="116.84" y2="508" width="0.1524" layer="91"/>
 <label x="116.84" y="508" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="C6" gate="G$1" pin="1"/>
-<wire x1="45.72" y1="508" x2="33.02" y2="508" width="0.1524" layer="91"/>
-<label x="33.02" y="508" size="1.778" layer="95"/>
+<wire x1="40.64" y1="508" x2="25.4" y2="508" width="0.1524" layer="91"/>
+<label x="25.4" y="508" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="IC21" gate="G$1" pin="GND1"/>
@@ -31308,6 +31310,11 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <pinref part="IC6" gate="G$1" pin="!EN!"/>
 <wire x1="266.7" y1="365.76" x2="241.3" y2="365.76" width="0.1524" layer="91"/>
 <label x="241.3" y="365.76" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="C45" gate="G$1" pin="2"/>
+<wire x1="45.72" y1="502.92" x2="25.4" y2="502.92" width="0.1524" layer="91"/>
+<label x="25.4" y="502.92" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="5V0" class="1">
@@ -32723,8 +32730,8 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <pinref part="IC4" gate="A" pin="VIN"/>
 <wire x1="55.88" y1="515.62" x2="53.34" y2="515.62" width="0.1524" layer="91"/>
 <pinref part="IC4" gate="A" pin="VINA"/>
-<wire x1="53.34" y1="515.62" x2="45.72" y2="515.62" width="0.1524" layer="91"/>
-<wire x1="45.72" y1="515.62" x2="15.24" y2="515.62" width="0.1524" layer="91"/>
+<wire x1="53.34" y1="515.62" x2="40.64" y2="515.62" width="0.1524" layer="91"/>
+<wire x1="40.64" y1="515.62" x2="15.24" y2="515.62" width="0.1524" layer="91"/>
 <wire x1="55.88" y1="508" x2="53.34" y2="508" width="0.1524" layer="91"/>
 <wire x1="53.34" y1="508" x2="53.34" y2="515.62" width="0.1524" layer="91"/>
 <junction x="53.34" y="515.62"/>
@@ -32734,7 +32741,9 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <junction x="53.34" y="508"/>
 <label x="15.24" y="515.62" size="1.778" layer="95"/>
 <pinref part="C6" gate="G$1" pin="2"/>
-<junction x="45.72" y="515.62"/>
+<junction x="40.64" y="515.62"/>
+<pinref part="C45" gate="G$1" pin="1"/>
+<junction x="53.34" y="502.92"/>
 </segment>
 <segment>
 <pinref part="TP5" gate="G$1" pin="TP"/>
