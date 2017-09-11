@@ -19254,15 +19254,15 @@ http://katalog.we-online.de/em/datasheet/4301x2xxx8x6.pdf&lt;/a&gt;&lt;p&gt;
 <smd name="RESET" x="0" y="-1.95" dx="2.4" dy="0.76" layer="1" rot="R270"/>
 <smd name="VCC" x="-1.27" y="-1.95" dx="2.4" dy="0.76" layer="1" rot="R270"/>
 <smd name="GND1" x="-2.54" y="-1.94" dx="2.4" dy="0.76" layer="1" rot="R270"/>
-<wire x1="-5.2" y1="2.6" x2="-3" y2="2.6" width="0.127" layer="21"/>
-<wire x1="-3" y1="2.6" x2="3" y2="2.6" width="0.127" layer="21"/>
-<wire x1="3" y1="2.6" x2="5.2" y2="2.6" width="0.127" layer="21"/>
-<wire x1="5.2" y1="2.6" x2="5.2" y2="-2.6" width="0.127" layer="21"/>
-<wire x1="5.2" y1="-2.6" x2="-5.2" y2="-2.6" width="0.127" layer="21"/>
-<wire x1="-5.2" y1="-2.6" x2="-5.2" y2="2.6" width="0.127" layer="21"/>
 <wire x1="-3" y1="4.3" x2="3" y2="4.3" width="0.127" layer="21"/>
 <wire x1="3" y1="4.3" x2="3" y2="2.6" width="0.127" layer="21"/>
 <wire x1="-3" y1="4.3" x2="-3" y2="2.6" width="0.127" layer="21"/>
+<wire x1="-3.81" y1="2.54" x2="-6.08" y2="2.54" width="0.127" layer="21"/>
+<wire x1="-6.08" y1="2.54" x2="-6.08" y2="-2.54" width="0.127" layer="21"/>
+<wire x1="-6.08" y1="-2.54" x2="-3.81" y2="-2.54" width="0.127" layer="21"/>
+<wire x1="3.81" y1="2.54" x2="6.08" y2="2.54" width="0.127" layer="21"/>
+<wire x1="6.08" y1="2.54" x2="6.08" y2="-2.54" width="0.127" layer="21"/>
+<wire x1="6.08" y1="-2.54" x2="3.81" y2="-2.54" width="0.127" layer="21"/>
 </package>
 </packages>
 <symbols>
