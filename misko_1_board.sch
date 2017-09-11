@@ -18761,6 +18761,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <text x="-4" y="-4" size="1.27" layer="27">&gt;VALUE</text>
 <rectangle x1="2.45" y1="0.5" x2="3.05" y2="1.8" layer="1"/>
 <rectangle x1="2.45" y1="-1.8" x2="3.05" y2="-0.5" layer="1" rot="R180"/>
+<wire x1="-3.81" y1="1.27" x2="-3.81" y2="-1.27" width="0.127" layer="21"/>
 </package>
 </packages>
 <symbols>
@@ -19681,10 +19682,6 @@ http://katalog.we-online.de/em/datasheet/4301x2xxx8x6.pdf&lt;/a&gt;&lt;p&gt;
 <library name="micro joystick">
 <packages>
 <package name="MICROJOYSTICK">
-<wire x1="-3.75" y1="3.75" x2="3.75" y2="3.75" width="0.127" layer="21"/>
-<wire x1="3.75" y1="3.75" x2="3.75" y2="-3.75" width="0.127" layer="21"/>
-<wire x1="3.75" y1="-3.75" x2="-3.75" y2="-3.75" width="0.127" layer="21"/>
-<wire x1="-3.75" y1="-3.75" x2="-3.75" y2="3.75" width="0.127" layer="21"/>
 <smd name="LEFT" x="-3.57" y="-1.46" dx="1" dy="1.3" layer="1" rot="R90"/>
 <smd name="DOWN" x="3.52" y="-1.46" dx="1" dy="1.3" layer="1" rot="R90"/>
 <smd name="CENTER" x="-3.575" y="-0.035" dx="1" dy="1.3" layer="1" rot="R90"/>
@@ -19702,6 +19699,14 @@ http://katalog.we-online.de/em/datasheet/4301x2xxx8x6.pdf&lt;/a&gt;&lt;p&gt;
 <text x="5" y="1" size="1.27" layer="25">R</text>
 <hole x="0" y="1.9" drill="0.75"/>
 <hole x="0" y="-1.9" drill="1.05"/>
+<wire x1="1.27" y1="-3.81" x2="3.81" y2="-3.81" width="0.127" layer="21"/>
+<wire x1="3.81" y1="-3.81" x2="3.81" y2="-2.54" width="0.127" layer="21"/>
+<wire x1="-1.27" y1="-3.81" x2="-3.81" y2="-3.81" width="0.127" layer="21"/>
+<wire x1="-3.81" y1="-3.81" x2="-3.81" y2="-2.54" width="0.127" layer="21"/>
+<wire x1="-1.27" y1="3.81" x2="-3.81" y2="3.81" width="0.127" layer="21"/>
+<wire x1="-3.81" y1="3.81" x2="-3.81" y2="2.54" width="0.127" layer="21"/>
+<wire x1="1.27" y1="3.81" x2="3.81" y2="3.81" width="0.127" layer="21"/>
+<wire x1="3.81" y1="3.81" x2="3.81" y2="2.54" width="0.127" layer="21"/>
 </package>
 </packages>
 <symbols>
