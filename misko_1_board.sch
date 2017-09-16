@@ -9,34 +9,34 @@
 </settings>
 <grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
-<layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
-<layer number="3" name="Route3" color="4" fill="3" visible="no" active="no"/>
-<layer number="4" name="Route4" color="1" fill="4" visible="no" active="no"/>
-<layer number="5" name="Route5" color="4" fill="4" visible="no" active="no"/>
-<layer number="6" name="Route6" color="1" fill="8" visible="no" active="no"/>
-<layer number="7" name="Route7" color="4" fill="8" visible="no" active="no"/>
-<layer number="8" name="Route8" color="1" fill="2" visible="no" active="no"/>
-<layer number="9" name="Route9" color="4" fill="2" visible="no" active="no"/>
-<layer number="10" name="Route10" color="1" fill="7" visible="no" active="no"/>
-<layer number="11" name="Route11" color="4" fill="7" visible="no" active="no"/>
-<layer number="12" name="Route12" color="1" fill="5" visible="no" active="no"/>
-<layer number="13" name="Route13" color="4" fill="5" visible="no" active="no"/>
-<layer number="14" name="Route14" color="1" fill="6" visible="no" active="no"/>
-<layer number="15" name="Route15" color="4" fill="6" visible="no" active="no"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="no"/>
-<layer number="17" name="Pads" color="2" fill="1" visible="no" active="no"/>
-<layer number="18" name="Vias" color="2" fill="1" visible="no" active="no"/>
-<layer number="19" name="Unrouted" color="6" fill="1" visible="no" active="no"/>
-<layer number="20" name="Dimension" color="15" fill="1" visible="no" active="no"/>
-<layer number="21" name="tPlace" color="7" fill="1" visible="no" active="no"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="no"/>
-<layer number="23" name="tOrigins" color="15" fill="1" visible="no" active="no"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="no"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="no" active="no"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="no" active="no"/>
-<layer number="27" name="tValues" color="7" fill="1" visible="no" active="no"/>
-<layer number="28" name="bValues" color="7" fill="1" visible="no" active="no"/>
+<layer number="1" name="Top" color="4" fill="1" visible="yes" active="no"/>
+<layer number="2" name="Route2" color="1" fill="3" visible="yes" active="no"/>
+<layer number="3" name="Route3" color="4" fill="3" visible="yes" active="no"/>
+<layer number="4" name="Route4" color="1" fill="4" visible="yes" active="no"/>
+<layer number="5" name="Route5" color="4" fill="4" visible="yes" active="no"/>
+<layer number="6" name="Route6" color="1" fill="8" visible="yes" active="no"/>
+<layer number="7" name="Route7" color="4" fill="8" visible="yes" active="no"/>
+<layer number="8" name="Route8" color="1" fill="2" visible="yes" active="no"/>
+<layer number="9" name="Route9" color="4" fill="2" visible="yes" active="no"/>
+<layer number="10" name="Route10" color="1" fill="7" visible="yes" active="no"/>
+<layer number="11" name="Route11" color="4" fill="7" visible="yes" active="no"/>
+<layer number="12" name="Route12" color="1" fill="5" visible="yes" active="no"/>
+<layer number="13" name="Route13" color="4" fill="5" visible="yes" active="no"/>
+<layer number="14" name="Route14" color="1" fill="6" visible="yes" active="no"/>
+<layer number="15" name="Route15" color="4" fill="6" visible="yes" active="no"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="no"/>
+<layer number="17" name="Pads" color="2" fill="1" visible="yes" active="no"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="no"/>
+<layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="no"/>
+<layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="no"/>
+<layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="no"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="no"/>
+<layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="no"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="no"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="no"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="no"/>
+<layer number="27" name="tValues" color="7" fill="1" visible="yes" active="no"/>
+<layer number="28" name="bValues" color="7" fill="1" visible="yes" active="no"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="no"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="no"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="no"/>
@@ -45,8 +45,8 @@
 <layer number="34" name="bFinish" color="6" fill="6" visible="no" active="no"/>
 <layer number="35" name="tGlue" color="7" fill="4" visible="no" active="no"/>
 <layer number="36" name="bGlue" color="7" fill="5" visible="no" active="no"/>
-<layer number="37" name="tTest" color="7" fill="1" visible="no" active="no"/>
-<layer number="38" name="bTest" color="7" fill="1" visible="no" active="no"/>
+<layer number="37" name="tTest" color="7" fill="1" visible="yes" active="no"/>
+<layer number="38" name="bTest" color="7" fill="1" visible="yes" active="no"/>
 <layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="no"/>
 <layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="no"/>
 <layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="no"/>
@@ -54,19 +54,19 @@
 <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="no"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="no"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="no"/>
-<layer number="46" name="Milling" color="3" fill="1" visible="no" active="no"/>
-<layer number="47" name="Measures" color="7" fill="1" visible="no" active="no"/>
-<layer number="48" name="Document" color="7" fill="1" visible="no" active="no"/>
-<layer number="49" name="Reference" color="7" fill="1" visible="no" active="no"/>
-<layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="no"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="no"/>
-<layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
-<layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
-<layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
-<layer number="57" name="tCAD" color="7" fill="1" visible="no" active="no"/>
-<layer number="59" name="tCarbon" color="7" fill="1" visible="no" active="no"/>
-<layer number="60" name="bCarbon" color="7" fill="1" visible="no" active="no"/>
+<layer number="46" name="Milling" color="3" fill="1" visible="yes" active="no"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="yes" active="no"/>
+<layer number="48" name="Document" color="7" fill="1" visible="yes" active="no"/>
+<layer number="49" name="Reference" color="7" fill="1" visible="yes" active="no"/>
+<layer number="50" name="dxf" color="7" fill="1" visible="yes" active="no"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="no"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="no"/>
+<layer number="53" name="tGND_GNDA" color="7" fill="9" visible="yes" active="no"/>
+<layer number="54" name="bGND_GNDA" color="1" fill="9" visible="yes" active="no"/>
+<layer number="56" name="wert" color="7" fill="1" visible="yes" active="no"/>
+<layer number="57" name="tCAD" color="7" fill="1" visible="yes" active="no"/>
+<layer number="59" name="tCarbon" color="7" fill="1" visible="yes" active="no"/>
+<layer number="60" name="bCarbon" color="7" fill="1" visible="yes" active="no"/>
 <layer number="90" name="Modules" color="5" fill="1" visible="yes" active="yes"/>
 <layer number="91" name="Nets" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="92" name="Busses" color="1" fill="1" visible="yes" active="yes"/>
@@ -27774,7 +27774,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </library>
 <library name="zener" urn="urn:adsk.eagle:library:449000">
 <packages>
-<package name="SOD123" urn="urn:adsk.eagle:footprint:449002/1" library_version="1" library_locally_modified="yes">
+<package name="SOD123" urn="urn:adsk.eagle:footprint:449002/1" locally_modified="yes" library_version="1" library_locally_modified="yes">
 <description>&lt;b&gt;SMALL OUTLINE DIODE&lt;/b&gt;</description>
 <wire x1="-2.973" y1="0.983" x2="2.973" y2="0.983" width="0.0508" layer="39"/>
 <wire x1="2.973" y1="-0.983" x2="-2.973" y2="-0.983" width="0.0508" layer="39"/>
@@ -27789,13 +27789,24 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <wire x1="0" y1="-0.5" x2="-1" y2="0" width="0.2032" layer="51"/>
 <wire x1="-1" y1="0.5" x2="-1" y2="0" width="0.2032" layer="51"/>
 <wire x1="-1" y1="0" x2="-1" y2="-0.5" width="0.2032" layer="51"/>
-<smd name="C" x="-1.7" y="0" dx="1.6" dy="0.8" layer="1"/>
-<smd name="A" x="1.7" y="0" dx="1.6" dy="0.8" layer="1"/>
+<smd name="CAT" x="-1.7" y="0" dx="1.6" dy="0.8" layer="1"/>
+<smd name="AN" x="1.7" y="0" dx="1.6" dy="0.8" layer="1"/>
 <text x="-2.54" y="1.27" size="1.016" layer="25" ratio="18">&gt;NAME</text>
 <text x="-2.54" y="-2.54" size="1.016" layer="27" ratio="18">&gt;VALUE</text>
 <rectangle x1="-1.9558" y1="-0.3048" x2="-1.3716" y2="0.3048" layer="51"/>
 <rectangle x1="1.3716" y1="-0.3048" x2="1.9558" y2="0.3048" layer="51"/>
 <rectangle x1="-0.4001" y1="-0.7" x2="0.4001" y2="0.7" layer="35"/>
+</package>
+<package name="DO-214" library_version="1" library_locally_modified="yes">
+<smd name="CAT" x="-1.9" y="0" dx="2.8" dy="1.6" layer="1" rot="R90"/>
+<smd name="AN" x="1.9" y="0" dx="2.8" dy="1.6" layer="1" rot="R90"/>
+<wire x1="3" y1="2" x2="-3" y2="2" width="0.127" layer="21"/>
+<wire x1="-3" y1="2" x2="-3" y2="-2" width="0.127" layer="21"/>
+<wire x1="-3" y1="-2" x2="3" y2="-2" width="0.127" layer="21"/>
+<wire x1="3" y1="-2" x2="3" y2="2" width="0.127" layer="21"/>
+<rectangle x1="-1" y1="-2" x2="0" y2="2" layer="21"/>
+<text x="-3" y="3" size="1.27" layer="21">&gt;NAME</text>
+<text x="-3" y="-4" size="1.27" layer="21">&gt;VALUE</text>
 </package>
 </packages>
 <packages3d>
@@ -27804,7 +27815,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </package3d>
 </packages3d>
 <symbols>
-<symbol name="ZENER" urn="urn:adsk.eagle:symbol:449001/1" library_version="1" library_locally_modified="yes">
+<symbol name="ZENER" urn="urn:adsk.eagle:symbol:449001/1" locally_modified="yes" library_version="1" library_locally_modified="yes">
 <wire x1="-1.27" y1="-1.27" x2="1.27" y2="0" width="0.254" layer="94"/>
 <wire x1="1.27" y1="0" x2="-1.27" y2="1.27" width="0.254" layer="94"/>
 <wire x1="1.27" y1="1.27" x2="1.27" y2="0" width="0.254" layer="94"/>
@@ -27814,12 +27825,12 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <wire x1="1.778" y1="1.27" x2="1.27" y2="1.27" width="0.254" layer="94"/>
 <text x="-2.54" y="1.778" size="1.778" layer="95">&gt;NAME</text>
 <text x="-2.54" y="-3.683" size="1.778" layer="96">&gt;VALUE</text>
-<pin name="A" x="-2.54" y="0" visible="off" length="short" direction="pas"/>
-<pin name="C" x="2.54" y="0" visible="off" length="short" direction="pas" rot="R180"/>
+<pin name="AN" x="-2.54" y="0" visible="off" length="short" direction="pas"/>
+<pin name="CAT" x="2.54" y="0" visible="off" length="short" direction="pas" rot="R180"/>
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="ZENER" urn="urn:adsk.eagle:component:449004/1" prefix="D" uservalue="yes" library_version="1" library_locally_modified="yes">
+<deviceset name="ZENER" urn="urn:adsk.eagle:component:449004/1" locally_modified="yes" prefix="D" uservalue="yes" library_version="1" library_locally_modified="yes">
 <description>&lt;B&gt;Zener diode&lt;/B&gt;</description>
 <gates>
 <gate name="G$1" symbol="ZENER" x="0" y="0"/>
@@ -27827,12 +27838,21 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <devices>
 <device name="SOD123" package="SOD123">
 <connects>
-<connect gate="G$1" pin="A" pad="A"/>
-<connect gate="G$1" pin="C" pad="C"/>
+<connect gate="G$1" pin="AN" pad="AN"/>
+<connect gate="G$1" pin="CAT" pad="CAT"/>
 </connects>
 <package3dinstances>
 <package3dinstance package3d_urn="urn:adsk.eagle:package:449003/1"/>
 </package3dinstances>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+<device name="" package="DO-214">
+<connects>
+<connect gate="G$1" pin="AN" pad="AN"/>
+<connect gate="G$1" pin="CAT" pad="CAT"/>
+</connects>
 <technologies>
 <technology name=""/>
 </technologies>
@@ -28042,6 +28062,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <part name="D5" library="zener" library_urn="urn:adsk.eagle:library:449000" deviceset="ZENER" device="SOD123" package3d_urn="urn:adsk.eagle:package:449003/1" value="BZT52C4V3-E3-18"/>
 <part name="D4" library="zener" library_urn="urn:adsk.eagle:library:449000" deviceset="ZENER" device="SOD123" package3d_urn="urn:adsk.eagle:package:449003/1" value="BZT52C3V3-E3-08"/>
 <part name="D6" library="zener" library_urn="urn:adsk.eagle:library:449000" deviceset="ZENER" device="SOD123" package3d_urn="urn:adsk.eagle:package:449003/1" value="1N4733AW-TP"/>
+<part name="D7" library="zener" library_urn="urn:adsk.eagle:library:449000" deviceset="ZENER" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -28280,6 +28301,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <attribute name="NAME" x="330.962" y="210.82" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="335.28" y="212.217" size="1.778" layer="96"/>
 </instance>
+<instance part="D7" gate="G$1" x="111.76" y="523.24" rot="R270"/>
 </instances>
 <busses>
 <bus name="B$1">
@@ -28576,6 +28598,8 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <label x="116.84" y="515.62" size="1.778" layer="95"/>
 <pinref part="C11" gate="G$1" pin="2"/>
 <junction x="111.76" y="515.62"/>
+<pinref part="D7" gate="G$1" pin="CAT"/>
+<wire x1="111.76" y1="515.62" x2="111.76" y2="520.7" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="TP4" gate="G$1" pin="TP"/>
@@ -28688,7 +28712,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <pinref part="C29" gate="G$1" pin="1"/>
 <wire x1="154.94" y1="-15.24" x2="162.56" y2="-15.24" width="0.1524" layer="91"/>
 <junction x="154.94" y="-15.24"/>
-<pinref part="D4" gate="G$1" pin="C"/>
+<pinref part="D4" gate="G$1" pin="CAT"/>
 <wire x1="162.56" y1="-15.24" x2="165.1" y2="-15.24" width="0.1524" layer="91"/>
 <junction x="162.56" y="-15.24"/>
 </segment>
@@ -29068,7 +29092,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <label x="279.4" y="-535.94" size="1.778" layer="95" ratio="9"/>
 <pinref part="C26" gate="G$1" pin="1"/>
 <wire x1="254" y1="-535.94" x2="264.16" y2="-535.94" width="0.1524" layer="91"/>
-<pinref part="D3" gate="G$1" pin="A"/>
+<pinref part="D3" gate="G$1" pin="AN"/>
 <wire x1="264.16" y1="-535.94" x2="271.78" y2="-535.94" width="0.1524" layer="91"/>
 <junction x="264.16" y="-535.94"/>
 <wire x1="271.78" y1="-535.94" x2="279.4" y2="-535.94" width="0.1524" layer="91"/>
@@ -29368,19 +29392,24 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <label x="25.4" y="502.92" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="D5" gate="G$1" pin="A"/>
+<pinref part="D5" gate="G$1" pin="AN"/>
 <wire x1="104.14" y1="-347.98" x2="104.14" y2="-340.36" width="0.1524" layer="91"/>
 <label x="104.14" y="-340.36" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="D4" gate="G$1" pin="A"/>
+<pinref part="D4" gate="G$1" pin="AN"/>
 <wire x1="162.56" y1="-10.16" x2="162.56" y2="-2.54" width="0.1524" layer="91"/>
 <label x="162.56" y="-2.54" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="D6" gate="G$1" pin="A"/>
+<pinref part="D6" gate="G$1" pin="AN"/>
 <wire x1="332.74" y1="210.82" x2="332.74" y2="205.74" width="0.1524" layer="91"/>
 <label x="332.74" y="205.74" size="1.778" layer="95"/>
+</segment>
+<segment>
+<pinref part="D7" gate="G$1" pin="AN"/>
+<wire x1="111.76" y1="525.78" x2="111.76" y2="535.94" width="0.1524" layer="91"/>
+<label x="111.76" y="535.94" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="5V0" class="1">
@@ -29431,7 +29460,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <wire x1="332.74" y1="220.98" x2="335.28" y2="220.98" width="0.1524" layer="91"/>
 <wire x1="332.74" y1="226.06" x2="332.74" y2="220.98" width="0.1524" layer="91"/>
 <junction x="332.74" y="220.98"/>
-<pinref part="D6" gate="G$1" pin="C"/>
+<pinref part="D6" gate="G$1" pin="CAT"/>
 <wire x1="332.74" y1="215.9" x2="332.74" y2="220.98" width="0.1524" layer="91"/>
 </segment>
 <segment>
@@ -30486,7 +30515,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <pinref part="C26" gate="G$1" pin="2"/>
 <wire x1="264.16" y1="-528.32" x2="271.78" y2="-528.32" width="0.1524" layer="91"/>
 <junction x="264.16" y="-528.32"/>
-<pinref part="D3" gate="G$1" pin="C"/>
+<pinref part="D3" gate="G$1" pin="CAT"/>
 <wire x1="271.78" y1="-528.32" x2="284.48" y2="-528.32" width="0.1524" layer="91"/>
 <wire x1="271.78" y1="-530.86" x2="271.78" y2="-528.32" width="0.1524" layer="91"/>
 <junction x="271.78" y="-528.32"/>
@@ -30495,7 +30524,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <pinref part="IC20" gate="G$1" pin="VBATT"/>
 <wire x1="81.28" y1="-353.06" x2="104.14" y2="-353.06" width="0.1524" layer="91"/>
 <label x="109.22" y="-353.06" size="1.778" layer="95"/>
-<pinref part="D5" gate="G$1" pin="C"/>
+<pinref part="D5" gate="G$1" pin="CAT"/>
 <wire x1="104.14" y1="-353.06" x2="109.22" y2="-353.06" width="0.1524" layer="91"/>
 <junction x="104.14" y="-353.06"/>
 </segment>
