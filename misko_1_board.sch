@@ -28062,7 +28062,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <part name="D5" library="zener" library_urn="urn:adsk.eagle:library:449000" deviceset="ZENER" device="SOD123" package3d_urn="urn:adsk.eagle:package:449003/1" value="BZT52C4V3-E3-18"/>
 <part name="D4" library="zener" library_urn="urn:adsk.eagle:library:449000" deviceset="ZENER" device="SOD123" package3d_urn="urn:adsk.eagle:package:449003/1" value="BZT52C3V3-E3-08"/>
 <part name="D6" library="zener" library_urn="urn:adsk.eagle:library:449000" deviceset="ZENER" device="SOD123" package3d_urn="urn:adsk.eagle:package:449003/1" value="1N4733AW-TP"/>
-<part name="D7" library="zener" library_urn="urn:adsk.eagle:library:449000" deviceset="ZENER" device=""/>
+<part name="D7" library="zener" library_urn="urn:adsk.eagle:library:449000" deviceset="ZENER" device="" value="BZG05C3V6-E3-TR3"/>
 </parts>
 <sheets>
 <sheet>
@@ -28301,7 +28301,10 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <attribute name="NAME" x="330.962" y="210.82" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="335.28" y="212.217" size="1.778" layer="96"/>
 </instance>
-<instance part="D7" gate="G$1" x="111.76" y="523.24" rot="R270"/>
+<instance part="D7" gate="G$1" x="111.76" y="523.24" smashed="yes" rot="R270">
+<attribute name="NAME" x="113.538" y="525.78" size="1.778" layer="95" rot="R270"/>
+<attribute name="VALUE" x="107.823" y="520.7" size="1.778" layer="96" rot="R90"/>
+</instance>
 </instances>
 <busses>
 <bus name="B$1">
