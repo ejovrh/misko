@@ -24,17 +24,17 @@
 <layer number="13" name="Route13" color="4" fill="5" visible="no" active="no"/>
 <layer number="14" name="Route14" color="1" fill="6" visible="no" active="no"/>
 <layer number="15" name="Route15" color="4" fill="6" visible="no" active="no"/>
-<layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
+<layer number="16" name="Bottom" color="1" fill="1" visible="no" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
 <layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
 <layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="yes"/>
 <layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="26" name="bNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
 <layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
@@ -48,19 +48,19 @@
 <layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
 <layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
 <layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
-<layer number="40" name="bKeepout" color="1" fill="11" visible="yes" active="yes"/>
+<layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="yes"/>
 <layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
-<layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
+<layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="46" name="Milling" color="3" fill="1" visible="yes" active="yes"/>
-<layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="48" name="Document" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
 <layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
 <layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
 <layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
 <layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
@@ -5892,11 +5892,11 @@ design rules under a new name.</description>
 <attribute name="NAME" x="26.5" y="1.84" size="1" layer="26" font="vector" rot="MR180" align="center"/>
 <attribute name="VALUE" x="25.23" y="6.29" size="1.27" layer="28" rot="MR180"/>
 </element>
-<element name="C8" library="resistor" library_urn="urn:adsk.eagle:library:348" package="C0805" value="15pF" x="42.75" y="38.5" smashed="yes" rot="MR90">
+<element name="C8" library="resistor" library_urn="urn:adsk.eagle:library:348" package="C0805" value="7pF" x="42.75" y="38.5" smashed="yes" rot="MR90">
 <attribute name="NAME" x="41.235" y="38.495" size="1" layer="26" font="vector" rot="MR270" align="center"/>
 <attribute name="VALUE" x="40.21" y="37.23" size="1.27" layer="28" rot="MR90"/>
 </element>
-<element name="C12" library="resistor" library_urn="urn:adsk.eagle:library:348" package="C0805" value="15pF" x="50.75" y="38.5" smashed="yes" rot="MR270">
+<element name="C12" library="resistor" library_urn="urn:adsk.eagle:library:348" package="C0805" value="7pF" x="50.75" y="38.5" smashed="yes" rot="MR270">
 <attribute name="NAME" x="50.905" y="34.74" size="1" layer="26" font="vector" rot="MR90" align="center"/>
 <attribute name="VALUE" x="53.29" y="39.77" size="1.27" layer="28" rot="MR270"/>
 </element>
@@ -6341,7 +6341,7 @@ design rules under a new name.</description>
 <element name="SW1" library="Wurth_Elektronik_Electromechanic_Switch_rev17c" library_urn="urn:adsk.eagle:library:480" package="430152050836" value="RESET" x="29" y="5.5" smashed="yes" rot="R180">
 <attribute name="VALUE" x="32.182" y="10.6834" size="1.27" layer="27" rot="R180"/>
 </element>
-<element name="Q1" library="ABM3B-8MHZ-10-1-U-T - Quartz Resonator" package="SMT" value="ABM3B" x="46.75" y="38.5" smashed="yes" rot="MR180">
+<element name="Q1" library="ABM3B-8MHZ-10-1-U-T - Quartz Resonator" package="SMT" value="ABM3B-8MHZ-10-1-U-T" x="46.75" y="38.5" smashed="yes" rot="MR180">
 <attribute name="NAME" x="46.73" y="35.63" size="1" layer="26" font="vector" rot="MR180" align="center"/>
 <attribute name="VALUE" x="43.75" y="42.5" size="1.27" layer="28" rot="MR180"/>
 </element>
