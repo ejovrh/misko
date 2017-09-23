@@ -28063,6 +28063,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <part name="D4" library="zener" library_urn="urn:adsk.eagle:library:449000" deviceset="ZENER" device="SOD123" package3d_urn="urn:adsk.eagle:package:449003/1" value="BZT52C3V3-E3-08"/>
 <part name="D6" library="zener" library_urn="urn:adsk.eagle:library:449000" deviceset="ZENER" device="SOD123" package3d_urn="urn:adsk.eagle:package:449003/1" value="1N4733AW-TP"/>
 <part name="D7" library="zener" library_urn="urn:adsk.eagle:library:449000" deviceset="ZENER" device="" value="BZG05C3V6-E3-TR3"/>
+<part name="R23" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0805" value="10k"/>
 </parts>
 <sheets>
 <sheet>
@@ -28305,6 +28306,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <attribute name="NAME" x="113.538" y="525.78" size="1.778" layer="95" rot="R270"/>
 <attribute name="VALUE" x="107.823" y="520.7" size="1.778" layer="96" rot="R90"/>
 </instance>
+<instance part="R23" gate="G$1" x="149.86" y="66.04" rot="R90"/>
 </instances>
 <busses>
 <bus name="B$1">
@@ -29414,6 +29416,11 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <wire x1="111.76" y1="525.78" x2="111.76" y2="535.94" width="0.1524" layer="91"/>
 <label x="111.76" y="535.94" size="1.778" layer="95"/>
 </segment>
+<segment>
+<pinref part="R23" gate="G$1" pin="2"/>
+<wire x1="149.86" y1="71.12" x2="149.86" y2="76.2" width="0.1524" layer="91"/>
+<label x="149.86" y="76.2" size="1.778" layer="95"/>
+</segment>
 </net>
 <net name="5V0" class="1">
 <segment>
@@ -29902,8 +29909,12 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <net name="GPS_POWER_CTL_PIN" class="2">
 <segment>
 <pinref part="IC11" gate="A" pin="~MR"/>
-<wire x1="172.72" y1="55.88" x2="142.24" y2="55.88" width="0.1524" layer="91"/>
+<wire x1="172.72" y1="55.88" x2="149.86" y2="55.88" width="0.1524" layer="91"/>
 <label x="142.24" y="55.88" size="1.778" layer="95"/>
+<pinref part="R23" gate="G$1" pin="1"/>
+<wire x1="149.86" y1="55.88" x2="142.24" y2="55.88" width="0.1524" layer="91"/>
+<wire x1="149.86" y1="60.96" x2="149.86" y2="55.88" width="0.1524" layer="91"/>
+<junction x="149.86" y="55.88"/>
 </segment>
 <segment>
 <label x="274.29" y="768.43" size="1.778" layer="95"/>
