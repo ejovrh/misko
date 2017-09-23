@@ -259,6 +259,8 @@ Stjenka Bojanić</text>
 <text x="102" y="23" size="1" layer="21" font="vector" rot="R90" align="center">GPRS</text>
 <text x="97" y="66.5" size="1.778" layer="21" font="vector" rot="R90" align="center">5V0</text>
 <text x="93.5" y="61" size="1.778" layer="22" font="vector" rot="MR270" align="center">LiPo</text>
+<text x="104.75" y="62.5" size="1" layer="21" font="vector" align="center">RX</text>
+<text x="104.75" y="56.5" size="1" layer="21" font="vector" align="center">TX</text>
 </plain>
 <libraries>
 <library name="resistor" urn="urn:adsk.eagle:library:348">
@@ -6135,12 +6137,10 @@ design rules under a new name.</description>
 <attribute name="NAME" x="111.653" y="43.11" size="1" layer="25" font="vector" ratio="10" rot="R90" align="center"/>
 <attribute name="VALUE" x="111.337" y="46.79" size="1.016" layer="27" ratio="10" rot="R270"/>
 </element>
-<element name="LED1" library="led" library_urn="urn:adsk.eagle:library:259" package="CHIPLED_1206" value="yellow" x="104.75" y="58.25" smashed="yes" rot="R90">
-<attribute name="NAME" x="104.78" y="56.22" size="1" layer="25" font="vector" align="center"/>
+<element name="LED1" library="led" library_urn="urn:adsk.eagle:library:259" package="CHIPLED_1206" value="TX" x="104.75" y="58.25" smashed="yes" rot="R90">
 <attribute name="VALUE" x="106.02" y="60.79" size="1.27" layer="27" rot="R180"/>
 </element>
-<element name="LED2" library="led" library_urn="urn:adsk.eagle:library:259" package="CHIPLED_1206" value="yellow" x="104.75" y="60.75" smashed="yes" rot="R90">
-<attribute name="NAME" x="104.58" y="62.52" size="1" layer="25" font="vector" align="center"/>
+<element name="LED2" library="led" library_urn="urn:adsk.eagle:library:259" package="CHIPLED_1206" value="RX" x="104.75" y="60.75" smashed="yes" rot="R90">
 <attribute name="VALUE" x="106.02" y="63.29" size="1.27" layer="27" rot="R180"/>
 </element>
 <element name="Q2" library="LFXTAL016178R 32.768kHz crystal" package="SMD" value="LFXTAL016178R" x="33.5" y="57.75" smashed="yes" rot="MR0">
