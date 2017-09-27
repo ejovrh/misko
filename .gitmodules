@@ -1,0 +1,3 @@
+[submodule "misko hw test/misko hw test/uart"]
+	path = misko hw test/misko hw test/uart
+	url = https://github.com/andygock/avr-uart.git
