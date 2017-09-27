@@ -7,10 +7,8 @@
 #include "gpio.h"
 #include "gpio_definitions.h"
 
-
 #define UART0_BAUD_RATE 9600
 #define UART1_BAUD_RATE 9600
-
 
 char str_uart[] = "hello world";
 
@@ -45,7 +43,28 @@ int main(void)
 	/* Replace with your application code */
 	while (1)
 	{
-		;
+		if (gpio_tst(menu_left_button_pin) == LOW)
+			uart0_puts("left\r\n");
+
+		if (gpio_tst(menu_right_button_pin) == LOW)
+			uart0_puts("right\r\n");
+
+		if (gpio_tst(menu_up_button_pin) == LOW)
+			uart0_puts("up\r\n");
+
+		if (gpio_tst(menu_down_button_pin) == LOW)
+			uart0_puts("down\r\n");
+
+		if (gpio_tst(menu_center_button_pin) == LOW)
+			uart0_puts("center\r\n");
+
+		if (gpio_tst(menu_gprs_power_button_pin) == LOW)
+			uart0_puts("GPRS\r\n");
+
+		if (gpio_tst(menu_bluetooth_power_button_pin) == LOW)
+			uart0_puts("BT\r\n");
+
+
 	}
 }
 
