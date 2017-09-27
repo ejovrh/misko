@@ -261,6 +261,8 @@ Stjenka Bojanić</text>
 <text x="93.5" y="61" size="1.778" layer="22" font="vector" rot="MR270" align="center">LiPo</text>
 <text x="104.75" y="62.5" size="1" layer="21" font="vector" align="center">RX</text>
 <text x="104.75" y="56.5" size="1" layer="21" font="vector" align="center">TX</text>
+<text x="87.5" y="56" size="1.778" layer="21" font="vector" align="center">TX</text>
+<text x="87.5" y="52.5" size="1.778" layer="21" font="vector" align="center">RX</text>
 </plain>
 <libraries>
 <library name="resistor" urn="urn:adsk.eagle:library:348">
@@ -5851,7 +5853,7 @@ design rules under a new name.</description>
 <attribute name="VALUE" x="99.79" y="69.27" size="1.27" layer="28" rot="MR270"/>
 </element>
 <element name="C23" library="resistor" library_urn="urn:adsk.eagle:library:348" package="C0805" value="10µF" x="88" y="61.5" smashed="yes" rot="R270">
-<attribute name="NAME" x="88.09" y="57.71" size="1" layer="25" font="vector" rot="R90" align="center"/>
+<attribute name="NAME" x="86.09" y="59.96" size="1" layer="25" font="vector" rot="R90" align="center"/>
 <attribute name="VALUE" x="85.46" y="62.77" size="1.27" layer="27" rot="R270"/>
 </element>
 <element name="C17" library="rcl" package="C0805" value="2.2µF / 25V" x="22.5" y="54.5" smashed="yes" rot="MR0">
@@ -7422,7 +7424,7 @@ design rules under a new name.</description>
 <contactref element="IC1" pad="3"/>
 <contactref element="R5" pad="1"/>
 <wire x1="92.3" y1="53.75" x2="90.3" y2="53.75" width="0.25" layer="1"/>
-<via x="90.3" y="53.75" extent="1-16" drill="0.3"/>
+<via x="90.3" y="53.75" extent="1-16" drill="0.5"/>
 <via x="42.6" y="53.9" extent="1-16" drill="0.3"/>
 <wire x1="90.3" y1="53.75" x2="42.75" y2="53.75" width="0.25" layer="16"/>
 <wire x1="42.75" y1="53.75" x2="42.6" y2="53.9" width="0.25" layer="16"/>
@@ -7433,7 +7435,7 @@ design rules under a new name.</description>
 <contactref element="IC1" pad="2"/>
 <contactref element="R4" pad="1"/>
 <via x="41.90214375" y="54.6928" extent="1-16" drill="0.3"/>
-<via x="90.3" y="54.7928" extent="1-16" drill="0.3"/>
+<via x="90.3" y="54.7928" extent="1-16" drill="0.5"/>
 <wire x1="39.88" y1="54.707" x2="41.88794375" y2="54.707" width="0.25" layer="1"/>
 <wire x1="41.88794375" y1="54.707" x2="41.90214375" y2="54.6928" width="0.25" layer="1"/>
 <wire x1="92.3" y1="56" x2="91.5072" y2="56" width="0.25" layer="1"/>
