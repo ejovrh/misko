@@ -1,7 +1,9 @@
 #include <avr/io.h>
+#include <stdint-gcc.h>
 #include <avr/interrupt.h>
 
 #include "uart/uart.h"
+#include "adxl345.h"
 
 // local files
 #include "gpio.h"
@@ -11,36 +13,43 @@
 #define UART1_BAUD_RATE 9600
 
 char str_uart[] = "hello world";
+volatile uint8_t adxl345_irq_src;
 
 int main(void)
 {
 	#include "gpio_modes.h"
 
-	cli(); // globally disable interrupts
-	TCCR5A  = 0x0; // clear the register (A and B)
+	cli();										// globally disable interrupts
+
+	EIMSK |= (1 << INT7);				// enable INT7 (lives on pin PE7)
+	EICRB |= (1 << ISC70);			// set to register
+	EICRB |= (0 << ISC71);			//	...	any logic level change
+
+	TCCR5A  = 0x0;						// clear the register (A and B)
 	TCCR5B  = 0x0;
-	OCR5A = 3900; // set compare match register to desired timer count
-	TCCR5B |= (1 << WGM12); // turn on CTC mode
-	TCCR5B |= (1 << CS10); // Set CS10 and CS12 bits for 1024 prescaler
+	OCR5A = 3900;							// set compare match register to desired timer count
+	TCCR5B |= (1 << WGM12);		// turn on CTC mode
+	TCCR5B |= (1 << CS10);		// Set CS10 and CS12 bits for 1024 prescaler
 	TCCR5B |= (1 << CS12);
-	TIMSK5 |= (1 << OCIE5A); // enable timer compare interrupt
+	TIMSK5 |= (1 << OCIE5A);	// enable timer compare interrupt
 
 	// hardware UART initialization
 	uart0_init(UART_BAUD_SELECT(UART0_BAUD_RATE,F_CPU)); // USB
+	uart0_puts("UART0 up\r\n");
+
 	uart1_init(UART_BAUD_SELECT(UART1_BAUD_RATE,F_CPU)); // SIM800
+	uart1_puts("UART1 up\r\n");
 
 	sei(); // globally enable interrupts
 
-	uart0_puts("UART0 up");
-	uart0_putc(0x0D); /* CR */
-	uart0_putc(0x0A); /* LF */
+	adxl345_init();
 
-	uart1_puts("UART1 up");
-	uart1_putc(0x0D); /* CR */
-	uart1_putc(0x0A); /* LF */
+	if (gpio_rd(PIN, SD_card_detect_pin) == LOW)
+		uart0_puts("SD inserted\r\n");
+	else
+		uart0_puts("SD removed\r\n");
 
 
-	/* Replace with your application code */
 	while (1)
 	{
 		if (gpio_tst(menu_left_button_pin) == LOW)
@@ -56,7 +65,10 @@ int main(void)
 			uart0_puts("down\r\n");
 
 		if (gpio_tst(menu_center_button_pin) == LOW)
+		{
+			//uart0_putc(adxl345_read(INT_SOURCE));
 			uart0_puts("center\r\n");
+		}
 
 		if (gpio_tst(menu_gprs_power_button_pin) == LOW)
 			uart0_puts("GPRS\r\n");
@@ -68,8 +80,39 @@ int main(void)
 	} // while(1)
 } // main()
 
+// ISR for the 500ms timer
 ISR(TIMER5_COMPA_vect)
 {
 	gpio_toggle(gps_red_led_pin);
-	//gpio_toggle(gps_green_led_pin);
-}
+};
+
+// ISR for the ADXL345 accelerometer
+ISR(INT7_vect)
+{
+	cli();
+	adxl345_irq_src = adxl345_read(INT_SOURCE);
+	uart1_puts("isr 7\r\n");
+
+	// inactivity
+	if( (adxl345_irq_src >> 3) & 0x01)  // if the inact bit is set
+	{
+		uart0_puts("Inactivity");
+		adxl345_write(BW_RATE, 0x17 ); // 0001 0111 (0x1A) - set to low power mode, bit 5 (was 0x0A, becomes 0x1A)
+	}
+
+	// activity
+	if( (adxl345_irq_src >> 4) & 0x01) // if the act bit is set
+	{
+		uart0_puts("Activity");
+
+		// set the device back in measurement mode
+		// as suggested on the datasheet, we put it in standby then in measurement mode
+		//adxl345_write(POWER_CTL_CFG, powerCTL & 11110011);
+		//adxl345_write(POWER_CTL, 0x04); // first standby
+		//adxl345_write(POWER_CTL_CFG, powerCTL & 11111011);
+		//adxl345_write(POWER_CTL, POWER_CTL_CFG); // then full measurement mode
+
+		adxl345_write(BW_RATE, 0x07 ); // 0000 0111 (0x0A) get back to full accuracy measurement (we will consume more power)
+	}
+	sei();
+};

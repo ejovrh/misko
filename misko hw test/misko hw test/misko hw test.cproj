@@ -151,6 +151,18 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="adxl345.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="adxl345.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="FM25W256.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="FM25W256.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="gpio.h">
       <SubType>compile</SubType>
     </Compile>
