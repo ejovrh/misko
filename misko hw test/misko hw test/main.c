@@ -65,8 +65,8 @@ int main(void)
 			uart0_puts("BT\r\n");
 
 
-	}
-}
+	} // while(1)
+} // main()
 
 ISR(TIMER5_COMPA_vect)
 {

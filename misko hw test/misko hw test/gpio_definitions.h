@@ -46,7 +46,7 @@
 #define    RTC_INT_interrupt_pin						E,   6,   6	// RTC_INT_INTERRUPT_PIN - interrupt sense for RTC events
 #define    ADXL345_INT1_interrupt_pin				E,   7,   7	// ADXL345_INT1_INTERRUPT_PIN - interrupt sense for accelerometer events
 
-#define    SPI_WIFI_SS_pin									F,   0,   0	// SPI_SS_WIFI_MODULE - SPI SS for WiFi
+#define    SPI_SS_WIFI_pin									F,   0,   0	// SPI_SS_WIFI_MODULE - SPI SS for WiFi
 #define    Vcc_sense_pin										F,   1,   1	// VCC_SENSE_PIN - ADC, Vcc measurement
 #define    bat_A_pin												F,   2,   2	// BAT_A_PIN - ADC, Vbat measurement
 #define    TMP36_Vsense_pin									F,   3,   3	// TMP36_VSENSE_PIN - ADC, temperature measurement

@@ -31,7 +31,7 @@ gpio_conf(SPI_SS_ADXL345_pin, OUTPUT, HIGH);							// high (device inert), low (
 gpio_conf(SPI_SS_OLED_pin, OUTPUT, HIGH);									// high (device inert), low (device selected)
 gpio_conf(SPI_SS_RTC_pin, OUTPUT, HIGH);									// high (device inert), low (device selected)
 gpio_conf(SPI_SS_SD_card_pin, OUTPUT, HIGH);							// high (device inert), low (device selected)
-gpio_conf(SPI_WIFI_SS_pin, OUTPUT, HIGH);									// high (device inert), low (device selected)
+gpio_conf(SPI_SS_WIFI_pin, OUTPUT, HIGH);									// high (device inert), low (device selected)
 gpio_conf(TMP36_Vsense_pin, INPUT, PULLUP);								// ADC
 gpio_conf(Vcc_sense_pin, INPUT, PULLUP);									// ADC
 gpio_conf(WIFI_INT_interrupt_pin, OUTPUT, LOW);						// hardware interrupt for WiFi-based events
