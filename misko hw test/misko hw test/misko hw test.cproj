@@ -157,6 +157,12 @@
     <Compile Include="adxl345.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="DS1394.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="DS1394.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="FM25W256.c">
       <SubType>compile</SubType>
     </Compile>

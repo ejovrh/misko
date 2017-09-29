@@ -4,6 +4,7 @@
 
 #include "uart/uart.h"
 #include "adxl345.h"
+#include "DS1394.h"
 
 // local files
 #include "gpio.h"
@@ -49,14 +50,16 @@ int main(void)
 	else
 		uart0_puts("SD removed\r\n");
 
-
 	while (1)
 	{
 		if (gpio_tst(menu_left_button_pin) == LOW)
 			uart0_puts("left\r\n");
 
 		if (gpio_tst(menu_right_button_pin) == LOW)
+		{
 			uart0_puts("right\r\n");
+			uart0_putc(65+ds1394_read(0x02)); // very crude way of verifying that i can read from the rtc (minutes, in this example)
+		}
 
 		if (gpio_tst(menu_up_button_pin) == LOW)
 			uart0_puts("up\r\n");
@@ -66,7 +69,6 @@ int main(void)
 
 		if (gpio_tst(menu_center_button_pin) == LOW)
 		{
-			//uart0_putc(adxl345_read(INT_SOURCE));
 			uart0_puts("center\r\n");
 		}
 

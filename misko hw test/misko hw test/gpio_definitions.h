@@ -10,7 +10,7 @@
 #define    GPS_power_ctl_pin   							A,   6,   6	// GPS_POWER_CTL_PIN - signals a wakeup to the GPS device via the voltage supervisor; the sleep command is issued in software
 #define    analog_sw_ctrl_pin   						A,   7,   7	// ANALOG_SW_CTRL_PIN - controls analog switches for BT/GPS <-> micro comm
 
-#define    SPI_FRAM_SS_pin   								B,   0,   0	// SPI_FRAM_SS_PIN - SPI FRAM SS
+#define    SPI_SS_FRAM_pin   								B,   0,   0	// SPI_S_FRAM_PIN - no direct pin operations advised
 #define    SPI_SCK_pin   										B,   1,   1	// SPI_SCK_PIN - no direct pin operations advised
 #define    SPI_MOSI_pin   									B,   2,   2	// SPI_MOSI_PIN - no direct pin operations advised
 #define    SPI_MISO_pin   									B,   3,   3	// SPI_MISO_PIN - no direct pin operations advised
