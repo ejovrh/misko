@@ -30146,7 +30146,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <label x="96.52" y="-388.62" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="SPI_FRAM_SS_PIN" class="2">
+<net name="SPI_SS_FRAM_PIN" class="2">
 <segment>
 <pinref part="IC16" gate="G$1" pin="!CS!"/>
 <pinref part="R19" gate="G$1" pin="1"/>

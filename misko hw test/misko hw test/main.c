@@ -5,6 +5,7 @@
 #include "uart/uart.h"
 #include "adxl345.h"
 #include "DS1394.h"
+#include "FM25W256.h"
 
 // local files
 #include "gpio.h"
@@ -13,7 +14,6 @@
 #define UART0_BAUD_RATE 9600
 #define UART1_BAUD_RATE 9600
 
-char str_uart[] = "hello world";
 volatile uint8_t adxl345_irq_src;
 
 int main(void)
@@ -44,6 +44,8 @@ int main(void)
 	sei(); // globally enable interrupts
 
 	adxl345_init();
+	fm25w256_init();
+
 
 	if (gpio_rd(PIN, SD_card_detect_pin) == LOW)
 		uart0_puts("SD inserted\r\n");
@@ -76,8 +78,18 @@ int main(void)
 			uart0_puts("GPRS\r\n");
 
 		if (gpio_tst(menu_bluetooth_power_button_pin) == LOW)
-			uart0_puts("BT\r\n");
+		{
+				uint8_t foo;
 
+				//fm25w256_write_byte(0x0002, 70);
+
+				foo = fm25w256_read_byte(0x0002);
+				uart0_putc('.');
+				uart0_putc(foo);
+				uart0_putc('.');
+				uart0_puts("\r\n");
+				uart0_puts("BT\r\n");
+		}
 
 	} // while(1)
 } // main()
