@@ -18886,94 +18886,6 @@ www.irf.com&lt;p&gt;
 </deviceset>
 </devicesets>
 </library>
-<library name="ORG1510-MK4 GPS module">
-<packages>
-<package name="PACKAGE">
-<wire x1="-5" y1="5" x2="5" y2="5" width="0.127" layer="21"/>
-<wire x1="5" y1="-5" x2="-5" y2="-5" width="0.127" layer="21"/>
-<circle x="0" y="0.5" radius="0.5" width="1.27" layer="22"/>
-<text x="6.07008125" y="4" size="0.6096" layer="21" align="center">5</text>
-<text x="-6.07008125" y="4" size="0.6096" layer="21" rot="R180" align="center">6</text>
-<text x="-6.07008125" y="-4" size="0.6096" layer="21" rot="R180" align="center">10</text>
-<rectangle x1="-3.2" y1="-5" x2="3.2" y2="5" layer="29"/>
-<smd name="WAKEUP" x="-5.1682625" y="2.54" dx="2.5908" dy="0.8636" layer="1"/>
-<smd name="CTS" x="-5.1682625" y="1.27" dx="2.5908" dy="0.8636" layer="1"/>
-<smd name="RESET" x="-5.168265625" y="0" dx="2.5908" dy="0.8636" layer="1"/>
-<smd name="RTS" x="-5.1682625" y="-1.27" dx="2.5908" dy="0.8636" layer="1"/>
-<smd name="RX" x="-5.168265625" y="-2.54" dx="2.5908" dy="0.8636" layer="1"/>
-<smd name="ON_OFF" x="5.168265625" y="-2.54" dx="2.5908" dy="0.8636" layer="1"/>
-<smd name="1PPS" x="5.1682625" y="-1.27" dx="2.5908" dy="0.8636" layer="1"/>
-<smd name="TX" x="5.168265625" y="0" dx="2.5908" dy="0.8636" layer="1"/>
-<smd name="VCC" x="5.168265625" y="1.27" dx="2.5908" dy="0.8636" layer="1"/>
-<smd name="GND3" x="5.1682625" y="2.54" dx="2.5908" dy="0.8636" layer="1"/>
-<text x="6.07008125" y="-4.29818125" size="0.6096" layer="21" align="center">1</text>
-<smd name="GND2" x="0" y="0" dx="6.4" dy="10" layer="1"/>
-<pad name="GND6" x="0" y="3.81" drill="0.3"/>
-<pad name="GND4" x="-2.54" y="-3.81" drill="0.3"/>
-<pad name="GND5" x="2.54" y="-3.81" drill="0.3"/>
-<text x="-3.81" y="7.62" size="1.27" layer="25">&gt;NAME</text>
-<text x="-3.81" y="-8.89" size="1.27" layer="27">&gt;VALUE</text>
-<wire x1="-5" y1="5" x2="-5" y2="3.2" width="0.127" layer="21"/>
-<wire x1="5" y1="5" x2="5" y2="3.2" width="0.127" layer="21"/>
-<wire x1="-5" y1="-5" x2="-5" y2="-3.2" width="0.127" layer="21"/>
-<wire x1="5" y1="-5" x2="5" y2="-3.2" width="0.127" layer="21"/>
-</package>
-</packages>
-<symbols>
-<symbol name="SYMBOL">
-<pin name="ON_OFF" x="-5.08" y="22.86" length="middle" direction="in"/>
-<pin name="1PPS" x="-5.08" y="17.78" length="middle" direction="out"/>
-<pin name="TX" x="-5.08" y="12.7" length="middle" direction="out"/>
-<pin name="VCC" x="-5.08" y="7.62" length="middle" direction="pwr"/>
-<pin name="GND1" x="5.08" y="-15.24" length="middle" rot="R90"/>
-<pin name="WAKEUP" x="25.4" y="2.54" length="middle" rot="R180"/>
-<pin name="CTS" x="25.4" y="7.62" length="middle" direction="nc" rot="R180"/>
-<pin name="RESET" x="25.4" y="12.7" length="middle" rot="R180"/>
-<pin name="RTS" x="25.4" y="17.78" length="middle" direction="out" rot="R180"/>
-<pin name="RX" x="25.4" y="22.86" length="middle" direction="in" rot="R180"/>
-<wire x1="0" y1="25.4" x2="20.32" y2="25.4" width="0.254" layer="94"/>
-<wire x1="20.32" y1="25.4" x2="20.32" y2="-10.16" width="0.254" layer="94"/>
-<wire x1="20.32" y1="-10.16" x2="0" y2="-10.16" width="0.254" layer="94"/>
-<wire x1="0" y1="-10.16" x2="0" y2="25.4" width="0.254" layer="94"/>
-<text x="0" y="27.94" size="1.778" layer="95">&gt;NAME</text>
-<text x="2.54" y="-2.54" size="1.778" layer="96">&gt;VALUE</text>
-<pin name="GND2" x="7.62" y="-15.24" length="middle" rot="R90"/>
-<pin name="GND3" x="10.16" y="-15.24" length="middle" rot="R90"/>
-<pin name="GND4" x="12.7" y="-15.24" length="middle" rot="R90"/>
-<pin name="GND5" x="15.24" y="-15.24" length="middle" rot="R90"/>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="ORG1510-MK4" prefix="IC">
-<gates>
-<gate name="G$1" symbol="SYMBOL" x="27.94" y="-2.54"/>
-</gates>
-<devices>
-<device name="" package="PACKAGE">
-<connects>
-<connect gate="G$1" pin="1PPS" pad="1PPS"/>
-<connect gate="G$1" pin="CTS" pad="CTS"/>
-<connect gate="G$1" pin="GND1" pad="GND2"/>
-<connect gate="G$1" pin="GND2" pad="GND3"/>
-<connect gate="G$1" pin="GND3" pad="GND4"/>
-<connect gate="G$1" pin="GND4" pad="GND5"/>
-<connect gate="G$1" pin="GND5" pad="GND6"/>
-<connect gate="G$1" pin="ON_OFF" pad="ON_OFF"/>
-<connect gate="G$1" pin="RESET" pad="RESET"/>
-<connect gate="G$1" pin="RTS" pad="RTS"/>
-<connect gate="G$1" pin="RX" pad="RX"/>
-<connect gate="G$1" pin="TX" pad="TX"/>
-<connect gate="G$1" pin="VCC" pad="VCC"/>
-<connect gate="G$1" pin="WAKEUP" pad="WAKEUP"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="Wurth_Elektronik_Electromechanic_Switch_rev17c" urn="urn:adsk.eagle:library:480">
 <description>&lt;BR&gt;Wurth Elektronik - Switches&lt;br&gt;&lt;Hr&gt;
 &lt;BR&gt;&lt;BR&gt; 
@@ -27861,6 +27773,88 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="ORG1510-MK4 GPS module">
+<packages>
+<package name="PACKAGE">
+<wire x1="-5" y1="5" x2="5" y2="5" width="0.127" layer="21"/>
+<wire x1="5" y1="-5" x2="-5" y2="-5" width="0.127" layer="21"/>
+<text x="6" y="4" size="1" layer="21" font="vector" align="center">5</text>
+<text x="-6" y="4" size="1" layer="21" font="vector" rot="R180" align="center">6</text>
+<text x="-6" y="-4" size="1" layer="21" font="vector" rot="R180" align="center">10</text>
+<rectangle x1="-3.2" y1="-5" x2="3.2" y2="5" layer="29"/>
+<smd name="WAKEUP" x="-5.1682625" y="2.54" dx="2.5908" dy="0.8636" layer="1"/>
+<smd name="CTS" x="-5.1682625" y="1.27" dx="2.5908" dy="0.8636" layer="1"/>
+<smd name="RESET" x="-5.168265625" y="0" dx="2.5908" dy="0.8636" layer="1"/>
+<smd name="RTS" x="-5.1682625" y="-1.27" dx="2.5908" dy="0.8636" layer="1"/>
+<smd name="RX" x="-5.168265625" y="-2.54" dx="2.5908" dy="0.8636" layer="1"/>
+<smd name="ON_OFF" x="5.168265625" y="-2.54" dx="2.5908" dy="0.8636" layer="1"/>
+<smd name="1PPS" x="5.1682625" y="-1.27" dx="2.5908" dy="0.8636" layer="1"/>
+<smd name="TX" x="5.168265625" y="0" dx="2.5908" dy="0.8636" layer="1"/>
+<smd name="VCC" x="5.168265625" y="1.27" dx="2.5908" dy="0.8636" layer="1"/>
+<smd name="GND3" x="5.1682625" y="2.54" dx="2.5908" dy="0.8636" layer="1"/>
+<text x="6" y="-4" size="1" layer="21" font="vector" align="center">1</text>
+<smd name="GND2" x="0" y="0" dx="6.4" dy="10" layer="1"/>
+<pad name="GND4" x="0" y="3.81" drill="0.3"/>
+<pad name="GND1" x="-2.54" y="-3.81" drill="0.3"/>
+<pad name="GND5" x="2.54" y="-3.81" drill="0.3"/>
+<text x="0" y="6" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
+<text x="-3.81" y="-8.89" size="1.27" layer="27">&gt;VALUE</text>
+<wire x1="-5" y1="5" x2="-5" y2="3.2" width="0.127" layer="21"/>
+<wire x1="5" y1="5" x2="5" y2="3.2" width="0.127" layer="21"/>
+<wire x1="-5" y1="-5" x2="-5" y2="-3.2" width="0.127" layer="21"/>
+<wire x1="5" y1="-5" x2="5" y2="-3.2" width="0.127" layer="21"/>
+<text x="0" y="-6" size="1" layer="21" font="vector" align="center">&gt;VALUE</text>
+<text x="-8" y="0.127" size="1" layer="21" font="vector" align="center">rst</text>
+<text x="9" y="-1.127" size="1" layer="21" font="vector" align="center">1pps</text>
+</package>
+</packages>
+<symbols>
+<symbol name="SYMBOL">
+<pin name="ON_OFF" x="-15.24" y="17.78" length="middle" direction="in"/>
+<pin name="1PPS" x="-15.24" y="12.7" length="middle" direction="out"/>
+<pin name="TX" x="-15.24" y="7.62" length="middle" direction="out"/>
+<pin name="VCC" x="-15.24" y="2.54" length="middle" direction="pwr"/>
+<pin name="GND" x="0" y="-20.32" length="middle" rot="R90"/>
+<pin name="WAKEUP" x="15.24" y="-2.54" length="middle" rot="R180"/>
+<pin name="CTS" x="15.24" y="2.54" length="middle" direction="nc" rot="R180"/>
+<pin name="RESET" x="15.24" y="7.62" length="middle" rot="R180"/>
+<pin name="RTS" x="15.24" y="12.7" length="middle" direction="out" rot="R180"/>
+<pin name="RX" x="15.24" y="17.78" length="middle" direction="in" rot="R180"/>
+<wire x1="-10.16" y1="20.32" x2="10.16" y2="20.32" width="0.254" layer="94"/>
+<wire x1="10.16" y1="20.32" x2="10.16" y2="-15.24" width="0.254" layer="94"/>
+<wire x1="10.16" y1="-15.24" x2="-10.16" y2="-15.24" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="-15.24" x2="-10.16" y2="20.32" width="0.254" layer="94"/>
+<text x="-10.16" y="22.86" size="1.778" layer="95">&gt;NAME</text>
+<text x="-7.62" y="-7.62" size="1.778" layer="96">&gt;VALUE</text>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="ORG1510-MK4" prefix="IC" uservalue="yes">
+<gates>
+<gate name="G$1" symbol="SYMBOL" x="27.94" y="-2.54"/>
+</gates>
+<devices>
+<device name="" package="PACKAGE">
+<connects>
+<connect gate="G$1" pin="1PPS" pad="1PPS"/>
+<connect gate="G$1" pin="CTS" pad="CTS"/>
+<connect gate="G$1" pin="GND" pad="GND1 GND2 GND3 GND4 GND5"/>
+<connect gate="G$1" pin="ON_OFF" pad="ON_OFF"/>
+<connect gate="G$1" pin="RESET" pad="RESET"/>
+<connect gate="G$1" pin="RTS" pad="RTS"/>
+<connect gate="G$1" pin="RX" pad="RX"/>
+<connect gate="G$1" pin="TX" pad="TX"/>
+<connect gate="G$1" pin="VCC" pad="VCC"/>
+<connect gate="G$1" pin="WAKEUP" pad="WAKEUP"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -27998,7 +27992,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <part name="C21" library="rcl" deviceset="C-EU" device="C0805" value="0.1µF"/>
 <part name="C25" library="EECS5R5H155 Supercap" deviceset="EECS5R5H155" device="" value="1.5F"/>
 <part name="IC4" library="TPS63031 - Buck Boost Voltage Regulator" deviceset="TPS63001DRCR" device="" value="TPS63031"/>
-<part name="R2" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0805" value="150k"/>
+<part name="R2" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0805" value="10k"/>
 <part name="C11" library="rcl" deviceset="C-EU" device="C0805" value="22µF"/>
 <part name="C6" library="rcl" deviceset="C-EU" device="C0805" value="10µF"/>
 <part name="L2" library="DJNR3015-1R5 Inductor" deviceset="DJNR3015-1R5" device=""/>
@@ -28029,7 +28023,6 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <part name="C35" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="CPOL-EU" device="E5-10.5" value="1000µF"/>
 <part name="C38" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="CPOL-EU" device="E5-10.5" value="1000µF"/>
 <part name="D2" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="BAT60J" device="" value=" BAT60AE6327 "/>
-<part name="IC10" library="ORG1510-MK4 GPS module" deviceset="ORG1510-MK4" device=""/>
 <part name="SW1" library="Wurth_Elektronik_Electromechanic_Switch_rev17c" library_urn="urn:adsk.eagle:library:480" deviceset="430152050836" device="" value="RESET"/>
 <part name="Q1" library="ABM3B-8MHZ-10-1-U-T - Quartz Resonator" deviceset="ABM3B" device="" value="ABM3B-8MHZ-10-1-U-T"/>
 <part name="CONN4" library="MX-67503-1230 USB Mini-B SMT straight socket" deviceset="MX-67503-1230" device="" value="USB mini B"/>
@@ -28064,6 +28057,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <part name="D6" library="zener" library_urn="urn:adsk.eagle:library:449000" deviceset="ZENER" device="SOD123" package3d_urn="urn:adsk.eagle:package:449003/1" value="1N4733AW-TP"/>
 <part name="D7" library="zener" library_urn="urn:adsk.eagle:library:449000" deviceset="ZENER" device="" value="BZG05C3V6-E3-TR3"/>
 <part name="R23" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0805" value="10k"/>
+<part name="IC10" library="ORG1510-MK4 GPS module" deviceset="ORG1510-MK4" device="" value="ORG1510-MK4"/>
 </parts>
 <sheets>
 <sheet>
@@ -28251,7 +28245,6 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <instance part="C35" gate="G$1" x="309.88" y="472.44"/>
 <instance part="C38" gate="G$1" x="322.58" y="472.44"/>
 <instance part="D2" gate="G$1" x="261.62" y="474.98"/>
-<instance part="IC10" gate="G$1" x="48.26" y="38.1"/>
 <instance part="SW1" gate="G$1" x="22.86" y="650.24" rot="R90"/>
 <instance part="Q1" gate="G$1" x="101.6" y="642.62"/>
 <instance part="CONN4" gate="G$1" x="294.64" y="215.9"/>
@@ -28307,6 +28300,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <attribute name="VALUE" x="107.823" y="520.7" size="1.778" layer="96" rot="R90"/>
 </instance>
 <instance part="R23" gate="G$1" x="149.86" y="66.04" rot="R90"/>
+<instance part="IC10" gate="G$1" x="58.42" y="43.18"/>
 </instances>
 <busses>
 <bus name="B$1">
@@ -29193,21 +29187,10 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <label x="154.94" y="40.64" size="1.778" layer="95"/>
 </segment>
 <segment>
-<wire x1="53.34" y1="22.86" x2="55.88" y2="22.86" width="0.1524" layer="91"/>
-<wire x1="55.88" y1="22.86" x2="58.42" y2="22.86" width="0.1524" layer="91"/>
-<wire x1="58.42" y1="22.86" x2="60.96" y2="22.86" width="0.1524" layer="91"/>
-<wire x1="60.96" y1="22.86" x2="63.5" y2="22.86" width="0.1524" layer="91"/>
+<wire x1="58.42" y1="22.86" x2="63.5" y2="22.86" width="0.1524" layer="91"/>
 <wire x1="63.5" y1="22.86" x2="63.5" y2="17.78" width="0.1524" layer="91"/>
 <label x="63.5" y="17.78" size="1.778" layer="95"/>
-<pinref part="IC10" gate="G$1" pin="GND1"/>
-<pinref part="IC10" gate="G$1" pin="GND2"/>
-<junction x="55.88" y="22.86"/>
-<pinref part="IC10" gate="G$1" pin="GND3"/>
-<junction x="58.42" y="22.86"/>
-<pinref part="IC10" gate="G$1" pin="GND4"/>
-<junction x="60.96" y="22.86"/>
-<pinref part="IC10" gate="G$1" pin="GND5"/>
-<junction x="63.5" y="22.86"/>
+<pinref part="IC10" gate="G$1" pin="GND"/>
 </segment>
 <segment>
 <pinref part="C25" gate="G$1" pin="-"/>
@@ -31294,7 +31277,6 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <approved hash="104,1,27.94,-546.1,IC21,GND7,GND,,,"/>
 <approved hash="104,1,172.72,63.5,IC11,VDD,VCC,,,"/>
 <approved hash="202,1,172.72,58.42,IC11,CT,,,,"/>
-<approved hash="104,1,43.18,45.72,IC10,VCC,VGPS,,,"/>
 <approved hash="104,1,299.72,220.98,CONN4,VBUS,VUSB,,,"/>
 <approved hash="104,1,419.1,599.44,CONN1,GND1,GND,,,"/>
 <approved hash="104,1,419.1,594.36,CONN1,GND2,GND,,,"/>
@@ -31306,6 +31288,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <approved hash="202,1,93.98,-30.48,IC13,P2_0,,,,"/>
 <approved hash="202,1,93.98,-33.02,IC13,P2_4,,,,"/>
 <approved hash="202,1,134.62,-38.1,IC13,EAN,,,,"/>
+<approved hash="104,1,43.18,45.72,IC10,VCC,VGPS,,,"/>
 <approved hash="206,1,238.76,528.32,V_LIION_REGULATED,,,,,"/>
 <approved hash="206,1,238.76,525.78,V_LIION_REGULATED,,,,,"/>
 <approved hash="115,1,306.07,220.98,VUSB,,,,,"/>

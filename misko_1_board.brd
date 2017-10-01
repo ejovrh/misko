@@ -3955,40 +3955,6 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 </package>
 </packages>
 </library>
-<library name="ORG1510-MK4 GPS module">
-<packages>
-<package name="PACKAGE">
-<wire x1="-5" y1="5" x2="5" y2="5" width="0.127" layer="21"/>
-<wire x1="5" y1="-5" x2="-5" y2="-5" width="0.127" layer="21"/>
-<circle x="0" y="0.5" radius="0.5" width="1.27" layer="22"/>
-<text x="6.07008125" y="4" size="0.6096" layer="21" align="center">5</text>
-<text x="-6.07008125" y="4" size="0.6096" layer="21" rot="R180" align="center">6</text>
-<text x="-6.07008125" y="-4" size="0.6096" layer="21" rot="R180" align="center">10</text>
-<rectangle x1="-3.2" y1="-5" x2="3.2" y2="5" layer="29"/>
-<smd name="WAKEUP" x="-5.1682625" y="2.54" dx="2.5908" dy="0.8636" layer="1"/>
-<smd name="CTS" x="-5.1682625" y="1.27" dx="2.5908" dy="0.8636" layer="1"/>
-<smd name="RESET" x="-5.168265625" y="0" dx="2.5908" dy="0.8636" layer="1"/>
-<smd name="RTS" x="-5.1682625" y="-1.27" dx="2.5908" dy="0.8636" layer="1"/>
-<smd name="RX" x="-5.168265625" y="-2.54" dx="2.5908" dy="0.8636" layer="1"/>
-<smd name="ON_OFF" x="5.168265625" y="-2.54" dx="2.5908" dy="0.8636" layer="1"/>
-<smd name="1PPS" x="5.1682625" y="-1.27" dx="2.5908" dy="0.8636" layer="1"/>
-<smd name="TX" x="5.168265625" y="0" dx="2.5908" dy="0.8636" layer="1"/>
-<smd name="VCC" x="5.168265625" y="1.27" dx="2.5908" dy="0.8636" layer="1"/>
-<smd name="GND3" x="5.1682625" y="2.54" dx="2.5908" dy="0.8636" layer="1"/>
-<text x="6.07008125" y="-4.29818125" size="0.6096" layer="21" align="center">1</text>
-<smd name="GND2" x="0" y="0" dx="6.4" dy="10" layer="1"/>
-<pad name="GND6" x="0" y="3.81" drill="0.3"/>
-<pad name="GND4" x="-2.54" y="-3.81" drill="0.3"/>
-<pad name="GND5" x="2.54" y="-3.81" drill="0.3"/>
-<text x="-3.81" y="7.62" size="1.27" layer="25">&gt;NAME</text>
-<text x="-3.81" y="-8.89" size="1.27" layer="27">&gt;VALUE</text>
-<wire x1="-5" y1="5" x2="-5" y2="3.2" width="0.127" layer="21"/>
-<wire x1="5" y1="5" x2="5" y2="3.2" width="0.127" layer="21"/>
-<wire x1="-5" y1="-5" x2="-5" y2="-3.2" width="0.127" layer="21"/>
-<wire x1="5" y1="-5" x2="5" y2="-3.2" width="0.127" layer="21"/>
-</package>
-</packages>
-</library>
 <library name="Wurth_Elektronik_Electromechanic_Switch_rev17c" urn="urn:adsk.eagle:library:480">
 <description>&lt;BR&gt;Wurth Elektronik - Switches&lt;br&gt;&lt;Hr&gt;
 &lt;BR&gt;&lt;BR&gt; 
@@ -5646,6 +5612,42 @@ grid 5.08 mm, diameter 10.5 mm</description>
 </package3d>
 </packages3d>
 </library>
+<library name="ORG1510-MK4 GPS module">
+<packages>
+<package name="PACKAGE">
+<wire x1="-5" y1="5" x2="5" y2="5" width="0.127" layer="21"/>
+<wire x1="5" y1="-5" x2="-5" y2="-5" width="0.127" layer="21"/>
+<text x="6" y="4" size="1" layer="21" font="vector" align="center">5</text>
+<text x="-6" y="4" size="1" layer="21" font="vector" rot="R180" align="center">6</text>
+<text x="-6" y="-4" size="1" layer="21" font="vector" rot="R180" align="center">10</text>
+<rectangle x1="-3.2" y1="-5" x2="3.2" y2="5" layer="29"/>
+<smd name="WAKEUP" x="-5.1682625" y="2.54" dx="2.5908" dy="0.8636" layer="1"/>
+<smd name="CTS" x="-5.1682625" y="1.27" dx="2.5908" dy="0.8636" layer="1"/>
+<smd name="RESET" x="-5.168265625" y="0" dx="2.5908" dy="0.8636" layer="1"/>
+<smd name="RTS" x="-5.1682625" y="-1.27" dx="2.5908" dy="0.8636" layer="1"/>
+<smd name="RX" x="-5.168265625" y="-2.54" dx="2.5908" dy="0.8636" layer="1"/>
+<smd name="ON_OFF" x="5.168265625" y="-2.54" dx="2.5908" dy="0.8636" layer="1"/>
+<smd name="1PPS" x="5.1682625" y="-1.27" dx="2.5908" dy="0.8636" layer="1"/>
+<smd name="TX" x="5.168265625" y="0" dx="2.5908" dy="0.8636" layer="1"/>
+<smd name="VCC" x="5.168265625" y="1.27" dx="2.5908" dy="0.8636" layer="1"/>
+<smd name="GND3" x="5.1682625" y="2.54" dx="2.5908" dy="0.8636" layer="1"/>
+<text x="6" y="-4" size="1" layer="21" font="vector" align="center">1</text>
+<smd name="GND2" x="0" y="0" dx="6.4" dy="10" layer="1"/>
+<pad name="GND4" x="0" y="3.81" drill="0.3"/>
+<pad name="GND1" x="-2.54" y="-3.81" drill="0.3"/>
+<pad name="GND5" x="2.54" y="-3.81" drill="0.3"/>
+<text x="0" y="6" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
+<text x="-3.81" y="-8.89" size="1.27" layer="27">&gt;VALUE</text>
+<wire x1="-5" y1="5" x2="-5" y2="3.2" width="0.127" layer="21"/>
+<wire x1="5" y1="5" x2="5" y2="3.2" width="0.127" layer="21"/>
+<wire x1="-5" y1="-5" x2="-5" y2="-3.2" width="0.127" layer="21"/>
+<wire x1="5" y1="-5" x2="5" y2="-3.2" width="0.127" layer="21"/>
+<text x="0" y="-6" size="1" layer="21" font="vector" align="center">&gt;VALUE</text>
+<text x="-8" y="0.127" size="1" layer="21" font="vector" align="center">rst</text>
+<text x="9" y="-1.127" size="1" layer="21" font="vector" align="center">1pps</text>
+</package>
+</packages>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -6336,10 +6338,6 @@ design rules under a new name.</description>
 <attribute name="TP_SIGNAL_NAME" value="" x="54" y="31.71" size="1" layer="37"/>
 <attribute name="VALUE" x="53.492" y="33.488" size="0.0254" layer="27"/>
 </element>
-<element name="IC10" library="ORG1510-MK4 GPS module" package="PACKAGE" value="ORG1510-MK4" x="98.5" y="36.25" smashed="yes" rot="R90">
-<attribute name="NAME" x="104.37" y="36.31" size="1" layer="25" font="vector" rot="R270" align="center"/>
-<attribute name="VALUE" x="107.39" y="32.44" size="1.27" layer="27" rot="R90"/>
-</element>
 <element name="SW1" library="Wurth_Elektronik_Electromechanic_Switch_rev17c" library_urn="urn:adsk.eagle:library:480" package="430152050836" value="RESET" x="29" y="5.5" smashed="yes" rot="R180">
 <attribute name="VALUE" x="32.182" y="10.6834" size="1.27" layer="27" rot="R180"/>
 </element>
@@ -6466,6 +6464,7 @@ design rules under a new name.</description>
 <attribute name="NAME" x="57.5" y="66.5" size="1" layer="21" font="vector" rot="R180" align="center"/>
 </element>
 <element name="R23" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0805" value="10k" x="84.25" y="32" rot="MR0"/>
+<element name="IC10" library="ORG1510-MK4 GPS module" package="PACKAGE" value="ORG1510-MK4" x="98.5" y="36.25" rot="R90"/>
 </elements>
 <signals>
 <signal name="VCC" class="1">
@@ -6866,11 +6865,6 @@ design rules under a new name.</description>
 <contactref element="C31" pad="-"/>
 <contactref element="C35" pad="-"/>
 <contactref element="C38" pad="-"/>
-<contactref element="IC10" pad="GND2"/>
-<contactref element="IC10" pad="GND3"/>
-<contactref element="IC10" pad="GND4"/>
-<contactref element="IC10" pad="GND5"/>
-<contactref element="IC10" pad="GND6"/>
 <contactref element="SW1" pad="1"/>
 <contactref element="SW1" pad="3"/>
 <contactref element="Q1" pad="GND1"/>
@@ -7082,6 +7076,11 @@ design rules under a new name.</description>
 <contactref element="D6" pad="AN"/>
 <contactref element="D7" pad="AN"/>
 <contactref element="R23" pad="2"/>
+<contactref element="IC10" pad="GND2"/>
+<contactref element="IC10" pad="GND5"/>
+<contactref element="IC10" pad="GND4"/>
+<contactref element="IC10" pad="GND3"/>
+<contactref element="IC10" pad="GND1"/>
 <wire x1="85.5" y1="67" x2="85.49" y2="67.01" width="0" layer="19" extent="16-16"/>
 <wire x1="32.25" y1="41" x2="31.5" y2="44.5" width="0" layer="19" extent="1-1"/>
 <wire x1="110" y1="102.46" x2="111.45" y2="71.71" width="0" layer="19" extent="1-1"/>
@@ -7556,18 +7555,19 @@ design rules under a new name.</description>
 <wire x1="41.43344375" y1="55.68344375" x2="41.25" y2="55.5" width="0.25" layer="16"/>
 </signal>
 <signal name="GPS_WAKEUP_PIN" class="3">
-<contactref element="IC10" pad="WAKEUP"/>
-<wire x1="95.8782625" y1="31" x2="95.96" y2="31.0817375" width="0.25" layer="1"/>
 <contactref element="IC1" pad="46"/>
 <wire x1="55.12" y1="53.8942" x2="64.28084375" y2="53.8942" width="0.25" layer="1"/>
 <wire x1="92.071" y1="39.4980375" x2="93.175" y2="38.3940375" width="0.25" layer="1"/>
 <wire x1="92.071" y1="46.179" x2="92.071" y2="39.4980375" width="0.25" layer="1"/>
-<wire x1="95.96" y1="31.0817375" x2="94.1682625" y2="31.0817375" width="0.25" layer="1"/>
 <wire x1="93.175" y1="38.3940375" x2="93.175" y2="32.075" width="0.25" layer="1"/>
-<wire x1="93.175" y1="32.075" x2="94.1682625" y2="31.0817375" width="0.25" layer="1"/>
+<wire x1="94.125" y1="31.125" x2="93.175" y2="32.075" width="0.25" layer="1"/>
+<wire x1="94.125" y1="31.125" x2="94.1682625" y2="31.0817375" width="0.25" layer="1"/>
 <wire x1="68.32504375" y1="49.85" x2="88.4" y2="49.85" width="0.25" layer="1"/>
 <wire x1="64.28084375" y1="53.8942" x2="68.32504375" y2="49.85" width="0.25" layer="1"/>
 <wire x1="88.4" y1="49.85" x2="92.071" y2="46.179" width="0.25" layer="1"/>
+<contactref element="IC10" pad="WAKEUP"/>
+<wire x1="95.96" y1="31.0817375" x2="94.1682625" y2="31.0817375" width="0.25" layer="1"/>
+<wire x1="94.1682625" y1="31.0817375" x2="94.125" y2="31.125" width="0.25" layer="1"/>
 </signal>
 <signal name="ANALOG_SW_CTRL_PIN" class="3">
 <contactref element="IC9" pad="6"/>
@@ -7714,12 +7714,10 @@ design rules under a new name.</description>
 <contactref element="IC1" pad="15"/>
 <contactref element="IC8" pad="3"/>
 <contactref element="C7" pad="2"/>
-<contactref element="IC10" pad="RX"/>
 <wire x1="100.48414375" y1="22.8102" x2="100.5454" y2="22.8102" width="0.25" layer="16"/>
 <via x="101.04" y="29.081734375" extent="1-16" drill="0.3"/>
 <wire x1="100.5454" y1="22.8102" x2="100.978" y2="22.8102" width="0.25" layer="16"/>
 <wire x1="69.2968" y1="33.562275" x2="69.2968" y2="40.812275" width="0.25" layer="16"/>
-<wire x1="101.04" y1="29.081734375" x2="101.04" y2="31.081734375" width="0.25" layer="1"/>
 <wire x1="101.04" y1="22.8722" x2="100.978" y2="22.8102" width="0.25" layer="16"/>
 <wire x1="101.25700625" y1="22.8102" x2="100.5454" y2="22.8102" width="0.25" layer="16"/>
 <wire x1="101.56086875" y1="28.560865625" x2="101.04" y2="29.081734375" width="0.25" layer="16"/>
@@ -7734,7 +7732,7 @@ design rules under a new name.</description>
 <wire x1="94.37914375" y1="28.8045375" x2="97.216840625" y2="25.966840625" width="0.25" layer="16"/>
 <via x="97.216840625" y="25.966840625" extent="1-16" drill="0.35"/>
 <wire x1="97.216840625" y1="25.966840625" x2="97.92510625" y2="25.966840625" width="0.25" layer="1"/>
-<wire x1="97.92510625" y1="25.966840625" x2="101.04" y2="29.081734375" width="0.25" layer="1"/>
+<wire x1="101.04" y1="29.081734375" x2="97.92510625" y2="25.966840625" width="0.25" layer="1"/>
 <wire x1="74.0545375" y1="28.8045375" x2="94.37914375" y2="28.8045375" width="0.25" layer="16"/>
 <wire x1="98.5" y1="34.05" x2="98.5" y2="31.621734375" width="0.25" layer="16"/>
 <wire x1="98.5" y1="31.621734375" x2="101.04" y2="29.081734375" width="0.25" layer="16"/>
@@ -7743,6 +7741,8 @@ design rules under a new name.</description>
 <wire x1="100.6056" y1="22.75" x2="102" y2="22.75" width="0.25" layer="16"/>
 <wire x1="102" y1="22.75" x2="102.271" y2="23.021" width="0.25" layer="16"/>
 <wire x1="102.271" y1="23.021" x2="102.271" y2="27.850734375" width="0.25" layer="16"/>
+<contactref element="IC10" pad="RX"/>
+<wire x1="101.04" y1="31.081734375" x2="101.04" y2="29.081734375" width="0.25" layer="1"/>
 </signal>
 <signal name="SD_CARD_DETECT_PIN" class="2">
 <contactref element="IC17" pad="DET"/>
@@ -7836,12 +7836,9 @@ design rules under a new name.</description>
 <signal name="GPS_TX" class="3">
 <contactref element="C1" pad="1"/>
 <contactref element="IC9" pad="1"/>
-<contactref element="IC10" pad="TX"/>
 <via x="98.5" y="43.5" extent="1-16" drill="0.3"/>
-<wire x1="98.5" y1="43.5" x2="98.5" y2="41.418265625" width="0.25" layer="1"/>
 <wire x1="102.721" y1="31.88615" x2="104" y2="33.16515" width="0.25" layer="16"/>
 <wire x1="102.721" y1="20.087675" x2="102.721" y2="31.88615" width="0.25" layer="16"/>
-<wire x1="98.5" y1="40.287915625" x2="98.5" y2="43.5" width="0.25" layer="16"/>
 <wire x1="98.5" y1="40.287915625" x2="98.5" y2="40.2" width="0.25" layer="16"/>
 <wire x1="98.7241625" y1="40.287915625" x2="98.5" y2="40.287915625" width="0.25" layer="16"/>
 <wire x1="98.5" y1="40.2" x2="102.8" y2="40.2" width="0.25" layer="16"/>
@@ -7850,6 +7847,9 @@ design rules under a new name.</description>
 <wire x1="97.9546" y1="19.5602" x2="97.9546" y2="18.7954" width="0.25" layer="16"/>
 <wire x1="97.9546" y1="18.7954" x2="101.428725" y2="18.7954" width="0.25" layer="16"/>
 <wire x1="101.428725" y1="18.7954" x2="102.721" y2="20.087675" width="0.25" layer="16"/>
+<contactref element="IC10" pad="TX"/>
+<wire x1="98.5" y1="40.2" x2="98.5" y2="43.5" width="0.25" layer="16"/>
+<wire x1="98.5" y1="43.5" x2="98.5" y2="41.418265625" width="0.25" layer="1"/>
 </signal>
 <signal name="BLUETOOTH_TX" class="2">
 <contactref element="IC9" pad="3"/>
@@ -8204,10 +8204,8 @@ design rules under a new name.</description>
 <contactref element="C25" pad="+"/>
 <contactref element="IC12" pad="VOUT1"/>
 <contactref element="IC12" pad="VOUT2"/>
-<contactref element="IC10" pad="VCC"/>
 <contactref element="C39" pad="1"/>
 <via x="97.25" y="43.5" extent="1-16" drill="0.3"/>
-<wire x1="97.25" y1="43.5" x2="97.25" y2="39.44955625" width="0.6" layer="16"/>
 <wire x1="77.9" y1="38.1" x2="78.65" y2="38.1" width="0.4" layer="16"/>
 <wire x1="78.75" y1="38" x2="78.65" y2="38.1" width="0.4" layer="16"/>
 <wire x1="77.9" y1="37.45" x2="78.7" y2="37.45" width="0.4" layer="16"/>
@@ -8221,8 +8219,6 @@ design rules under a new name.</description>
 <wire x1="39.54638125" y1="55.8" x2="37.7" y2="55.8" width="0.25" layer="16"/>
 <wire x1="78.75" y1="37.7" x2="82.3" y2="37.7" width="0.6" layer="16"/>
 <wire x1="82.3" y1="37.7" x2="82.5" y2="37.5" width="0.6" layer="16"/>
-<wire x1="97.23" y1="41.418265625" x2="97.25" y2="41.438265625" width="0.6" layer="1"/>
-<wire x1="97.25" y1="41.438265625" x2="97.25" y2="43.5" width="0.6" layer="1"/>
 <wire x1="82.5" y1="37.5" x2="83.95" y2="37.5" width="0.6" layer="1"/>
 <wire x1="83.95" y1="37.5" x2="84" y2="37.45" width="0.6" layer="1"/>
 <wire x1="82.5" y1="37.5" x2="82.95" y2="37.95" width="0.6" layer="1"/>
@@ -8235,13 +8231,17 @@ design rules under a new name.</description>
 <wire x1="82.945" y1="46.575" x2="82.945" y2="43.005" width="0.6" layer="1"/>
 <wire x1="82.945" y1="43.005" x2="82.95" y2="43" width="0.6" layer="1"/>
 <wire x1="94.18" y1="46.57" x2="80.5" y2="46.57" width="0.6" layer="16"/>
-<wire x1="94.18" y1="46.57" x2="97.25" y2="43.5" width="0.6" layer="16"/>
+<wire x1="97.25" y1="43.5" x2="94.18" y2="46.57" width="0.6" layer="16"/>
 <wire x1="80.5" y1="46.57" x2="73.995" y2="53.075" width="0.25" layer="16"/>
 <wire x1="73.995" y1="53.075" x2="42.27138125" y2="53.075" width="0.25" layer="16"/>
 <wire x1="82.5" y1="37.5" x2="82.5" y2="38.75" width="0.6" layer="16"/>
 <wire x1="82.5" y1="38.75" x2="82.75" y2="39" width="0.6" layer="16"/>
 <wire x1="82.75" y1="39" x2="85.85321875" y2="39" width="0.6" layer="16"/>
 <wire x1="85.85321875" y1="39" x2="86.25" y2="38.60321875" width="0.6" layer="16"/>
+<contactref element="IC10" pad="VCC"/>
+<wire x1="97.25" y1="43.5" x2="97.25" y2="41.438265625" width="0.6" layer="1"/>
+<wire x1="97.25" y1="41.438265625" x2="97.23" y2="41.418265625" width="0.6" layer="1"/>
+<wire x1="97.25" y1="39.44955625" x2="97.25" y2="43.5" width="0.6" layer="16"/>
 </signal>
 <signal name="PFI" class="2">
 <contactref element="R47" pad="2"/>
@@ -8414,23 +8414,24 @@ design rules under a new name.</description>
 <signal name="GPS_ON_OFF" class="3">
 <contactref element="IC11" pad="1"/>
 <contactref element="R29" pad="1"/>
-<contactref element="IC10" pad="ON_OFF"/>
 <wire x1="87.1898" y1="35.2046" x2="87.25" y2="35.1444" width="0.25" layer="16"/>
 <wire x1="87.25" y1="35.1444" x2="87.25" y2="33.764" width="0.25" layer="16"/>
 <via x="87.25" y="33.764" extent="1-16" drill="0.3"/>
 <wire x1="88.5" y1="35.55" x2="88.5" y2="35.014" width="0.25" layer="1"/>
 <wire x1="88.5" y1="35.014" x2="87.25" y2="33.764" width="0.25" layer="1"/>
 <via x="92.8" y="39.8" extent="1-16" drill="0.3"/>
-<wire x1="101.1" y1="40.2" x2="101.1" y2="41.358265625" width="0.25" layer="1"/>
-<wire x1="101.1" y1="41.358265625" x2="101.04" y2="41.418265625" width="0.25" layer="1"/>
 <wire x1="92.8" y1="39.8" x2="95.39144375" y2="39.8" width="0.25" layer="1"/>
 <wire x1="95.39144375" y1="39.8" x2="95.39358125" y2="39.7978625" width="0.25" layer="1"/>
-<wire x1="100.6978625" y1="39.7978625" x2="101.1" y2="40.2" width="0.25" layer="1"/>
+<wire x1="100.825" y1="39.925" x2="100.6978625" y2="39.7978625" width="0.25" layer="1"/>
+<wire x1="100.825" y1="39.925" x2="101.1" y2="40.2" width="0.25" layer="1"/>
 <wire x1="95.39358125" y1="39.7978625" x2="100.6978625" y2="39.7978625" width="0.25" layer="1"/>
 <wire x1="87.25" y1="33.764" x2="87.25" y2="34.25" width="0.25" layer="16"/>
 <wire x1="87.1898" y1="35.2046" x2="87.2352" y2="35.25" width="0.25" layer="16"/>
 <wire x1="88.25" y1="35.25" x2="92.8" y2="39.8" width="0.25" layer="16"/>
 <wire x1="87.2352" y1="35.25" x2="88.25" y2="35.25" width="0.25" layer="16"/>
+<contactref element="IC10" pad="ON_OFF"/>
+<wire x1="101.04" y1="41.418265625" x2="101.04" y2="40.14" width="0.25" layer="1"/>
+<wire x1="101.04" y1="40.14" x2="100.825" y2="39.925" width="0.25" layer="1"/>
 </signal>
 <signal name="GSM_ANT" class="2">
 <contactref element="IC22" pad="GSM_ANT"/>
@@ -9197,8 +9198,8 @@ design rules under a new name.</description>
 <approved hash="6,16,4997bc3aa7dcb1aa"/>
 <approved hash="6,16,5e469f269cc05da0"/>
 <approved hash="5,16,b135938dbd2c1fbc"/>
-<approved hash="5,16,c72bf732b7e6fa03"/>
 <approved hash="5,16,8e7937cf3738f372"/>
+<approved hash="5,16,c72bf732b7e6fa03"/>
 <approved hash="19,16,b76a09900850b6aa"/>
 <approved hash="5,16,4d64f4d36a8e58cc"/>
 <approved hash="5,16,1953c1aaca8e358b"/>
@@ -9207,20 +9208,20 @@ design rules under a new name.</description>
 <approved hash="5,16,a80d6786b3d58bb3"/>
 <approved hash="5,16,601c3d8e29f9576b"/>
 <approved hash="5,16,2e1a51e23a08b40a"/>
-<approved hash="5,16,234752c73538f34c"/>
-<approved hash="5,16,efaec75c1cfd83fa"/>
 <approved hash="5,16,6a15923ab5e6fa3d"/>
+<approved hash="5,16,7d4f5826cc6d5ef1"/>
 <approved hash="5,16,87838940ee8fcf11"/>
 <approved hash="5,16,65838946cc89ad17"/>
-<approved hash="5,16,7d4f5826cc6d5ef1"/>
+<approved hash="5,16,234752c73538f34c"/>
 <approved hash="5,16,18dc83b3626ed88c"/>
 <approved hash="5,16,5ddd48b36268138a"/>
+<approved hash="5,16,efaec75c1cfd83fa"/>
 <approved hash="5,16,48b7b80ee8407a08"/>
 <approved hash="5,16,4629eca7b8f34c86"/>
 <approved hash="19,16,b3d50f02c6ee8f5f"/>
 <approved hash="4,16,7b20aa7790d40ebc"/>
-<approved hash="4,16,5af3627740239120"/>
 <approved hash="4,16,59375221708990f4"/>
+<approved hash="4,16,5af3627740239120"/>
 </errors>
 </board>
 </drawing>
