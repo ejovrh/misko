@@ -27804,8 +27804,6 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <wire x1="-5" y1="-5" x2="-5" y2="-3.2" width="0.127" layer="21"/>
 <wire x1="5" y1="-5" x2="5" y2="-3.2" width="0.127" layer="21"/>
 <text x="0" y="-6" size="1" layer="21" font="vector" align="center">&gt;VALUE</text>
-<text x="-8" y="0.127" size="1" layer="21" font="vector" align="center">rst</text>
-<text x="9" y="-1.127" size="1" layer="21" font="vector" align="center">1pps</text>
 </package>
 </packages>
 <symbols>
