@@ -16987,59 +16987,6 @@ high speed (Philips)</description>
 </deviceset>
 </devicesets>
 </library>
-<library name="DJNR6045-100S Power Inductor">
-<description>&lt;b&gt;Coilcraft SMD Inductors&lt;/b&gt;&lt;p&gt;
-&lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
-<packages>
-<package name="DJNR6045-100-S">
-<text x="-3" y="4" size="1.27" layer="21">&gt;NAME</text>
-<text x="-3" y="-5" size="1.27" layer="21">&gt;VALUE</text>
-<smd name="2" x="2.35" y="0" dx="1.6" dy="5.7" layer="1"/>
-<smd name="1" x="-2.35" y="0" dx="1.6" dy="5.7" layer="1"/>
-<wire x1="-3" y1="3" x2="3" y2="3" width="0.127" layer="21"/>
-<wire x1="3" y1="3" x2="3" y2="-3" width="0.127" layer="21"/>
-<wire x1="3" y1="-3" x2="-3" y2="-3" width="0.127" layer="21"/>
-<wire x1="-3" y1="-3" x2="-3" y2="3" width="0.127" layer="21"/>
-</package>
-</packages>
-<symbols>
-<symbol name="INDUCTOR">
-<wire x1="0" y1="5.08" x2="1.27" y2="3.81" width="0.254" layer="94" curve="-90" cap="flat"/>
-<wire x1="0" y1="2.54" x2="1.27" y2="3.81" width="0.254" layer="94" curve="90" cap="flat"/>
-<wire x1="0" y1="2.54" x2="1.27" y2="1.27" width="0.254" layer="94" curve="-90" cap="flat"/>
-<wire x1="0" y1="0" x2="1.27" y2="1.27" width="0.254" layer="94" curve="90" cap="flat"/>
-<wire x1="0" y1="0" x2="1.27" y2="-1.27" width="0.254" layer="94" curve="-90" cap="flat"/>
-<wire x1="0" y1="-2.54" x2="1.27" y2="-1.27" width="0.254" layer="94" curve="90" cap="flat"/>
-<wire x1="0" y1="-2.54" x2="1.27" y2="-3.81" width="0.254" layer="94" curve="-90" cap="flat"/>
-<wire x1="0" y1="-5.08" x2="1.27" y2="-3.81" width="0.254" layer="94" curve="90" cap="flat"/>
-<text x="2.54" y="6.35" size="1.778" layer="95">&gt;NAME</text>
-<text x="2.54" y="-6.35" size="1.778" layer="96">&gt;VALUE</text>
-<pin name="1" x="0" y="7.62" visible="off" length="short" direction="pas" swaplevel="1" rot="R270"/>
-<pin name="2" x="0" y="-7.62" visible="off" length="short" direction="pas" swaplevel="1" rot="R90"/>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="DJNR6045-100-S" prefix="L">
-<description>&lt;b&gt;Shielded Power Inductors&lt;/b&gt;&lt;p&gt;
-Package 6.6 × 6.6 mm x 4.1 mm high&lt;br&gt;
-Source: http://www.farnell.com/datasheets/1681958.pdf</description>
-<gates>
-<gate name="G$2" symbol="INDUCTOR" x="-45.72" y="5.08"/>
-</gates>
-<devices>
-<device name="" package="DJNR6045-100-S">
-<connects>
-<connect gate="G$2" pin="1" pad="1"/>
-<connect gate="G$2" pin="2" pad="2"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="Molex SD-47309 SD Card Slot">
 <packages>
 <package name="MICRO_SD_CONNECTOR">
@@ -30390,6 +30337,137 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </deviceset>
 </devicesets>
 </library>
+<library name="SparkFun-Fuses" urn="urn:adsk.eagle:library:517">
+<description>&lt;h3&gt;SparkFun Fuses&lt;/h3&gt;
+In this library you'll find fuses, or fuse like components such as PTCs. Reference designator F.
+&lt;br&gt;
+&lt;br&gt;
+We've spent an enormous amount of time creating and checking these footprints and parts, but it is &lt;b&gt; the end user's responsibility&lt;/b&gt; to ensure correctness and suitablity for a given componet or application. 
+&lt;br&gt;
+&lt;br&gt;If you enjoy using this library, please buy one of our products at &lt;a href=" www.sparkfun.com"&gt;SparkFun.com&lt;/a&gt;.
+&lt;br&gt;
+&lt;br&gt;
+&lt;b&gt;Licensing:&lt;/b&gt; Creative Commons ShareAlike 4.0 International - https://creativecommons.org/licenses/by-sa/4.0/ 
+&lt;br&gt;
+&lt;br&gt;
+You are welcome to use this library for commercial purposes. For attribution, we ask that when you begin to sell your device using our footprint, you email us with a link to the product being sold. We want bragging rights that we helped (in a very small part) to create your 8th world wonder. We would like the opportunity to feature your device on our homepage.</description>
+<packages>
+<package name="PTH" urn="urn:adsk.eagle:footprint:38571/1" library_version="1">
+<description>Two 0.8 mm PTHs spaced 0.2 in apart for through hole parts.</description>
+<wire x1="-3.81" y1="1.524" x2="3.81" y2="1.524" width="0.2032" layer="21"/>
+<wire x1="3.81" y1="1.524" x2="3.81" y2="-1.524" width="0.2032" layer="21"/>
+<wire x1="3.81" y1="-1.524" x2="-3.81" y2="-1.524" width="0.2032" layer="21"/>
+<wire x1="-3.81" y1="-1.524" x2="-3.81" y2="1.524" width="0.2032" layer="21"/>
+<pad name="P$1" x="-2.54" y="0" drill="0.8" diameter="1.8796"/>
+<pad name="P$2" x="2.54" y="0" drill="0.8" diameter="1.8796"/>
+<text x="0" y="1.778" size="0.6096" layer="25" font="vector" ratio="20" align="bottom-center">&gt;Name</text>
+<text x="0" y="-1.778" size="0.6096" layer="27" font="vector" ratio="20" align="top-center">&gt;Value</text>
+</package>
+<package name="1206" urn="urn:adsk.eagle:footprint:38572/1" library_version="1">
+<description>&lt;p&gt;&lt;b&gt;Generic 3216 (1206) package&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;0.2mm courtyard excess rounded to nearest 0.05mm.&lt;/p&gt;</description>
+<wire x1="-2.4" y1="1.1" x2="2.4" y2="1.1" width="0.0508" layer="39"/>
+<wire x1="2.4" y1="-1.1" x2="-2.4" y2="-1.1" width="0.0508" layer="39"/>
+<wire x1="-2.4" y1="-1.1" x2="-2.4" y2="1.1" width="0.0508" layer="39"/>
+<wire x1="2.4" y1="1.1" x2="2.4" y2="-1.1" width="0.0508" layer="39"/>
+<wire x1="-0.965" y1="0.787" x2="0.965" y2="0.787" width="0.1016" layer="51"/>
+<wire x1="-0.965" y1="-0.787" x2="0.965" y2="-0.787" width="0.1016" layer="51"/>
+<smd name="1" x="-1.4" y="0" dx="1.6" dy="1.8" layer="1"/>
+<smd name="2" x="1.4" y="0" dx="1.6" dy="1.8" layer="1"/>
+<text x="0" y="1.143" size="0.6096" layer="25" font="vector" ratio="20" align="bottom-center">&gt;NAME</text>
+<text x="0" y="-1.143" size="0.6096" layer="27" font="vector" ratio="20" align="top-center">&gt;VALUE</text>
+<rectangle x1="-1.7018" y1="-0.8509" x2="-0.9517" y2="0.8491" layer="51"/>
+<rectangle x1="0.9517" y1="-0.8491" x2="1.7018" y2="0.8509" layer="51"/>
+<rectangle x1="-0.1999" y1="-0.4001" x2="0.1999" y2="0.4001" layer="35"/>
+</package>
+</packages>
+<packages3d>
+<package3d name="PTH" urn="urn:adsk.eagle:package:38574/1" type="box" library_version="1">
+<description>Two 0.8 mm PTHs spaced 0.2 in apart for through hole parts.</description>
+</package3d>
+<package3d name="1206" urn="urn:adsk.eagle:package:38575/1" type="box" library_version="1">
+<description>Generic 3216 (1206) package
+0.2mm courtyard excess rounded to nearest 0.05mm.</description>
+</package3d>
+</packages3d>
+<symbols>
+<symbol name="PPTC" urn="urn:adsk.eagle:symbol:38570/1" library_version="1">
+<description>A polymeric positive temperature coefficient device (PPTC, commonly known as a resettable fuse, polyfuse or polyswitch) is a passive electronic component used to protect against overcurrent faults in electronic circuits. - Wikipedia</description>
+<wire x1="5.08" y1="1.27" x2="5.08" y2="-1.27" width="0.1524" layer="94"/>
+<wire x1="5.08" y1="-1.27" x2="-2.54" y2="-1.27" width="0.1524" layer="94"/>
+<wire x1="-2.54" y1="-1.27" x2="-2.54" y2="1.27" width="0.1524" layer="94"/>
+<wire x1="-2.54" y1="1.27" x2="5.08" y2="1.27" width="0.1524" layer="94"/>
+<wire x1="-1.524" y1="-2.54" x2="3.81" y2="2.54" width="0.1524" layer="94"/>
+<wire x1="3.81" y1="2.54" x2="5.08" y2="2.54" width="0.1524" layer="94"/>
+<text x="1.905" y="3.175" size="1.778" layer="95" font="vector" align="bottom-center">&gt;NAME</text>
+<text x="1.27" y="-2.794" size="1.778" layer="96" font="vector" align="top-center">&gt;VALUE</text>
+<pin name="1" x="-5.08" y="0" visible="off" length="short"/>
+<pin name="2" x="7.62" y="0" visible="off" length="short" rot="R180"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="PPTC" urn="urn:adsk.eagle:component:38576/1" prefix="F" library_version="1">
+<description>&lt;h3&gt;Resettable Fuse PPTC&lt;/h3&gt;
+&lt;p&gt;Resettable Fuse. Really a sort of resistor with a &lt;b&gt;p&lt;/b&gt;olymeric &lt;b&gt;p&lt;/b&gt;ositive &lt;b&gt;t&lt;/b&gt;emperature &lt;b&gt;c&lt;/b&gt;oefficient whose resistance increases dramatically with an increase in temperature. When heated by the power passing through the resistance rises causing the current to be limited, protecting the circuit. This is achieved by the transition of the polymer from a crystalline to an amorphous state where the conductive carbon separates breaking the conductive pathways found in the cool crystalline structure. When a PPTC cools back down it resumes conducting letting the circuit turn back on.&lt;/p&gt;
+&lt;p&gt;SparkFun Products:
+&lt;ul&gt;&lt;li&gt;&lt;a href="https://www.sparkfun.com/products/12757"&gt;SparkFun RedBoard - Programmed with Arduino&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.sparkfun.com/products/12640"&gt;Pro Micro - 5V/16MHz&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.sparkfun.com/products/10915"&gt;Arduino Pro 328 - 5V/16MHz&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href="https://www.sparkfun.com/products/13720"&gt;MP3 Trigger&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/p&gt;</description>
+<gates>
+<gate name="G$1" symbol="PPTC" x="0" y="0"/>
+</gates>
+<devices>
+<device name="_PTH" package="PTH">
+<connects>
+<connect gate="G$1" pin="1" pad="P$1"/>
+<connect gate="G$1" pin="2" pad="P$2"/>
+</connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:38574/1"/>
+</package3dinstances>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="RES-08490"/>
+<attribute name="VALUE" value="72V/0.25A"/>
+</technology>
+</technologies>
+</device>
+<device name="_HALF-AMP" package="1206">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+</connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:38575/1"/>
+</package3dinstances>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="RES-08585"/>
+<attribute name="VALUE" value="6V/0.5A"/>
+</technology>
+</technologies>
+</device>
+<device name="_THREE-QUARTER-AMP" package="1206">
+<connects>
+<connect gate="G$1" pin="1" pad="1"/>
+<connect gate="G$1" pin="2" pad="2"/>
+</connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:38575/1"/>
+</package3dinstances>
+<technologies>
+<technology name="">
+<attribute name="PROD_ID" value="RES-11150"/>
+<attribute name="VALUE" value="6V/0.75A"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -30539,7 +30617,6 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <part name="TP6" library="testpad" deviceset="PTR1" device="TP14R" value="VGPS"/>
 <part name="TP4" library="testpad" deviceset="PTR1" device="TP14R" value="VCC"/>
 <part name="TP1" library="testpad" deviceset="TP" device="PAD1-17Y" value="GND"/>
-<part name="L3" library="DJNR6045-100S Power Inductor" deviceset="DJNR6045-100-S" device=""/>
 <part name="C42" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="C-EU" device="C0805" value="0.1µF"/>
 <part name="IC18" library="con-hirose" deviceset="FH12-30S-0.5S" device="H"/>
 <part name="C17" library="rcl" deviceset="C-EU" device="C0805" value="2.2µF / 25V"/>
@@ -30589,11 +30666,11 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <part name="C45" library="rcl" deviceset="C-EU" device="C0805" value="0.1µF"/>
 <part name="D5" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SMB" package3d_urn="urn:adsk.eagle:package:43404/2" value="SZ1SMB5916BT3G"/>
 <part name="D4" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="SMB" package3d_urn="urn:adsk.eagle:package:43404/2" value="SZ1SMB5916BT3G"/>
-<part name="D6" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="DIODE-" device="DO214AA" package3d_urn="urn:adsk.eagle:package:43433/2" value="SMBJ5339B-TP"/>
 <part name="D7" library="zener" library_urn="urn:adsk.eagle:library:449000" deviceset="ZENER" device="" value="BZG05C3V6-E3-TR3"/>
 <part name="R23" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0805" value="10k"/>
 <part name="IC10" library="ORG1510-MK4 GPS module" deviceset="ORG1510-MK4" device="" value="ORG1510-MK4"/>
 <part name="IC23" library="SP3012 TVS Diode Array" deviceset="SP3012-04UTG" device="" value="SP3012-04UTG"/>
+<part name="F1" library="SparkFun-Fuses" library_urn="urn:adsk.eagle:library:517" deviceset="PPTC" device="_THREE-QUARTER-AMP" package3d_urn="urn:adsk.eagle:package:38575/1" value="PTS120615V050 "/>
 </parts>
 <sheets>
 <sheet>
@@ -30733,7 +30810,6 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <attribute name="NAME" x="260.684" y="803.432" size="1.778" layer="95"/>
 <attribute name="TP_SIGNAL_NAME" x="267.94" y="805.26" size="1.778" layer="97" rot="R90"/>
 </instance>
-<instance part="L3" gate="G$2" x="322.58" y="220.98" rot="R270"/>
 <instance part="C42" gate="G$1" x="332.74" y="231.14"/>
 <instance part="IC18" gate="-1" x="55.88" y="-215.9"/>
 <instance part="IC18" gate="-2" x="55.88" y="-218.44"/>
@@ -30783,7 +30859,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <instance part="D2" gate="G$1" x="261.62" y="474.98"/>
 <instance part="SW1" gate="G$1" x="22.86" y="650.24" rot="R90"/>
 <instance part="Q1" gate="G$1" x="101.6" y="642.62"/>
-<instance part="CONN4" gate="G$1" x="254" y="215.9"/>
+<instance part="CONN4" gate="G$1" x="264.16" y="215.9"/>
 <instance part="TP2" gate="G$1" x="266.67" y="798.91" smashed="yes" rot="R90">
 <attribute name="NAME" x="260.684" y="798.352" size="1.778" layer="95"/>
 <attribute name="TP_SIGNAL_NAME" x="267.94" y="800.18" size="1.778" layer="97" rot="R90"/>
@@ -30827,17 +30903,14 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <attribute name="NAME" x="164.338" y="-10.16" size="1.778" layer="95" rot="R270"/>
 <attribute name="VALUE" x="167.64" y="-11.303" size="1.778" layer="96"/>
 </instance>
-<instance part="D6" gate="G$1" x="332.74" y="213.36" smashed="yes" rot="R90">
-<attribute name="NAME" x="330.962" y="210.82" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="335.28" y="212.217" size="1.778" layer="96"/>
-</instance>
 <instance part="D7" gate="G$1" x="111.76" y="523.24" smashed="yes" rot="R270">
 <attribute name="NAME" x="113.538" y="525.78" size="1.778" layer="95" rot="R270"/>
 <attribute name="VALUE" x="107.823" y="520.7" size="1.778" layer="96" rot="R90"/>
 </instance>
 <instance part="R23" gate="G$1" x="149.86" y="66.04" rot="R90"/>
 <instance part="IC10" gate="G$1" x="58.42" y="43.18"/>
-<instance part="IC23" gate="G$1" x="284.48" y="215.9"/>
+<instance part="IC23" gate="G$1" x="317.5" y="215.9"/>
+<instance part="F1" gate="G$1" x="292.1" y="220.98"/>
 </instances>
 <busses>
 <bus name="B$1">
@@ -31754,20 +31827,20 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <segment>
 <pinref part="CONN4" gate="G$1" pin="GND1"/>
 <pinref part="CONN4" gate="G$1" pin="GND2"/>
-<wire x1="259.08" y1="210.82" x2="259.08" y2="208.28" width="0.1524" layer="91"/>
+<wire x1="269.24" y1="210.82" x2="269.24" y2="208.28" width="0.1524" layer="91"/>
 <pinref part="CONN4" gate="G$1" pin="GND3"/>
-<wire x1="259.08" y1="208.28" x2="259.08" y2="205.74" width="0.1524" layer="91"/>
-<junction x="259.08" y="208.28"/>
+<wire x1="269.24" y1="208.28" x2="269.24" y2="205.74" width="0.1524" layer="91"/>
+<junction x="269.24" y="208.28"/>
 <pinref part="CONN4" gate="G$1" pin="GND4"/>
-<wire x1="259.08" y1="205.74" x2="259.08" y2="203.2" width="0.1524" layer="91"/>
-<junction x="259.08" y="205.74"/>
+<wire x1="269.24" y1="205.74" x2="269.24" y2="203.2" width="0.1524" layer="91"/>
+<junction x="269.24" y="205.74"/>
 <pinref part="CONN4" gate="G$1" pin="GND5"/>
-<wire x1="259.08" y1="203.2" x2="259.08" y2="200.66" width="0.1524" layer="91"/>
-<junction x="259.08" y="203.2"/>
-<label x="264.16" y="210.82" size="1.778" layer="95"/>
+<wire x1="269.24" y1="203.2" x2="269.24" y2="200.66" width="0.1524" layer="91"/>
+<junction x="269.24" y="203.2"/>
+<label x="274.32" y="210.82" size="1.778" layer="95"/>
 <pinref part="IC23" gate="G$1" pin="GND"/>
-<wire x1="259.08" y1="210.82" x2="274.32" y2="210.82" width="0.1524" layer="91"/>
-<junction x="259.08" y="210.82"/>
+<wire x1="269.24" y1="210.82" x2="307.34" y2="210.82" width="0.1524" layer="91"/>
+<junction x="269.24" y="210.82"/>
 </segment>
 <segment>
 <wire x1="419.1" y1="599.44" x2="426.72" y2="599.44" width="0.1524" layer="91"/>
@@ -31928,11 +32001,6 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <label x="162.56" y="-2.54" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="D6" gate="G$1" pin="A"/>
-<wire x1="332.74" y1="210.82" x2="332.74" y2="205.74" width="0.1524" layer="91"/>
-<label x="332.74" y="205.74" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="D7" gate="G$1" pin="AN"/>
 <wire x1="111.76" y1="525.78" x2="111.76" y2="535.94" width="0.1524" layer="91"/>
 <label x="111.76" y="535.94" size="1.778" layer="95"/>
@@ -31985,14 +32053,12 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </segment>
 <segment>
 <pinref part="C42" gate="G$1" pin="2"/>
-<wire x1="330.2" y1="220.98" x2="332.74" y2="220.98" width="0.1524" layer="91"/>
 <label x="335.28" y="220.98" size="1.778" layer="95"/>
-<pinref part="L3" gate="G$2" pin="1"/>
 <wire x1="332.74" y1="220.98" x2="335.28" y2="220.98" width="0.1524" layer="91"/>
 <wire x1="332.74" y1="226.06" x2="332.74" y2="220.98" width="0.1524" layer="91"/>
 <junction x="332.74" y="220.98"/>
-<pinref part="D6" gate="G$1" pin="C"/>
-<wire x1="332.74" y1="215.9" x2="332.74" y2="220.98" width="0.1524" layer="91"/>
+<wire x1="332.74" y1="220.98" x2="327.66" y2="220.98" width="0.1524" layer="91"/>
+<pinref part="IC23" gate="G$1" pin="10"/>
 </segment>
 <segment>
 <pinref part="D2" gate="G$1" pin="A"/>
@@ -32759,8 +32825,8 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </segment>
 <segment>
 <pinref part="IC23" gate="G$1" pin="9"/>
-<wire x1="294.64" y1="218.44" x2="299.72" y2="218.44" width="0.1524" layer="91"/>
-<label x="299.72" y="218.44" size="1.778" layer="95"/>
+<wire x1="327.66" y1="218.44" x2="335.28" y2="218.44" width="0.1524" layer="91"/>
+<label x="335.28" y="218.44" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="USB_D+" class="2">
@@ -32771,8 +32837,8 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </segment>
 <segment>
 <pinref part="IC23" gate="G$1" pin="7"/>
-<wire x1="294.64" y1="215.9" x2="299.72" y2="215.9" width="0.1524" layer="91"/>
-<label x="299.72" y="215.9" size="1.778" layer="95"/>
+<wire x1="327.66" y1="215.9" x2="335.28" y2="215.9" width="0.1524" layer="91"/>
+<label x="335.28" y="215.9" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="N$10" class="2">
@@ -33280,9 +33346,9 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 </segment>
 <segment>
 <pinref part="CONN4" gate="G$1" pin="VBUS"/>
-<pinref part="IC23" gate="G$1" pin="1"/>
-<wire x1="274.32" y1="220.98" x2="259.08" y2="220.98" width="0.1524" layer="91"/>
-<label x="264.16" y="220.98" size="1.778" layer="95"/>
+<label x="274.32" y="220.98" size="1.778" layer="95"/>
+<pinref part="F1" gate="G$1" pin="1"/>
+<wire x1="287.02" y1="220.98" x2="269.24" y2="220.98" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="TP2" gate="G$1" pin="TP"/>
@@ -33779,45 +33845,44 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <wire x1="147.32" y1="-17.78" x2="147.32" y2="-25.4" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="USB_VBUS" class="1">
-<segment>
-<pinref part="L3" gate="G$2" pin="2"/>
-<wire x1="314.96" y1="220.98" x2="294.64" y2="220.98" width="0.1524" layer="91"/>
-<pinref part="IC23" gate="G$1" pin="10"/>
-<label x="299.72" y="220.98" size="1.778" layer="95"/>
-</segment>
-</net>
 <net name="USB_ID" class="0">
 <segment>
 <pinref part="IC23" gate="G$1" pin="6"/>
-<wire x1="294.64" y1="213.36" x2="299.72" y2="213.36" width="0.1524" layer="91"/>
-<label x="299.72" y="213.36" size="1.778" layer="95"/>
+<wire x1="327.66" y1="213.36" x2="335.28" y2="213.36" width="0.1524" layer="91"/>
+<label x="335.28" y="213.36" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="ID" class="0">
 <segment>
 <pinref part="IC23" gate="G$1" pin="5"/>
-<label x="264.16" y="213.36" size="1.778" layer="95"/>
+<label x="274.32" y="213.36" size="1.778" layer="95"/>
 <pinref part="CONN4" gate="G$1" pin="ID"/>
-<wire x1="259.08" y1="213.36" x2="274.32" y2="213.36" width="0.1524" layer="91"/>
+<wire x1="269.24" y1="213.36" x2="307.34" y2="213.36" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="D-" class="2">
 <segment>
 <pinref part="CONN4" gate="G$1" pin="D-"/>
-<wire x1="259.08" y1="218.44" x2="264.16" y2="218.44" width="0.1524" layer="91"/>
-<label x="264.16" y="218.44" size="1.778" layer="95"/>
+<wire x1="269.24" y1="218.44" x2="274.32" y2="218.44" width="0.1524" layer="91"/>
+<label x="274.32" y="218.44" size="1.778" layer="95"/>
 <pinref part="IC23" gate="G$1" pin="2"/>
-<wire x1="274.32" y1="218.44" x2="259.08" y2="218.44" width="0.1524" layer="91"/>
-<junction x="259.08" y="218.44"/>
+<wire x1="307.34" y1="218.44" x2="269.24" y2="218.44" width="0.1524" layer="91"/>
+<junction x="269.24" y="218.44"/>
 </segment>
 </net>
 <net name="D+" class="2">
 <segment>
 <pinref part="CONN4" gate="G$1" pin="D+"/>
-<wire x1="259.08" y1="215.9" x2="274.32" y2="215.9" width="0.1524" layer="91"/>
-<label x="264.16" y="215.9" size="1.778" layer="95"/>
+<wire x1="269.24" y1="215.9" x2="307.34" y2="215.9" width="0.1524" layer="91"/>
+<label x="274.32" y="215.9" size="1.778" layer="95"/>
 <pinref part="IC23" gate="G$1" pin="4"/>
+</segment>
+</net>
+<net name="N$4" class="1">
+<segment>
+<pinref part="IC23" gate="G$1" pin="1"/>
+<wire x1="307.34" y1="220.98" x2="299.72" y2="220.98" width="0.1524" layer="91"/>
+<pinref part="F1" gate="G$1" pin="2"/>
 </segment>
 </net>
 </nets>
@@ -33857,8 +33922,8 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <approved hash="104,1,27.94,-546.1,IC21,GND7,GND,,,"/>
 <approved hash="104,1,172.72,63.5,IC11,VDD,VCC,,,"/>
 <approved hash="202,1,172.72,58.42,IC11,CT,,,,"/>
-<approved hash="103,1,259.08,213.36,CONN4,ID,ID,,,"/>
-<approved hash="104,1,259.08,220.98,CONN4,VBUS,VUSB,,,"/>
+<approved hash="103,1,269.24,213.36,CONN4,ID,ID,,,"/>
+<approved hash="104,1,269.24,220.98,CONN4,VBUS,VUSB,,,"/>
 <approved hash="104,1,419.1,599.44,CONN1,GND1,GND,,,"/>
 <approved hash="104,1,419.1,594.36,CONN1,GND2,GND,,,"/>
 <approved hash="104,1,238.76,508,IC5,GND2,GND,,,"/>
@@ -33870,7 +33935,7 @@ Source: http://products.nichicon.co.jp/en/pdf/XJA043/e-ud.pdf</description>
 <approved hash="202,1,93.98,-33.02,IC13,P2_4,,,,"/>
 <approved hash="202,1,134.62,-38.1,IC13,EAN,,,,"/>
 <approved hash="104,1,43.18,45.72,IC10,VCC,VGPS,,,"/>
-<approved hash="106,1,294.64,213.36,USB_ID,,,,,"/>
+<approved hash="106,1,327.66,213.36,USB_ID,,,,,"/>
 <approved hash="206,1,238.76,528.32,V_LIION_REGULATED,,,,,"/>
 <approved hash="206,1,238.76,525.78,V_LIION_REGULATED,,,,,"/>
 </errors>
