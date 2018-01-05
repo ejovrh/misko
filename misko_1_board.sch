@@ -20048,13 +20048,13 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <library name="EECS5R5H155 Supercap">
 <packages>
 <package name="TH">
-<pad name="-" x="0" y="0" drill="1" rot="R90"/>
-<pad name="+" x="20" y="0" drill="1" rot="R90"/>
-<circle x="10" y="0" radius="9" width="0.127" layer="21"/>
-<text x="1.89" y="-3" size="6.4516" layer="21">-</text>
-<text x="12.84" y="-3" size="6.4516" layer="21">+</text>
-<text x="0" y="3.24" size="1.27" layer="21">&gt;NAME</text>
-<text x="0.08" y="-4" size="1.27" layer="21">&gt;VALUE</text>
+<pad name="-" x="-10.16" y="0" drill="1" rot="R90"/>
+<pad name="+" x="9.84" y="0" drill="1" rot="R90"/>
+<circle x="-0.16" y="0" radius="9" width="0.127" layer="21"/>
+<text x="-5.08" y="0" size="6.4516" layer="21" font="vector" align="center">-</text>
+<text x="6.35" y="0" size="6.4516" layer="21" font="vector" align="center">+</text>
+<text x="-10.16" y="6.35" size="1.27" layer="21" font="vector" rot="R90" align="center">&gt;NAME</text>
+<text x="-10.16" y="-5.08" size="1.27" layer="21" font="vector" rot="R90" align="center">&gt;VALUE</text>
 </package>
 </packages>
 <symbols>
@@ -20079,7 +20079,7 @@ new: Attribute TP_SIGNAL_NAME&lt;br&gt;
 <devicesets>
 <deviceset name="EECS5R5H155" prefix="C" uservalue="yes">
 <gates>
-<gate name="G$1" symbol="SUPERCAP" x="-5.08" y="-12.7"/>
+<gate name="G$1" symbol="SUPERCAP" x="0" y="0"/>
 </gates>
 <devices>
 <device name="" package="TH">
