@@ -32024,8 +32024,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="C7" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:26137/1" value="18pF"/>
 <part name="C1" library="rcl" deviceset="C-EU" device="C0805" value="18pF"/>
 <part name="IC12" library="LTC4425 Supercap Charger" deviceset="LTC4425" device=""/>
-<part name="R47" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:26059/1" value="150k"/>
-<part name="R46" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:26059/1" value="150k"/>
+<part name="R47" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:26059/1" value="470k"/>
+<part name="R46" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:26059/1" value="470k"/>
 <part name="R35" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:26059/1" value="1k"/>
 <part name="R36" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0805" package3d_urn="urn:adsk.eagle:package:26059/1" value="10k"/>
 <part name="C40" library="rcl" deviceset="C-EU" device="C0805" value="100µF"/>
