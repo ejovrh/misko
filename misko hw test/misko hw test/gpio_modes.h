@@ -24,14 +24,14 @@ gpio_conf(menu_up_button_pin, INPUT, HIGH);								// high (idle), low (pressed)
 gpio_conf(RTC_INT_interrupt_pin, OUTPUT, LOW);						//TODO
 gpio_conf(SD_card_detect_pin, OUTPUT, HIGH);							// low (card inserted), high (card removed)
 gpio_conf(SIM800C_power_ctrl_pin, OUTPUT, HIGH);					// high (device off), toggle low (device on)
-gpio_conf(SIM800C_power_pin, OUTPUT, LOW);								// low(device off), high (device on)
+gpio_conf(SIM800C_power_pin, INPUT, LOW);									// low(device off), high (device on)
 gpio_conf(SPI_MISO_pin, INPUT, LOW);
 gpio_conf(SPI_MOSI_pin, OUTPUT, LOW);
 gpio_conf(SPI_SCK_pin, OUTPUT, HIGH);
 gpio_conf(SPI_OLED_a0_pin, OUTPUT, LOW);									//TODO
 gpio_conf(SPI_OLED_reset_pin, OUTPUT, LOW);								//TODO
 gpio_conf(SPI_SS_ADXL345_pin, OUTPUT, HIGH);							// high (device inert), low (device selected)
-gpio_conf(SPI_SS_FRAM_pin, OUTPUT, HIGH);							// high (device inert), low (device selected)
+gpio_conf(SPI_SS_FRAM_pin, OUTPUT, HIGH);								// high (device inert), low (device selected)
 gpio_conf(SPI_SS_OLED_pin, OUTPUT, HIGH);									// high (device inert), low (device selected)
 gpio_conf(SPI_SS_RTC_pin, OUTPUT, HIGH);									// high (device inert), low (device selected)
 gpio_conf(SPI_SS_SD_card_pin, OUTPUT, HIGH);							// high (device inert), low (device selected)

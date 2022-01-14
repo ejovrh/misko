@@ -45,6 +45,8 @@ int main(void)
 
 	adxl345_init();
 	fm25w256_init();
+	ds1394_init();
+
 
 
 	if (gpio_rd(PIN, SD_card_detect_pin) == LOW)
@@ -60,7 +62,7 @@ int main(void)
 		if (gpio_tst(menu_right_button_pin) == LOW)
 		{
 			uart0_puts("right\r\n");
-			uart0_putc(65+ds1394_read(0x02)); // very crude way of verifying that i can read from the rtc (minutes, in this example)
+			uart0_putc(40+ds1394_read(0x03)); // very crude way of verifying that i can read from the rtc (minutes, in this example)
 		}
 
 		if (gpio_tst(menu_up_button_pin) == LOW)
@@ -79,16 +81,36 @@ int main(void)
 
 		if (gpio_tst(menu_bluetooth_power_button_pin) == LOW)
 		{
-				uint8_t foo;
-
+				//uint8_t foo;
 				//fm25w256_write_byte(0x0002, 70);
-
-				foo = fm25w256_read_byte(0x0002);
-				uart0_putc('.');
-				uart0_putc(foo);
-				uart0_putc('.');
-				uart0_puts("\r\n");
+				//foo = fm25w256_read_byte(0x0002);
+				//uart0_putc('.');
+				//uart0_putc(foo);
+				//uart0_putc('.');
+				//uart0_puts("\r\n");
 				uart0_puts("BT\r\n");
+
+				char string[12] = "zello world";
+				fm25w256_write_string(0x3123, &string, 11); //FIXME
+
+
+
+				uart0_puts("readback\r\n");
+				char retstring[12] = "";
+				fm25w256_read_string(0x4123, retstring, 11);
+
+
+uart0_puts("readback string\r\n");
+				uart0_putc('.');
+				//uart0_puts(retstring);
+				for(int i=0; i<12; i++)
+					uart0_putc(*retstring+i);
+				uart0_putc('.');
+
+
+				uart0_puts("\r\n-");
+				uart0_putc(fm25w256_read_byte(0x4123));
+
 		}
 
 	} // while(1)

@@ -9,9 +9,11 @@ static void spi_bus_on(void)
 {
 	/* ADXL345 specs:
 	 *	- SCK <5MHz
-	 *	- SPI mode 3
-	 *	MSB first
+	 *	- SPI mode 3 only
+	 *	- MSB first
 	 */
+
+	PRR0 = (0<<PRSPI); // power on the SPI bus
 	SPCR = ((1<<SPE)|     // SPI Enable
 					(0<<SPIE)|    // SPI Interupt Enable
 					(0<<DORD)|    // Data Order (0:MSB first / 1:LSB first)
@@ -26,7 +28,8 @@ static void spi_bus_on(void)
 
 static void spi_bus_off(void)
 {
-	SPCR = 0x00;
+	SPCR = 0x00;	// set the SPI control register to all 0
+	PRR0 = (1<<PRSPI); // power off the whole bus
 };
 
 void adxl345_init(void)

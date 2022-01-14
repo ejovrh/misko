@@ -235,4 +235,19 @@ uint8_t fm25w256_write_byte(const uint16_t addr, const uint8_t val);
 // writes one byte (val) to addr
 uint8_t fm25w256_read_byte(const uint16_t addr);
 
+/*
+ *	examples:
+ * 			char string[20] = "hello world";
+ *
+ */
+uint8_t fm25w256_write_string(const uint16_t addr,  char *in, const uint8_t len);
+
+/*
+ *	examples:
+ *			fm25w256_read_string(0x1234, string, 11);
+ *
+ *
+ */
+uint8_t fm25w256_read_string(const uint16_t addr, char *out, const uint8_t len);
+
 #endif /* FM25W256_H_ */

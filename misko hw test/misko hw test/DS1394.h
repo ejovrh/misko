@@ -26,7 +26,7 @@
 
 	#define hours_read	0x03
 	#define hours_write 0x83
-	#define bitmask_24h_format 0x40									// 1 = 24 format
+	#define bitmask_24h_format 0x40									// 0 = 24 format
 	#define bitmask_hours 0x3f											// 00-23 BCD
 
 	#define days_read 0x04
@@ -64,7 +64,7 @@
 	#define alarm_hours_read 0x0b
 	#define alarm_hours_write 0x8b
 	#define bitmask_alarm_hours_am3 0x40
-	#define bitmask_alarm_hours_24h_format 0x40			// 1 = 24h format
+	#define bitmask_alarm_hours_24h_format 0x40			// 0 = 24h format
 	#define bitmask_alarm_hours_hours 0x3f					// 00-23 BCD
 
 	#define alarm_day_date_read 0x0c
@@ -90,17 +90,71 @@
 
 	#define charger_read 0x0f
 	#define charger_write 0x8f											// datasheet p. 18, table 5
-	#define tcs3 0x80																//
-	#define tcs2 0x40																//
-	#define tcs1 0x20																//
-	#define tcs0 0x10																//
-	#define ds1 0x08																//
-	#define ds0 0x04																//
-	#define rout1 0x02															//
-	#define rout0 0x01															//
+	#define tcs3 7																	//
+	#define tcs2 6																	//
+	#define tcs1 5																	//
+	#define tcs0 4																	//
+	#define ds1 3																		//
+	#define ds0 2																		//
+	#define rout1 1																	//
+	#define rout0 0																	//
+
+/* Address registers define */
+#define DS1394_REG_100THS               0x00	// Hundredths of Seconds register /0-99 BCD
+#define DS1394_REG_SECONDS              0x01	// Seconds register				/00-59 BCD
+#define DS1394_REG_MINUTES              0x02	// Minutes register				/00-59 BCD
+#define DS1394_REG_HOURS                0x03	// Hours register				/00-23 BCD
+#define DS1394_REG_DAY                  0x04	// Day of week register			/1-7 BCD
+#define DS1394_REG_DATE                 0x05	// Date register				/01-31 BCD
+#define DS1394_REG_MONTH_CENT           0x06	// Month register 				/01-12 BCD + Century bit (bit7)
+#define DS1394_REG_YEAR                 0x07	// Year register 				/00-99 BCD
+
+/* Alarm address registers  */
+#define DS1394_REG_ALARM_BIT			0x10	// Alarm match bit, can be added to day, hours, minutes and seconds register, see ds,  Table 4
+#define DS1394_REG_ALARM_100THS         0x08	// Hundredths of Seconds alarm register	/0-99 BCD
+#define DS1394_REG_ALARM_SECONDS        0x09	// Seconds alarm register				/00-59 BCD
+#define DS1394_REG_ALARM_MINUTES        0x0A	// Minutes alarm register				/00-59 BCD
+#define DS1394_REG_ALARM_HOURS          0x0B	// Hours alarm register				/00-23 BCD
+#define DS1394_REG_ALARM_DAY_DATE       0x0C	// Day alarm register				/01-31 BCD
+
+/* Control registers address define */
+#define DS1394_REG_CONTROL              0x0D	// control register (specific for the different models of ds13.., see datasheet)
+#define DS1394_REG_STATUS               0x0E	// status register can be written to "0" to reset the flags
+#define DS1394_REG_TRICKLE              0x0F	// Trickle charge register, see datasheet? Table 5
+
+/* Control register map */						// specific for DS1394, see datasheet for other
+#define DS1394_CONTROL_REG_CLEAN		0x00	// control register cleaning, oscillator run
+#define DS1394_STOP_OSC 				BIT7	// stop oscillator, can be stopped on battery powered
+#define DS1394_BBSQI 					BIT5	// Battery-Backed Square-Wave and Interrupt Enable
+#define DS1394_RATE_1HZ 				0x00	// Rate Select frequency of the square-wave output
+#define DS1394_RATE_4KHZ 				0x08	// when the square wave has been enabled
+#define DS1394_RATE_8KHZ 				0x10	//
+#define DS1394_RATE_32KHZ 				0x18	//
+#define DS1394_INTERRUPT 				BIT2	// Interrupt Control, activates the SQW/INT provided the alarm is also enabled
+#define DS1394_ALARM_ENABLE 			BIT0	// Alarm Interrupt Enable. permits the alarm flag (AF) bit in the status register to assert SQW/INT
+
+/* Status register map */
+#define DS1394_STATUS_REG_CLEAN			0x00	// Status register cleaning, clean all flags
+#define DS1394_OSCILLATOR_STOP_FLAG 	BIT7	// Oscillator Stop Flag
+#define DS1394_ALARM_FLAG 				BIT0	// Alarm Flag
+
+/* Trickle charger register map */
+#define DISABLE_TCS 					0x00	// Disable trickle charger
+#define ENABLE_TCS 						0xA0	// Enable trickle charger
+#define ENABLE_DIODE 					0x08	// Diode switch on
+#define RES_250_OHM 					0x01	// resistors are used to select
+#define RES_2K_OHM 						0x02	// the appropriate face value or its combination.
+#define RES_4K_OHM 						0x03	//
+
+
+
+void ds1394_init(void);
 
 uint8_t ds1394_read(uint8_t addr);
 
 uint8_t ds1394_write(uint8_t addr, const uint8_t val);
 
+void ds1394_set_date(unsigned char day, unsigned char day_date, unsigned char month, unsigned char year);
+
+void ds1394_set_time(unsigned char hours, unsigned char minutes, unsigned char seconds);
 #endif /* DS1394_H_ */
