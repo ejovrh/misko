@@ -35,7 +35,7 @@
 #define FIFO_CTL  				0x38											// FIFO control, DS. p. 27
 #define FIFO_STATUS 			0x39											// FIFO status, DS. p. 27
 
-#define DEVID_VAL					0xE5		// hardcoded device ID
+#define DEVID_VAL				0xE5											// hardcoded device ID
 
 //config items for act./inact. detection
 #define	DATA_FORMAT_CFG			0x0B											// 16g range, full resolution, active high int.

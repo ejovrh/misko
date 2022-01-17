@@ -1,7 +1,7 @@
 #ifndef GPIO_MODES_H_
 #define GPIO_MODES_H_
 
-gpio_conf(ADXL345_INT1_interrupt_pin, INPUT, NOPULLUP);							// hardware interrupt for motion-based events
+gpio_conf(ADXL345_INT1_interrupt_pin, INPUT, LOW);								// hardware interrupt for motion-based events, active high
 gpio_conf(analog_sw_ctrl_pin, OUTPUT, LOW);										//TODO low (), high ()
 gpio_conf(bat_A_pin, INPUT, PULLUP);											// ADC
 gpio_conf(Bluetooth_profile_indicator_pin, OUTPUT, LOW);						// sense pin: high (BT classic), low (BLE)

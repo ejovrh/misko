@@ -5,8 +5,7 @@
 
 typedef struct																	// public part of struct describing devices on ADXL345
 {
-	uint8_t (*SPIReadByte)(const uint8_t in_addr);								// reads one byte of data from address
-	void (*SPIWriteByte)(const uint8_t in_addr, const uint8_t in_data);			// writes one byte of data to address
+	uint8_t (*TransferByte)(const uint8_t in_addr);								// sends a byte into the circular buffer and gets something back
 } spi_t;
 
 spi_t *spi_ctor(void);															// object constructor

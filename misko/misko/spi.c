@@ -1,7 +1,6 @@
 #include "spi.h"
 
 #include <avr/io.h>
-#include <avr/interrupt.h>
 
 typedef struct																	// fm25w256_t actual
 {
@@ -39,48 +38,26 @@ static inline void _SPIBusOff(void)												// SPI reset & power off
 };
 */
 
-static inline uint8_t __SPITransferByte(const uint8_t in_val)					//
+static inline uint8_t _TransferByte(const uint8_t in_val)						// sends a byte into the circular buffer and gets something back
 {
 	SPDR = in_val;																// first, initiate the transfer by writing data into the data register
 																				//	then
 	while( !(SPSR & _BV(SPIF)) )												// wait for the transfer to complete & reset the SPI interrupt by reading (DS. p. 198)
 		;
-
 	return SPDR;																// read shift register receive buffer & return data
-};
-
-static inline uint8_t _ReadByte(const uint8_t in_addr)							// reads one byte of data from address
-{
-	uint8_t retval;
-
-	cli();																		// atomic section start
-	__SPITransferByte(in_addr);													// pass address to device
-	retval = __SPITransferByte(0x00);											// write something to device and retrieve requested address contents
-	sei();																		// atomic section end
-
-	return retval;
-};
-
-static inline void _WriteByte(const uint8_t in_addr, const uint8_t in_data)		// writes one byte of data to address
-{
-	cli();																		// atomic section start
-	__SPITransferByte(in_addr);													// pass address to device
-	__SPITransferByte(in_data);													// further on, pass data to device
-	sei();																		// atomic section end
 };
 
 __spi_t __SPI =																	// instantiate __spi_t object & set values
 {
-	.public.SPIReadByte = &_ReadByte,
-	.public.SPIWriteByte = &_WriteByte
+	.public.TransferByte = &_TransferByte										// set function pointer
 };
 
 spi_t *spi_ctor(void)															// object constructor
 {
-	__SPI.__semaphore = 0;
+	__SPI.__semaphore = 0;														// semaphore for critical sections
 
-	__SPI.public.SPIReadByte = &_ReadByte;
-	__SPI.public.SPIWriteByte = &_WriteByte;
+	__SPI.public.TransferByte = &_TransferByte;									// set function pointer
+	
 
 	return &__SPI.public;														// return address of public part; calling code accesses it via pointer
 };
