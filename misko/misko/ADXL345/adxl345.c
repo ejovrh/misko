@@ -10,7 +10,7 @@
 
 typedef struct																	// adxl345_t actual
 {
-	volatile uint8_t adxl345_irq_src;											//
+	volatile uint8_t adxl345_irq_src;											// holds the interrupt source bitmask
 
 	spi_t *_spi;																// tie in SPI object
 
@@ -45,7 +45,7 @@ static void _WriteByte(const uint8_t in_addr, const uint8_t in_data)			// writes
 
 adxl345_t *adxl345_ctor(void)													// object constructor
 {
-	__ADXL345._spi = spi_ctor();
+	__ADXL345._spi = spi_ctor();												// tie in SPI
 
 	__ADXL345.public.ReadByte = &_ReadByte;										// set function pointer
 	__ADXL345.public.WriteByte = &_WriteByte;									//	ditto

@@ -2,7 +2,7 @@
 
 #include "misko.h"
 
-#include "FM25W256/FM25W256.h"
+
 #include "SDCard/SDCard.h"
 #include "DS1394U/DS1394U.h"
 #include "EROLED0152W/EROLED0152W.h"
@@ -12,17 +12,10 @@
 
 typedef struct																	// adxl345_t actual
 {
-	uint8_t __privatefoo;														// private var - foo
-	
 	misko_t public;																// public struct
 } __misko_t;
 
 static __misko_t __misko __attribute__ ((section (".data")));					// preallocate __misko_t object in .data
-
-// static void _barfunc(uint8_t in_val)											//
-// {
-// 	__misko.__privatefoo = __misko.adxl345->TransferByte(0xFF);					//
-// };
 
 
 
@@ -30,8 +23,9 @@ void misko_ctor(void)
 {
 	#include "gpio_modes.h"
 
-	__misko.public.mcu = atmega_ctor();
-	__misko.public.adxl345 = adxl345_ctor();
+	__misko.public.mcu = atmega_ctor();											//
+	__misko.public.adxl345 = adxl345_ctor();									//
+	__misko.public.fm25w256 = fm25w256_ctor();									//
 };
 
 misko_t * const misko = &__misko.public;										// return address of public part; calling code accesses it via pointer

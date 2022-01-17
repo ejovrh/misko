@@ -26,7 +26,7 @@ ATMega2561_t *atmega_ctor(void)
 		PRR1 = 0x3F;															// ditto
 		PRR0 &= ~_BV(PRUSART0);													// unset bit - USART0 power on
 	}
-	
+
 	// SPI bus config
 	{
 		PRR0 &= ~_BV(PRSPI);													// unset bit - SPI bus power on
@@ -51,7 +51,7 @@ ATMega2561_t *atmega_ctor(void)
 		EICRB |= (0 << ISC71);													//	...	rising edge
 		EIMSK |= (1 << INT7);													// enable INT7 (lives on pin PE7)
 	}
-	
+
 	sei();																		// enable interrupts globally
 
 	return &__MCU.public;														// return address of public part; calling code accesses it via pointer
