@@ -25,7 +25,7 @@ static __adxl345_t __ADXL345 __attribute__ ((section (".data")));				// prealloc
 
 	cli();
 	gpio_clr(SPI_SS_ADXL345_pin);												// drive device CS low
-	__ADXL345._spi->TransferByte(in_addr | 0x80);								// send data
+	__ADXL345._spi->TransferByte(in_addr | 0x80);								// send address
 	retval = __ADXL345._spi->TransferByte(0x00);								// hopefully get something back
 	gpio_set(SPI_SS_ADXL345_pin);												// drive device CS high
 	sei();
@@ -73,19 +73,19 @@ ISR(INT7_vect)
 {
 	cli();
 
-	__ADXL345.adxl345_irq_src = _ReadByte(INT_SOURCE);							// clear pending interrupts
+	__ADXL345.adxl345_irq_src = _ReadByte(INT_SOURCE);							// read interrupt source
 
 	// inactivity
 	if( (__ADXL345.adxl345_irq_src >> 3) & 0x01)								// if the inact. bit is set
 	{
-		__ADXL345.adxl345_irq_src = _ReadByte(INT_SOURCE);						// clear pending interrupts
+		_ReadByte(INT_SOURCE);													// clear pending interrupts
 		gpio_set(gps_red_led_pin);												// indicate by turning red LED off
 	}
 
 	// activity
 	if( (__ADXL345.adxl345_irq_src >> 4) & 0x01)								// if the act bit is set
 	{
-		__ADXL345.adxl345_irq_src = _ReadByte(INT_SOURCE);						// clear pending interrupts
+		_ReadByte(INT_SOURCE);													// clear pending interrupts
 		gpio_clr(gps_red_led_pin);												// indicate by turning red LED on
 	}
 
