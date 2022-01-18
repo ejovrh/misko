@@ -10,8 +10,9 @@
 #define CMD_RDSR	0x05														// Read Status Register; reads write protection features (p. 7)
 #define CMD_WREN	0x06														// Set Write Enable Latch; disabled on power on (p. 6)
 
-typedef struct																	// public part of struct describing devices on ADXL345
+typedef struct																	// public part of struct describing devices on FM25W256
 {
+	// TODO - reduce functions to _ReadString() and _WriteString() only
 	uint8_t (*ReadByte)(const uint16_t in_addr);								// reads one byte of data from address
 	uint8_t (*WriteByte)(const uint16_t in_addr, const uint8_t in_data);		// writes one byte of data to address
 	uint8_t (*ReadString)(const uint16_t addr, char *out, const uint8_t len);	// reads a length of string from from address

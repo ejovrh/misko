@@ -16,6 +16,7 @@ typedef struct																	// fm25w256_t actual
 
 static __fm25w256_t __FM25W256 __attribute__ ((section (".data")));				// preallocate __fm25w256 object in .data
 
+// TODO - reduce functions to _ReadString() and _WriteString() only
 static uint8_t _ReadByte(const uint16_t in_addr)								// reads one byte of data from address
 {
 	uint8_t retval;
