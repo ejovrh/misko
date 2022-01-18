@@ -9,7 +9,7 @@ typedef struct																	// ds1394_t actual
 	ds1394_t public;															// public struct
 } __ds1394_t;
 
-static __ds1394_t __DS1394 __attribute__ ((section (".data")));					// preallocate __fm25w256 object in .data
+static __ds1394_t __DS1394 __attribute__ ((section (".data")));					// preallocate __ds1394 object in .data
 
 //static uint8_t _TransferByte(uint8_t in_val)									//
 //{
