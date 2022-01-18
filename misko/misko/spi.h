@@ -3,7 +3,7 @@
 
 #include <inttypes.h>
 
-typedef struct																	// public part of struct describing devices on ADXL345
+typedef struct																	// public part of struct describing the SPI bus
 {
 	uint8_t (*TransferByte)(const uint8_t in_addr);								// sends a byte into the circular buffer and gets something back
 } spi_t;
