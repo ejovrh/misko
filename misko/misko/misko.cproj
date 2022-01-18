@@ -180,6 +180,27 @@ echo "-------------------------------------------------" &amp;
     <Compile Include="EROLED0152W\EROLED0152W.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="FATFS\diskio.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="FATFS\diskio.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="FATFS\ff.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="FATFS\ff.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="FATFS\ffconf.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="FATFS\ffsystem.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="FATFS\ffunicode.c">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="gpio.h">
       <SubType>compile</SubType>
     </Compile>
@@ -262,6 +283,7 @@ echo "-------------------------------------------------" &amp;
     <Folder Include="RN4678" />
     <Folder Include="ORG1510-MK4" />
     <Folder Include="SDCard" />
+    <Folder Include="FATFS" />
   </ItemGroup>
   <Import Project="$(AVRSTUDIO_EXE_PATH)\\Vs\\Compiler.targets" />
 </Project>
