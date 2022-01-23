@@ -4,7 +4,7 @@
 
 
 #include "SDCard/SDCard.h"
-#include "DS1394U/DS1394U.h"
+
 #include "EROLED0152W/EROLED0152W.h"
 #include "RN4678/RN4678.h"
 #include "ORG1510-MK4/ORG1510-MK4.h"
@@ -25,11 +25,12 @@ void misko_ctor(void)
 
 	__misko.public.flag_print = 0;												// flag if in main() a debug print shall happen
 	__misko.public.mcu->foocounter = 0;
-	
+
 	__misko.public.mcu = atmega_ctor();											// initialize MCU (interrupts, timers, peripherals, etc.)
 	__misko.public.fm25w256 = fm25w256_ctor();									// initialize RAM storage
 
-	__misko.public.adxl345 = adxl345_ctor();									// initialize aux. device peripherals
+	__misko.public.adxl345 = adxl345_ctor();									// initialize accelerometer
+	__misko.public.ds1394 = ds1394_ctor();										// initialize RTC
 };
 
 misko_t * const misko = &__misko.public;										// return address of public part; calling code accesses it via pointer

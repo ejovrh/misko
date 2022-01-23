@@ -28,6 +28,7 @@ __spi_t __SPI =																	// instantiate __spi_t object & set values
 
 spi_t *spi_ctor(void)															// object constructor
 {
+// TODO - write SPI mode code
 	__SPI.__semaphore = 0;														// semaphore for critical sections
 
 	__SPI.public.TransferByte = &_TransferByte;									// set function pointer
