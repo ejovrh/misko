@@ -315,9 +315,10 @@
  *  Parameters  : cfg - Symbolic name of entry in config. table
  * ------------------------------------------------------------------
  */
+// FIXME - gpio_toggle seems buggy with original "if( ARG_nbits(cfg)==1 )"
 #define gpio_toggle(cfg)                                            \
 ({                                                                  \
-    if( ARG_nbits(cfg)==1 )                                         \
+    if( ARG_nbits(cfg)>1 )                                         \
         ARG_pin(cfg)|=ARG_mask(cfg);                                \
     else                                                            \
         ARG_pin(cfg)=ARG_mask(cfg);                                 \
