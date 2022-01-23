@@ -12,9 +12,11 @@
 
 typedef struct																	// public part of struct describing devices on misko
 {
-	ATMega2561_t *mcu;															//
-	adxl345_t *adxl345;															//
-	fm25w256_t *fm25w256;														//
+	uint8_t flag_print;															// flag for timer-based print control
+
+	ATMega2561_t *mcu;															// MCU object
+	adxl345_t *adxl345;															// accelerometer object
+	fm25w256_t *fm25w256;														// RTC object
 } misko_t;
 
 void misko_ctor(void);															// declare constructor for concrete class

@@ -21,11 +21,15 @@ static __misko_t __misko __attribute__ ((section (".data")));					// preallocate
 
 void misko_ctor(void)
 {
-	#include "gpio_modes.h"
+	#include "gpio_modes.h"														// set pins to proper states
 
-	__misko.public.mcu = atmega_ctor();											//
-	__misko.public.adxl345 = adxl345_ctor();									//
-	__misko.public.fm25w256 = fm25w256_ctor();									//
+	__misko.public.flag_print = 0;												// flag if in main() a debug print shall happen
+	__misko.public.mcu->foocounter = 0;
+	
+	__misko.public.mcu = atmega_ctor();											// initialize MCU (interrupts, timers, peripherals, etc.)
+	__misko.public.fm25w256 = fm25w256_ctor();									// initialize RAM storage
+
+	__misko.public.adxl345 = adxl345_ctor();									// initialize aux. device peripherals
 };
 
 misko_t * const misko = &__misko.public;										// return address of public part; calling code accesses it via pointer
