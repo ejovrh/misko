@@ -21,10 +21,8 @@ gpio_conf(menu_gprs_power_button_pin, INPUT, HIGH);								// high (idle), low (
 gpio_conf(menu_left_button_pin, INPUT, HIGH);									// high (idle), low (pressed)
 gpio_conf(menu_right_button_pin, INPUT, HIGH);									// high (idle), low (pressed)
 gpio_conf(menu_up_button_pin, INPUT, HIGH);										// high (idle), low (pressed)
-gpio_conf(RTC_INT_interrupt_pin, OUTPUT, LOW);									// TODO
+gpio_conf(RTC_INT_interrupt_pin, INPUT, LOW);									// TODO
 gpio_conf(SD_card_detect_pin, INPUT, HIGH);										// TODO low (card inserted), high (card removed)
-gpio_conf(SIM800C_power_ctrl_pin, OUTPUT, HIGH);								// high (device off), toggle low (device on)
-gpio_conf(SIM800C_power_pin, INPUT, LOW);										// low(device off), high (device on)
 gpio_conf(SPI_MISO_pin, INPUT, LOW);
 gpio_conf(SPI_MOSI_pin, OUTPUT, LOW);
 gpio_conf(SPI_SCK_pin, OUTPUT, HIGH);
@@ -35,11 +33,7 @@ gpio_conf(SPI_SS_FRAM_pin, OUTPUT, HIGH);										// high (device inert), low (
 gpio_conf(SPI_SS_OLED_pin, OUTPUT, HIGH);										// high (device inert), low (device selected)
 gpio_conf(SPI_SS_RTC_pin, OUTPUT, HIGH);										// high (device inert), low (device selected)
 gpio_conf(SPI_SS_SD_card_pin, OUTPUT, HIGH);									// high (device inert), low (device selected)
-gpio_conf(SPI_SS_WIFI_pin, OUTPUT, HIGH);										// high (device inert), low (device selected)
 gpio_conf(TMP36_Vsense_pin, INPUT, PULLUP);										// ADC
 gpio_conf(Vcc_sense_pin, INPUT, PULLUP);										// ADC
-gpio_conf(WIFI_INT_interrupt_pin, OUTPUT, LOW);									// hardware interrupt for WiFi-based events
-gpio_conf(WIFI_enable_pin, OUTPUT, LOW);										// low (device off), high (device on)
-gpio_conf(WIFI_wake_pin, OUTPUT, HIGH);											// high (device sleep), low (device wake)
 
 #endif /* GPIO_MODES_H_ */
