@@ -41,6 +41,8 @@
 #define	DATA_FORMAT_CFG			0x0B											// 16g range, full resolution, active high int.
 #define	INT_MAP_CFG				0x00											// route all to INT1
 #define	INT_ENABLE_CFG			0x18											// enable interrupts only for act./inact. detection
+#define	INT_ENABLE_ACT_CFG		0x10											// enable interrupts only for act. detection
+
 //set via FeRAM readout #define	TIME_INACT_CFG		0x02	// LSB meaning: 0x05 (dec 5) => 5s , 0x3C (dec 60) => 60s
 //set via FeRAM readout #define	THRESH_INACT_CFG	0x02	// 62.5mg / LSB
 //set via FeRAM readout #define	THRESH_ACT_CFG		0x02	// 62.5mg / LSB
