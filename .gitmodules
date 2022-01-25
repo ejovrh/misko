@@ -1,9 +1,0 @@
-[submodule "misko/misko/m2tklib"]
-	path = misko/misko/m2tklib
-	url = https://github.com/olikraus/m2tklib
-[submodule "misko/misko/u8glib"]
-	path = misko/misko/u8glib
-	url = https://github.com/olikraus/u8glib
-[submodule "misko/misko/uart"]
-	path = misko/misko/uart
-	url = https://github.com/andygock/avr-uart
