@@ -18,12 +18,13 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include <stdlib.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -43,7 +44,8 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-
+static volatile uint8_t FlagPrint;
+static volatile uint8_t counter;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -54,7 +56,8 @@ void SystemClock_Config(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
+char uart2string[]="\r\nUART2 start\r\n";
+char buffer[sizeof(char) + 3];
 /* USER CODE END 0 */
 
 /**
@@ -86,14 +89,26 @@ int main(void)
 	/* Initialize all configured peripherals */
 	MX_GPIO_Init();
 	MX_USART2_UART_Init();
+	MX_TIM10_Init();
+	MX_TIM11_Init();
 	/* USER CODE BEGIN 2 */
-
+	HAL_TIM_Base_Start_IT(&htim10);  // start timer10 - 500ms periodic
+	HAL_TIM_Base_Start_IT(&htim11);  // start timer11 - 10ms periodic
+	HAL_UART_Transmit(&huart2, (uint8_t*) uart2string, sizeof(uart2string), 100);		// transmit test string
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
 	/* USER CODE BEGIN WHILE */
 	while(1)
 		{
+			if(FlagPrint)  // if printout is flagged
+				{
+					FlagPrint=0;  // unset flag
+					itoa(counter, (char*) buffer, 10);  // convert counter to integer
+					HAL_UART_Transmit(&huart2, (uint8_t*) buffer, sizeof(buffer), 100);  // print converted integer
+					HAL_UART_Transmit(&huart2, (uint8_t*) "\r\n", sizeof(buffer), 100);  // add newline and carriage return
+				}
+
 			/* USER CODE END WHILE */
 
 			/* USER CODE BEGIN 3 */
@@ -118,9 +133,8 @@ void SystemClock_Config(void)
 	/** Initializes the RCC Oscillators according to the specified parameters
 	 * in the RCC_OscInitTypeDef structure.
 	 */
-	RCC_OscInitStruct.OscillatorType= RCC_OSCILLATORTYPE_HSI;
-	RCC_OscInitStruct.HSIState= RCC_HSI_ON;
-	RCC_OscInitStruct.HSICalibrationValue= RCC_HSICALIBRATION_DEFAULT;
+	RCC_OscInitStruct.OscillatorType= RCC_OSCILLATORTYPE_HSE;
+	RCC_OscInitStruct.HSEState= RCC_HSE_BYPASS;
 	RCC_OscInitStruct.PLL.PLLState= RCC_PLL_NONE;
 	if(HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
 		{
@@ -130,7 +144,7 @@ void SystemClock_Config(void)
 	 */
 	RCC_ClkInitStruct.ClockType= RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK
 			| RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
-	RCC_ClkInitStruct.SYSCLKSource= RCC_SYSCLKSOURCE_HSI;
+	RCC_ClkInitStruct.SYSCLKSource= RCC_SYSCLKSOURCE_HSE;
 	RCC_ClkInitStruct.AHBCLKDivider= RCC_SYSCLK_DIV1;
 	RCC_ClkInitStruct.APB1CLKDivider= RCC_HCLK_DIV1;
 	RCC_ClkInitStruct.APB2CLKDivider= RCC_HCLK_DIV1;
@@ -143,25 +157,25 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
-/*
- void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  // ISR callback for timer interrupts
- {
- if(htim->Instance == TIM3)  // timer2 - 500ms periodic
- {
- HAL_GPIO_TogglePin(LED_GPIO_Port, LED_Pin);
- }
- /*	if(htim->Instance == TIM3)  // timer3 - 10ms periodic
- {
- HAL_GPIO_TogglePin(GPIOB, LED102_Pin);
- }
- }
- */
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  // ISR callback for timer interrupts
+{
+	if(htim->Instance == TIM10)  // timer10 - 500ms periodic
+		{
+			FlagPrint=1;  // flag to pint
+			++counter;  // increase counter value
+		}
+
+	if(htim->Instance == TIM11)  // timer11 - 10ms periodic
+		{
+			HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);  // for now jsut toggle the LED
+		}
+}
 
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)		// ISR for pin change interrupts
 {
 	if(GPIO_Pin == PushButton_Pin)		// if button is pressed
 		HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);		// for now only toggle the LED
-	;
 }
 
 /* USER CODE END 4 */
