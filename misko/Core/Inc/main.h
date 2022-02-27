@@ -57,19 +57,44 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define PushButton_Pin GPIO_PIN_13
-#define PushButton_GPIO_Port GPIOC
-#define PushButton_EXTI_IRQn EXTI15_10_IRQn
+#define EXTI_PushButton_Pin GPIO_PIN_13
+#define EXTI_PushButton_GPIO_Port GPIOC
+#define EXTI_PushButton_EXTI_IRQn EXTI15_10_IRQn
+#define RCC_OSC_IN_Pin GPIO_PIN_0
+#define RCC_OSC_IN_GPIO_Port GPIOH
 #define USART2_TX_Pin GPIO_PIN_2
 #define USART2_TX_GPIO_Port GPIOA
 #define USART2_RX_Pin GPIO_PIN_3
 #define USART2_RX_GPIO_Port GPIOA
-#define LED2_Pin GPIO_PIN_5
-#define LED2_GPIO_Port GPIOA
+#define SPI1_SCK_Pin GPIO_PIN_5
+#define SPI1_SCK_GPIO_Port GPIOA
+#define SPI1_MISO_Pin GPIO_PIN_6
+#define SPI1_MISO_GPIO_Port GPIOA
+#define SPI1_MOSI_Pin GPIO_PIN_7
+#define SPI1_MOSI_GPIO_Port GPIOA
+#define USART3_TX_Pin GPIO_PIN_10
+#define USART3_TX_GPIO_Port GPIOB
+#define USART3_RX_Pin GPIO_PIN_11
+#define USART3_RX_GPIO_Port GPIOB
+#define SPI1_SS_MR25H256_Pin GPIO_PIN_7
+#define SPI1_SS_MR25H256_GPIO_Port GPIOC
+#define USB_DM_Pin GPIO_PIN_11
+#define USB_DM_GPIO_Port GPIOA
+#define USB_DP_Pin GPIO_PIN_12
+#define USB_DP_GPIO_Port GPIOA
 #define SWDIO_Pin GPIO_PIN_13
 #define SWDIO_GPIO_Port GPIOA
 #define SWCLK_Pin GPIO_PIN_14
 #define SWCLK_GPIO_Port GPIOA
+#define LED_GREEN_Pin GPIO_PIN_10
+#define LED_GREEN_GPIO_Port GPIOC
+#define LED_RED_Pin GPIO_PIN_11
+#define LED_RED_GPIO_Port GPIOC
+#define EXTI_ADXL345_Pin GPIO_PIN_4
+#define EXTI_ADXL345_GPIO_Port GPIOB
+#define EXTI_ADXL345_EXTI_IRQn EXTI4_IRQn
+#define SPI1_SS_ADXL345_Pin GPIO_PIN_6
+#define SPI1_SS_ADXL345_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */

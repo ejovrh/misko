@@ -26,6 +26,10 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <stdlib.h>
+#include <string.h>
+
+#include "ADXL345\adxl345.h"
+#include "FM25W256/FM25W256.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -47,18 +51,21 @@
 /* USER CODE BEGIN PV */
 static volatile uint8_t FlagPrint;
 static volatile uint8_t counter;
+adxl345_t *adxl345;
+fm25w256_t *fm25w256;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-char uart2string[]="\r\nUART2 start\r\n";
 char buffer[sizeof(char) + 3];
+uint8_t ReturnString[20];
 /* USER CODE END 0 */
 
 /**
@@ -77,7 +84,7 @@ int main(void)
   HAL_Init();
 
   /* USER CODE BEGIN Init */
-// foo
+
   /* USER CODE END Init */
 
   /* Configure the system clock */
@@ -92,20 +99,49 @@ int main(void)
   MX_USART2_UART_Init();
   MX_TIM10_Init();
   MX_TIM11_Init();
+  MX_USART3_UART_Init();
   MX_SPI1_Init();
+
+  /* Initialize interrupts */
+  MX_NVIC_Init();
   /* USER CODE BEGIN 2 */
 	HAL_TIM_Base_Start_IT(&htim10);  // start timer10 - 500ms periodic
 	HAL_TIM_Base_Start_IT(&htim11);  // start timer11 - 10ms periodic
-	HAL_UART_Transmit_IT(&huart2, (uint8_t*) uart2string, sizeof(uart2string));		// transmit test string
+
+	while(HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY)
+		;
+	HAL_UART_Transmit_IT(&huart2, (uint8_t*) "\r\nUART2 start\r\n", 15);  // transmit test string
+
+	adxl345 = adxl345_ctor();
+	fm25w256 = fm25w256_ctor();
+
+	fm25w256->WriteString(0x1234, (uint8_t*) "Test1234", 9);  //write something into FeRAM
+	fm25w256->ReadString(0x1234, ReturnString, 9);  // read it out
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
 	while(1)
 		{
+			if(adxl345->FlagStop)  // if processor stop is flagged
+				{
+					adxl345->FlagStop = 0;  // unset stop mode
+
+					HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET);  // turn LED off
+					HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);  // ditto
+
+					HAL_UART_Transmit_IT(&huart2, (uint8_t*) "accel. sleep\r\n", 14);  // indicate via UART message
+					while(HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY)
+						;
+
+					HAL_SuspendTick();  // suspend systick
+					HAL_PWR_EnableSleepOnExit();  // enable sleep mode
+					HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);  // enter stop mode and wait for interrupt
+				}
+
 			if(FlagPrint)  // if printout is flagged
 				{
-					FlagPrint=0;  // unset flag
+					FlagPrint = 0;  // unset flag
 					itoa(counter, (char*) buffer, 10);  // convert counter to integer
 
 					while(HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY)
@@ -116,7 +152,6 @@ int main(void)
 						;
 					HAL_UART_Transmit_IT(&huart2, (uint8_t*) "\r\n", 3);  // add newline and carriage return
 				}
-
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -161,29 +196,52 @@ void SystemClock_Config(void)
   }
 }
 
-/* USER CODE BEGIN 4 */
+/**
+  * @brief NVIC Configuration.
+  * @retval None
+  */
+static void MX_NVIC_Init(void)
+{
+  /* TIM10_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(TIM10_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(TIM10_IRQn);
+  /* TIM11_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(TIM11_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(TIM11_IRQn);
+  /* EXTI15_10_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+}
 
+/* USER CODE BEGIN 4 */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  // ISR callback for timer interrupts
 {
 	if(htim->Instance == TIM10)  // timer10 - 500ms periodic
 		{
-			FlagPrint=1;  // flag to pint
+			HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
+			FlagPrint = 1;  // flag to pint
 			++counter;  // increase counter value
 		}
 
 	if(htim->Instance == TIM11)  // timer11 - 10ms periodic
 		{
-			HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);  // for now jsut toggle the LED
+			//HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);  // for now jsut toggle the LED
+			;
 		}
 }
 
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)		// ISR for pin change interrupts
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)	// ISR for pin change interrupts
 {
-	if(GPIO_Pin == PushButton_Pin)		// if button is pressed
-		counter=0;
-	//HAL_GPIO_TogglePin(LED2_GPIO_Port, LED2_Pin);		// for now only toggle the LED
-}
+	if(GPIO_Pin == EXTI_PushButton_Pin)  // if button is pressed
+		{
+			SystemClock_Config();
+			HAL_ResumeTick();
+			HAL_PWR_DisableSleepOnExit();
+		}
 
+	if(GPIO_Pin == EXTI_ADXL345_Pin)  // accelerometer interrupt (act. or inact.)
+		adxl345->ISR();  // execute the ISR callback
+}
 /* USER CODE END 4 */
 
 /**

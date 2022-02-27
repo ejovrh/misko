@@ -4,31 +4,30 @@
 <drawing>
 <settings>
 <setting alwaysvectorfont="no"/>
-<setting keepoldvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
 <grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
-<layer number="2" name="Route2" color="1" fill="3" visible="no" active="yes"/>
-<layer number="3" name="Route3" color="4" fill="3" visible="no" active="yes"/>
-<layer number="4" name="Route4" color="1" fill="4" visible="no" active="yes"/>
-<layer number="5" name="Route5" color="4" fill="4" visible="no" active="yes"/>
-<layer number="6" name="Route6" color="1" fill="8" visible="no" active="yes"/>
-<layer number="7" name="Route7" color="4" fill="8" visible="no" active="yes"/>
-<layer number="8" name="Route8" color="1" fill="2" visible="no" active="yes"/>
-<layer number="9" name="Route9" color="4" fill="2" visible="no" active="yes"/>
-<layer number="10" name="Route10" color="1" fill="7" visible="no" active="yes"/>
-<layer number="11" name="Route11" color="4" fill="7" visible="no" active="yes"/>
-<layer number="12" name="Route12" color="1" fill="5" visible="no" active="yes"/>
-<layer number="13" name="Route13" color="4" fill="5" visible="no" active="yes"/>
-<layer number="14" name="Route14" color="1" fill="6" visible="no" active="yes"/>
-<layer number="15" name="Route15" color="4" fill="6" visible="no" active="yes"/>
+<layer number="2" name="Route2" color="16" fill="1" visible="no" active="yes"/>
+<layer number="3" name="Route3" color="17" fill="1" visible="no" active="yes"/>
+<layer number="4" name="Route4" color="18" fill="1" visible="no" active="yes"/>
+<layer number="5" name="Route5" color="19" fill="1" visible="no" active="yes"/>
+<layer number="6" name="Route6" color="25" fill="1" visible="no" active="yes"/>
+<layer number="7" name="Route7" color="26" fill="1" visible="no" active="yes"/>
+<layer number="8" name="Route8" color="27" fill="1" visible="no" active="yes"/>
+<layer number="9" name="Route9" color="28" fill="1" visible="no" active="yes"/>
+<layer number="10" name="Route10" color="29" fill="1" visible="no" active="yes"/>
+<layer number="11" name="Route11" color="30" fill="1" visible="no" active="yes"/>
+<layer number="12" name="Route12" color="20" fill="1" visible="no" active="yes"/>
+<layer number="13" name="Route13" color="21" fill="1" visible="no" active="yes"/>
+<layer number="14" name="Route14" color="22" fill="1" visible="no" active="yes"/>
+<layer number="15" name="Route15" color="23" fill="1" visible="no" active="yes"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="yes" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
-<layer number="20" name="Dimension" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="20" name="Dimension" color="24" fill="1" visible="yes" active="yes"/>
 <layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
@@ -60,6 +59,8 @@
 <layer number="49" name="Reference" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="88" name="SimResults" color="9" fill="1" visible="yes" active="yes"/>
+<layer number="89" name="SimProbes" color="9" fill="1" visible="yes" active="yes"/>
 <layer number="90" name="Modules" color="5" fill="1" visible="yes" active="yes"/>
 <layer number="91" name="Nets" color="2" fill="1" visible="yes" active="yes"/>
 <layer number="92" name="Busses" color="1" fill="1" visible="yes" active="yes"/>
@@ -72,41 +73,59 @@
 </layers>
 <library>
 <packages>
-<package name="FFF">
-<smd name="P$1" x="1.35" y="-0.01" dx="2.7" dy="1.5" layer="1" rot="R90"/>
-<smd name="P$2" x="-1.35" y="0.01" dx="2.7" dy="1.5" layer="1" rot="R270"/>
-<wire x1="-3" y1="2" x2="-3" y2="-2" width="0.127" layer="21"/>
-<wire x1="-3" y1="-2" x2="3" y2="-2" width="0.127" layer="21"/>
-<wire x1="3" y1="-2" x2="3" y2="2" width="0.127" layer="21"/>
-<wire x1="3" y1="2" x2="-3" y2="2" width="0.127" layer="21"/>
-<text x="0" y="3.81" size="1" layer="21" align="center">&gt;NAME</text>
-<text x="0" y="-3.81" size="1" layer="21" align="center">&gt;VALUE</text>
+<package name="DFN-8">
+<smd name="1_!CS!" x="-3.175" y="1.905" dx="1.4" dy="0.45" layer="1" rot="R180"/>
+<smd name="GND" x="0" y="0" dx="4.2" dy="4.2" layer="1"/>
+<wire x1="-3.05" y1="2.55" x2="3.05" y2="2.55" width="0.127" layer="21"/>
+<wire x1="-3.05" y1="-2.55" x2="3.05" y2="-2.55" width="0.127" layer="21"/>
+<wire x1="3.05" y1="2.55" x2="3.05" y2="-2.55" width="0.127" layer="21"/>
+<wire x1="-3.05" y1="2.55" x2="-3.05" y2="-2.55" width="0.127" layer="21"/>
+<smd name="2_SO" x="-3.175" y="0.635" dx="1.4" dy="0.45" layer="1" rot="R180"/>
+<smd name="3_!WP!" x="-3.175" y="-0.635" dx="1.4" dy="0.45" layer="1" rot="R180"/>
+<smd name="4_VSS" x="-3.175" y="-1.905" dx="1.4" dy="0.45" layer="1" rot="R180"/>
+<smd name="5_SI" x="3.175" y="-1.905" dx="1.4" dy="0.45" layer="1" rot="R180"/>
+<smd name="6_SCK" x="3.175" y="-0.635" dx="1.4" dy="0.45" layer="1" rot="R180"/>
+<smd name="7_!HOLD!" x="3.175" y="0.635" dx="1.4" dy="0.45" layer="1" rot="R180"/>
+<smd name="8_VDD" x="3.175" y="1.905" dx="1.4" dy="0.45" layer="1" rot="R180"/>
+<circle x="-3.5" y="3" radius="0.1" width="0.2" layer="21"/>
+<text x="0" y="3.25" size="1" layer="25" font="vector" align="center">&gt;NAME</text>
+<text x="0" y="-3.25" size="1" layer="27" font="vector" align="center">&gt;VALUE</text>
 </package>
 </packages>
 <symbols>
-<symbol name="IND">
-<pin name="L1" x="-5.08" y="0" visible="off" length="point" direction="pas"/>
-<pin name="L2" x="5.08" y="0" visible="off" length="point" direction="pas" rot="R180"/>
-<wire x1="-3.81" y1="0" x2="-1.905" y2="0" width="0.254" layer="94" curve="-180"/>
-<wire x1="-1.905" y1="0" x2="0" y2="0" width="0.254" layer="94" curve="-180"/>
-<wire x1="0" y1="0" x2="1.905" y2="0" width="0.254" layer="94" curve="-180"/>
-<wire x1="1.905" y1="0" x2="3.81" y2="0" width="0.254" layer="94" curve="-180"/>
-<text x="-5.08" y="2.54" size="1.27" layer="95">&gt;NAME</text>
-<text x="2.54" y="2.54" size="1.27" layer="96">&gt;VALUE</text>
-<wire x1="5.08" y1="0" x2="3.81" y2="0" width="0.254" layer="94"/>
-<wire x1="-5.08" y1="0" x2="-3.81" y2="0" width="0.254" layer="94"/>
+<symbol name="MR25H256">
+<text x="0" y="10.16" size="1.778" layer="95" align="center">&gt;NAME</text>
+<text x="0" y="-10.16" size="1.778" layer="96" align="center">&gt;VALUE</text>
+<pin name="SCK_6" x="15.24" y="2.54" length="middle" direction="in" rot="R180"/>
+<pin name="SI_5" x="15.24" y="0" length="middle" direction="in" rot="R180"/>
+<pin name="SO_2" x="15.24" y="-2.54" length="middle" direction="out" rot="R180"/>
+<pin name="!CS!_1" x="15.24" y="-5.08" length="middle" direction="hiz" rot="R180"/>
+<pin name="4_VSS" x="-15.24" y="-5.08" length="middle" direction="pwr"/>
+<pin name="8_VDD" x="-15.24" y="-2.54" length="middle" direction="pwr"/>
+<pin name="7_!HOLD!" x="-15.24" y="2.54" length="middle" direction="in"/>
+<pin name="3_!WP!" x="-15.24" y="5.08" length="middle" direction="in"/>
+<wire x1="-10.16" y1="7.62" x2="10.16" y2="7.62" width="0.254" layer="94"/>
+<wire x1="10.16" y1="7.62" x2="10.16" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="10.16" y1="-7.62" x2="-10.16" y2="-7.62" width="0.254" layer="94"/>
+<wire x1="-10.16" y1="-7.62" x2="-10.16" y2="7.62" width="0.254" layer="94"/>
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="DJNR3015-1R5" prefix="L" uservalue="yes">
+<deviceset name="MR25H256" prefix="IC" uservalue="yes">
 <gates>
-<gate name="G$1" symbol="IND" x="0" y="0"/>
+<gate name="G$1" symbol="MR25H256" x="0" y="0"/>
 </gates>
 <devices>
-<device name="" package="FFF">
+<device name="" package="DFN-8">
 <connects>
-<connect gate="G$1" pin="L1" pad="P$1"/>
-<connect gate="G$1" pin="L2" pad="P$2"/>
+<connect gate="G$1" pin="!CS!_1" pad="1_!CS!"/>
+<connect gate="G$1" pin="3_!WP!" pad="3_!WP!"/>
+<connect gate="G$1" pin="4_VSS" pad="4_VSS GND"/>
+<connect gate="G$1" pin="7_!HOLD!" pad="7_!HOLD!"/>
+<connect gate="G$1" pin="8_VDD" pad="8_VDD"/>
+<connect gate="G$1" pin="SCK_6" pad="6_SCK"/>
+<connect gate="G$1" pin="SI_5" pad="5_SI"/>
+<connect gate="G$1" pin="SO_2" pad="2_SO"/>
 </connects>
 <technologies>
 <technology name=""/>
