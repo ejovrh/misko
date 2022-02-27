@@ -28,8 +28,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "ADXL345\adxl345.h"
-#include "FM25W256/FM25W256.h"
+#include "misko.h"	// misko hardware object representation
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -49,10 +48,10 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
+misko_t *misko;  // instantiate misko object
+
 static volatile uint8_t FlagPrint;
 static volatile uint8_t counter;
-adxl345_t *adxl345;
-fm25w256_t *fm25w256;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -69,42 +68,42 @@ uint8_t ReturnString[20];
 /* USER CODE END 0 */
 
 /**
-  * @brief  The application entry point.
-  * @retval int
-  */
+ * @brief  The application entry point.
+ * @retval int
+ */
 int main(void)
 {
-  /* USER CODE BEGIN 1 */
+	/* USER CODE BEGIN 1 */
 
-  /* USER CODE END 1 */
+	/* USER CODE END 1 */
 
-  /* MCU Configuration--------------------------------------------------------*/
+	/* MCU Configuration--------------------------------------------------------*/
 
-  /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-  HAL_Init();
+	/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+	HAL_Init();
 
-  /* USER CODE BEGIN Init */
+	/* USER CODE BEGIN Init */
 
-  /* USER CODE END Init */
+	/* USER CODE END Init */
 
-  /* Configure the system clock */
-  SystemClock_Config();
+	/* Configure the system clock */
+	SystemClock_Config();
 
-  /* USER CODE BEGIN SysInit */
+	/* USER CODE BEGIN SysInit */
 
-  /* USER CODE END SysInit */
+	/* USER CODE END SysInit */
 
-  /* Initialize all configured peripherals */
-  MX_GPIO_Init();
-  MX_USART2_UART_Init();
-  MX_TIM10_Init();
-  MX_TIM11_Init();
-  MX_USART3_UART_Init();
-  MX_SPI1_Init();
+	/* Initialize all configured peripherals */
+	MX_GPIO_Init();
+	MX_USART2_UART_Init();
+	MX_TIM10_Init();
+	MX_TIM11_Init();
+	MX_USART3_UART_Init();
+	MX_SPI1_Init();
 
-  /* Initialize interrupts */
-  MX_NVIC_Init();
-  /* USER CODE BEGIN 2 */
+	/* Initialize interrupts */
+	MX_NVIC_Init();
+	/* USER CODE BEGIN 2 */
 	HAL_TIM_Base_Start_IT(&htim10);  // start timer10 - 500ms periodic
 	HAL_TIM_Base_Start_IT(&htim11);  // start timer11 - 10ms periodic
 
@@ -112,32 +111,15 @@ int main(void)
 		;
 	HAL_UART_Transmit_IT(&huart2, (uint8_t*) "\r\nUART2 start\r\n", 15);  // transmit test string
 
-	adxl345 = adxl345_ctor();
-	fm25w256 = fm25w256_ctor();
+	misko = misko_ctor();  // run misko constructor
+	/* USER CODE END 2 */
 
-	fm25w256->WriteString(0x1234, (uint8_t*) "Test1234", 9);  //write something into FeRAM
-	fm25w256->ReadString(0x1234, ReturnString, 9);  // read it out
-  /* USER CODE END 2 */
-
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
+	/* Infinite loop */
+	/* USER CODE BEGIN WHILE */
 	while(1)
 		{
-			if(adxl345->FlagStop)  // if processor stop is flagged
-				{
-					adxl345->FlagStop = 0;  // unset stop mode
-
-					HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET);  // turn LED off
-					HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);  // ditto
-
-					HAL_UART_Transmit_IT(&huart2, (uint8_t*) "accel. sleep\r\n", 14);  // indicate via UART message
-					while(HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY)
-						;
-
-					HAL_SuspendTick();  // suspend systick
-					HAL_PWR_EnableSleepOnExit();  // enable sleep mode
-					HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);  // enter stop mode and wait for interrupt
-				}
+			if(misko->adxl345->FlagStop)  // if processor stop is flagged
+				misko->StopMode(1);  // go into stop mode
 
 			if(FlagPrint)  // if printout is flagged
 				{
@@ -152,65 +134,66 @@ int main(void)
 						;
 					HAL_UART_Transmit_IT(&huart2, (uint8_t*) "\r\n", 3);  // add newline and carriage return
 				}
-    /* USER CODE END WHILE */
+			/* USER CODE END WHILE */
 
-    /* USER CODE BEGIN 3 */
+			/* USER CODE BEGIN 3 */
 		}
-  /* USER CODE END 3 */
+	/* USER CODE END 3 */
 }
 
 /**
-  * @brief System Clock Configuration
-  * @retval None
-  */
+ * @brief System Clock Configuration
+ * @retval None
+ */
 void SystemClock_Config(void)
 {
-  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
-  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+	RCC_OscInitTypeDef RCC_OscInitStruct =
+		{0};
+	RCC_ClkInitTypeDef RCC_ClkInitStruct =
+		{0};
 
-  /** Configure the main internal regulator output voltage
-  */
-  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
-  /** Initializes the RCC Oscillators according to the specified parameters
-  * in the RCC_OscInitTypeDef structure.
-  */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
-  RCC_OscInitStruct.HSEState = RCC_HSE_BYPASS;
-  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
-  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Initializes the CPU, AHB and APB buses clocks
-  */
-  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
-                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
-  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSE;
-  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
-  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
-  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
+	/** Configure the main internal regulator output voltage
+	 */
+	__HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+	/** Initializes the RCC Oscillators according to the specified parameters
+	 * in the RCC_OscInitTypeDef structure.
+	 */
+	RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+	RCC_OscInitStruct.HSEState = RCC_HSE_BYPASS;
+	RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
+	if(HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+		{
+			Error_Handler();
+		}
+	/** Initializes the CPU, AHB and APB buses clocks
+	 */
+	RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
+	RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_HSE;
+	RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+	RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV1;
+	RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV1;
 
-  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
-  {
-    Error_Handler();
-  }
+	if(HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_0) != HAL_OK)
+		{
+			Error_Handler();
+		}
 }
 
 /**
-  * @brief NVIC Configuration.
-  * @retval None
-  */
+ * @brief NVIC Configuration.
+ * @retval None
+ */
 static void MX_NVIC_Init(void)
 {
-  /* TIM10_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(TIM10_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(TIM10_IRQn);
-  /* TIM11_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(TIM11_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(TIM11_IRQn);
-  /* EXTI15_10_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
+	/* TIM10_IRQn interrupt configuration */
+	HAL_NVIC_SetPriority(TIM10_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(TIM10_IRQn);
+	/* TIM11_IRQn interrupt configuration */
+	HAL_NVIC_SetPriority(TIM11_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(TIM11_IRQn);
+	/* EXTI15_10_IRQn interrupt configuration */
+	HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 }
 
 /* USER CODE BEGIN 4 */
@@ -233,30 +216,26 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  // ISR callback for
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)	// ISR for pin change interrupts
 {
 	if(GPIO_Pin == EXTI_PushButton_Pin)  // if button is pressed
-		{
-			SystemClock_Config();
-			HAL_ResumeTick();
-			HAL_PWR_DisableSleepOnExit();
-		}
+		misko->StopMode(0);  // go out of stop mode
 
 	if(GPIO_Pin == EXTI_ADXL345_Pin)  // accelerometer interrupt (act. or inact.)
-		adxl345->ISR();  // execute the ISR callback
+		misko->adxl345->ISR();  // execute the ISR callback
 }
 /* USER CODE END 4 */
 
 /**
-  * @brief  This function is executed in case of error occurrence.
-  * @retval None
-  */
+ * @brief  This function is executed in case of error occurrence.
+ * @retval None
+ */
 void Error_Handler(void)
 {
-  /* USER CODE BEGIN Error_Handler_Debug */
+	/* USER CODE BEGIN Error_Handler_Debug */
 	/* User can add his own implementation to report the HAL error return state */
 	__disable_irq();
 	while(1)
 		{
 		}
-  /* USER CODE END Error_Handler_Debug */
+	/* USER CODE END Error_Handler_Debug */
 }
 
 #ifdef  USE_FULL_ASSERT

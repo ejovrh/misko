@@ -3,12 +3,12 @@
 
 #include <inttypes.h>
 
-#define CMD_WRSR	0x01	// Write Status Register; sets write protection features (p. 7)
-#define CMD_WRITE	0x02	// Write Memory Data; writes one byte to a 2 byte address (p. 8)
-#define CMD_READ	0x03	// Read Memory Data; reads one byte from a 2 byte address (p. 8)
-#define CMD_WRDI	0x04	// Clear Write Enable Latch; puts module in read-only mode (p. 6)
-#define CMD_RDSR	0x05	// Read Status Register; reads write protection features (p. 7)
-#define CMD_WREN	0x06	// Set Write Enable Latch; disabled on power on (p. 6)
+#define CMD_WRSR	0x01																													// Write Status Register; sets write protection features (p. 7)
+#define CMD_WRITE	0x02																													// Write Memory Data; writes one byte to a 2 byte address (p. 8)
+#define CMD_READ	0x03																													// Read Memory Data; reads one byte from a 2 byte address (p. 8)
+#define CMD_WRDI	0x04																													// Clear Write Enable Latch; puts module in read-only mode (p. 6)
+#define CMD_RDSR	0x05																													// Read Status Register; reads write protection features (p. 7)
+#define CMD_WREN	0x06																													// Set Write Enable Latch; disabled on power on (p. 6)
 
 typedef struct  // public part of struct describing devices on FM25W256
 {

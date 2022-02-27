@@ -1,8 +1,8 @@
 #include "ADXL345.h"
+#include "misko.h"
 
 #include <spi.h>
 
-extern void SystemClock_Config(void);
 extern UART_HandleTypeDef huart2;
 
 typedef struct  // adxl345_t actual
@@ -12,7 +12,7 @@ typedef struct  // adxl345_t actual
 	adxl345_t public;  // public struct
 } __adxl345_t;
 
-static __adxl345_t  __ADXL345  __attribute__ ((section (".data")));  // preallocate __adxl345 object in .data
+static __adxl345_t    __ADXL345    __attribute__ ((section (".data")));  // preallocate __adxl345 object in .data
 
 static uint8_t _ReadByte(uint8_t in_addr)  // reads one byte of data from address
 {
@@ -62,14 +62,12 @@ void _ISR(void)  // ISR for the ADXL345 accelerometer
 			_WriteByte(INT_ENABLE, 0x00);  // disable interrupts
 			_WriteByte(INT_ENABLE, INT_ENABLE_ACT_CFG);  // configure for activity detection
 
-			__ADXL345.public.FlagStop = 1;  // flag for sleep mode - is evaluated in main()
+			__ADXL345.public.FlagStop = 1;  // flag accelerator stop mode - evaluated in main()
 		}
 
 	if((__ADXL345._adxl345_irq_src >> 4) & 0x01)  // if the act bit is set
 		{
-			SystemClock_Config();  // restart the clocks
-			HAL_ResumeTick();  // resume systick
-			HAL_PWR_DisableSleepOnExit();  // disable sleep
+			misko->StopMode(0);  // go out of stop mode
 
 			_ReadByte(INT_SOURCE);  // clear any pending interrupts
 			_WriteByte(INT_ENABLE, 0x00);  // disable interrupts
