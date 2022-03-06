@@ -18,6 +18,8 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "adc.h"
+#include "dma.h"
 #include "spi.h"
 #include "tim.h"
 #include "usart.h"
@@ -94,22 +96,36 @@ int main(void)
 	/* USER CODE END SysInit */
 
 	/* Initialize all configured peripherals */
-	MX_GPIO_Init();
-	MX_USART2_UART_Init();
 	MX_TIM10_Init();
 	MX_TIM11_Init();
-	MX_USART3_UART_Init();
+	MX_DMA_Init();
+	MX_GPIO_Init();
 	MX_SPI1_Init();
+	MX_ADC_Init();
+	MX_USART2_UART_Init();
+	MX_USART3_UART_Init();
 
 	/* Initialize interrupts */
 	MX_NVIC_Init();
 	/* USER CODE BEGIN 2 */
+
+	/* bug in MX code generation - order or initialisation is wrong (UART before DMA -> no comm.)
+	 MX_TIM10_Init();
+	 MX_TIM11_Init();
+	 MX_DMA_Init();
+	 MX_GPIO_Init();
+	 MX_SPI1_Init();
+	 MX_ADC_Init();
+	 MX_USART2_UART_Init();
+	 MX_USART3_UART_Init();
+	 */
+
 	HAL_TIM_Base_Start_IT(&htim10);  // start timer10 - 500ms periodic
 	HAL_TIM_Base_Start_IT(&htim11);  // start timer11 - 10ms periodic
 
 	while(HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY)
 		;
-	HAL_UART_Transmit_IT(&huart2, (uint8_t*) "\r\nUART2 start\r\n", 15);  // transmit test string
+	HAL_UART_Transmit_DMA(&huart2, (uint8_t*) "\r\nUART2 start\r\n", 15);  // transmit test string
 
 	misko = misko_ctor();  // run misko constructor
 	/* USER CODE END 2 */
@@ -128,11 +144,11 @@ int main(void)
 
 					while(HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY)
 						;
-					HAL_UART_Transmit_IT(&huart2, (uint8_t*) buffer, sizeof(buffer));  // print converted integer
+					HAL_UART_Transmit_DMA(&huart2, (uint8_t*) buffer, strlen(buffer));  // print converted integer
 
 					while(HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY)
 						;
-					HAL_UART_Transmit_IT(&huart2, (uint8_t*) "\r\n", 3);  // add newline and carriage return
+					HAL_UART_Transmit_DMA(&huart2, (uint8_t*) "\r\n", 2);  // add newline and carriage return
 				}
 			/* USER CODE END WHILE */
 
@@ -158,8 +174,10 @@ void SystemClock_Config(void)
 	/** Initializes the RCC Oscillators according to the specified parameters
 	 * in the RCC_OscInitTypeDef structure.
 	 */
-	RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
+	RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI | RCC_OSCILLATORTYPE_HSE;
 	RCC_OscInitStruct.HSEState = RCC_HSE_BYPASS;
+	RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+	RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
 	RCC_OscInitStruct.PLL.PLLState = RCC_PLL_NONE;
 	if(HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
 		{

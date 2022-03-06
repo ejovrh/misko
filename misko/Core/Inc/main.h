@@ -62,6 +62,12 @@ void Error_Handler(void);
 #define EXTI_PushButton_EXTI_IRQn EXTI15_10_IRQn
 #define RCC_OSC_IN_Pin GPIO_PIN_0
 #define RCC_OSC_IN_GPIO_Port GPIOH
+#define ADC_IN10_Pin GPIO_PIN_0
+#define ADC_IN10_GPIO_Port GPIOC
+#define USART2_CTS_Pin GPIO_PIN_0
+#define USART2_CTS_GPIO_Port GPIOA
+#define USART2_RTS_Pin GPIO_PIN_1
+#define USART2_RTS_GPIO_Port GPIOA
 #define USART2_TX_Pin GPIO_PIN_2
 #define USART2_TX_GPIO_Port GPIOA
 #define USART2_RX_Pin GPIO_PIN_3
@@ -76,6 +82,10 @@ void Error_Handler(void);
 #define USART3_TX_GPIO_Port GPIOB
 #define USART3_RX_Pin GPIO_PIN_11
 #define USART3_RX_GPIO_Port GPIOB
+#define USART3_CTS_Pin GPIO_PIN_13
+#define USART3_CTS_GPIO_Port GPIOB
+#define USART3_RTS_Pin GPIO_PIN_14
+#define USART3_RTS_GPIO_Port GPIOB
 #define SPI1_SS_MR25H256_Pin GPIO_PIN_7
 #define SPI1_SS_MR25H256_GPIO_Port GPIOC
 #define USB_DM_Pin GPIO_PIN_11
