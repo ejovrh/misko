@@ -96,28 +96,28 @@ int main(void)
 	/* USER CODE END SysInit */
 
 	/* Initialize all configured peripherals */
-	MX_TIM10_Init();
-	MX_TIM11_Init();
-	MX_DMA_Init();
+	MX_TIM10_Init();  // 500ms periodic
+	MX_TIM11_Init();  // 10ms periodic
+	MX_DMA_Init();  // mem to mem: DMA1 C4 & C5
 	MX_GPIO_Init();
-	MX_SPI1_Init();
-	MX_ADC_Init();
-	MX_USART2_UART_Init();
-	MX_USART3_UART_Init();
+	MX_SPI1_Init();  // IT mode
+	MX_ADC_Init();  // DMA1 C1
+	MX_USART2_UART_Init();  // TX: DMA1 C7, RX: DMA1 C6
+	MX_USART3_UART_Init();  // TX: DMA1 C2, RX: DMA1 C3
 
 	/* Initialize interrupts */
 	MX_NVIC_Init();
 	/* USER CODE BEGIN 2 */
 
 	/* bug in MX code generation - order or initialisation is wrong (UART before DMA -> no comm.)
-	 MX_TIM10_Init();
-	 MX_TIM11_Init();
-	 MX_DMA_Init();
+	 MX_TIM10_Init();  // 500ms periodic
+	 MX_TIM11_Init();  // 10ms periodic
+	 MX_DMA_Init();  // mem to mem: DMA1 C4 & C5
 	 MX_GPIO_Init();
-	 MX_SPI1_Init();
-	 MX_ADC_Init();
-	 MX_USART2_UART_Init();
-	 MX_USART3_UART_Init();
+	 MX_SPI1_Init();  // IT mode
+	 MX_ADC_Init();  // DMA1 C1
+	 MX_USART2_UART_Init();  // TX: DMA1 C7, RX: DMA1 C6
+	 MX_USART3_UART_Init();  // TX: DMA1 C2, RX: DMA1 C3
 	 */
 
 	HAL_TIM_Base_Start_IT(&htim10);  // start timer10 - 500ms periodic
