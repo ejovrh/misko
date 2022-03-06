@@ -65,7 +65,7 @@ static void MX_NVIC_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-char buffer[sizeof(char) + 3];
+char bufferITOA[sizeof(char) + 3];
 uint8_t ReturnString[20];
 /* USER CODE END 0 */
 
@@ -140,11 +140,11 @@ int main(void)
 			if(FlagPrint)  // if printout is flagged
 				{
 					FlagPrint = 0;  // unset flag
-					itoa(counter, (char*) buffer, 10);  // convert counter to integer
+					itoa(counter, (char*) bufferITOA, 10);  // convert counter to integer
 
 					while(HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY)
 						;
-					HAL_UART_Transmit_DMA(&huart2, (uint8_t*) buffer, strlen(buffer));  // print converted integer
+					HAL_UART_Transmit_DMA(&huart2, (uint8_t*) bufferITOA, strlen(bufferITOA));  // print converted integer
 
 					while(HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY)
 						;
