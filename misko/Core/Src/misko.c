@@ -17,7 +17,7 @@ typedef struct  // adxl345_t actual
 	misko_t public;  // public struct
 } __misko_t;
 
-static __misko_t       __misko       __attribute__ ((section (".data")));  // preallocate __misko_t object in .data
+static __misko_t  __misko  __attribute__ ((section (".data")));  // preallocate __misko_t object in .data
 
 void _StopMode(const uint8_t in_flag)  // stop mode powersave function
 {
