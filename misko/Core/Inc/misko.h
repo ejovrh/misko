@@ -8,6 +8,10 @@
 #include "FM25W256/FM25W256.h"	// FeRAM
 //#include "DS1394U/DS1394U.h"	// RTC
 
+//#define STOPMODE
+
+#define NMEA_BUFFERSIZE 82	// officially, NMEA sentences are at maximum 82 characters long (80 readable characters + \r\n)
+
 typedef struct  // public part of struct describing devices on misko
 {
 	uint8_t flag_print;  // flag for timer-based print control

@@ -17,7 +17,7 @@ typedef struct  // adxl345_t actual
 	misko_t public;  // public struct
 } __misko_t;
 
-static __misko_t  __misko  __attribute__ ((section (".data")));  // preallocate __misko_t object in .data
+static __misko_t    __misko    __attribute__ ((section (".data")));  // preallocate __misko_t object in .data
 
 void _StopMode(const uint8_t in_flag)  // stop mode powersave function
 {
@@ -25,22 +25,26 @@ void _StopMode(const uint8_t in_flag)  // stop mode powersave function
 		{
 			__misko.public.adxl345->FlagStop = 0;  // unflag accelerator stop mode - evaluated in main()
 
-			HAL_UART_Transmit_IT(&huart2, (uint8_t*) "accel. sleep\r\n", 14);  // indicate via UART message
+			HAL_UART_Transmit_DMA(&huart2, (uint8_t*) "accel. sleep\r\n", 14);  // indicate via UART message
 			while(HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY)
 				;
 
 			HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_SET);  // turn LED off
 			HAL_GPIO_WritePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin, GPIO_PIN_SET);  // ditto
 
+#ifdef  STOPMODE
 			HAL_SuspendTick();  // suspend systick
 			HAL_PWR_EnableSleepOnExit();  // enable sleep mode
 			HAL_PWR_EnterSTOPMode(PWR_LOWPOWERREGULATOR_ON, PWR_STOPENTRY_WFI);  // enter stop mode and wait for any interrupt
+#endif
 		}
 	else  // if flag is not set
 		{
+#ifdef  STOPMODE
 			SystemClock_Config();  // reconfigure clocks
 			HAL_ResumeTick();  // resume systick
 			HAL_PWR_DisableSleepOnExit();  // disable stop mode
+#endif
 		}
 }
 

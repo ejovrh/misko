@@ -1,21 +1,21 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.h
-  * @brief          : Header for main.c file.
-  *                   This file contains the common defines of the application.
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2022 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.h
+ * @brief          : Header for main.c file.
+ *                   This file contains the common defines of the application.
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2022 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
@@ -84,18 +84,14 @@ void Error_Handler(void);
 #define GPS_PWR_CTRL_GPIO_Port GPIOB
 #define GPS_WAKEUP_Pin GPIO_PIN_2
 #define GPS_WAKEUP_GPIO_Port GPIOB
-#define USART3_TX_Pin GPIO_PIN_10
-#define USART3_TX_GPIO_Port GPIOB
-#define USART3_RX_Pin GPIO_PIN_11
-#define USART3_RX_GPIO_Port GPIOB
-#define USART3_CTS_Pin GPIO_PIN_13
-#define USART3_CTS_GPIO_Port GPIOB
-#define USART3_RTS_Pin GPIO_PIN_14
-#define USART3_RTS_GPIO_Port GPIOB
 #define ANAL_SW_CTRL_Pin GPIO_PIN_15
 #define ANAL_SW_CTRL_GPIO_Port GPIOB
 #define SPI1_SS_MR25H256_Pin GPIO_PIN_7
 #define SPI1_SS_MR25H256_GPIO_Port GPIOC
+#define USART1_TX_Pin GPIO_PIN_9
+#define USART1_TX_GPIO_Port GPIOA
+#define USART1_RX_Pin GPIO_PIN_10
+#define USART1_RX_GPIO_Port GPIOA
 #define USB_DM_Pin GPIO_PIN_11
 #define USB_DM_GPIO_Port GPIOA
 #define USB_DP_Pin GPIO_PIN_12
@@ -114,7 +110,7 @@ void Error_Handler(void);
 #define SPI1_SS_ADXL345_Pin GPIO_PIN_6
 #define SPI1_SS_ADXL345_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
-
+//#define STOPMODE
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
