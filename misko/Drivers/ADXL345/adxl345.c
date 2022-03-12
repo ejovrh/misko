@@ -12,7 +12,7 @@ typedef struct  // adxl345_t actual
 	adxl345_t public;  // public struct
 } __adxl345_t;
 
-static __adxl345_t    __ADXL345    __attribute__ ((section (".data")));  // preallocate __adxl345 object in .data
+static __adxl345_t  __ADXL345 __attribute__ ((section (".data")));  // preallocate __adxl345 object in .data
 
 static uint8_t _ReadByte(uint8_t in_addr)  // reads one byte of data from address
 {
@@ -76,8 +76,8 @@ void _ISR(void)  // ISR for the ADXL345 accelerometer
 
 //			HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, GPIO_PIN_RESET);  // turn LED on
 
-			while(HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY)
-				;
+//			while(HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY)
+//				;
 			HAL_UART_Transmit_DMA(&huart2, (uint8_t*) "accel. wakeup\r\n", 15);  // indicate via UART message
 		}
 }

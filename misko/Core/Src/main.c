@@ -142,15 +142,15 @@ int main(void)
 			if(FlagPrint)  // if printout is flagged
 				{
 					FlagPrint = 0;  // unset flag
-					itoa(counter, (char*) bufferITOA, 10);  // convert counter to integer
-
-					while(HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY)
-						;
-					HAL_UART_Transmit_DMA(&huart2, (uint8_t*) bufferITOA, strlen(bufferITOA));  // print converted integer
-
-					while(HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY)
-						;
-					HAL_UART_Transmit_DMA(&huart2, (uint8_t*) "\r\n", 2);  // add newline and carriage return
+//					itoa(counter, (char*) bufferITOA, 10);  // convert counter to integer
+//
+//					while(HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY)
+//						;
+//					HAL_UART_Transmit_DMA(&huart2, (uint8_t*) bufferITOA, strlen(bufferITOA));  // print converted integer
+//
+//					while(HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY)
+//						;
+//					HAL_UART_Transmit_DMA(&huart2, (uint8_t*) "\r\n", 2);  // add newline and carriage return
 				}
 			/* USER CODE END WHILE */
 
@@ -173,6 +173,7 @@ void SystemClock_Config(void)
 	/** Configure the main internal regulator output voltage
 	 */
 	__HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+
 	/** Initializes the RCC Oscillators according to the specified parameters
 	 * in the RCC_OscInitTypeDef structure.
 	 */
@@ -185,6 +186,7 @@ void SystemClock_Config(void)
 		{
 			Error_Handler();
 		}
+
 	/** Initializes the CPU, AHB and APB buses clocks
 	 */
 	RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK | RCC_CLOCKTYPE_SYSCLK | RCC_CLOCKTYPE_PCLK1 | RCC_CLOCKTYPE_PCLK2;
@@ -274,6 +276,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)	// ISR for pin change interrupts
 			HAL_GPIO_TogglePin(GPS_PWR_CTRL_GPIO_Port, GPS_PWR_CTRL_Pin);
 			HAL_GPIO_TogglePin(ANAL_SW_CTRL_GPIO_Port, ANAL_SW_CTRL_Pin);
 		}
+
 	if(GPIO_Pin == EXTI_ADXL345_Pin)  // accelerometer interrupt (act. or inact.)
 		misko->adxl345->ISR();  // execute the ISR callback
 }
@@ -335,4 +338,3 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-
