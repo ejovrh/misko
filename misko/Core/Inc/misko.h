@@ -6,21 +6,19 @@
 
 #include "ADXL345/ADXL345.h"	// accelerometer
 #include "FM25W256/FM25W256.h"	// FeRAM
-//#include "DS1394U/DS1394U.h"	// RTC
+#include "ORG1510/ORG1510.h"// GPS receiver
 
-//#define STOPMODE
-
-#define NMEA_BUFFERSIZE 82	// officially, NMEA sentences are at maximum 82 characters long (80 readable characters + \r\n)
+#define STOPMODE 1 // use MCU power save mode or not
 
 typedef struct  // public part of struct describing devices on misko
 {
-	uint8_t flag_print;  // flag for timer-based print control
+	uint8_t FlagPrint;  // flag for timer-based print control
 
 	void (*StopMode)(const uint8_t in_flag);  // stop mode powersave function
 
 	adxl345_t *adxl345;  // accelerometer object
 	fm25w256_t *fm25w256;  // FeRAM object
-//	ds1394_t *ds1394;	// RTC object
+	org1510_t *org1510;  // GPS receiver object
 } misko_t;
 
 misko_t* misko_ctor(void);  // declare constructor for concrete class

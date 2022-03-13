@@ -41,7 +41,7 @@ void MX_USART1_UART_Init(void)
   /* USER CODE END USART1_Init 0 */
 
   /* USER CODE BEGIN USART1_Init 1 */
-	__HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);  // enable UART1 idle interrupt
+
   /* USER CODE END USART1_Init 1 */
   huart1.Instance = USART1;
   huart1.Init.BaudRate = 9600;
@@ -56,7 +56,7 @@ void MX_USART1_UART_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN USART1_Init 2 */
-
+	__HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);  // enable UART1 idle interrupt
   /* USER CODE END USART1_Init 2 */
 
 }

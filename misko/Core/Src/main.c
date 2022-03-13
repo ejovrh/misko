@@ -52,7 +52,6 @@
 /* USER CODE BEGIN PV */
 misko_t *misko;  // instantiate misko object
 
-static volatile uint8_t FlagPrint;
 static volatile uint8_t counter;
 /* USER CODE END PV */
 
@@ -66,7 +65,6 @@ static void MX_NVIC_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 char bufferITOA[sizeof(char) + 3];  // integer to ASCII conversion bufferITOA
-char NMEA_buffer[NMEA_BUFFERSIZE] = "";  // string buffer for the NMEA sentence
 /* USER CODE END 0 */
 
 /**
@@ -102,8 +100,8 @@ int main(void)
 	MX_GPIO_Init();
 	MX_SPI1_Init();  // IT mode
 	MX_ADC_Init();  // DMA1 C1
-	MX_USART2_UART_Init();  // TX: DMA1 C7, RX: DMA1 C6
-	MX_USART1_UART_Init();  // TX: DMA1 C4, RX: DMA1 C5
+	MX_USART2_UART_Init();  // debugger - TX: DMA1 C7, RX: DMA1 C6
+	MX_USART1_UART_Init();  // GPS/BT - TX: DMA1 C4, RX: DMA1 C5
 
 	/* Initialize interrupts */
 	MX_NVIC_Init();
@@ -128,8 +126,6 @@ int main(void)
 	HAL_UART_Transmit_DMA(&huart2, (uint8_t*) "\r\nUART2 start\r\n", 15);  // transmit test string
 
 	misko = misko_ctor();  // run misko constructor
-
-	HAL_UART_Receive_DMA(&huart1, (uint8_t*) NMEA_buffer, NMEA_BUFFERSIZE);  // receive from GPS into buffer
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
@@ -139,9 +135,10 @@ int main(void)
 			if(misko->adxl345->FlagStop)  // if processor stop is flagged
 				misko->StopMode(1);  // go into stop mode
 
-			if(FlagPrint)  // if printout is flagged
+			if(misko->FlagPrint)  // if printout is flagged
 				{
-					FlagPrint = 0;  // unset flag
+					misko->FlagPrint = 0;  // unset flag
+
 //					itoa(counter, (char*) bufferITOA, 10);  // convert counter to integer
 //
 //					while(HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY)
@@ -150,7 +147,7 @@ int main(void)
 //
 //					while(HAL_UART_GetState(&huart2) != HAL_UART_STATE_READY)
 //						;
-//					HAL_UART_Transmit_DMA(&huart2, (uint8_t*) "\r\n", 2);  // add newline and carriage return
+					HAL_UART_Transmit_DMA(&huart2, (uint8_t*) "\r\nXXX\r\n", 6);
 				}
 			/* USER CODE END WHILE */
 
@@ -208,16 +205,16 @@ void SystemClock_Config(void)
 static void MX_NVIC_Init(void)
 {
 	/* TIM10_IRQn interrupt configuration */
-	HAL_NVIC_SetPriority(TIM10_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(TIM10_IRQn, 0, 6);
 	HAL_NVIC_EnableIRQ(TIM10_IRQn);
 	/* TIM11_IRQn interrupt configuration */
-	HAL_NVIC_SetPriority(TIM11_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(TIM11_IRQn, 0, 7);
 	HAL_NVIC_EnableIRQ(TIM11_IRQn);
 	/* DMA1_Channel7_IRQn interrupt configuration */
-	HAL_NVIC_SetPriority(DMA1_Channel7_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(DMA1_Channel7_IRQn, 0, 1);
 	HAL_NVIC_EnableIRQ(DMA1_Channel7_IRQn);
 	/* DMA1_Channel6_IRQn interrupt configuration */
-	HAL_NVIC_SetPriority(DMA1_Channel6_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(DMA1_Channel6_IRQn, 0, 1);
 	HAL_NVIC_EnableIRQ(DMA1_Channel6_IRQn);
 	/* DMA1_Channel5_IRQn interrupt configuration */
 	HAL_NVIC_SetPriority(DMA1_Channel5_IRQn, 0, 0);
@@ -226,25 +223,25 @@ static void MX_NVIC_Init(void)
 	HAL_NVIC_SetPriority(DMA1_Channel4_IRQn, 0, 0);
 	HAL_NVIC_EnableIRQ(DMA1_Channel4_IRQn);
 	/* DMA1_Channel1_IRQn interrupt configuration */
-	HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 1, 7);
 	HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
 	/* DMA2_Channel2_IRQn interrupt configuration */
-	HAL_NVIC_SetPriority(DMA2_Channel2_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(DMA2_Channel2_IRQn, 0, 3);
 	HAL_NVIC_EnableIRQ(DMA2_Channel2_IRQn);
 	/* DMA2_Channel1_IRQn interrupt configuration */
-	HAL_NVIC_SetPriority(DMA2_Channel1_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(DMA2_Channel1_IRQn, 0, 3);
 	HAL_NVIC_EnableIRQ(DMA2_Channel1_IRQn);
 	/* EXTI15_10_IRQn interrupt configuration */
-	HAL_NVIC_SetPriority(EXTI15_10_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(EXTI15_10_IRQn, 1, 1);
 	HAL_NVIC_EnableIRQ(EXTI15_10_IRQn);
 	/* EXTI4_IRQn interrupt configuration */
-	HAL_NVIC_SetPriority(EXTI4_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(EXTI4_IRQn, 1, 0);
 	HAL_NVIC_EnableIRQ(EXTI4_IRQn);
 	/* ADC1_IRQn interrupt configuration */
-	HAL_NVIC_SetPriority(ADC1_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(ADC1_IRQn, 1, 7);
 	HAL_NVIC_EnableIRQ(ADC1_IRQn);
 	/* USART2_IRQn interrupt configuration */
-	HAL_NVIC_SetPriority(USART2_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(USART2_IRQn, 0, 1);
 	HAL_NVIC_EnableIRQ(USART2_IRQn);
 	/* USART1_IRQn interrupt configuration */
 	HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
@@ -257,7 +254,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)  // ISR callback for
 	if(htim->Instance == TIM10)  // timer10 - 500ms periodic
 		{
 //			HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);
-			FlagPrint = 1;  // flag to pint
+			misko->FlagPrint = 1;  // flag to print
 			++counter;  // increase counter value
 		}
 
@@ -281,29 +278,16 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)	// ISR for pin change interrupts
 		misko->adxl345->ISR();  // execute the ISR callback
 }
 
-void HAL_UART_RxHalfCpltCallback(UART_HandleTypeDef *huart)
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)  // ISR for UART complete
 {
-	;
+	if(huart->Instance == USART1)  // incoming data from GP
+		misko->org1510->parse();  // parse received NMEA sentences
 }
 
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)  // ISR for UART receive complete
+void HAL_UART_RxHalfCpltCallback(UART_HandleTypeDef *huart)  // ISR for UART RX half complete
 {
-	if(huart->Instance == USART1)  // for USART1
-		{
-			HAL_GPIO_TogglePin(LED_GREEN_GPIO_Port, LED_GREEN_Pin);  // take action
-
-			HAL_UART_Transmit_DMA(&huart2, (uint8_t*) NMEA_buffer, NMEA_BUFFERSIZE);
-		}
-}
-
-void HAL_UART_TxHalfCpltCallback(UART_HandleTypeDef *huart)  // ISR for UART receive half complete
-{
-	;
-}
-
-void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
-{
-	;
+	if(huart->Instance == USART1)  // incoming data from GPS
+		misko->org1510->parse();  // parse received NMEA sentences
 }
 /* USER CODE END 4 */
 
