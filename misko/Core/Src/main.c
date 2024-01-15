@@ -43,20 +43,23 @@
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart3;
+DMA_HandleTypeDef handle_GPDMA1_Channel1;
+DMA_HandleTypeDef handle_GPDMA1_Channel0;
 
 PCD_HandleTypeDef hpcd_USB_DRD_FS;
 
 /* USER CODE BEGIN PV */
-
+uint8_t aTxBuffer[] = "\r\nnucleo-h503rb start\r\n";
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_ICACHE_Init(void);
+static void MX_GPDMA1_Init(void);
 static void MX_USART1_UART_Init(void);
-static void MX_USART3_UART_Init(void);
+static void MX_ICACHE_Init(void);
 static void MX_USB_PCD_Init(void);
+static void MX_USART3_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -94,12 +97,16 @@ int main(void)
 
 	/* Initialize all configured peripherals */
 	MX_GPIO_Init();
-	MX_ICACHE_Init();
+	MX_GPDMA1_Init();
 	MX_USART1_UART_Init();
-	MX_USART3_UART_Init();
+	MX_ICACHE_Init();
 	MX_USB_PCD_Init();
+	MX_USART3_UART_Init();
 	/* USER CODE BEGIN 2 */
-
+	if(HAL_UART_Transmit_DMA(&huart3, (uint8_t*) aTxBuffer, 22) != HAL_OK)
+		{
+			Error_Handler();
+		}
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
@@ -166,6 +173,36 @@ void SystemClock_Config(void)
 		{
 			Error_Handler();
 		}
+}
+
+/**
+ * @brief GPDMA1 Initialization Function
+ * @param None
+ * @retval None
+ */
+static void MX_GPDMA1_Init(void)
+{
+
+	/* USER CODE BEGIN GPDMA1_Init 0 */
+
+	/* USER CODE END GPDMA1_Init 0 */
+
+	/* Peripheral clock enable */
+	__HAL_RCC_GPDMA1_CLK_ENABLE();
+
+	/* GPDMA1 interrupt Init */
+	HAL_NVIC_SetPriority(GPDMA1_Channel0_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(GPDMA1_Channel0_IRQn);
+	HAL_NVIC_SetPriority(GPDMA1_Channel1_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(GPDMA1_Channel1_IRQn);
+
+	/* USER CODE BEGIN GPDMA1_Init 1 */
+
+	/* USER CODE END GPDMA1_Init 1 */
+	/* USER CODE BEGIN GPDMA1_Init 2 */
+
+	/* USER CODE END GPDMA1_Init 2 */
+
 }
 
 /**
