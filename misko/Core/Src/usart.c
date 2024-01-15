@@ -85,7 +85,7 @@ void MX_USART2_UART_Init(void)
     Error_Handler();
   }
   /* USER CODE BEGIN USART2_Init 2 */
-
+	__HAL_UART_ENABLE_IT(&huart2, UART_IT_IDLE);  // enable UART2 idle interrupt
   /* USER CODE END USART2_Init 2 */
 
 }
@@ -148,7 +148,8 @@ void HAL_UART_MspInit(UART_HandleTypeDef* uartHandle)
     __HAL_LINKDMA(uartHandle,hdmatx,hdma_usart1_tx);
 
   /* USER CODE BEGIN USART1_MspInit 1 */
-
+			//	__HAL_DMA_ENABLE_IT(&hdma_usart1_rx, DMA_IT_HT);
+			//	__HAL_DMA_ENABLE_IT(&hdma_usart1_rx, DMA_IT_TC);
   /* USER CODE END USART1_MspInit 1 */
   }
   else if(uartHandle->Instance==USART2)

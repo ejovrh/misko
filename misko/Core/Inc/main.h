@@ -109,6 +109,7 @@ void Error_Handler(void);
 #define EXTI_ADXL345_EXTI_IRQn EXTI4_IRQn
 #define SPI1_SS_ADXL345_Pin GPIO_PIN_6
 #define SPI1_SS_ADXL345_GPIO_Port GPIOB
+
 /* USER CODE BEGIN Private defines */
 //#define STOPMODE
 /* USER CODE END Private defines */

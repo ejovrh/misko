@@ -8,11 +8,14 @@
 #include "FM25W256/FM25W256.h"	// FeRAM
 #include "ORG1510/ORG1510.h"// GPS receiver
 
-#define STOPMODE 1 // use MCU power save mode or not
+#define STOPMODE 0 // use MCU power save mode or not
 
 typedef struct  // public part of struct describing devices on misko
 {
-	uint8_t FlagPrint;  // flag for timer-based print control
+	volatile uint8_t FlagPrint;  // flag for timer-based print control
+	volatile uint8_t free1;
+	volatile uint8_t free2;
+	volatile uint8_t free3;
 
 	void (*StopMode)(const uint8_t in_flag);  // stop mode powersave function
 

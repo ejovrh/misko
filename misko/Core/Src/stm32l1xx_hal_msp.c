@@ -20,6 +20,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
@@ -75,14 +76,6 @@ void HAL_MspInit(void)
   /* System interrupt init*/
 
   /* Peripheral interrupt init */
-  /* RCC_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(RCC_IRQn, 1, 0);
-  /* RCC_IRQn interrupt configuration */
-  HAL_NVIC_EnableIRQ(RCC_IRQn);
-  /* RCC_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(RCC_IRQn, 1, 0);
-  /* RCC_IRQn interrupt configuration */
-  HAL_NVIC_EnableIRQ(RCC_IRQn);
 
   /* USER CODE BEGIN MspInit 1 */
 
