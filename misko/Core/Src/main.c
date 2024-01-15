@@ -353,11 +353,11 @@ static void MX_GPIO_Init(void)
 	/*Configure GPIO pin Output Level */
 	HAL_GPIO_WritePin(USB_FS_PWR_EN_GPIO_Port, USB_FS_PWR_EN_Pin, GPIO_PIN_RESET);
 
-	/*Configure GPIO pin : B1_BLUE_USER_BUTTON_Pin */
-	GPIO_InitStruct.Pin = B1_BLUE_USER_BUTTON_Pin;
+	/*Configure GPIO pin : Blue_User_Button_Pin */
+	GPIO_InitStruct.Pin = Blue_User_Button_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	HAL_GPIO_Init(B1_BLUE_USER_BUTTON_GPIO_Port, &GPIO_InitStruct);
+	HAL_GPIO_Init(Blue_User_Button_GPIO_Port, &GPIO_InitStruct);
 
 	/*Configure GPIO pins : PC0 PC1 PC2 PC3
 	 PC4 PC5 PC6 PC7
@@ -407,6 +407,10 @@ static void MX_GPIO_Init(void)
 	GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(USB_FS_OVCR_GPIO_Port, &GPIO_InitStruct);
+
+	/* EXTI interrupt init*/
+	HAL_NVIC_SetPriority(EXTI13_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(EXTI13_IRQn);
 
 	/* USER CODE BEGIN MX_GPIO_Init_2 */
 	/* USER CODE END MX_GPIO_Init_2 */
