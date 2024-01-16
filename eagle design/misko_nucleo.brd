@@ -7,9 +7,9 @@
 <setting keepoldvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.25" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.005" altunitdist="mm" altunit="mm"/>
+<grid distance="25" unitdist="mil" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.005" altunitdist="mm" altunit="mm"/>
 <layers>
-<layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
+<layer number="1" name="Top" color="4" fill="1" visible="no" active="yes"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
 <layer number="3" name="Route3" color="4" fill="3" visible="no" active="no"/>
 <layer number="4" name="Route4" color="1" fill="4" visible="no" active="no"/>
@@ -26,14 +26,14 @@
 <layer number="15" name="Route15" color="4" fill="6" visible="no" active="no"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="no" active="yes"/>
 <layer number="17" name="Pads" color="2" fill="1" visible="yes" active="yes"/>
-<layer number="18" name="Vias" color="2" fill="1" visible="yes" active="yes"/>
+<layer number="18" name="Vias" color="2" fill="1" visible="no" active="yes"/>
 <layer number="19" name="Unrouted" color="6" fill="1" visible="yes" active="yes"/>
 <layer number="20" name="Dimension" color="14" fill="1" visible="yes" active="yes"/>
 <layer number="21" name="tPlace" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="22" name="bPlace" color="7" fill="1" visible="no" active="yes"/>
+<layer number="22" name="bPlace" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="23" name="tOrigins" color="15" fill="1" visible="yes" active="yes"/>
-<layer number="24" name="bOrigins" color="15" fill="1" visible="no" active="yes"/>
-<layer number="25" name="tNames" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="24" name="bOrigins" color="15" fill="1" visible="yes" active="yes"/>
+<layer number="25" name="tNames" color="7" fill="1" visible="no" active="yes"/>
 <layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
 <layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
@@ -48,19 +48,19 @@
 <layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
 <layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
 <layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
-<layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="yes"/>
+<layer number="40" name="bKeepout" color="1" fill="11" visible="yes" active="yes"/>
 <layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
-<layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
+<layer number="42" name="bRestrict" color="1" fill="10" visible="yes" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="yes" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
 <layer number="45" name="Holes" color="7" fill="1" visible="no" active="yes"/>
 <layer number="46" name="Milling" color="3" fill="1" visible="yes" active="yes"/>
-<layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
-<layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
-<layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
+<layer number="47" name="Measures" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="48" name="Document" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="49" name="Reference" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="50" name="dxf" color="7" fill="1" visible="no" active="no"/>
 <layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
-<layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
+<layer number="52" name="bDocu" color="7" fill="1" visible="yes" active="yes"/>
 <layer number="53" name="tGND_GNDA" color="7" fill="9" visible="no" active="no"/>
 <layer number="54" name="bGND_GNDA" color="1" fill="9" visible="no" active="no"/>
 <layer number="56" name="wert" color="7" fill="1" visible="no" active="no"/>
@@ -172,8 +172,6 @@
 <plain>
 <wire x1="88.25" y1="13" x2="197.25" y2="13" width="0.1" layer="20"/>
 <wire x1="200.25" y1="16" x2="200.25" y2="84" width="0.1" layer="20"/>
-<dimension x1="85.25" y1="8" x2="200.25" y2="8" x3="142.75" y3="-9" textsize="1.778" layer="47" visible="yes"/>
-<dimension x1="80.25" y1="13" x2="80.25" y2="86" x3="73.25" y3="49.5" textsize="1.778" layer="47" visible="yes"/>
 <wire x1="198.25" y1="86" x2="88.25" y2="86" width="0.1" layer="20"/>
 <wire x1="85.25" y1="83" x2="85.25" y2="16" width="0.1" layer="20"/>
 <circle x="154" y="71" radius="1.11803125" width="0.5" layer="21"/>
@@ -185,7 +183,6 @@
 <wire x1="200.25" y1="111" x2="200.25" y2="125" width="0.1" layer="20"/>
 <wire x1="197.25" y1="128" x2="88.25" y2="128" width="0.1" layer="20"/>
 <wire x1="85.25" y1="125" x2="85.25" y2="111" width="0.1" layer="20"/>
-<wire x1="90.5" y1="77.25" x2="109.75" y2="77.25" width="1.27" layer="46"/>
 <wire x1="85.25" y1="83" x2="88.25" y2="86" width="0.1" layer="20" curve="-90"/>
 <wire x1="85.25" y1="16" x2="88.25" y2="13" width="0.1" layer="20" curve="90"/>
 <wire x1="197.25" y1="13" x2="200.25" y2="16" width="0.1" layer="20" curve="90"/>
@@ -255,6 +252,52 @@ ejovrh</text>
 <text x="174" y="65.5" size="1.778" layer="21" font="vector" align="center">RX</text>
 <text x="184.615" y="82.73" size="1.778" layer="21" font="vector" rot="R270" align="center">+</text>
 <text x="182.705" y="82.515" size="1.778" layer="21" font="vector" rot="R180" align="center">-</text>
+<text x="62.23" y="6.35" size="1" layer="21" rot="R90" align="center">UART1</text>
+<text x="60.96" y="25.4" size="1" layer="48" align="center">mosi</text>
+<text x="69.85" y="45.72" size="1" layer="48" align="center">sck</text>
+<text x="60.96" y="35.56" size="1" layer="48" align="center">miso</text>
+<text x="60.96" y="33.02" size="1" layer="48" align="center">mosi</text>
+<text x="8.89" y="5.08" size="1" layer="48" align="center">sck</text>
+<text x="0" y="7.62" size="1" layer="48" align="center">miso</text>
+<text x="0" y="5.08" size="1" layer="48" align="center">mosi</text>
+<text x="8.89" y="12.7" size="1" layer="48" align="center">sck</text>
+<text x="60.96" y="22.86" size="1" layer="48" align="center">sck</text>
+<text x="60.96" y="17.78" size="1" layer="48" align="center">miso</text>
+<text x="60.96" y="15.24" size="1" layer="48" align="center">mosi</text>
+<text x="60.325" y="45.72" size="1" layer="48" align="center">can tx</text>
+<text x="71.12" y="7.62" size="1" layer="48" align="center">can rx</text>
+<text x="60.325" y="48.26" size="1" layer="48" align="center">can tx</text>
+<text x="55.88" y="15.24" size="1" layer="48" align="center">can rx</text>
+<text x="55.88" y="17.78" size="1" layer="48" align="center">can tx</text>
+<text x="60.325" y="30.48" size="1" layer="48" align="center">can tx</text>
+<text x="71.12" y="50.8" size="1" layer="48" align="center">can rx</text>
+<text x="55.88" y="25.4" size="1" layer="48" align="center">can tx</text>
+<text x="59.69" y="27.94" size="1" layer="48" align="center">can rx</text>
+<text x="71.12" y="15.24" size="1" layer="48" align="center">can tx</text>
+<text x="15.875" y="12.7" size="1" layer="48" align="center">lp uart1 rx</text>
+<text x="10.795" y="10.16" size="1" layer="48" align="center">uart2 tx</text>
+<text x="71.755" y="22.86" size="1" layer="48" align="center">uart2 rx</text>
+<text x="55.245" y="22.86" size="1" layer="48" align="center">uart2 tx</text>
+<text x="52.705" y="27.94" size="1" layer="48" align="center">uart2 tx</text>
+<text x="48.895" y="25.4" size="1" layer="48" align="center">uart2 rx</text>
+<text x="57.785" y="10.16" size="1" layer="48" align="center">lp uart1 rx</text>
+<text x="48.895" y="15.24" size="1" layer="48" align="center">uart2 rx</text>
+<text x="52.705" y="48.26" size="1" layer="48" align="center">lp uart1 tx</text>
+<text x="52.705" y="45.72" size="1" layer="48" align="center">lp uart1 rx</text>
+<text x="9.525" y="17.78" size="1" layer="48" align="center">miso</text>
+<text x="16.51" y="17.78" size="1" layer="48" align="center">lptim1 in2</text>
+<text x="16.51" y="15.24" size="1" layer="48" align="center">lptim1 in1</text>
+<text x="25.4" y="12.7" size="1" layer="48" align="center">lptim1 in2</text>
+<text x="33.655" y="12.7" size="1" layer="48" align="center">uart2 tx</text>
+<text x="19.05" y="10.16" size="1" layer="48" align="center">lptim1 in1</text>
+<text x="80.645" y="22.86" size="1" layer="48" align="center">lptim1 in2</text>
+<text x="40.64" y="15.24" size="1" layer="48" align="center">lptim1 in1</text>
+<text x="11.43" y="7.62" size="1" layer="48" align="center">lptim2 in1</text>
+<text x="48.26" y="10.16" size="1" layer="48" align="center">lptim2 in2</text>
+<text x="58.42" y="20.32" size="1" layer="48" align="center">lptim2 in1</text>
+<text x="46.99" y="22.86" size="1" layer="48" align="center">lptim2 in1</text>
+<text x="12.7" y="73.66" size="1.5" layer="29" font="vector" ratio="12" align="center">misko POC
+ejovrh rev.3</text>
 </plain>
 <libraries>
 <library name="resistor" urn="urn:adsk.eagle:library:348">
@@ -8806,7 +8849,7 @@ design rules under a new name.</description>
 <signal name="PA7" class="2">
 <contactref element="MISKO" pad="CN10_15"/>
 </signal>
-<signal name="PA9" class="2">
+<signal name="PA10" class="2">
 <contactref element="MISKO" pad="CN10_33"/>
 </signal>
 <signal name="PA8" class="2">

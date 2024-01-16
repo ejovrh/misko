@@ -7,7 +7,7 @@
 <setting keepoldvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="dots" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -35204,6 +35204,55 @@ You are welcome to use this library for commercial purposes. For attribution, we
 </deviceset>
 </devicesets>
 </library>
+<library name="frames" urn="urn:adsk.eagle:library:229">
+<description>&lt;b&gt;Frames for Sheet and Layout&lt;/b&gt;</description>
+<packages>
+</packages>
+<symbols>
+<symbol name="A3L-LOC" urn="urn:adsk.eagle:symbol:13881/1" library_version="1">
+<wire x1="288.29" y1="3.81" x2="342.265" y2="3.81" width="0.1016" layer="94"/>
+<wire x1="342.265" y1="3.81" x2="373.38" y2="3.81" width="0.1016" layer="94"/>
+<wire x1="373.38" y1="3.81" x2="383.54" y2="3.81" width="0.1016" layer="94"/>
+<wire x1="383.54" y1="3.81" x2="383.54" y2="8.89" width="0.1016" layer="94"/>
+<wire x1="383.54" y1="8.89" x2="383.54" y2="13.97" width="0.1016" layer="94"/>
+<wire x1="383.54" y1="13.97" x2="383.54" y2="19.05" width="0.1016" layer="94"/>
+<wire x1="383.54" y1="19.05" x2="383.54" y2="24.13" width="0.1016" layer="94"/>
+<wire x1="288.29" y1="3.81" x2="288.29" y2="24.13" width="0.1016" layer="94"/>
+<wire x1="288.29" y1="24.13" x2="342.265" y2="24.13" width="0.1016" layer="94"/>
+<wire x1="342.265" y1="24.13" x2="383.54" y2="24.13" width="0.1016" layer="94"/>
+<wire x1="373.38" y1="3.81" x2="373.38" y2="8.89" width="0.1016" layer="94"/>
+<wire x1="373.38" y1="8.89" x2="383.54" y2="8.89" width="0.1016" layer="94"/>
+<wire x1="373.38" y1="8.89" x2="342.265" y2="8.89" width="0.1016" layer="94"/>
+<wire x1="342.265" y1="8.89" x2="342.265" y2="3.81" width="0.1016" layer="94"/>
+<wire x1="342.265" y1="8.89" x2="342.265" y2="13.97" width="0.1016" layer="94"/>
+<wire x1="342.265" y1="13.97" x2="383.54" y2="13.97" width="0.1016" layer="94"/>
+<wire x1="342.265" y1="13.97" x2="342.265" y2="19.05" width="0.1016" layer="94"/>
+<wire x1="342.265" y1="19.05" x2="383.54" y2="19.05" width="0.1016" layer="94"/>
+<wire x1="342.265" y1="19.05" x2="342.265" y2="24.13" width="0.1016" layer="94"/>
+<text x="344.17" y="15.24" size="2.54" layer="94">&gt;DRAWING_NAME</text>
+<text x="344.17" y="10.16" size="2.286" layer="94">&gt;LAST_DATE_TIME</text>
+<text x="357.505" y="5.08" size="2.54" layer="94">&gt;SHEET</text>
+<text x="343.916" y="4.953" size="2.54" layer="94">Sheet:</text>
+<frame x1="0" y1="0" x2="387.35" y2="260.35" columns="8" rows="5" layer="94"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="A3L-LOC" urn="urn:adsk.eagle:component:13942/1" prefix="FRAME" uservalue="yes" library_version="1">
+<description>&lt;b&gt;FRAME&lt;/b&gt;&lt;p&gt;
+DIN A3, landscape with location and doc. field</description>
+<gates>
+<gate name="G$1" symbol="A3L-LOC" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
@@ -35390,6 +35439,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="SUPPLY4" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY5" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY6" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
+<part name="MISKO-POC" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A3L-LOC" device="" value="misko POC, rev.3"/>
 </parts>
 <sheets>
 <sheet>
@@ -35421,6 +35471,8 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <text x="251.46" y="393.7" size="1.778" layer="97">Debouncer</text>
 <text x="243.84" y="266.7" size="1.778" layer="97">USB connetor</text>
 <text x="124.46" y="93.98" size="1.778" layer="97">VGPS Voltage Supervisor</text>
+<text x="-429.26" y="662.94" size="1.778" layer="97">misko POC
+ejovrh rev.3</text>
 </plain>
 <instances>
 <instance part="IC1" gate="A" x="111.76" y="772.16" smashed="yes">
@@ -36065,6 +36117,11 @@ You are welcome to use this library for commercial purposes. For attribution, we
 </instance>
 <instance part="SUPPLY6" gate="G$1" x="-426.72" y="622.3" smashed="yes" rot="R90">
 <attribute name="VALUE" x="-424.18" y="622.3" size="1.778" layer="96" align="center-left"/>
+</instance>
+<instance part="MISKO-POC" gate="G$1" x="-513.08" y="480.06" smashed="yes">
+<attribute name="DRAWING_NAME" x="-168.91" y="495.3" size="2.54" layer="94"/>
+<attribute name="LAST_DATE_TIME" x="-168.91" y="490.22" size="2.286" layer="94"/>
+<attribute name="SHEET" x="-155.575" y="485.14" size="2.54" layer="94"/>
 </instance>
 </instances>
 <busses>
@@ -38871,7 +38928,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="-487.68" y="574.04" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="PA9" class="2">
+<net name="PA10" class="2">
 <segment>
 <wire x1="-474.98" y1="568.96" x2="-487.68" y2="568.96" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PA10"/>
@@ -38991,7 +39048,6 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <approved hash="101,1,53.34,-276.86,IC18-25,1,,,,"/>
 <approved hash="104,1,68.58,820.42,IC1,VCC_2,VCC,,,"/>
 <approved hash="104,1,78.74,226.06,IC7,VCCIO,N$10,,,"/>
-<approved hash="104,1,109.22,220.98,IC7,VCC,5V0,,,"/>
 <approved hash="104,1,182.88,589.28,IC3,+VS,VCC,,,"/>
 <approved hash="104,1,314.96,63.5,IC12,GND1,GND,,,"/>
 <approved hash="104,1,294.64,35.56,IC12,GND2,GND,,,"/>
@@ -39023,6 +39079,10 @@ You are welcome to use this library for commercial purposes. For attribution, we
 </schematic>
 </drawing>
 <compatibility>
+<note version="6.3" minversion="6.2.2" severity="warning">
+Since Version 6.2.2 text objects can contain more than one line,
+which will not be processed correctly with this version.
+</note>
 <note version="8.2" severity="warning">
 Since Version 8.2, EAGLE supports online libraries. The ids
 of those online libraries will not be understood (or retained)
