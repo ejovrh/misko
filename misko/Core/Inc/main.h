@@ -70,6 +70,8 @@ void Error_Handler(void);
 #define UART1_TX_GPIO_Port GPIOB
 #define UART1_RX_Pin GPIO_PIN_15
 #define UART1_RX_GPIO_Port GPIOB
+#define Debug_Out_Pin GPIO_PIN_8
+#define Debug_Out_GPIO_Port GPIOC
 #define USB_FS_VBUS_Pin GPIO_PIN_9
 #define USB_FS_VBUS_GPIO_Port GPIOA
 #define USB_FS_DN_Pin GPIO_PIN_11
