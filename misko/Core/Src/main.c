@@ -49,7 +49,7 @@ DMA_HandleTypeDef handle_GPDMA1_Channel0;
 PCD_HandleTypeDef hpcd_USB_DRD_FS;
 
 /* USER CODE BEGIN PV */
-uint8_t aTxBuffer[] = "\r\nnucleo-h503rb start\r\n";
+uint8_t aTxBuffer[] = "\rnucleo-h503rb start\r\n";
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
