@@ -52,7 +52,7 @@
 /*#define HAL_DCMI_MODULE_ENABLED */
 /*#define HAL_DTS_MODULE_ENABLED */
 /*#define HAL_ETH_MODULE_ENABLED */
-/*#define HAL_FDCAN_MODULE_ENABLED */
+#define HAL_FDCAN_MODULE_ENABLED
 /*#define HAL_FMAC_MODULE_ENABLED */
 /*#define HAL_GTZC_MODULE_ENABLED */
 /*#define HAL_HASH_MODULE_ENABLED */
@@ -77,7 +77,7 @@
 /*#define HAL_MMC_MODULE_ENABLED */
 /*#define HAL_SMARTCARD_MODULE_ENABLED */
 /*#define HAL_SMBUS_MODULE_ENABLED */
-/*#define HAL_SPI_MODULE_ENABLED */
+#define HAL_SPI_MODULE_ENABLED
 /*#define HAL_SRAM_MODULE_ENABLED */
 #define HAL_TIM_MODULE_ENABLED
 /*#define HAL_RAMCFG_MODULE_ENABLED */
@@ -394,7 +394,7 @@
 #endif /* HAL_SMBUS_MODULE_ENABLED */
 
 #ifdef HAL_SPI_MODULE_ENABLED
- #include "stm32h5xx_hal_spi.h"
+#include "stm32h5xx_hal_spi.h"
 #endif /* HAL_SPI_MODULE_ENABLED */
 
 #ifdef HAL_TIM_MODULE_ENABLED
@@ -450,7 +450,7 @@
 #endif /* HAL_ETH_MODULE_ENABLED */
 
 #ifdef HAL_FDCAN_MODULE_ENABLED
- #include "stm32h5xx_hal_fdcan.h"
+#include "stm32h5xx_hal_fdcan.h"
 #endif /* HAL_FDCAN_MODULE_ENABLED */
 
 #ifdef HAL_CEC_MODULE_ENABLED

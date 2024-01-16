@@ -55,11 +55,14 @@
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern FDCAN_HandleTypeDef hfdcan1;
+extern SPI_HandleTypeDef hspi1;
 extern TIM_HandleTypeDef htim1;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel3;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel2;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel1;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel0;
+extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart3;
 /* USER CODE BEGIN EV */
 
@@ -209,7 +212,7 @@ void SysTick_Handler(void)
 void EXTI13_IRQHandler(void)
 {
 	/* USER CODE BEGIN EXTI13_IRQn 0 */
-	HAL_GPIO_TogglePin(USER_LED_GPIO_Port, USER_LED_Pin);
+	HAL_GPIO_TogglePin(User_LED_GPIO_Port, User_LED_Pin);
 	/* USER CODE END EXTI13_IRQn 0 */
 	HAL_GPIO_EXTI_IRQHandler(Blue_User_Button_Pin);
 	/* USER CODE BEGIN EXTI13_IRQn 1 */
@@ -274,6 +277,34 @@ void GPDMA1_Channel3_IRQHandler(void)
 }
 
 /**
+ * @brief This function handles FDCAN1 interrupt 0.
+ */
+void FDCAN1_IT0_IRQHandler(void)
+{
+	/* USER CODE BEGIN FDCAN1_IT0_IRQn 0 */
+
+	/* USER CODE END FDCAN1_IT0_IRQn 0 */
+	HAL_FDCAN_IRQHandler(&hfdcan1);
+	/* USER CODE BEGIN FDCAN1_IT0_IRQn 1 */
+
+	/* USER CODE END FDCAN1_IT0_IRQn 1 */
+}
+
+/**
+ * @brief This function handles FDCAN1 interrupt 1.
+ */
+void FDCAN1_IT1_IRQHandler(void)
+{
+	/* USER CODE BEGIN FDCAN1_IT1_IRQn 0 */
+
+	/* USER CODE END FDCAN1_IT1_IRQn 0 */
+	HAL_FDCAN_IRQHandler(&hfdcan1);
+	/* USER CODE BEGIN FDCAN1_IT1_IRQn 1 */
+
+	/* USER CODE END FDCAN1_IT1_IRQn 1 */
+}
+
+/**
  * @brief This function handles TIM1 Capture Compare interrupt.
  */
 void TIM1_CC_IRQHandler(void)
@@ -285,6 +316,34 @@ void TIM1_CC_IRQHandler(void)
 	/* USER CODE BEGIN TIM1_CC_IRQn 1 */
 
 	/* USER CODE END TIM1_CC_IRQn 1 */
+}
+
+/**
+ * @brief This function handles SPI1 global interrupt.
+ */
+void SPI1_IRQHandler(void)
+{
+	/* USER CODE BEGIN SPI1_IRQn 0 */
+
+	/* USER CODE END SPI1_IRQn 0 */
+	HAL_SPI_IRQHandler(&hspi1);
+	/* USER CODE BEGIN SPI1_IRQn 1 */
+
+	/* USER CODE END SPI1_IRQn 1 */
+}
+
+/**
+ * @brief This function handles USART1 global interrupt.
+ */
+void USART1_IRQHandler(void)
+{
+	/* USER CODE BEGIN USART1_IRQn 0 */
+
+	/* USER CODE END USART1_IRQn 0 */
+	HAL_UART_IRQHandler(&huart1);
+	/* USER CODE BEGIN USART1_IRQn 1 */
+
+	/* USER CODE END USART1_IRQn 1 */
 }
 
 /**
