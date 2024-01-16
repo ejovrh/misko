@@ -7,7 +7,7 @@
 <setting keepoldvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="0.1" unitdist="inch" unit="inch" style="lines" multiple="1" display="no" altdistance="0.01" altunitdist="inch" altunit="inch"/>
+<grid distance="0.1" unitdist="inch" unit="inch" style="dots" multiple="1" display="yes" altdistance="0.01" altunitdist="inch" altunit="inch"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="no" active="no"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -35151,29 +35151,78 @@ You are welcome to use this library for commercial purposes. For attribution, we
 </deviceset>
 </devicesets>
 </library>
+<library name="Power_Symbols" urn="urn:adsk.eagle:library:16502351">
+<description>&lt;B&gt;Supply &amp; Ground symbols</description>
+<packages>
+</packages>
+<symbols>
+<symbol name="3V3-CIRCLE" urn="urn:adsk.eagle:symbol:18498229/2" library_version="9">
+<description>3.3 Volt (3V3) Circle</description>
+<circle x="0" y="1.27" radius="1.27" width="0.254" layer="94"/>
+<text x="-0.127" y="3.175" size="1.778" layer="96" align="bottom-center">&gt;VALUE</text>
+<pin name="3V3" x="0" y="-2.54" visible="off" length="short" direction="sup" rot="R90"/>
+</symbol>
+<symbol name="GND-BAR" urn="urn:adsk.eagle:symbol:16502372/2" library_version="9">
+<description>Ground (GND) Bar</description>
+<wire x1="-1.905" y1="0" x2="1.905" y2="0" width="0.254" layer="94"/>
+<text x="0" y="-1.905" size="1.778" layer="96" align="center">&gt;VALUE</text>
+<pin name="GND" x="0" y="2.54" visible="off" length="short" direction="sup" rot="R270"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="3V3-CIRCLE" urn="urn:adsk.eagle:component:16502438/6" prefix="SUPPLY" library_version="9">
+<description>&lt;b&gt;SUPPLY SYMBOL&lt;/b&gt;  3.3 Volt (3V3) Circle</description>
+<gates>
+<gate name="G$1" symbol="3V3-CIRCLE" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name="">
+<attribute name="CATEGORY" value="Supply" constant="no"/>
+<attribute name="VALUE" value="3V3" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+<deviceset name="GND-BAR" urn="urn:adsk.eagle:component:16502419/4" prefix="SUPPLY" library_version="9">
+<description>&lt;b&gt;SUPPLY SYMBOL&lt;/b&gt; - Ground (GND) Bar</description>
+<gates>
+<gate name="G$1" symbol="GND-BAR" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name="">
+<attribute name="CATEGORY" value="Supply" constant="no"/>
+<attribute name="VALUE" value="GND" constant="no"/>
+</technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
 </libraries>
 <attributes>
 </attributes>
 <variantdefs>
 </variantdefs>
 <classes>
-<class number="0" name="GND" width="0.4" drill="0.25">
+<class number="0" name="GND" width="0.25" drill="0.35">
 <clearance class="0" value="0.1"/>
 </class>
-<class number="1" name="VCC" width="0.6" drill="0.25">
-<clearance class="0" value="0.1"/>
-<clearance class="1" value="0.1"/>
-</class>
-<class number="2" name="signal" width="0.25" drill="0.25">
+<class number="1" name="3V3" width="0.25" drill="0.35">
 <clearance class="0" value="0.1"/>
 <clearance class="1" value="0.1"/>
-<clearance class="2" value="0.1"/>
 </class>
-<class number="3" name="signal cross-board" width="0.25" drill="0.25">
+<class number="2" name="signal" width="0.25" drill="0.35">
 <clearance class="0" value="0.1"/>
 <clearance class="1" value="0.1"/>
 <clearance class="2" value="0.1"/>
-<clearance class="3" value="0.1"/>
+</class>
+<class number="3" name="5V0" width="0" drill="0">
 </class>
 </classes>
 <modules>
@@ -35337,6 +35386,10 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <part name="IC23" library="SP3012 TVS Diode Array" deviceset="SP3012-04UTG" device="" value="SP3012-04UTG"/>
 <part name="F1" library="SparkFun-Fuses" library_urn="urn:adsk.eagle:library:517" deviceset="PPTC" device="_THREE-QUARTER-AMP" package3d_urn="urn:adsk.eagle:package:38575/1" value="PTS120615V050 "/>
 <part name="MISKO" library="NUCLEO-H503RB-B02" deviceset="NUCLEO-H503RB-B02" device="" value="misko"/>
+<part name="SUPPLY1" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="SUPPLY4" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
+<part name="SUPPLY5" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
+<part name="SUPPLY6" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 </parts>
 <sheets>
 <sheet>
@@ -36001,6 +36054,18 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <attribute name="NAME" x="-469.9" y="590.55" size="1.778" layer="95"/>
 <attribute name="VALUE" x="-469.9" y="509.27" size="1.778" layer="96" rot="MR180"/>
 </instance>
+<instance part="SUPPLY1" gate="G$1" x="-426.72" y="680.72" smashed="yes" rot="R270">
+<attribute name="VALUE" x="-421.64" y="680.72" size="1.778" layer="96" align="center-left"/>
+</instance>
+<instance part="SUPPLY4" gate="G$1" x="-429.26" y="515.62" smashed="yes" rot="R90">
+<attribute name="VALUE" x="-426.72" y="515.62" size="1.778" layer="96" align="center-left"/>
+</instance>
+<instance part="SUPPLY5" gate="G$1" x="-429.26" y="518.16" smashed="yes" rot="R90">
+<attribute name="VALUE" x="-426.72" y="518.16" size="1.778" layer="96" align="center-left"/>
+</instance>
+<instance part="SUPPLY6" gate="G$1" x="-426.72" y="622.3" smashed="yes" rot="R90">
+<attribute name="VALUE" x="-424.18" y="622.3" size="1.778" layer="96" align="center-left"/>
+</instance>
 </instances>
 <busses>
 <bus name="B$1">
@@ -36107,7 +36172,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 </bus>
 </busses>
 <nets>
-<net name="VCC" class="1">
+<net name="VCC" class="0">
 <segment>
 <pinref part="IC8" gate="A" pin="VCC"/>
 <wire x1="60.96" y1="144.78" x2="33.02" y2="144.78" width="0.1524" layer="91"/>
@@ -36928,8 +36993,23 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="149.86" y1="71.12" x2="149.86" y2="76.2" width="0.1524" layer="91"/>
 <label x="149.86" y="76.2" size="1.778" layer="95"/>
 </segment>
+<segment>
+<wire x1="-439.42" y1="515.62" x2="-431.8" y2="515.62" width="0.1524" layer="91"/>
+<pinref part="MISKO" gate="CN10" pin="GND"/>
+<pinref part="SUPPLY4" gate="G$1" pin="GND"/>
+</segment>
+<segment>
+<wire x1="-439.42" y1="518.16" x2="-431.8" y2="518.16" width="0.1524" layer="91"/>
+<pinref part="MISKO" gate="CN10" pin="AGND"/>
+<pinref part="SUPPLY5" gate="G$1" pin="GND"/>
+</segment>
+<segment>
+<wire x1="-436.88" y1="622.3" x2="-429.26" y2="622.3" width="0.1524" layer="91"/>
+<pinref part="MISKO" gate="CN7" pin="GND"/>
+<pinref part="SUPPLY6" gate="G$1" pin="GND"/>
+</segment>
 </net>
-<net name="5V0" class="1">
+<net name="OLD_5V0" class="3">
 <segment>
 <pinref part="IC7" gate="G$1" pin="VCC"/>
 <wire x1="109.22" y1="220.98" x2="114.3" y2="220.98" width="0.1524" layer="91"/>
@@ -36937,7 +37017,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 </segment>
 <segment>
 <wire x1="190.5" y1="528.32" x2="193.04" y2="528.32" width="0.1524" layer="91"/>
-<label x="182.88" y="528.32" size="1.778" layer="95"/>
+<label x="182.88" y="528.32" size="1.778" layer="95" rot="R180"/>
 <wire x1="193.04" y1="525.78" x2="190.5" y2="525.78" width="0.1524" layer="91"/>
 <wire x1="190.5" y1="525.78" x2="190.5" y2="528.32" width="0.1524" layer="91"/>
 <junction x="190.5" y="528.32"/>
@@ -37044,7 +37124,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="162.56" y="782.32" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="GPS_RED_LED_PIN" class="3">
+<net name="GPS_RED_LED_PIN" class="2">
 <segment>
 <pinref part="R18" gate="G$1" pin="1"/>
 <wire x1="154.94" y1="647.7" x2="129.54" y2="647.7" width="0.1524" layer="91"/>
@@ -37056,7 +37136,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="162.56" y="795.02" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="GPS_GREEN_LED_PIN" class="3">
+<net name="GPS_GREEN_LED_PIN" class="2">
 <segment>
 <pinref part="R17" gate="G$1" pin="1"/>
 <wire x1="154.94" y1="657.86" x2="129.54" y2="657.86" width="0.1524" layer="91"/>
@@ -37119,7 +37199,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="162.56" y="800.1" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="JTAG_TDI_PIN" class="3">
+<net name="JTAG_TDI_PIN" class="2">
 <segment>
 <pinref part="IC1" gate="A" pin="PF7_(ADC7/TDI)"/>
 <wire x1="68.58" y1="756.92" x2="33.02" y2="756.92" width="0.1524" layer="91"/>
@@ -37131,7 +37211,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <pinref part="CONN1" gate="G$1" pin="TDI"/>
 </segment>
 </net>
-<net name="JTAG_TDO_PIN" class="3">
+<net name="JTAG_TDO_PIN" class="2">
 <segment>
 <pinref part="IC1" gate="A" pin="PF6_(ADC6/TDO)"/>
 <wire x1="68.58" y1="759.46" x2="33.02" y2="759.46" width="0.1524" layer="91"/>
@@ -37143,7 +37223,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <pinref part="CONN1" gate="G$1" pin="TDO"/>
 </segment>
 </net>
-<net name="JTAG_TMS_PIN" class="3">
+<net name="JTAG_TMS_PIN" class="2">
 <segment>
 <pinref part="IC1" gate="A" pin="PF5_(ADC5/TMS)"/>
 <wire x1="68.58" y1="762" x2="33.02" y2="762" width="0.1524" layer="91"/>
@@ -37155,7 +37235,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <pinref part="CONN1" gate="G$1" pin="TMS"/>
 </segment>
 </net>
-<net name="JTAG_TCL_PIN" class="3">
+<net name="JTAG_TCL_PIN" class="2">
 <segment>
 <pinref part="IC1" gate="A" pin="PF4_(ADC4/TCK)"/>
 <wire x1="68.58" y1="764.54" x2="33.02" y2="764.54" width="0.1524" layer="91"/>
@@ -37241,7 +37321,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="33.02" y="789.94" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="SPI_SS_OLED_PIN" class="3">
+<net name="SPI_SS_OLED_PIN" class="2">
 <segment>
 <pinref part="IC1" gate="A" pin="(TOSC1)_PG4"/>
 <wire x1="154.94" y1="812.8" x2="162.56" y2="812.8" width="0.1524" layer="91"/>
@@ -37253,7 +37333,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="25.4" y="-246.38" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="SPI_OLED_D/C_PIN" class="3">
+<net name="SPI_OLED_D/C_PIN" class="2">
 <segment>
 <pinref part="IC1" gate="A" pin="(OC0A/OC1C/PCINT7)_PB7"/>
 <wire x1="154.94" y1="716.28" x2="162.56" y2="716.28" width="0.1524" layer="91"/>
@@ -37265,7 +37345,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="25.4" y="-251.46" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="SPI_OLED_RESET_PIN" class="3">
+<net name="SPI_OLED_RESET_PIN" class="2">
 <segment>
 <pinref part="IC1" gate="A" pin="(TOSC2)_PG3"/>
 <wire x1="154.94" y1="815.34" x2="162.56" y2="815.34" width="0.1524" layer="91"/>
@@ -37294,7 +37374,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="162.56" y="718.82" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="PDI_UART0_TX_PIN" class="3">
+<net name="PDI_UART0_TX_PIN" class="2">
 <segment>
 <pinref part="IC1" gate="A" pin="(TXD0/PDO)_PE1"/>
 <wire x1="68.58" y1="795.02" x2="33.02" y2="795.02" width="0.1524" layer="91"/>
@@ -37306,7 +37386,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="17.78" y="223.52" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="PDI_UART0_RX_PIN" class="3">
+<net name="PDI_UART0_RX_PIN" class="2">
 <segment>
 <pinref part="IC1" gate="A" pin="(RXD0/PCINT8/PDI)_PE0"/>
 <wire x1="68.58" y1="797.56" x2="33.02" y2="797.56" width="0.1524" layer="91"/>
@@ -37339,7 +37419,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="162.56" y="789.94" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="PDI_UART0_CTS_PIN" class="3">
+<net name="PDI_UART0_CTS_PIN" class="2">
 <segment>
 <pinref part="IC1" gate="A" pin="(OC0B)_PG5"/>
 <wire x1="154.94" y1="810.26" x2="162.56" y2="810.26" width="0.1524" layer="91"/>
@@ -37351,7 +37431,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="17.78" y="218.44" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="GPS_WAKEUP_PIN" class="3">
+<net name="GPS_WAKEUP_PIN" class="2">
 <segment>
 <wire x1="73.66" y1="40.64" x2="88.9" y2="40.64" width="0.1524" layer="91"/>
 <label x="88.9" y="40.64" size="1.778" layer="95"/>
@@ -37363,7 +37443,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="162.56" y="792.48" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="ANALOG_SW_CTRL_PIN" class="3">
+<net name="ANALOG_SW_CTRL_PIN" class="2">
 <segment>
 <pinref part="IC9" gate="A" pin="S"/>
 <wire x1="210.82" y1="137.16" x2="182.88" y2="137.16" width="0.1524" layer="91"/>
@@ -37385,7 +37465,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="162.56" y="787.4" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="SPI_MOSI_PIN" class="3">
+<net name="SPI_MOSI_PIN" class="2">
 <segment>
 <pinref part="IC1" gate="A" pin="(MOSI/PCINT2)_PB2"/>
 <wire x1="154.94" y1="728.98" x2="162.56" y2="728.98" width="0.1524" layer="91"/>
@@ -37444,7 +37524,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="309.88" y="-254" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="GPS_SW_SERIAL_RX" class="3">
+<net name="GPS_SW_SERIAL_RX" class="2">
 <segment>
 <pinref part="IC1" gate="A" pin="(OC2A/_PCINT4)_PB4"/>
 <wire x1="154.94" y1="723.9" x2="162.56" y2="723.9" width="0.1524" layer="91"/>
@@ -37461,7 +37541,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="33.02" y="134.62" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="GPS_SW_SERIAL_TX" class="3">
+<net name="GPS_SW_SERIAL_TX" class="2">
 <segment>
 <pinref part="IC1" gate="A" pin="(OC1A/PCINT5)_PB5"/>
 <wire x1="154.94" y1="721.36" x2="162.56" y2="721.36" width="0.1524" layer="91"/>
@@ -37494,7 +37574,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="33.02" y="792.48" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="BLUETOOTH_WAKEUP_PIN" class="3">
+<net name="BLUETOOTH_WAKEUP_PIN" class="2">
 <segment>
 <pinref part="IC13" gate="G$1" pin="WAKEUP"/>
 <wire x1="134.62" y1="-35.56" x2="165.1" y2="-35.56" width="0.1524" layer="91"/>
@@ -37511,7 +37591,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="162.56" y="764.54" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="SPI_SCK_PIN" class="3">
+<net name="SPI_SCK_PIN" class="2">
 <segment>
 <pinref part="IC1" gate="A" pin="(SCK/PCINT1)_PB1"/>
 <wire x1="154.94" y1="734.06" x2="162.56" y2="734.06" width="0.1524" layer="91"/>
@@ -37559,7 +37639,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="162.56" y="736.6" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="GPS_TX" class="3">
+<net name="GPS_TX" class="2">
 <segment>
 <label x="-2.54" y="50.8" size="1.778" layer="95"/>
 <wire x1="43.18" y1="50.8" x2="7.62" y2="50.8" width="0.1524" layer="91"/>
@@ -37586,7 +37666,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="165.1" y="-50.8" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="TXD" class="3">
+<net name="TXD" class="2">
 <segment>
 <pinref part="IC7" gate="G$1" pin="TXD"/>
 <pinref part="R4" gate="G$1" pin="2"/>
@@ -37762,7 +37842,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <junction x="40.64" y="586.74"/>
 </segment>
 </net>
-<net name="RESET" class="3">
+<net name="RESET" class="2">
 <segment>
 <pinref part="IC1" gate="A" pin="~RESET"/>
 <wire x1="68.58" y1="805.18" x2="33.02" y2="805.18" width="0.1524" layer="91"/>
@@ -37819,7 +37899,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <junction x="114.3" y="641.35"/>
 </segment>
 </net>
-<net name="AVCC" class="2">
+<net name="AVCC" class="0">
 <segment>
 <pinref part="IC1" gate="A" pin="AVCC"/>
 <wire x1="68.58" y1="822.96" x2="33.02" y2="822.96" width="0.1524" layer="91"/>
@@ -37838,7 +37918,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="337.82" y="637.54" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="EN" class="3">
+<net name="EN" class="2">
 <segment>
 <pinref part="SW2" gate="G$1" pin="1"/>
 <wire x1="45.72" y1="467.36" x2="50.8" y2="467.36" width="0.1524" layer="91"/>
@@ -37853,7 +37933,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <junction x="48.26" y="495.3"/>
 </segment>
 </net>
-<net name="BUTTON_BLUETOOTH" class="3">
+<net name="BUTTON_BLUETOOTH" class="2">
 <segment>
 <label x="180.254" y="398.736" size="1.778" layer="95"/>
 <wire x1="162.56" y1="398.78" x2="180.34" y2="398.78" width="0.1524" layer="91"/>
@@ -37877,7 +37957,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="241.3" y="358.14" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="V_LIION+" class="1">
+<net name="V_LIION+" class="2">
 <segment>
 <wire x1="238.76" y1="523.24" x2="241.3" y2="523.24" width="0.1524" layer="91"/>
 <wire x1="241.3" y1="523.24" x2="241.3" y2="520.7" width="0.1524" layer="91"/>
@@ -37902,7 +37982,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="307.34" y="513.08" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="VGPS" class="1">
+<net name="VGPS" class="0">
 <segment>
 <label x="16.51" y="45.72" size="1.778" layer="95"/>
 <pinref part="C2" gate="G$1" pin="1"/>
@@ -38007,7 +38087,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="71.12" y1="-127" x2="93.98" y2="-127" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="GREEN_LED" class="3">
+<net name="GREEN_LED" class="2">
 <segment>
 <pinref part="R17" gate="G$1" pin="2"/>
 <pinref part="LED3" gate="G$1" pin="C"/>
@@ -38015,7 +38095,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="165.1" y="662.94" size="1.778" layer="95" ratio="9"/>
 </segment>
 </net>
-<net name="RED_LED" class="3">
+<net name="RED_LED" class="2">
 <segment>
 <pinref part="LED4" gate="G$1" pin="C"/>
 <pinref part="R18" gate="G$1" pin="2"/>
@@ -38032,7 +38112,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <pinref part="D1" gate="G$1" pin="A"/>
 </segment>
 </net>
-<net name="VUSB" class="1">
+<net name="VUSB" class="3">
 <segment>
 <pinref part="R14" gate="G$1" pin="1"/>
 <wire x1="137.16" y1="629.92" x2="129.54" y2="629.92" width="0.1524" layer="91"/>
@@ -38067,7 +38147,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="114.3" y="226.06" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="RXD" class="3">
+<net name="RXD" class="2">
 <segment>
 <pinref part="R5" gate="G$1" pin="2"/>
 <pinref part="IC7" gate="G$1" pin="RXD"/>
@@ -38075,7 +38155,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="62.23" y="223.52" size="1.778" layer="95" ratio="9"/>
 </segment>
 </net>
-<net name="GPS_ON_OFF" class="3">
+<net name="GPS_ON_OFF" class="2">
 <segment>
 <wire x1="17.78" y1="60.96" x2="43.18" y2="60.96" width="0.1524" layer="91"/>
 <label x="17.78" y="60.96" size="1.778" layer="95"/>
@@ -38097,7 +38177,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="147.32" y1="619.76" x2="152.4" y2="619.76" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="V_LIION_REGULATED" class="1">
+<net name="V_LIION_REGULATED" class="2">
 <segment>
 <pinref part="C23" gate="G$1" pin="1"/>
 <wire x1="246.38" y1="528.32" x2="246.38" y2="530.86" width="0.1524" layer="91"/>
@@ -38266,7 +38346,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="162.56" y="777.24" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="BUTTON_GPRS" class="3">
+<net name="BUTTON_GPRS" class="2">
 <segment>
 <label x="170.18" y="340.36" size="1.778" layer="95" ratio="9"/>
 <wire x1="170.18" y1="340.36" x2="152.4" y2="340.36" width="0.1524" layer="91"/>
@@ -38278,7 +38358,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="241.3" y="345.44" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="SPI_SS_RTC_PIN" class="3">
+<net name="SPI_SS_RTC_PIN" class="2">
 <segment>
 <pinref part="IC19" gate="G$1" pin="!CS!"/>
 <pinref part="R32" gate="G$1" pin="2"/>
@@ -38293,7 +38373,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <label x="33.02" y="784.86" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="RTC_INT_INTERRUPT_PIN" class="3">
+<net name="RTC_INT_INTERRUPT_PIN" class="2">
 <segment>
 <pinref part="IC19" gate="G$1" pin="!INT!"/>
 <wire x1="292.1" y1="-248.92" x2="309.88" y2="-248.92" width="0.1524" layer="91"/>
@@ -38326,7 +38406,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="251.46" y1="-246.38" x2="251.46" y2="-231.14" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="GPRS_NETLIGHT" class="3">
+<net name="GPRS_NETLIGHT" class="2">
 <segment>
 <label x="160.02" y="314.96" size="1.778" layer="95"/>
 <pinref part="R27" gate="G$1" pin="1"/>
@@ -38336,7 +38416,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="182.88" y1="314.96" x2="185.42" y2="314.96" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="N$6" class="0">
+<net name="N$6" class="2">
 <segment>
 <wire x1="271.78" y1="474.98" x2="284.48" y2="474.98" width="0.1524" layer="91"/>
 <pinref part="C27" gate="G$1" pin="+"/>
@@ -38449,7 +38529,7 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="152.4" y1="327.66" x2="208.28" y2="327.66" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="LDO33_O" class="1">
+<net name="LDO33_O" class="2">
 <segment>
 <pinref part="SW4" gate="G$1" pin="L1"/>
 <wire x1="144.78" y1="386.08" x2="127" y2="386.08" width="0.1524" layer="91"/>
@@ -38464,14 +38544,14 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <wire x1="147.32" y1="-17.78" x2="147.32" y2="-25.4" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="USB_ID" class="0">
+<net name="USB_ID" class="2">
 <segment>
 <pinref part="IC23" gate="G$1" pin="6"/>
 <wire x1="327.66" y1="213.36" x2="335.28" y2="213.36" width="0.1524" layer="91"/>
 <label x="335.28" y="213.36" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="ID" class="0">
+<net name="ID" class="2">
 <segment>
 <pinref part="IC23" gate="G$1" pin="5"/>
 <label x="274.32" y="213.36" size="1.778" layer="95"/>
@@ -38497,367 +38577,403 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <pinref part="IC23" gate="G$1" pin="4"/>
 </segment>
 </net>
-<net name="N$4" class="1">
+<net name="N$4" class="2">
 <segment>
 <pinref part="IC23" gate="G$1" pin="1"/>
 <wire x1="307.34" y1="220.98" x2="299.72" y2="220.98" width="0.1524" layer="91"/>
 <pinref part="F1" gate="G$1" pin="2"/>
 </segment>
 </net>
-<net name="UART1_GPS_RX" class="0">
+<net name="UART1_GPS_RX" class="2">
 <segment>
 <pinref part="IC1" gate="A" pin="(RXD1/INT2)_PD2"/>
 <wire x1="154.94" y1="754.38" x2="162.56" y2="754.38" width="0.1524" layer="91"/>
 <label x="162.56" y="754.38" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="UART1_GPS_TX" class="0">
+<net name="UART1_GPS_TX" class="2">
 <segment>
 <pinref part="IC1" gate="A" pin="(TXD1/INT3)_PD3"/>
 <wire x1="154.94" y1="751.84" x2="162.56" y2="751.84" width="0.1524" layer="91"/>
 <label x="162.56" y="751.84" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$5" class="0">
+<net name="VBAT" class="2">
 <segment>
 <wire x1="-436.88" y1="695.96" x2="-429.26" y2="695.96" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="VBAT"/>
+<label x="-429.26" y="695.96" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$7" class="0">
+<net name="VDD" class="0">
 <segment>
 <wire x1="-436.88" y1="693.42" x2="-429.26" y2="693.42" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="VDD"/>
+<label x="-429.26" y="693.42" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$8" class="0">
+<net name="VIN" class="0">
 <segment>
 <wire x1="-436.88" y1="690.88" x2="-429.26" y2="690.88" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="VIN"/>
+<label x="-429.26" y="690.88" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$9" class="0">
+<net name="E5V" class="3">
 <segment>
 <wire x1="-436.88" y1="688.34" x2="-429.26" y2="688.34" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="E5V"/>
+<label x="-429.26" y="688.34" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$12" class="0">
-<segment>
-<wire x1="-436.88" y1="685.8" x2="-429.26" y2="685.8" width="0.1524" layer="91"/>
-<pinref part="MISKO" gate="CN7" pin="5V0"/>
-</segment>
-</net>
-<net name="N$13" class="0">
+<net name="IOREF" class="2">
 <segment>
 <wire x1="-436.88" y1="683.26" x2="-429.26" y2="683.26" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="IOREF"/>
+<label x="-429.26" y="683.26" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$14" class="0">
+<net name="3V3" class="1">
 <segment>
 <wire x1="-436.88" y1="680.72" x2="-429.26" y2="680.72" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="3V3"/>
+<pinref part="SUPPLY1" gate="G$1" pin="3V3"/>
 </segment>
 </net>
-<net name="N$15" class="0">
+<net name="NRST" class="2">
 <segment>
 <wire x1="-436.88" y1="650.24" x2="-429.26" y2="650.24" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="NRST"/>
+<label x="-429.26" y="650.24" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$16" class="0">
+<net name="BOOT0" class="2">
 <segment>
 <wire x1="-436.88" y1="645.16" x2="-429.26" y2="645.16" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="BOOT0"/>
+<label x="-429.26" y="645.16" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$17" class="0">
-<segment>
-<wire x1="-436.88" y1="622.3" x2="-429.26" y2="622.3" width="0.1524" layer="91"/>
-<pinref part="MISKO" gate="CN7" pin="GND"/>
-</segment>
-</net>
-<net name="N$18" class="0">
+<net name="PF1" class="2">
 <segment>
 <wire x1="-477.52" y1="622.3" x2="-487.68" y2="622.3" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="PF1"/>
+<label x="-487.68" y="622.3" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$20" class="0">
+<net name="PF0" class="2">
 <segment>
 <wire x1="-477.52" y1="624.84" x2="-487.68" y2="624.84" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="PF0"/>
+<label x="-487.68" y="624.84" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$21" class="0">
+<net name="PD2" class="2">
 <segment>
 <wire x1="-477.52" y1="632.46" x2="-487.68" y2="632.46" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="PD2"/>
+<label x="-487.68" y="632.46" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$22" class="0">
+<net name="PC15" class="2">
 <segment>
 <wire x1="-477.52" y1="640.08" x2="-487.68" y2="640.08" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="PC15"/>
+<label x="-487.68" y="640.08" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$23" class="0">
+<net name="PC14" class="2">
 <segment>
 <wire x1="-477.52" y1="642.62" x2="-487.68" y2="642.62" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="PC14"/>
+<label x="-487.68" y="642.62" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$24" class="0">
+<net name="PC13" class="2">
 <segment>
 <wire x1="-477.52" y1="645.16" x2="-487.68" y2="645.16" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="PC13"/>
+<label x="-487.68" y="645.16" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$25" class="0">
+<net name="PC12" class="2">
 <segment>
 <wire x1="-477.52" y1="647.7" x2="-487.68" y2="647.7" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="PC12"/>
+<label x="-487.68" y="647.7" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$26" class="0">
+<net name="PC11" class="2">
 <segment>
 <wire x1="-477.52" y1="650.24" x2="-487.68" y2="650.24" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="PC11"/>
+<label x="-487.68" y="650.24" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$27" class="0">
+<net name="PC10" class="2">
 <segment>
 <wire x1="-477.52" y1="652.78" x2="-487.68" y2="652.78" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="PC10"/>
+<label x="-487.68" y="652.78" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$28" class="0">
+<net name="PC3" class="2">
 <segment>
 <wire x1="-477.52" y1="655.32" x2="-487.68" y2="655.32" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="PC3"/>
+<label x="-487.68" y="655.32" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$29" class="0">
+<net name="PC2" class="2">
 <segment>
 <wire x1="-477.52" y1="657.86" x2="-487.68" y2="657.86" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="PC2"/>
+<label x="-487.68" y="657.86" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$30" class="0">
+<net name="PC1" class="2">
 <segment>
 <wire x1="-477.52" y1="660.4" x2="-487.68" y2="660.4" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="PC1"/>
+<label x="-487.68" y="660.4" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$32" class="0">
+<net name="PC0" class="2">
 <segment>
 <wire x1="-477.52" y1="662.94" x2="-487.68" y2="662.94" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="PC0"/>
+<label x="-487.68" y="662.94" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$33" class="0">
+<net name="PB0" class="2">
 <segment>
 <wire x1="-477.52" y1="670.56" x2="-487.68" y2="670.56" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="PB0"/>
+<label x="-487.68" y="670.56" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$34" class="0">
+<net name="PA15" class="2">
 <segment>
 <wire x1="-477.52" y1="678.18" x2="-487.68" y2="678.18" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="PA15"/>
+<label x="-487.68" y="678.18" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$35" class="0">
+<net name="PA14" class="2">
 <segment>
 <wire x1="-477.52" y1="680.72" x2="-487.68" y2="680.72" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="PA14"/>
+<label x="-487.68" y="680.72" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$36" class="0">
+<net name="PA13" class="2">
 <segment>
 <wire x1="-477.52" y1="683.26" x2="-487.68" y2="683.26" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="PA13"/>
+<label x="-487.68" y="683.26" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$37" class="0">
+<net name="PA2" class="2">
 <segment>
 <wire x1="-477.52" y1="685.8" x2="-487.68" y2="685.8" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="PA2"/>
+<label x="-487.68" y="685.8" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$38" class="0">
+<net name="PA1" class="2">
 <segment>
 <wire x1="-477.52" y1="688.34" x2="-487.68" y2="688.34" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="PA1"/>
+<label x="-487.68" y="688.34" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$39" class="0">
+<net name="PA0" class="2">
 <segment>
 <wire x1="-477.52" y1="690.88" x2="-487.68" y2="690.88" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN7" pin="PA0"/>
+<label x="-487.68" y="690.88" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$40" class="0">
+<net name="AVDD" class="2">
 <segment>
 <wire x1="-439.42" y1="584.2" x2="-431.8" y2="584.2" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="AVDD"/>
+<label x="-431.8" y="584.2" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$41" class="0">
+<net name="VBUS_STLK" class="2">
 <segment>
 <wire x1="-439.42" y1="581.66" x2="-431.8" y2="581.66" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="VBUS_STLK"/>
+<label x="-431.8" y="581.66" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$42" class="0">
+<net name="PC4" class="2">
 <segment>
 <wire x1="-439.42" y1="553.72" x2="-431.8" y2="553.72" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PC4"/>
+<label x="-431.8" y="553.72" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$43" class="0">
+<net name="PC5" class="2">
 <segment>
 <wire x1="-439.42" y1="551.18" x2="-431.8" y2="551.18" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PC5"/>
+<label x="-431.8" y="551.18" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$44" class="0">
+<net name="PC6" class="2">
 <segment>
 <wire x1="-439.42" y1="548.64" x2="-431.8" y2="548.64" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PC6"/>
+<label x="-431.8" y="548.64" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$45" class="0">
+<net name="PC7" class="2">
 <segment>
 <wire x1="-439.42" y1="546.1" x2="-431.8" y2="546.1" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PC7"/>
+<label x="-431.8" y="546.1" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$46" class="0">
+<net name="PC8" class="2">
 <segment>
 <wire x1="-439.42" y1="543.56" x2="-431.8" y2="543.56" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PC8"/>
+<label x="-431.8" y="543.56" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$47" class="0">
+<net name="PC9" class="2">
 <segment>
 <wire x1="-439.42" y1="541.02" x2="-431.8" y2="541.02" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PC9"/>
+<label x="-431.8" y="541.02" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="N$48" class="0">
-<segment>
-<wire x1="-439.42" y1="518.16" x2="-431.8" y2="518.16" width="0.1524" layer="91"/>
-<pinref part="MISKO" gate="CN10" pin="AGND"/>
-</segment>
-</net>
-<net name="N$49" class="0">
-<segment>
-<wire x1="-439.42" y1="515.62" x2="-431.8" y2="515.62" width="0.1524" layer="91"/>
-<pinref part="MISKO" gate="CN10" pin="GND"/>
-</segment>
-</net>
-<net name="N$50" class="0">
+<net name="PA5" class="2">
 <segment>
 <wire x1="-474.98" y1="579.12" x2="-487.68" y2="579.12" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PA5"/>
+<label x="-487.68" y="579.12" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$51" class="0">
+<net name="PA6" class="2">
 <segment>
 <wire x1="-474.98" y1="576.58" x2="-487.68" y2="576.58" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PA6"/>
+<label x="-487.68" y="576.58" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$52" class="0">
+<net name="PA7" class="2">
 <segment>
 <wire x1="-474.98" y1="574.04" x2="-487.68" y2="574.04" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PA7"/>
+<label x="-487.68" y="574.04" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$53" class="0">
+<net name="PA9" class="2">
 <segment>
 <wire x1="-474.98" y1="568.96" x2="-487.68" y2="568.96" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PA10"/>
+<label x="-487.68" y="568.96" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$54" class="0">
+<net name="PA8" class="2">
 <segment>
 <wire x1="-474.98" y1="571.5" x2="-487.68" y2="571.5" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PA8"/>
+<label x="-487.68" y="571.5" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$55" class="0">
+<net name="PB1" class="2">
 <segment>
 <wire x1="-474.98" y1="553.72" x2="-487.68" y2="553.72" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PB1"/>
+<label x="-487.68" y="553.72" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$56" class="0">
+<net name="PB2" class="2">
 <segment>
 <wire x1="-474.98" y1="551.18" x2="-487.68" y2="551.18" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PB2"/>
+<label x="-487.68" y="551.18" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$57" class="0">
+<net name="PB4" class="2">
 <segment>
 <wire x1="-474.98" y1="546.1" x2="-487.68" y2="546.1" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PB4"/>
+<label x="-487.68" y="546.1" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$58" class="0">
+<net name="PB5" class="2">
 <segment>
 <wire x1="-474.98" y1="543.56" x2="-487.68" y2="543.56" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PB5"/>
+<label x="-487.68" y="543.56" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$59" class="0">
+<net name="PB6" class="2">
 <segment>
 <wire x1="-474.98" y1="541.02" x2="-487.68" y2="541.02" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PB6"/>
+<label x="-487.68" y="541.02" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$60" class="0">
+<net name="PB7" class="2">
 <segment>
 <wire x1="-474.98" y1="538.48" x2="-487.68" y2="538.48" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PB7"/>
+<label x="-487.68" y="538.48" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$61" class="0">
+<net name="PB8" class="2">
 <segment>
 <wire x1="-474.98" y1="535.94" x2="-487.68" y2="535.94" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PB8"/>
+<label x="-487.68" y="535.94" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$62" class="0">
+<net name="PB10" class="2">
 <segment>
 <wire x1="-474.98" y1="533.4" x2="-487.68" y2="533.4" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PB10"/>
+<label x="-487.68" y="533.4" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$63" class="0">
+<net name="PN12" class="2">
 <segment>
 <wire x1="-474.98" y1="530.86" x2="-487.68" y2="530.86" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PB12"/>
+<label x="-487.68" y="530.86" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$64" class="0">
+<net name="PB13" class="2">
 <segment>
 <wire x1="-474.98" y1="528.32" x2="-487.68" y2="528.32" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PB13"/>
+<label x="-487.68" y="528.32" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$65" class="0">
+<net name="PB14" class="2">
 <segment>
 <wire x1="-474.98" y1="525.78" x2="-487.68" y2="525.78" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PB14"/>
+<label x="-487.68" y="525.78" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="N$66" class="0">
+<net name="PB15" class="2">
 <segment>
 <wire x1="-474.98" y1="523.24" x2="-487.68" y2="523.24" width="0.1524" layer="91"/>
 <pinref part="MISKO" gate="CN10" pin="PB15"/>
+<label x="-487.68" y="523.24" size="1.778" layer="95" rot="R180"/>
+</segment>
+</net>
+<net name="5V0" class="3">
+<segment>
+<wire x1="-436.88" y1="685.8" x2="-429.26" y2="685.8" width="0.1524" layer="91"/>
+<pinref part="MISKO" gate="CN7" pin="5V0"/>
+<label x="-429.26" y="685.8" size="1.778" layer="95"/>
 </segment>
 </net>
 </nets>
