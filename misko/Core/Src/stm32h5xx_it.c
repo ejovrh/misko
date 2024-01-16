@@ -207,12 +207,41 @@ void SysTick_Handler(void)
 /******************************************************************************/
 
 /**
+ * @brief This function handles EXTI Line2 interrupt.
+ */
+void EXTI2_IRQHandler(void)
+{
+	/* USER CODE BEGIN EXTI2_IRQn 0 */
+
+	/* USER CODE END EXTI2_IRQn 0 */
+	HAL_GPIO_EXTI_IRQHandler(USB_FS_OVCR_Pin);
+	/* USER CODE BEGIN EXTI2_IRQn 1 */
+
+	/* USER CODE END EXTI2_IRQn 1 */
+}
+
+/**
+ * @brief This function handles EXTI Line9 interrupt.
+ */
+void EXTI9_IRQHandler(void)
+{
+	/* USER CODE BEGIN EXTI9_IRQn 0 */
+
+	/* USER CODE END EXTI9_IRQn 0 */
+	HAL_GPIO_EXTI_IRQHandler(ADXL345_INT_Pin);
+	/* USER CODE BEGIN EXTI9_IRQn 1 */
+
+	/* USER CODE END EXTI9_IRQn 1 */
+}
+
+/**
  * @brief This function handles EXTI Line13 interrupt.
  */
 void EXTI13_IRQHandler(void)
 {
 	/* USER CODE BEGIN EXTI13_IRQn 0 */
 	HAL_GPIO_TogglePin(User_LED_GPIO_Port, User_LED_Pin);
+	HAL_GPIO_TogglePin(GPS_Green_LED_GPIO_Port, GPS_Green_LED_Pin);
 	/* USER CODE END EXTI13_IRQn 0 */
 	HAL_GPIO_EXTI_IRQHandler(Blue_User_Button_Pin);
 	/* USER CODE BEGIN EXTI13_IRQn 1 */
