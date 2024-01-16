@@ -45,6 +45,8 @@ TIM_HandleTypeDef htim1;
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart3;
+DMA_HandleTypeDef handle_GPDMA1_Channel3;
+DMA_HandleTypeDef handle_GPDMA1_Channel2;
 DMA_HandleTypeDef handle_GPDMA1_Channel1;
 DMA_HandleTypeDef handle_GPDMA1_Channel0;
 
@@ -194,6 +196,10 @@ static void MX_GPDMA1_Init(void)
 	HAL_NVIC_EnableIRQ(GPDMA1_Channel0_IRQn);
 	HAL_NVIC_SetPriority(GPDMA1_Channel1_IRQn, 0, 0);
 	HAL_NVIC_EnableIRQ(GPDMA1_Channel1_IRQn);
+	HAL_NVIC_SetPriority(GPDMA1_Channel2_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(GPDMA1_Channel2_IRQn);
+	HAL_NVIC_SetPriority(GPDMA1_Channel3_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(GPDMA1_Channel3_IRQn);
 
 	/* USER CODE BEGIN GPDMA1_Init 1 */
 
