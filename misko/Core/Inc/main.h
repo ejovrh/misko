@@ -31,7 +31,7 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "linked_list.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -41,7 +41,8 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
-
+extern DMA_QListTypeDef Queue_tx;
+extern DMA_QListTypeDef Queue_rx;
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/

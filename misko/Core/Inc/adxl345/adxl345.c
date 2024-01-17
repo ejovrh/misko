@@ -56,33 +56,45 @@ static const uint8_t _RegisterAddress[REG_CNT] =  // address of each register ad
 // reads a bytes from device
 static uint8_t _ReadByte(const adxl345_reg_t in_register)
 {
-	__disable_irq();  // atomic start
-	uint8_t address = (_RegisterAddress[in_register] | COMMAND_READ);  // mark address as read command
+	uint8_t address = (_RegisterAddress[in_register] | COMMAND_READ);  // flag address with read command
+
+	while(HAL_SPI_GetState(__ADXL345._hspi) != HAL_SPI_STATE_READY)
+		;  // guard for bus-ready condition
 
 	HAL_GPIO_WritePin(__ADXL345._CS_Port, __ADXL345._CS_Pin, GPIO_PIN_RESET);  // select the slave
 
-	HAL_SPI_Transmit(__ADXL345._hspi, &address, 1, SPI_TIMEOUT);  // send register address to read from
-	HAL_SPI_Receive(__ADXL345._hspi, &address, 1, SPI_TIMEOUT);  // send register address to read from
+	HAL_SPI_Transmit_DMA(__ADXL345._hspi, &address, 1);  // first, supply the address to read from
+	while(HAL_SPI_GetState(__ADXL345._hspi) != HAL_SPI_STATE_READY)
+		;  // the bloody thing needs its time...
+
+	HAL_SPI_Receive_DMA(__ADXL345._hspi, &address, 1);	// second, (invisibly) clock-in 0x00 into the bus and get data back from the circular buffer
+	while(HAL_SPI_GetState(__ADXL345._hspi) != HAL_SPI_STATE_READY)
+		;  // same as above
 
 	HAL_GPIO_WritePin(__ADXL345._CS_Port, __ADXL345._CS_Pin, GPIO_PIN_SET);  // de-select the slave
-	__enable_irq();  // atomic end
 
-	return address;
+	return address;  // return received data
 }
 
 // writes a bytes to device
 static void _WriteByte(const adxl345_reg_t in_register, const uint8_t data)
 {
-	__disable_irq();  // atomic start
 	uint8_t address = _RegisterAddress[in_register];
+
+	while(HAL_SPI_GetState(__ADXL345._hspi) != HAL_SPI_STATE_READY)
+		;  // guard for bus-ready condition
 
 	HAL_GPIO_WritePin(__ADXL345._CS_Port, __ADXL345._CS_Pin, GPIO_PIN_RESET);  // select the slave
 
-	HAL_SPI_Transmit(__ADXL345._hspi, &address, 1, SPI_TIMEOUT);  // send register address to write to
-	HAL_SPI_Transmit(__ADXL345._hspi, &data, 1, SPI_TIMEOUT);  // send data
+	HAL_SPI_Transmit_DMA(__ADXL345._hspi, &address, 1);  // send register address to write to
+	while(HAL_SPI_GetState(__ADXL345._hspi) != HAL_SPI_STATE_READY)
+		;  // the bloody thing needs its time...
+
+	HAL_SPI_Transmit_DMA(__ADXL345._hspi, &data, 1);  // send data
+	while(HAL_SPI_GetState(__ADXL345._hspi) != HAL_SPI_STATE_READY)
+		;  // same as above
 
 	HAL_GPIO_WritePin(__ADXL345._CS_Port, __ADXL345._CS_Pin, GPIO_PIN_SET);  // de-select the slave
-	__enable_irq();  // atomic end
 }
 
 //
@@ -139,6 +151,8 @@ adxl345_t* adxl345_ctor(SPI_HandleTypeDef *in_hspi, GPIO_TypeDef *_SPI_CS_Port, 
 	_WriteByte(INT_MAP, 0x00);	// route all to INT1
 
 	_WriteByte(POWER_CTL, POWER_CTL_CFG);  // power on and start
+
+	HAL_NVIC_EnableIRQ(EXTI9_IRQn);  // turn on EXTI triggered by INT1 for good
 
 	return &__ADXL345.public;  // set pointer to ADXL345 public part
 }

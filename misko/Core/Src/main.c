@@ -46,6 +46,9 @@ ADC_HandleTypeDef hadc1;
 
 FDCAN_HandleTypeDef hfdcan1;
 
+DMA_HandleTypeDef handle_GPDMA1_Channel7;
+DMA_HandleTypeDef handle_GPDMA1_Channel6;
+
 SPI_HandleTypeDef hspi1;
 
 TIM_HandleTypeDef htim1;
@@ -82,7 +85,7 @@ static void MX_ADC1_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-uint8_t data[55];
+
 /* USER CODE END 0 */
 
 /**
@@ -126,6 +129,12 @@ int main(void)
 	MX_FDCAN1_Init();
 	MX_ADC1_Init();
 	/* USER CODE BEGIN 2 */
+	MX_Queue_tx_Config();
+	HAL_DMAEx_List_LinkQ(&handle_GPDMA1_Channel7, &Queue_tx);
+	__HAL_LINKDMA(&hspi1, hdmatx, handle_GPDMA1_Channel7);
+	MX_Queue_rx_Config();
+	HAL_DMAEx_List_LinkQ(&handle_GPDMA1_Channel6, &Queue_rx);
+	__HAL_LINKDMA(&hspi1, hdmarx, handle_GPDMA1_Channel6);
 
 	adxl345_ctor(&hspi1, SPI1_ADXL345_CS_GPIO_Port, SPI1_ADXL345_CS_Pin);  // initialize accelerometer object
 
@@ -134,7 +143,6 @@ int main(void)
 
 	if(HAL_TIM_OC_Start_IT(&htim1, TIM_CHANNEL_1) != HAL_OK)	// 125ms time base
 		Error_Handler();
-
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
@@ -354,10 +362,42 @@ static void MX_GPDMA1_Init(void)
 	HAL_NVIC_EnableIRQ(GPDMA1_Channel2_IRQn);
 	HAL_NVIC_SetPriority(GPDMA1_Channel3_IRQn, 0, 0);
 	HAL_NVIC_EnableIRQ(GPDMA1_Channel3_IRQn);
+	HAL_NVIC_SetPriority(GPDMA1_Channel6_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(GPDMA1_Channel6_IRQn);
+	HAL_NVIC_SetPriority(GPDMA1_Channel7_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(GPDMA1_Channel7_IRQn);
 
 	/* USER CODE BEGIN GPDMA1_Init 1 */
 
 	/* USER CODE END GPDMA1_Init 1 */
+	handle_GPDMA1_Channel7.Instance = GPDMA1_Channel7;
+	handle_GPDMA1_Channel7.InitLinkedList.Priority = DMA_LOW_PRIORITY_HIGH_WEIGHT;
+	handle_GPDMA1_Channel7.InitLinkedList.LinkStepMode = DMA_LSM_FULL_EXECUTION;
+	handle_GPDMA1_Channel7.InitLinkedList.LinkAllocatedPort = DMA_LINK_ALLOCATED_PORT1;
+	handle_GPDMA1_Channel7.InitLinkedList.TransferEventMode = DMA_TCEM_LAST_LL_ITEM_TRANSFER;
+	handle_GPDMA1_Channel7.InitLinkedList.LinkedListMode = DMA_LINKEDLIST_NORMAL;
+	if(HAL_DMAEx_List_Init(&handle_GPDMA1_Channel7) != HAL_OK)
+		{
+			Error_Handler();
+		}
+	if(HAL_DMA_ConfigChannelAttributes(&handle_GPDMA1_Channel7, DMA_CHANNEL_NPRIV) != HAL_OK)
+		{
+			Error_Handler();
+		}
+	handle_GPDMA1_Channel6.Instance = GPDMA1_Channel6;
+	handle_GPDMA1_Channel6.InitLinkedList.Priority = DMA_LOW_PRIORITY_HIGH_WEIGHT;
+	handle_GPDMA1_Channel6.InitLinkedList.LinkStepMode = DMA_LSM_FULL_EXECUTION;
+	handle_GPDMA1_Channel6.InitLinkedList.LinkAllocatedPort = DMA_LINK_ALLOCATED_PORT0;
+	handle_GPDMA1_Channel6.InitLinkedList.TransferEventMode = DMA_TCEM_LAST_LL_ITEM_TRANSFER;
+	handle_GPDMA1_Channel6.InitLinkedList.LinkedListMode = DMA_LINKEDLIST_NORMAL;
+	if(HAL_DMAEx_List_Init(&handle_GPDMA1_Channel6) != HAL_OK)
+		{
+			Error_Handler();
+		}
+	if(HAL_DMA_ConfigChannelAttributes(&handle_GPDMA1_Channel6, DMA_CHANNEL_NPRIV) != HAL_OK)
+		{
+			Error_Handler();
+		}
 	/* USER CODE BEGIN GPDMA1_Init 2 */
 
 	/* USER CODE END GPDMA1_Init 2 */
@@ -779,13 +819,14 @@ static void MX_GPIO_Init(void)
 	HAL_NVIC_SetPriority(EXTI2_IRQn, 0, 0);
 	HAL_NVIC_EnableIRQ(EXTI2_IRQn);
 
-	HAL_NVIC_SetPriority(EXTI9_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(EXTI9_IRQn, 1, 0);
 	HAL_NVIC_EnableIRQ(EXTI9_IRQn);
 
 	HAL_NVIC_SetPriority(EXTI13_IRQn, 0, 0);
 	HAL_NVIC_EnableIRQ(EXTI13_IRQn);
 
 	/* USER CODE BEGIN MX_GPIO_Init_2 */
+	HAL_NVIC_DisableIRQ(EXTI9_IRQn);	// disable until accelerometer initialization is complete - see adxl345_ctor()
 	/* USER CODE END MX_GPIO_Init_2 */
 }
 
