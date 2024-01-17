@@ -55,8 +55,8 @@ typedef enum adxl345_reg_t  // register name to array index translation
 typedef struct	// struct describing the Accelerometer functionality
 {
 	void (*ISR)(void);	// device ISR
-	uint8_t (*ReadByte)(const adxl345_reg_t in_register);  // reads a bytes from device
-	void (*WriteByte)(const adxl345_reg_t in_register, const uint8_t data);  // writes a bytes to device
+	uint8_t (*ReadByte)(const adxl345_reg_t in_register);  // reads a byte from device
+	void (*WriteByte)(const adxl345_reg_t in_register, const uint8_t data);  // writes a byte to device
 } adxl345_t;
 
 adxl345_t* adxl345_ctor(SPI_HandleTypeDef *in_hspi, GPIO_TypeDef *_SPI_CS_Port, const uint16_t _SPI_CS_Pin);  // the ADXL345 constructor

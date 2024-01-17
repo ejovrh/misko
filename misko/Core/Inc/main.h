@@ -117,7 +117,8 @@ void Error_Handler(void);
 #define Anal_SW_CTRL_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
-#define USE_ADXL345 1
+#define USE_ADXL345 1	// use the accelerometer
+#define USE_FM25W256 1	// use the memory
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

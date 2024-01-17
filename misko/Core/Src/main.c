@@ -24,6 +24,9 @@
 #if USE_ADXL345
 #include "adxl345/adxl345.h"
 #endif
+#if USE_FM25W256
+#include "fm25w256/fm25w256.h"
+#endif
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -137,6 +140,7 @@ int main(void)
 	__HAL_LINKDMA(&hspi1, hdmarx, handle_GPDMA1_Channel6);
 
 	adxl345_ctor(&hspi1, SPI1_ADXL345_CS_GPIO_Port, SPI1_ADXL345_CS_Pin);  // initialize accelerometer object
+	fm25w256_ctor(&hspi1, SPI1_FRAM_CS_GPIO_Port, SPI1_FRAM_CS_Pin);  //initialize FeRAM object
 
 	if(HAL_UART_Transmit_DMA(&huart3, (uint8_t*) aTxBuffer, 22) != HAL_OK)	// transmit hello world
 		Error_Handler();

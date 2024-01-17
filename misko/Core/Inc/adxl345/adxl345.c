@@ -53,7 +53,7 @@ static const uint8_t _RegisterAddress[REG_CNT] =  // address of each register ad
 	0x39,  // FIFO_STATUS
 	};
 
-// reads a bytes from device
+// reads a byte from device
 static uint8_t _ReadByte(const adxl345_reg_t in_register)
 {
 	uint8_t address = (_RegisterAddress[in_register] | COMMAND_READ);  // flag address with read command
@@ -76,7 +76,7 @@ static uint8_t _ReadByte(const adxl345_reg_t in_register)
 	return address;  // return received data
 }
 
-// writes a bytes to device
+// writes a byte to device
 static void _WriteByte(const adxl345_reg_t in_register, const uint8_t data)
 {
 	uint8_t address = _RegisterAddress[in_register];
@@ -125,8 +125,8 @@ void _ISR(void)  // ISR for the ADXL345 accelerometer
 static __adxl345_t __ADXL345 =  // instantiate adxl345c_t actual and set function pointers
 	{  //
 	.public.ISR = &_ISR,	// device ISR
-	.public.ReadByte = &_ReadByte,	// reads a bytes from device
-	.public.WriteByte = &_WriteByte  // writes a bytes to device
+	.public.ReadByte = &_ReadByte,	// reads a byte from device
+	.public.WriteByte = &_WriteByte  // writes a byte to device
 	};
 
 adxl345_t* adxl345_ctor(SPI_HandleTypeDef *in_hspi, GPIO_TypeDef *_SPI_CS_Port, const uint16_t _SPI_CS_Pin)  //
