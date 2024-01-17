@@ -68,10 +68,10 @@ void Error_Handler(void);
 #define UART3_VCP_TX_GPIO_Port GPIOA
 #define User_LED_Pin GPIO_PIN_5
 #define User_LED_GPIO_Port GPIOA
-#define SPI_FRAM_CS_Pin GPIO_PIN_6
-#define SPI_FRAM_CS_GPIO_Port GPIOA
-#define ADXL345_CS_Pin GPIO_PIN_7
-#define ADXL345_CS_GPIO_Port GPIOA
+#define SPI1_FRAM_CS_Pin GPIO_PIN_6
+#define SPI1_FRAM_CS_GPIO_Port GPIOA
+#define SPI1_ADXL345_CS_Pin GPIO_PIN_7
+#define SPI1_ADXL345_CS_GPIO_Port GPIOA
 #define GPS_PWR_CTRL_Pin GPIO_PIN_4
 #define GPS_PWR_CTRL_GPIO_Port GPIOC
 #define UART1_TX_Pin GPIO_PIN_14
@@ -84,9 +84,9 @@ void Error_Handler(void);
 #define CAN_TX_GPIO_Port GPIOC
 #define Debug_Out_Pin GPIO_PIN_8
 #define Debug_Out_GPIO_Port GPIOC
-#define ADXL345_INT_Pin GPIO_PIN_9
-#define ADXL345_INT_GPIO_Port GPIOC
-#define ADXL345_INT_EXTI_IRQn EXTI9_IRQn
+#define ADXL345_INT1_Pin GPIO_PIN_9
+#define ADXL345_INT1_GPIO_Port GPIOC
+#define ADXL345_INT1_EXTI_IRQn EXTI9_IRQn
 #define USB_FS_VBUS_Pin GPIO_PIN_9
 #define USB_FS_VBUS_GPIO_Port GPIOA
 #define GPS_WKUP_Pin GPIO_PIN_10
@@ -116,7 +116,7 @@ void Error_Handler(void);
 #define Anal_SW_CTRL_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
-
+#define USE_ADXL345 1
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
