@@ -14,6 +14,7 @@ typedef struct	// adxl345c_t actual
 
 static __adxl345_t __ADXL345 __attribute__ ((section (".data")));  // preallocate __ADXL345 object in .data
 
+#define SPI_TIMEOUT 10	// SPI timeout in SysTicks
 #define REG_CNT 30	// 64 registers
 #define COMMAND_READ 0x80	// SPI read command, DS. p. 15, figure 37
 
@@ -60,8 +61,8 @@ static uint8_t _ReadByte(const adxl345_reg_t in_register)
 
 	HAL_GPIO_WritePin(__ADXL345._CS_Port, __ADXL345._CS_Pin, GPIO_PIN_RESET);  // select the slave
 
-	HAL_SPI_Transmit(__ADXL345._hspi, &address, 1, 100);  // send register address to read from
-	HAL_SPI_Receive(__ADXL345._hspi, &address, 1, 100);  // send register address to read from
+	HAL_SPI_Transmit(__ADXL345._hspi, &address, 1, SPI_TIMEOUT);  // send register address to read from
+	HAL_SPI_Receive(__ADXL345._hspi, &address, 1, SPI_TIMEOUT);  // send register address to read from
 
 	HAL_GPIO_WritePin(__ADXL345._CS_Port, __ADXL345._CS_Pin, GPIO_PIN_SET);  // de-select the slave
 	__enable_irq();  // atomic end
@@ -73,13 +74,12 @@ static uint8_t _ReadByte(const adxl345_reg_t in_register)
 static void _WriteByte(const adxl345_reg_t in_register, const uint8_t data)
 {
 	__disable_irq();  // atomic start
-
 	uint8_t address = _RegisterAddress[in_register];
 
 	HAL_GPIO_WritePin(__ADXL345._CS_Port, __ADXL345._CS_Pin, GPIO_PIN_RESET);  // select the slave
 
-	HAL_SPI_Transmit(__ADXL345._hspi, &address, 1, 100);  // send register address to write to
-	HAL_SPI_Transmit(__ADXL345._hspi, &data, 1, 100);  // send data
+	HAL_SPI_Transmit(__ADXL345._hspi, &address, 1, SPI_TIMEOUT);  // send register address to write to
+	HAL_SPI_Transmit(__ADXL345._hspi, &data, 1, SPI_TIMEOUT);  // send data
 
 	HAL_GPIO_WritePin(__ADXL345._CS_Port, __ADXL345._CS_Pin, GPIO_PIN_SET);  // de-select the slave
 	__enable_irq();  // atomic end
