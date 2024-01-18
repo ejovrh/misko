@@ -83,7 +83,7 @@
    functions to the core functions that actually perform the work.
    Note: error checking is enabled by default.  */
 
-/* #define FX_DISABLE_ERROR_CHECKING */
+#define FX_DISABLE_ERROR_CHECKING
 
 /* Defined, FileX does not update already opened files.  */
 
@@ -107,7 +107,7 @@
 
 /* Defined, enables FileX fault tolerant service.  */
 
-/* #define FX_ENABLE_FAULT_TOLERANT */
+#define FX_ENABLE_FAULT_TOLERANT
 
 /* Defines the size in bytes of the bit map used to update the secondary FAT sectors.
    The larger the value the less unnecessary secondary FAT sector writes.   */
@@ -134,9 +134,9 @@
 /* Defines the maximum size of long file names supported by FileX.
    The minimum value is 13 and the maximum value is 256.  */
 
-/* #define FX_MAX_LAST_NAME_LEN         256 */
+#define FX_MAX_LAST_NAME_LEN      128
 
-/* #define FX_MAX_LONG_NAME_LEN         256 */
+#define FX_MAX_LONG_NAME_LEN      128
 
 /* Defines the maximum number of logical sectors that can be cached by FileX. The cache memory
    supplied to FileX at fx_media_open determines how many sectors can actually be cached.  */
@@ -145,11 +145,11 @@
 
 /* Defined, the file search cache optimization is disabled.  */
 
-/* #define FX_MEDIA_DISABLE_SEARCH_CACHE */
+#define FX_MEDIA_DISABLE_SEARCH_CACHE
 
 /* Defined, gathering of media statistics is disabled.  */
 
-/* #define FX_MEDIA_STATISTICS_DISABLE */
+#define FX_MEDIA_STATISTICS_DISABLE
 
 /* Defined, local path logic is disabled.  */
 
@@ -190,7 +190,7 @@
 
 /* Determine if cache is disabled.  */
 
-/*#define FX_DISABLE_CACHE   */
+#define FX_DISABLE_CACHE
 
 /* If defined, file close is disabled.  */
 

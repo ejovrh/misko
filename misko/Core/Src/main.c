@@ -149,6 +149,8 @@ int main(void)
 
 	if(HAL_TIM_OC_Start_IT(&htim1, TIM_CHANNEL_1) != HAL_OK)	// 125ms time base
 		Error_Handler();
+
+	fx_system_initialize();
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
@@ -784,7 +786,7 @@ static void MX_GPIO_Init(void)
 
 	/*Configure GPIO pin : SD_CD_Pin */
 	GPIO_InitStruct.Pin = SD_CD_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	HAL_GPIO_Init(SD_CD_GPIO_Port, &GPIO_InitStruct);
 
