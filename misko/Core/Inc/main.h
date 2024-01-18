@@ -77,6 +77,8 @@ void Error_Handler(void);
 #define SPI1_ADXL345_CS_GPIO_Port GPIOA
 #define GPS_PWR_CTRL_Pin GPIO_PIN_4
 #define GPS_PWR_CTRL_GPIO_Port GPIOC
+#define SD_CD_Pin GPIO_PIN_0
+#define SD_CD_GPIO_Port GPIOB
 #define UART1_TX_Pin GPIO_PIN_14
 #define UART1_TX_GPIO_Port GPIOB
 #define UART1_RX_Pin GPIO_PIN_15

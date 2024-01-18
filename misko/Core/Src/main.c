@@ -782,9 +782,15 @@ static void MX_GPIO_Init(void)
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	HAL_GPIO_Init(GPS_PWR_CTRL_GPIO_Port, &GPIO_InitStruct);
 
-	/*Configure GPIO pins : PB0 PB1 PB2 PB10
-	 PB12 PB13 PB6 PB7 */
-	GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_10 | GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_6 | GPIO_PIN_7;
+	/*Configure GPIO pin : SD_CD_Pin */
+	GPIO_InitStruct.Pin = SD_CD_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_IT_FALLING;
+	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	HAL_GPIO_Init(SD_CD_GPIO_Port, &GPIO_InitStruct);
+
+	/*Configure GPIO pins : PB1 PB2 PB10 PB12
+	 PB13 PB6 PB7 */
+	GPIO_InitStruct.Pin = GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_10 | GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_6 | GPIO_PIN_7;
 	GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
@@ -855,6 +861,16 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 
 	if(GPIO_Pin == ADXL345_INT1_Pin)  // accelerometer interrupt (act. or inact.)
 		ADXL345->ISR();  // execute the ISR callback
+}
+
+// EXTI falling edge callback
+void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
+{
+	if(GPIO_Pin == SD_CD_Pin)  // if card is removed
+		{
+			;  // TODO - disable read/write operations
+			// TODO - also make sure that before any read/write, this GPIO state is checked
+		}
 }
 /* USER CODE END 4 */
 
