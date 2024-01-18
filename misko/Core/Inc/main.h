@@ -63,6 +63,8 @@ void Error_Handler(void);
 #define Blue_User_Button_EXTI_IRQn EXTI13_IRQn
 #define ADC_VGPS_Pin GPIO_PIN_0
 #define ADC_VGPS_GPIO_Port GPIOA
+#define SPI1_SD_CS_Pin GPIO_PIN_1
+#define SPI1_SD_CS_GPIO_Port GPIOA
 #define UART3_VCP_RX_Pin GPIO_PIN_3
 #define UART3_VCP_RX_GPIO_Port GPIOA
 #define UART3_VCP_TX_Pin GPIO_PIN_4
