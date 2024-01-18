@@ -18103,86 +18103,6 @@ high speed (Philips)</description>
 </deviceset>
 </devicesets>
 </library>
-<library name="Molex SD-47309 SD Card Slot">
-<packages>
-<package name="MICRO_SD_CONNECTOR">
-<wire x1="0" y1="-15.3" x2="0" y2="0" width="0.127" layer="21"/>
-<wire x1="0" y1="0" x2="11" y2="0" width="0.127" layer="21"/>
-<wire x1="11" y1="0" x2="11" y2="-15.3" width="0.127" layer="21"/>
-<wire x1="11" y1="-15.3" x2="0" y2="-15.3" width="0.127" layer="21"/>
-<smd name="DAT1" x="1.75" y="-0.63" dx="1.25" dy="0.6" layer="1" rot="R90"/>
-<smd name="DAT0" x="2.85" y="-0.63" dx="1.25" dy="0.6" layer="1" rot="R90"/>
-<smd name="VSS" x="3.95" y="-0.63" dx="1.25" dy="0.6" layer="1" rot="R90"/>
-<smd name="CLK" x="5.05" y="-0.63" dx="1.25" dy="0.6" layer="1" rot="R90"/>
-<smd name="VDD" x="6.15" y="-0.63" dx="1.25" dy="0.6" layer="1" rot="R90"/>
-<smd name="CMD" x="7.25" y="-0.63" dx="1.25" dy="0.6" layer="1" rot="R90"/>
-<smd name="CD/DAT3" x="8.35" y="-0.63" dx="1.25" dy="0.6" layer="1" rot="R90"/>
-<smd name="DAT2" x="9.45" y="-0.63" dx="1.25" dy="0.6" layer="1" rot="R90"/>
-<smd name="GND4" x="0.6" y="-3.81" dx="3.79" dy="1.2" layer="1" rot="R90"/>
-<smd name="POL" x="10.5" y="-4.3" dx="1" dy="0.6" layer="1"/>
-<smd name="GND2" x="10.3" y="-3.05" dx="1.45" dy="1.4" layer="1"/>
-<smd name="DET" x="9.9" y="-5.27" dx="0.95" dy="0.85" layer="1"/>
-<wire x1="0" y1="-5.7" x2="11" y2="-5.7" width="0.127" layer="21"/>
-<text x="2.54" y="-8.89" size="1.27" layer="25">&gt;NAME</text>
-<text x="2.54" y="-11.43" size="1.27" layer="27">&gt;VALUE</text>
-</package>
-</packages>
-<symbols>
-<symbol name="MICROSD_SPI_MODE">
-<wire x1="7.62" y1="15.24" x2="7.62" y2="-17.78" width="0.254" layer="94"/>
-<wire x1="7.62" y1="-17.78" x2="-12.7" y2="-17.78" width="0.254" layer="94"/>
-<wire x1="-12.7" y1="-17.78" x2="-12.7" y2="15.24" width="0.254" layer="94"/>
-<wire x1="-12.7" y1="15.24" x2="7.62" y2="15.24" width="0.254" layer="94"/>
-<wire x1="-12.7" y1="15.24" x2="-7.62" y2="10.16" width="0.254" layer="94" curve="-90"/>
-<wire x1="-7.62" y1="10.16" x2="-7.62" y2="-10.16" width="0.254" layer="94"/>
-<wire x1="-7.62" y1="-10.16" x2="-12.7" y2="-17.78" width="0.254" layer="94" curve="-90"/>
-<text x="-12.7" y="20.32" size="1.778" layer="95">&gt;NAME</text>
-<text x="-12.7" y="17.78" size="1.778" layer="96">&gt;VALUE</text>
-<text x="-11.43" y="7.366" size="1.778" layer="94" rot="R270">microSD CARD</text>
-<pin name="DI" x="12.7" y="-2.54" length="middle" rot="R180"/>
-<pin name="DO" x="12.7" y="0" length="middle" rot="R180"/>
-<pin name="GND2" x="12.7" y="10.16" length="middle" rot="R180"/>
-<pin name="CARD_DETECT" x="12.7" y="-10.16" length="middle" rot="R180"/>
-<pin name="CLK" x="12.7" y="-5.08" length="middle" rot="R180"/>
-<pin name="VCC" x="12.7" y="2.54" length="middle" rot="R180"/>
-<pin name="CS" x="12.7" y="-7.62" length="middle" rot="R180"/>
-<pin name="DAT1" x="12.7" y="-12.7" length="middle" rot="R180"/>
-<pin name="GND1" x="12.7" y="12.7" length="middle" rot="R180"/>
-<pin name="DAT2" x="12.7" y="-15.24" length="middle" rot="R180"/>
-<pin name="GND3" x="12.7" y="7.62" length="middle" rot="R180"/>
-<pin name="GND4" x="12.7" y="5.08" length="middle" rot="R180"/>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="MICROSD_SPI_MODE" prefix="IC">
-<description>&lt;b&gt;MOLEX - 49225-0821 - CONNECTEUR MICRO SD PUSH/PUSH REV&lt;/b&gt;&lt;hr&gt;&lt;p&gt;Fabricant: MOLEX&lt;br&gt;Code commande Farnell: &lt;a href="http://fr.farnell.com/molex/49225-0821/connecteur-micro-sd-push-push-rev/dp/1366700?Ntt=1366700"&gt;1366700&lt;/a&gt;&lt;br&gt;Référence fabricant: 49225-0821 &lt;/p&gt;&lt;img src="MOLEX - 49225-0821 - CONNECTEUR MICRO SD.png"&gt;</description>
-<gates>
-<gate name="G$1" symbol="MICROSD_SPI_MODE" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="MICRO_SD_CONNECTOR">
-<connects>
-<connect gate="G$1" pin="CARD_DETECT" pad="DET"/>
-<connect gate="G$1" pin="CLK" pad="CLK"/>
-<connect gate="G$1" pin="CS" pad="CD/DAT3"/>
-<connect gate="G$1" pin="DAT1" pad="DAT1"/>
-<connect gate="G$1" pin="DAT2" pad="DAT2"/>
-<connect gate="G$1" pin="DI" pad="CMD"/>
-<connect gate="G$1" pin="DO" pad="DAT0"/>
-<connect gate="G$1" pin="GND1" pad="VSS"/>
-<connect gate="G$1" pin="GND2" pad="GND2"/>
-<connect gate="G$1" pin="GND3" pad="POL"/>
-<connect gate="G$1" pin="GND4" pad="GND4"/>
-<connect gate="G$1" pin="VCC" pad="VDD"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="con-hirose" urn="urn:adsk.eagle:library:152">
 <description>&lt;b&gt;Hirose Connectors&lt;/b&gt;&lt;p&gt;
 www.hirose.co.jp&lt;p&gt;
@@ -34986,6 +34906,19 @@ DIN A5, landscape with doc field</description>
 </device>
 </devices>
 </deviceset>
+<deviceset name="A5L-LOC" urn="urn:adsk.eagle:component:13933/1" prefix="FRAME" uservalue="yes" library_version="1">
+<description>A5L LOC</description>
+<gates>
+<gate name="G$1" symbol="A5L-LOC" x="0" y="0"/>
+</gates>
+<devices>
+<device name="">
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
 </devicesets>
 </library>
 <library name="ADXL345 Accelerometer">
@@ -35251,6 +35184,116 @@ DIN A5, landscape with doc field</description>
 <attribute name="OC_FARNELL" value="unknown" constant="no"/>
 <attribute name="OC_NEWARK" value="unknown" constant="no"/>
 </technology>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
+<library name="Molex SD-47309 SD Card Slot">
+<packages>
+<package name="MICRO_SD_CONNECTOR">
+<wire x1="6" y1="0" x2="6" y2="-2.2" width="0.127" layer="21"/>
+<wire x1="6" y1="-4.7" x2="6" y2="-12.7" width="0.127" layer="21"/>
+<wire x1="6" y1="-12.7" x2="4" y2="-14.7" width="0.127" layer="21" curve="-90"/>
+<wire x1="4" y1="-14.7" x2="-3.6" y2="-14.7" width="0.127" layer="21"/>
+<wire x1="-3.6" y1="-14.7" x2="-5.6" y2="-12.7" width="0.127" layer="21" curve="-90"/>
+<wire x1="-5.6" y1="-12.7" x2="-5.6" y2="-5.8" width="0.127" layer="21"/>
+<wire x1="-5.6" y1="-1.9" x2="-5.6" y2="0" width="0.127" layer="21"/>
+<wire x1="-5.6" y1="0" x2="6" y2="0" width="0.127" layer="21"/>
+<smd name="DAT1" x="-3.85" y="-1.33" dx="1.25" dy="0.6" layer="1" rot="R90"/>
+<smd name="DAT0" x="-2.75" y="-1.33" dx="1.25" dy="0.6" layer="1" rot="R90"/>
+<smd name="GND3" x="-1.65" y="-1.33" dx="1.25" dy="0.6" layer="1" rot="R90"/>
+<smd name="CLK" x="-0.55" y="-1.33" dx="1.25" dy="0.6" layer="1" rot="R90"/>
+<smd name="VDD" x="0.55" y="-1.33" dx="1.25" dy="0.6" layer="1" rot="R90"/>
+<smd name="CMD" x="1.65" y="-1.33" dx="1.25" dy="0.6" layer="1" rot="R90"/>
+<smd name="CD/DAT3" x="2.75" y="-1.33" dx="1.25" dy="0.6" layer="1" rot="R90"/>
+<smd name="DAT2" x="3.85" y="-1.33" dx="1.25" dy="0.6" layer="1" rot="R90"/>
+<smd name="GND1" x="-5" y="-3.81" dx="3.79" dy="1.2" layer="1" rot="R90"/>
+<smd name="POL" x="5.7" y="-4.3" dx="1" dy="0.6" layer="1"/>
+<smd name="GND2" x="5.475" y="-3.05" dx="1.45" dy="1.4" layer="1"/>
+<smd name="DET" x="4.775" y="-5.723" dx="0.95" dy="0.85" layer="1"/>
+<wire x1="-4.3" y1="-5.5" x2="4.2" y2="-5.5" width="0.127" layer="21"/>
+<wire x1="5.4" y1="-5.5" x2="6" y2="-5.5" width="0.127" layer="21"/>
+<text x="0" y="-7" size="1" layer="25" align="center">&gt;NAME</text>
+<text x="0" y="-9" size="1" layer="27" align="center">&gt;VALUE</text>
+<wire x1="0" y1="0.05" x2="0" y2="-16.95" width="0" layer="49"/>
+<dimension x1="0" y1="-0.1" x2="6.2" y2="-0.1" x3="3.1" y3="0" textsize="0.1" layer="49" width="0"/>
+<dimension x1="0" y1="-0.1" x2="-5.6" y2="-0.1" x3="-2.8" y3="0" textsize="0.1" layer="49" width="0"/>
+<dimension x1="4.3" y1="-5.4" x2="0" y2="-5.4" x3="2.15" y3="-7.6" textsize="0.1" layer="49" width="0" extlength="1"/>
+<dimension x1="5.2" y1="-5.1" x2="0" y2="-5.1" x3="2.6" y3="-5.5" textsize="0.1" layer="49" width="0"/>
+<dimension x1="6.2" y1="-3.3" x2="0" y2="-3.3" x3="3.1" y3="-4.099996875" textsize="0.1" layer="49" width="0"/>
+<dimension x1="6.2" y1="-0.7" x2="6.2" y2="-1.95" x3="7.7" y3="-1.325" textsize="0.1" layer="49" width="0"/>
+<dimension x1="5.4" y1="0" x2="5.4" y2="-0.7" x3="7.7" y3="-0.35" textsize="0.1" layer="49" width="0"/>
+<dimension x1="8.2" y1="0" x2="8.2" y2="-4" x3="8.9" y3="-2" textsize="0.1" layer="49" width="0"/>
+<dimension x1="-3.9" y1="-0.4" x2="-2.8" y2="-0.4" x3="-3.35" y3="-0.2" textsize="0.1" layer="49" width="0"/>
+<dimension x1="4.3" y1="0" x2="4.3" y2="-2.35" x3="4.6" y3="-1.175" textsize="0.1" layer="49" width="0"/>
+<dimension x1="-5.7" y1="0" x2="-5.7" y2="-1.9" x3="-6" y3="-0.95" textsize="0.1" layer="49" width="0"/>
+<dimension x1="0" y1="0" x2="0" y2="-5.5" x3="-1.1" y3="-2.75" textsize="0.1" layer="49" width="0"/>
+<dimension x1="0" y1="0.9" x2="6" y2="0.9" x3="3" y3="0.6" textsize="0.1" layer="49" width="0"/>
+<dimension x1="0" y1="0.9" x2="-5.6" y2="0.9" x3="-2.8" y3="0.6" textsize="0.1" layer="49" width="0"/>
+<dimension x1="-6.5" y1="0.6" x2="-6.5" y2="-14.7" x3="-7.7" y3="-7.05" textsize="0.1" layer="49" width="0"/>
+</package>
+</packages>
+<symbols>
+<symbol name="MICROSD_SPI_MODE">
+<wire x1="12.7" y1="7.62" x2="12.7" y2="5.08" width="0.254" layer="94"/>
+<wire x1="12.7" y1="5.08" x2="12.7" y2="2.54" width="0.254" layer="94"/>
+<wire x1="12.7" y1="2.54" x2="12.7" y2="-25.4" width="0.254" layer="94"/>
+<wire x1="12.7" y1="-25.4" x2="-7.62" y2="-25.4" width="0.254" layer="94"/>
+<wire x1="-7.62" y1="-25.4" x2="-7.62" y2="7.62" width="0.254" layer="94"/>
+<wire x1="-7.62" y1="7.62" x2="12.7" y2="7.62" width="0.254" layer="94"/>
+<wire x1="-7.62" y1="7.62" x2="-2.54" y2="2.54" width="0.254" layer="94" curve="-90"/>
+<wire x1="-2.54" y1="2.54" x2="-2.54" y2="-20.32" width="0.254" layer="94"/>
+<wire x1="-2.54" y1="-20.32" x2="-7.62" y2="-25.4" width="0.254" layer="94" curve="-90"/>
+<text x="-5.08" y="10.16" size="1.778" layer="95">&gt;NAME</text>
+<text x="-5.08" y="-27.94" size="1.778" layer="96">&gt;VALUE</text>
+<text x="-6.35" y="-0.254" size="1.778" layer="94" rot="R270">microSD CARD</text>
+<pin name="CMD" x="17.78" y="-10.16" visible="pin" length="middle" direction="in" rot="R180"/>
+<pin name="DAT2" x="17.78" y="-5.08" visible="pin" length="middle" direction="nc" rot="R180"/>
+<pin name="DET" x="17.78" y="5.08" visible="pin" length="middle" direction="hiz" rot="R180"/>
+<pin name="CLK" x="17.78" y="-15.24" visible="pin" length="middle" direction="in" rot="R180"/>
+<pin name="VDD" x="17.78" y="-12.7" visible="pin" length="middle" direction="pwr" rot="R180"/>
+<pin name="CD/DAT3" x="17.78" y="-7.62" visible="pin" length="middle" direction="in" rot="R180"/>
+<pin name="DAT1" x="17.78" y="-22.86" visible="pin" length="middle" direction="nc" rot="R180"/>
+<pin name="VSS" x="17.78" y="-17.78" visible="pin" length="middle" direction="pwr" rot="R180"/>
+<pin name="DAT0" x="17.78" y="-20.32" visible="pin" length="middle" direction="out" rot="R180"/>
+<pin name="POL" x="17.78" y="2.54" visible="pin" length="middle" direction="hiz" rot="R180"/>
+<text x="12.065" y="-10.16" size="0.254" layer="97" align="center-right">SPI MOSI</text>
+<text x="12.065" y="-12.7" size="0.254" layer="97" align="center-right">3V3</text>
+<text x="12.065" y="-15.24" size="0.254" layer="97" align="center-right">SPI SCK</text>
+<text x="12.065" y="-17.78" size="0.254" layer="97" align="center-right">GND</text>
+<text x="12.065" y="-20.32" size="0.254" layer="97" align="center-right">SPI MISO</text>
+<text x="12.065" y="-7.62" size="0.254" layer="97" align="center-right">SPI CS</text>
+<wire x1="12.7" y1="5.08" x2="3.175" y2="5.08" width="0.254" layer="94"/>
+<wire x1="12.7" y1="2.54" x2="3.175" y2="2.54" width="0.254" layer="94"/>
+<wire x1="3.175" y1="2.54" x2="3.175" y2="3.175" width="0.254" layer="94"/>
+<wire x1="3.175" y1="4.445" x2="3.175" y2="5.08" width="0.254" layer="94"/>
+<wire x1="3.175" y1="4.445" x2="2.54" y2="3.175" width="0.254" layer="94"/>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="MICROSD_SPI_MODE" prefix="IC" uservalue="yes">
+<description>&lt;b&gt;MOLEX - 49225-0821 - CONNECTEUR MICRO SD PUSH/PUSH REV&lt;/b&gt;&lt;hr&gt;&lt;p&gt;Fabricant: MOLEX&lt;br&gt;Code commande Farnell: &lt;a href="http://fr.farnell.com/molex/49225-0821/connecteur-micro-sd-push-push-rev/dp/1366700?Ntt=1366700"&gt;1366700&lt;/a&gt;&lt;br&gt;Référence fabricant: 49225-0821 &lt;/p&gt;&lt;img src="MOLEX - 49225-0821 - CONNECTEUR MICRO SD.png"&gt;</description>
+<gates>
+<gate name="G$1" symbol="MICROSD_SPI_MODE" x="0" y="0"/>
+</gates>
+<devices>
+<device name="" package="MICRO_SD_CONNECTOR">
+<connects>
+<connect gate="G$1" pin="CD/DAT3" pad="CD/DAT3"/>
+<connect gate="G$1" pin="CLK" pad="CLK"/>
+<connect gate="G$1" pin="CMD" pad="CMD"/>
+<connect gate="G$1" pin="DAT0" pad="DAT0"/>
+<connect gate="G$1" pin="DAT1" pad="DAT1"/>
+<connect gate="G$1" pin="DAT2" pad="DAT2"/>
+<connect gate="G$1" pin="DET" pad="DET"/>
+<connect gate="G$1" pin="POL" pad="POL"/>
+<connect gate="G$1" pin="VDD" pad="VDD"/>
+<connect gate="G$1" pin="VSS" pad="GND1 GND2 GND3"/>
+</connects>
+<technologies>
+<technology name=""/>
 </technologies>
 </device>
 </devices>
@@ -35586,6 +35629,151 @@ DIN A5, landscape with doc field</description>
 </sheet>
 </sheets>
 </module>
+<module name="SD_CARD" prefix="" dx="25.4" dy="35.56">
+<ports>
+<port name="GND" side="bottom" coord="0" direction="pwr"/>
+<port name="3V3" side="left" coord="10.16" direction="pwr"/>
+<port name="SPI1_MOSI" side="left" coord="5.08" direction="in"/>
+<port name="SPI1_MISO" side="left" coord="2.54" direction="out"/>
+<port name="SPI1_SCK" side="left" coord="0" direction="in"/>
+<port name="SPI1_SD_CS" side="left" coord="-5.08" direction="in"/>
+<port name="SD_CD" side="left" coord="-7.62" direction="hiz"/>
+</ports>
+<variantdefs>
+</variantdefs>
+<parts>
+<part name="SD-CARD" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A5L-LOC" device="" value="SD Card"/>
+<part name="SUPPLY4" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="SUPPLY6" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
+<part name="C31" library="rcl" deviceset="C-EU" device="C0805" value="0.1u / 16V"/>
+<part name="IC1" library="Molex SD-47309 SD Card Slot" deviceset="MICROSD_SPI_MODE" device="" value="47309-2651"/>
+<part name="SUPPLY1" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
+<part name="SUPPLY2" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="SUPPLY3" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="SUPPLY5" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
+<part name="SUPPLY7" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+</parts>
+<sheets>
+<sheet>
+<plain>
+</plain>
+<instances>
+<instance part="SD-CARD" gate="G$1" x="0" y="0" smashed="yes">
+<attribute name="DRAWING_NAME" x="140.97" y="15.24" size="2.54" layer="94"/>
+<attribute name="LAST_DATE_TIME" x="140.97" y="10.16" size="2.286" layer="94"/>
+<attribute name="SHEET" x="154.305" y="5.08" size="2.54" layer="94"/>
+</instance>
+<instance part="SUPPLY4" gate="G$1" x="63.5" y="20.32" smashed="yes">
+<attribute name="VALUE" x="63.5" y="25.4" size="1.778" layer="96" rot="R180" align="center"/>
+</instance>
+<instance part="SUPPLY6" gate="G$1" x="73.66" y="10.16" smashed="yes">
+<attribute name="VALUE" x="73.66" y="7.62" size="1.778" layer="96" rot="R180" align="center"/>
+</instance>
+<instance part="C31" gate="G$1" x="25.4" y="22.86" smashed="yes">
+<attribute name="NAME" x="27.94" y="22.86" size="1.778" layer="95"/>
+<attribute name="VALUE" x="27.94" y="20.32" size="1.778" layer="96"/>
+</instance>
+<instance part="IC1" gate="G$1" x="71.12" y="83.82" smashed="yes">
+<attribute name="NAME" x="66.04" y="93.98" size="1.778" layer="95"/>
+<attribute name="VALUE" x="66.04" y="53.34" size="1.778" layer="96"/>
+</instance>
+<instance part="SUPPLY1" gate="G$1" x="93.98" y="66.04" smashed="yes" rot="R90">
+<attribute name="VALUE" x="99.06" y="66.04" size="1.778" layer="96" align="center"/>
+</instance>
+<instance part="SUPPLY2" gate="G$1" x="93.98" y="71.12" smashed="yes" rot="R270">
+<attribute name="VALUE" x="99.06" y="71.12" size="1.778" layer="96" rot="R180" align="center"/>
+</instance>
+<instance part="SUPPLY3" gate="G$1" x="96.52" y="91.44" smashed="yes">
+<attribute name="VALUE" x="96.52" y="96.52" size="1.778" layer="96" align="center"/>
+</instance>
+<instance part="SUPPLY5" gate="G$1" x="25.4" y="12.7" smashed="yes">
+<attribute name="VALUE" x="25.4" y="10.16" size="1.778" layer="96" rot="R180" align="center"/>
+</instance>
+<instance part="SUPPLY7" gate="G$1" x="25.4" y="30.48" smashed="yes">
+<attribute name="VALUE" x="25.4" y="35.56" size="1.778" layer="96" align="center"/>
+</instance>
+</instances>
+<busses>
+</busses>
+<nets>
+<net name="GND" class="0">
+<segment>
+<pinref part="SUPPLY6" gate="G$1" pin="GND"/>
+<wire x1="73.66" y1="12.7" x2="73.66" y2="17.78" width="0.1524" layer="91"/>
+<label x="73.66" y="17.78" size="1.778" layer="95" xref="yes"/>
+</segment>
+<segment>
+<pinref part="IC1" gate="G$1" pin="VSS"/>
+<pinref part="SUPPLY1" gate="G$1" pin="GND"/>
+<wire x1="91.44" y1="66.04" x2="88.9" y2="66.04" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="C31" gate="G$1" pin="2"/>
+<pinref part="SUPPLY5" gate="G$1" pin="GND"/>
+<wire x1="25.4" y1="15.24" x2="25.4" y2="17.78" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="3V3" class="0">
+<segment>
+<wire x1="63.5" y1="10.16" x2="63.5" y2="17.78" width="0.1524" layer="91"/>
+<label x="63.5" y="10.16" size="1.778" layer="95" rot="R180" xref="yes"/>
+<pinref part="SUPPLY4" gate="G$1" pin="3V3"/>
+</segment>
+<segment>
+<pinref part="IC1" gate="G$1" pin="VDD"/>
+<pinref part="SUPPLY2" gate="G$1" pin="3V3"/>
+<wire x1="91.44" y1="71.12" x2="88.9" y2="71.12" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<pinref part="IC1" gate="G$1" pin="DET"/>
+<wire x1="88.9" y1="88.9" x2="96.52" y2="88.9" width="0.1524" layer="91"/>
+<pinref part="SUPPLY3" gate="G$1" pin="3V3"/>
+</segment>
+<segment>
+<pinref part="C31" gate="G$1" pin="1"/>
+<pinref part="SUPPLY7" gate="G$1" pin="3V3"/>
+<wire x1="25.4" y1="27.94" x2="25.4" y2="25.4" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="SPI1_MISO" class="0">
+<segment>
+<pinref part="IC1" gate="G$1" pin="DAT0"/>
+<wire x1="88.9" y1="63.5" x2="106.68" y2="63.5" width="0.1524" layer="91"/>
+<label x="106.68" y="63.5" size="1.778" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="SPI1_SCK" class="0">
+<segment>
+<pinref part="IC1" gate="G$1" pin="CLK"/>
+<wire x1="88.9" y1="68.58" x2="106.68" y2="68.58" width="0.1524" layer="91"/>
+<label x="106.68" y="68.58" size="1.778" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="SPI1_MOSI" class="0">
+<segment>
+<pinref part="IC1" gate="G$1" pin="CMD"/>
+<wire x1="88.9" y1="73.66" x2="106.68" y2="73.66" width="0.1524" layer="91"/>
+<label x="106.68" y="73.66" size="1.778" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="SPI1_SD_CS" class="0">
+<segment>
+<pinref part="IC1" gate="G$1" pin="CD/DAT3"/>
+<wire x1="88.9" y1="76.2" x2="106.68" y2="76.2" width="0.1524" layer="91"/>
+<label x="106.68" y="76.2" size="1.778" layer="95" xref="yes"/>
+</segment>
+</net>
+<net name="SD_CD" class="0">
+<segment>
+<pinref part="IC1" gate="G$1" pin="POL"/>
+<wire x1="88.9" y1="86.36" x2="106.68" y2="86.36" width="0.1524" layer="91"/>
+<label x="106.68" y="86.36" size="1.778" layer="95" xref="yes"/>
+</segment>
+</net>
+</nets>
+</sheet>
+</sheets>
+</module>
 </modules>
 <parts>
 <part name="U2" library="Atmel_By_element14_Batch_1-00" deviceset="ATMEGA1281-16AU" device=""/>
@@ -35648,9 +35836,6 @@ DIN A5, landscape with doc field</description>
 <part name="SJ1" library="jumper" deviceset="SJ" device="W" value="RESET"/>
 <part name="C36" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:26137/1" value="0.1µF"/>
 <part name="L2" library="rcl" deviceset="L-US" device="" value="DL0805-33 33µH"/>
-<part name="IC7" library="Molex SD-47309 SD Card Slot" deviceset="MICROSD_SPI_MODE" device=""/>
-<part name="R37" library="rcl" deviceset="R-EU_" device="R0805" value="10k"/>
-<part name="C31" library="rcl" deviceset="C-EU" device="C0805" value="0.1µF"/>
 <part name="C15" library="rcl" deviceset="C-EU" device="C0805" value="1µF"/>
 <part name="C14" library="rcl" deviceset="C-EU" device="C0805" value="1µF"/>
 <part name="C16" library="rcl" deviceset="C-EU" device="C0805" value="10µF"/>
@@ -35728,6 +35913,8 @@ DIN A5, landscape with doc field</description>
 <part name="SUPPLY8" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 <part name="SUPPLY9" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 <part name="SUPPLY10" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="SUPPLY11" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
+<part name="SUPPLY12" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 </parts>
 <sheets>
 <sheet>
@@ -35768,6 +35955,9 @@ ejovrh rev.3</text>
 </moduleinst>
 <moduleinst name="FERAM" module="FERAM" x="200.66" y="106.68">
 <attribute name="NAME" value="FERAM" x="200.66" y="119.38" size="2.032" layer="95" align="bottom-center"/>
+</moduleinst>
+<moduleinst name="SD_CARD" module="SD_CARD" x="200.66" y="157.48">
+<attribute name="NAME" value="SD_CARD" x="200.66" y="170.18" size="2.032" layer="95" align="bottom-center"/>
 </moduleinst>
 </moduleinsts>
 <instances>
@@ -36009,18 +36199,6 @@ ejovrh rev.3</text>
 <instance part="L2" gate="G$1" x="843.28" y="45.72" smashed="yes">
 <attribute name="NAME" x="842.01" y="40.64" size="1.778" layer="95" rot="R90"/>
 <attribute name="VALUE" x="847.09" y="40.64" size="1.778" layer="96" rot="R90"/>
-</instance>
-<instance part="IC7" gate="G$1" x="784.86" y="-734.06" smashed="yes">
-<attribute name="NAME" x="772.16" y="-713.74" size="1.778" layer="95"/>
-<attribute name="VALUE" x="772.16" y="-716.28" size="1.778" layer="96"/>
-</instance>
-<instance part="R37" gate="G$1" x="825.5" y="-736.6" smashed="yes" rot="R90">
-<attribute name="NAME" x="824.0014" y="-740.41" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="828.802" y="-740.41" size="1.778" layer="96" rot="R90"/>
-</instance>
-<instance part="C31" gate="G$1" x="825.5" y="-728.98" smashed="yes" rot="R180">
-<attribute name="NAME" x="823.976" y="-729.361" size="1.778" layer="95" rot="R180"/>
-<attribute name="VALUE" x="823.976" y="-724.281" size="1.778" layer="96" rot="R180"/>
 </instance>
 <instance part="C15" gate="G$1" x="662.94" y="-858.52" smashed="yes" rot="R180">
 <attribute name="NAME" x="661.416" y="-858.901" size="1.778" layer="95" rot="R180"/>
@@ -36409,6 +36587,12 @@ ejovrh rev.3</text>
 <instance part="SUPPLY10" gate="G$1" x="180.34" y="96.52" smashed="yes" rot="R90">
 <attribute name="VALUE" x="175.26" y="96.52" size="1.778" layer="96" rot="R180" align="center-left"/>
 </instance>
+<instance part="SUPPLY11" gate="G$1" x="200.66" y="129.54" smashed="yes">
+<attribute name="VALUE" x="200.66" y="127" size="1.778" layer="96" align="center-left"/>
+</instance>
+<instance part="SUPPLY12" gate="G$1" x="177.8" y="167.64" smashed="yes" rot="R90">
+<attribute name="VALUE" x="172.72" y="167.64" size="1.778" layer="96" rot="R180" align="center-left"/>
+</instance>
 </instances>
 <busses>
 <bus name="B$1">
@@ -36515,8 +36699,8 @@ ejovrh rev.3</text>
 </bus>
 <bus name="SPI1:SPI1_MISO,SPI1_MOSI,SPI1_SCK">
 <segment>
-<wire x1="147.32" y1="129.54" x2="147.32" y2="55.88" width="0.762" layer="92"/>
-<label x="147.32" y="129.54" size="1.778" layer="95"/>
+<wire x1="147.32" y1="190.5" x2="147.32" y2="55.88" width="0.762" layer="92"/>
+<label x="147.32" y="190.5" size="1.778" layer="95"/>
 </segment>
 <segment>
 <wire x1="7.62" y1="116.84" x2="7.62" y2="63.5" width="0.762" layer="92"/>
@@ -36627,15 +36811,6 @@ ejovrh rev.3</text>
 <pinref part="L2" gate="G$1" pin="1"/>
 <wire x1="843.28" y1="53.34" x2="850.9" y2="53.34" width="0.1524" layer="91"/>
 <label x="850.9" y="53.34" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="R37" gate="G$1" pin="2"/>
-<pinref part="IC7" gate="G$1" pin="VCC"/>
-<pinref part="C31" gate="G$1" pin="1"/>
-<wire x1="825.5" y1="-731.52" x2="797.56" y2="-731.52" width="0.1524" layer="91"/>
-<wire x1="830.58" y1="-731.52" x2="825.5" y2="-731.52" width="0.1524" layer="91"/>
-<junction x="825.5" y="-731.52"/>
-<label x="830.58" y="-731.52" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="IC3" gate="A" pin="VOUT"/>
@@ -37010,28 +37185,6 @@ ejovrh rev.3</text>
 <label x="838.2" y="-585.47" size="1.778" layer="95" ratio="9"/>
 </segment>
 <segment>
-<pinref part="C31" gate="G$1" pin="2"/>
-<pinref part="IC7" gate="G$1" pin="GND1"/>
-<wire x1="825.5" y1="-721.36" x2="825.5" y2="-723.9" width="0.1524" layer="91"/>
-<wire x1="797.56" y1="-721.36" x2="802.64" y2="-721.36" width="0.1524" layer="91"/>
-<junction x="825.5" y="-721.36"/>
-<pinref part="IC7" gate="G$1" pin="GND2"/>
-<wire x1="802.64" y1="-721.36" x2="825.5" y2="-721.36" width="0.1524" layer="91"/>
-<wire x1="797.56" y1="-723.9" x2="802.64" y2="-723.9" width="0.1524" layer="91"/>
-<wire x1="802.64" y1="-723.9" x2="802.64" y2="-721.36" width="0.1524" layer="91"/>
-<junction x="802.64" y="-721.36"/>
-<wire x1="802.64" y1="-723.9" x2="802.64" y2="-726.44" width="0.1524" layer="91"/>
-<junction x="802.64" y="-723.9"/>
-<pinref part="IC7" gate="G$1" pin="GND3"/>
-<wire x1="802.64" y1="-726.44" x2="797.56" y2="-726.44" width="0.1524" layer="91"/>
-<wire x1="802.64" y1="-726.44" x2="802.64" y2="-728.98" width="0.1524" layer="91"/>
-<junction x="802.64" y="-726.44"/>
-<pinref part="IC7" gate="G$1" pin="GND4"/>
-<wire x1="802.64" y1="-728.98" x2="797.56" y2="-728.98" width="0.1524" layer="91"/>
-<label x="830.58" y="-721.36" size="1.778" layer="95" ratio="9"/>
-<wire x1="825.5" y1="-721.36" x2="830.58" y2="-721.36" width="0.1524" layer="91"/>
-</segment>
-<segment>
 <pinref part="R35" gate="G$1" pin="2"/>
 <wire x1="805.18" y1="-93.98" x2="805.18" y2="-99.06" width="0.1524" layer="91"/>
 <label x="805.18" y="-99.06" size="1.778" layer="95"/>
@@ -37293,6 +37446,11 @@ ejovrh rev.3</text>
 <portref moduleinst="FERAM" port="GND"/>
 <pinref part="SUPPLY7" gate="G$1" pin="GND"/>
 <wire x1="200.66" y1="83.82" x2="200.66" y2="81.28" width="0.1524" layer="91"/>
+</segment>
+<segment>
+<portref moduleinst="SD_CARD" port="GND"/>
+<pinref part="SUPPLY11" gate="G$1" pin="GND"/>
+<wire x1="200.66" y1="132.08" x2="200.66" y2="134.62" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="OLD_5V0" class="3">
@@ -37589,14 +37747,6 @@ ejovrh rev.3</text>
 </net>
 <net name="SPI_SS_SD_CARD_PIN" class="2">
 <segment>
-<pinref part="IC7" gate="G$1" pin="CS"/>
-<pinref part="R37" gate="G$1" pin="1"/>
-<wire x1="797.56" y1="-741.68" x2="825.5" y2="-741.68" width="0.1524" layer="91"/>
-<wire x1="825.5" y1="-741.68" x2="830.58" y2="-741.68" width="0.1524" layer="91"/>
-<junction x="825.5" y="-741.68"/>
-<label x="830.58" y="-741.68" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="U2" gate="A" pin="(OC3A/AIN1)_PE3"/>
 <wire x1="581.66" y1="190.5" x2="546.1" y2="190.5" width="0.1524" layer="91"/>
 <label x="546.1" y="190.5" size="1.778" layer="95"/>
@@ -37743,11 +37893,6 @@ ejovrh rev.3</text>
 <label x="675.64" y="129.54" size="1.778" layer="95"/>
 </segment>
 <segment>
-<pinref part="IC7" gate="G$1" pin="DI"/>
-<wire x1="797.56" y1="-736.6" x2="805.18" y2="-736.6" width="0.1524" layer="91"/>
-<label x="805.18" y="-736.6" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="X1" gate="-19" pin="1"/>
 <wire x1="566.42" y1="-861.06" x2="538.48" y2="-861.06" width="0.1524" layer="91"/>
 <label x="538.48" y="-861.06" size="1.778" layer="95"/>
@@ -37763,11 +37908,6 @@ ejovrh rev.3</text>
 <pinref part="U2" gate="A" pin="(MISO/PCINT3)_PB3"/>
 <wire x1="668.02" y1="127" x2="675.64" y2="127" width="0.1524" layer="91"/>
 <label x="675.64" y="127" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="IC7" gate="G$1" pin="DO"/>
-<wire x1="797.56" y1="-734.06" x2="805.18" y2="-734.06" width="0.1524" layer="91"/>
-<label x="805.18" y="-734.06" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="IC8" gate="G$1" pin="DOUT"/>
@@ -37815,11 +37955,6 @@ ejovrh rev.3</text>
 </net>
 <net name="SD_CARD_DETECT_PIN" class="2">
 <segment>
-<pinref part="IC7" gate="G$1" pin="CARD_DETECT"/>
-<wire x1="797.56" y1="-744.22" x2="830.58" y2="-744.22" width="0.1524" layer="91"/>
-<label x="830.58" y="-744.22" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="U2" gate="A" pin="(XCK0/AIN0)_PE2"/>
 <wire x1="581.66" y1="193.04" x2="546.1" y2="193.04" width="0.1524" layer="91"/>
 <label x="546.1" y="193.04" size="1.778" layer="95"/>
@@ -37847,11 +37982,6 @@ ejovrh rev.3</text>
 <pinref part="U2" gate="A" pin="(SCK/PCINT1)_PB1"/>
 <wire x1="668.02" y1="134.62" x2="675.64" y2="134.62" width="0.1524" layer="91"/>
 <label x="675.64" y="134.62" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="IC7" gate="G$1" pin="CLK"/>
-<wire x1="797.56" y1="-739.14" x2="805.18" y2="-739.14" width="0.1524" layer="91"/>
-<label x="805.18" y="-739.14" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="X1" gate="-18" pin="1"/>
@@ -38882,6 +39012,11 @@ ejovrh rev.3</text>
 <portref moduleinst="FERAM" port="FRAM_!HOLD!"/>
 <pinref part="SUPPLY10" gate="G$1" pin="3V3"/>
 </segment>
+<segment>
+<portref moduleinst="SD_CARD" port="3V3"/>
+<pinref part="SUPPLY12" gate="G$1" pin="3V3"/>
+<wire x1="180.34" y1="167.64" x2="182.88" y2="167.64" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="NRST" class="2">
 <segment>
@@ -38988,13 +39123,6 @@ ejovrh rev.3</text>
 <label x="33.02" y="182.88" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="PB0" class="2">
-<segment>
-<wire x1="43.18" y1="190.5" x2="33.02" y2="190.5" width="0.1524" layer="91"/>
-<pinref part="BRD1" gate="CN7" pin="PB0"/>
-<label x="33.02" y="190.5" size="1.778" layer="95" rot="R180"/>
-</segment>
-</net>
 <net name="PA15" class="2">
 <segment>
 <wire x1="43.18" y1="198.12" x2="33.02" y2="198.12" width="0.1524" layer="91"/>
@@ -39016,18 +39144,28 @@ ejovrh rev.3</text>
 <label x="33.02" y="203.2" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="PA2" class="2">
+<net name="SD_CD" class="2">
 <segment>
-<wire x1="43.18" y1="205.74" x2="33.02" y2="205.74" width="0.1524" layer="91"/>
-<pinref part="BRD1" gate="CN7" pin="PA2"/>
-<label x="33.02" y="205.74" size="1.778" layer="95" rot="R180"/>
+<wire x1="43.18" y1="190.5" x2="33.02" y2="190.5" width="0.1524" layer="91"/>
+<pinref part="BRD1" gate="CN7" pin="PB0"/>
+<label x="33.02" y="190.5" size="1.778" layer="95" rot="R180"/>
+</segment>
+<segment>
+<portref moduleinst="SD_CARD" port="SD_CD"/>
+<wire x1="182.88" y1="149.86" x2="175.26" y2="149.86" width="0.1524" layer="91"/>
+<label x="175.26" y="149.86" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="PA1" class="2">
+<net name="SPI1_SD_CS" class="2">
 <segment>
 <wire x1="43.18" y1="208.28" x2="33.02" y2="208.28" width="0.1524" layer="91"/>
 <pinref part="BRD1" gate="CN7" pin="PA1"/>
 <label x="33.02" y="208.28" size="1.778" layer="95" rot="R180"/>
+</segment>
+<segment>
+<portref moduleinst="SD_CARD" port="SPI1_SD_CS"/>
+<wire x1="182.88" y1="152.4" x2="175.26" y2="152.4" width="0.1524" layer="91"/>
+<label x="175.26" y="152.4" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="ADC_VGPS" class="2">
@@ -39152,6 +39290,11 @@ ejovrh rev.3</text>
 <wire x1="182.88" y1="106.68" x2="147.32" y2="106.68" width="0.1524" layer="91"/>
 <label x="175.26" y="106.68" size="1.778" layer="95" rot="R180"/>
 </segment>
+<segment>
+<portref moduleinst="SD_CARD" port="SPI1_SCK"/>
+<wire x1="182.88" y1="157.48" x2="147.32" y2="157.48" width="0.1524" layer="91"/>
+<label x="175.26" y="157.48" size="1.778" layer="95" rot="R180"/>
+</segment>
 </net>
 <net name="PB1" class="2">
 <segment>
@@ -39182,6 +39325,16 @@ ejovrh rev.3</text>
 <portref moduleinst="FERAM" port="SPI1_MISO"/>
 <wire x1="182.88" y1="109.22" x2="147.32" y2="109.22" width="0.1524" layer="91"/>
 <label x="175.26" y="109.22" size="1.778" layer="95" rot="R180"/>
+</segment>
+<segment>
+<portref moduleinst="SD_CARD" port="SPI1_MOSI"/>
+<wire x1="182.88" y1="162.56" x2="147.32" y2="162.56" width="0.1524" layer="91"/>
+<label x="175.26" y="162.56" size="1.778" layer="95" rot="R180"/>
+</segment>
+<segment>
+<portref moduleinst="SD_CARD" port="SPI1_MISO"/>
+<wire x1="182.88" y1="160.02" x2="147.32" y2="160.02" width="0.1524" layer="91"/>
+<label x="175.26" y="160.02" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="SPI1_MOSI" class="2">
@@ -39264,6 +39417,13 @@ ejovrh rev.3</text>
 <label x="91.44" y="205.74" size="1.778" layer="95"/>
 </segment>
 </net>
+<net name="PA2" class="2">
+<segment>
+<wire x1="43.18" y1="205.74" x2="33.02" y2="205.74" width="0.1524" layer="91"/>
+<pinref part="BRD1" gate="CN7" pin="PA2"/>
+<label x="33.02" y="205.74" size="1.778" layer="95" rot="R180"/>
+</segment>
+</net>
 </nets>
 </sheet>
 </sheets>
@@ -39271,6 +39431,9 @@ ejovrh rev.3</text>
 <approved hash="104,1@ADXL345,48.26,88.9,IC1,VDDIO,3V3,,,"/>
 <approved hash="104,1@ADXL345,48.26,83.82,IC1,VS,3V3,,,"/>
 <approved hash="104,1@ADXL345,111.76,81.28,IC2,VCC,3V3,,,"/>
+<approved hash="104,1@FERAM,99.06,81.28,IC1,VCC,3V3,,,"/>
+<approved hash="104,1@SD_CARD,88.9,71.12,IC1,VDD,3V3,,,"/>
+<approved hash="104,1@SD_CARD,88.9,66.04,IC1,VSS,GND,,,"/>
 </errors>
 </schematic>
 </drawing>
