@@ -123,6 +123,7 @@ void Error_Handler(void);
 /* USER CODE BEGIN Private defines */
 #define USE_ADXL345 1	// use the accelerometer
 #define USE_FM25W256 1	// use the memory
+#define USE_SD 1	// use the SD card
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
