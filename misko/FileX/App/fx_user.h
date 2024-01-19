@@ -67,10 +67,10 @@
 /* USER CODE END 1 */
 
 /* Define various build options for the FileX port.  The application should either make changes
-   here by commenting or un-commenting the conditional compilation defined OR supply the defines though the compiler's equivalent of the -D option.  */
+ here by commenting or un-commenting the conditional compilation defined OR supply the defines though the compiler's equivalent of the -D option.  */
 
 /* Override various options with default values already assigned in fx_api.h or fx_port.h.
-  Please also refer to fx_port.h for descriptions on each of these options.  */
+ Please also refer to fx_port.h for descriptions on each of these options.  */
 
 /* #define ULONG64_DEFINED */
 
@@ -79,9 +79,9 @@
 /* #define FX_DISABLE_DIRECT_DATA_READ_CACHE_FILL */
 
 /* Determine if error checking is desired.  If so, map API functions
-   to the appropriate error checking front-ends.  Otherwise, map API
-   functions to the core functions that actually perform the work.
-   Note: error checking is enabled by default.  */
+ to the appropriate error checking front-ends.  Otherwise, map API
+ functions to the core functions that actually perform the work.
+ Note: error checking is enabled by default.  */
 
 #define FX_DISABLE_ERROR_CHECKING
 
@@ -95,13 +95,13 @@
 
 /* Defined, FileX is able to access exFAT file system.
 
-   FileX supports the Microsoft exFAT file system format.
-   Your use of exFAT technology in your products requires a separate
-   license from Microsoft. Please see the following link for further
-   details on exFAT licensing:
+ FileX supports the Microsoft exFAT file system format.
+ Your use of exFAT technology in your products requires a separate
+ license from Microsoft. Please see the following link for further
+ details on exFAT licensing:
 
-   https://www.microsoft.com/en-us/legal/intellectualproperty/mtl/exfat-licensing.aspx
-*/
+ https://www.microsoft.com/en-us/legal/intellectualproperty/mtl/exfat-licensing.aspx
+ */
 
 /* #define FX_ENABLE_EXFAT */
 
@@ -110,36 +110,36 @@
 #define FX_ENABLE_FAULT_TOLERANT
 
 /* Defines the size in bytes of the bit map used to update the secondary FAT sectors.
-   The larger the value the less unnecessary secondary FAT sector writes.   */
+ The larger the value the less unnecessary secondary FAT sector writes.   */
 
 /* #define FX_FAT_MAP_SIZE         128 */
 
 /* Defined, data sector write requests are flushed immediately to the driver.  */
 
-/* #define FX_FAULT_TOLERANT */
+#define FX_FAULT_TOLERANT
 
 /* Define byte offset in boot sector where the cluster number of the Fault Tolerant Log file is.
-   Note that this field (byte 116 to 119) is marked as reserved by FAT 12/16/32/exFAT specification. */
+ Note that this field (byte 116 to 119) is marked as reserved by FAT 12/16/32/exFAT specification. */
 
 /* #define FX_FAULT_TOLERANT_BOOT_INDEX         116 */
 
 /* Defined, data sector write requests are flushed immediately to the driver.  */
 
-/* #define FX_FAULT_TOLERANT_DATA */
+#define FX_FAULT_TOLERANT_DATA
 
 /* Defines the number of entries in the FAT cache.  */
 
 /* #define FX_MAX_FAT_CACHE         16 */
 
 /* Defines the maximum size of long file names supported by FileX.
-   The minimum value is 13 and the maximum value is 256.  */
+ The minimum value is 13 and the maximum value is 256.  */
 
 #define FX_MAX_LAST_NAME_LEN      128
 
 #define FX_MAX_LONG_NAME_LEN      128
 
 /* Defines the maximum number of logical sectors that can be cached by FileX. The cache memory
-   supplied to FileX at fx_media_open determines how many sectors can actually be cached.  */
+ supplied to FileX at fx_media_open determines how many sectors can actually be cached.  */
 
 /* #define FX_MAX_SECTOR_CACHE         256 */
 
@@ -168,9 +168,9 @@
 /* #define FX_SINGLE_OPEN_LEGACY */
 
 /* Define FileX internal protection macros.  If FX_SINGLE_THREAD is defined,
-   these protection macros are effectively disabled.  However, for multi-thread
-   uses, the macros are setup to utilize a ThreadX mutex for multiple thread
-   access control into an open media.  */
+ these protection macros are effectively disabled.  However, for multi-thread
+ uses, the macros are setup to utilize a ThreadX mutex for multiple thread
+ access control into an open media.  */
 
 #define FX_SINGLE_THREAD
 
@@ -183,8 +183,8 @@
 /* #define FX_UPDATE_RATE_IN_SECONDS         10 */
 
 /* Defines the number of ThreadX timer ticks required to achieve the update rate specified by
-   FX_UPDATE_RATE_IN_SECONDS defined previously. By default, the ThreadX timer tick is 10ms,
-   so the default value for this constant is 1000.  */
+ FX_UPDATE_RATE_IN_SECONDS defined previously. By default, the ThreadX timer tick is 10ms,
+ so the default value for this constant is 1000.  */
 
 /* #define FX_UPDATE_RATE_IN_TICKS         1000 */
 
@@ -221,18 +221,18 @@
 /* #define FX_DISABLE_CONSECUTIVE_DETECT */
 
 /* Define bitmap cache size for exFAT. Size should be minimum one sector size and maximum 4096. For applications using multiple media devices with varying sector size, the value should be set to the size of largest sector size.
-The FX_EXFAT_MAX_CACHE_SIZE is 2 power of FX_EXFAT_MAX_CACHE_SIZE_NB_BIT.  */
+ The FX_EXFAT_MAX_CACHE_SIZE is 2 power of FX_EXFAT_MAX_CACHE_SIZE_NB_BIT.  */
 
 /*
-#define FX_EXFAT_MAX_CACHE_SIZE            512
-*/
+ #define FX_EXFAT_MAX_CACHE_SIZE            512
+ */
 
 /* Define the size of fault tolerant cache, which is used when freeing FAT chain.
-	The FX_FAULT_TOLERANT_CACHE_SIZE is 2 power of FX_FAULT_TOLERANT_CACHE_SIZE_NB_SIZE.  */
+ The FX_FAULT_TOLERANT_CACHE_SIZE is 2 power of FX_FAULT_TOLERANT_CACHE_SIZE_NB_SIZE.  */
 
 /*
-#define FX_FAULT_TOLERANT_CACHE_SIZE            1024
-*/
+ #define FX_FAULT_TOLERANT_CACHE_SIZE            1024
+ */
 
 /* USER CODE BEGIN 2 */
 
