@@ -18,7 +18,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "app_filex.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -132,7 +131,6 @@ int main(void)
 	MX_SPI1_Init();
 	MX_FDCAN1_Init();
 	MX_ADC1_Init();
-	MX_FileX_Init();
 	/* USER CODE BEGIN 2 */
 	MX_Queue_tx_Config();
 	HAL_DMAEx_List_LinkQ(&handle_GPDMA1_Channel7, &Queue_tx);
@@ -150,7 +148,6 @@ int main(void)
 	if(HAL_TIM_OC_Start_IT(&htim1, TIM_CHANNEL_1) != HAL_OK)	// 125ms time base
 		Error_Handler();
 
-	fx_system_initialize();
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
