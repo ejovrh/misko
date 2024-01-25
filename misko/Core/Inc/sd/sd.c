@@ -11,7 +11,7 @@ typedef struct	// sdc_t actual
 	uint16_t _CS_Pin;  // SPI chip select GPIO pin
 } __sd_t;
 
-static __sd_t __SD __attribute__ ((section (".data")));  // preallocate __SD object in .data
+static __sd_t  __SD  __attribute__ ((section (".data")));  // preallocate __SD object in .data
 
 // reads a length of string from address
 static void _Read(void)
@@ -25,7 +25,7 @@ static void _Write(void)
 	;
 }
 
-static __sd_t __SD =  // instantiate sdc_t actual and set function pointers
+static __sd_t  __SD =  // instantiate sdc_t actual and set function pointers
 	{  //
 	.public.Read = &_Read,  // reads n bytes from device
 	.public.Write = &_Write  // writes n bytes to device

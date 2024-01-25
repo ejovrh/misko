@@ -121,6 +121,7 @@ void Error_Handler(void);
 #define Anal_SW_CTRL_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
+#define SD_SPI_HANDLE hspi1
 #define USE_ADXL345 1	// use the accelerometer
 #define USE_FM25W256 1	// use the memory
 #define USE_SD 1	// use the SD card
