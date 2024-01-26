@@ -28,7 +28,7 @@
 #include "fm25w256/fm25w256.h"
 #endif
 
-#include "fatfs.h"
+#include "FatFs/fatfs.h"
 
 #include <stdio.h>
 #include <string.h>
