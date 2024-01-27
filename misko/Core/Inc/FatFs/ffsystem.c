@@ -4,7 +4,6 @@
 
 #include "ff.h"
 
-
 #if FF_USE_LFN == 3	/* Use dynamic memory allocation */
 
 /*------------------------------------------------------------------------*/
@@ -30,9 +29,6 @@ void ff_memfree (
 }
 
 #endif
-
-
-
 
 #if FF_FS_REENTRANT	/* Mutal exclusion */
 /*------------------------------------------------------------------------*/

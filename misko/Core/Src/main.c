@@ -28,7 +28,8 @@
 #include "fm25w256/fm25w256.h"
 #endif
 
-#include "FatFs/fatfs.h"
+#include "FatFs/ff.h"
+#include "FatFs/diskio.h"
 
 #include <stdio.h>
 #include <string.h>
