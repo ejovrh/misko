@@ -28,8 +28,7 @@
 #include "fm25w256/fm25w256.h"
 #endif
 
-#include "FatFs/ff.h"
-#include "FatFs/diskio.h"
+#include "FatFs/fatfs.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -166,7 +165,7 @@ int main(void)
 	if(HAL_TIM_OC_Start_IT(&htim1, TIM_CHANNEL_1) != HAL_OK)	// 125ms time base
 		Error_Handler();
 
-	myprintf("\r\n~ SD card demo by kiwih ~\r\n\r\n");
+	MX_FATFS_Init();
 
 	HAL_Delay(1000);  //a short delay is important to let the SD card settle
 
@@ -174,6 +173,8 @@ int main(void)
 	FATFS FatFs; 	//Fatfs handle
 	FIL fil; 		//File handle
 	FRESULT fres;  //Result after operations
+
+	myprintf("\r\n~ SD card demo by kiwih ~\r\n\r\n");
 
 	//Open the file system
 	fres = f_mount(&FatFs, "", 1);  //1=mount now
