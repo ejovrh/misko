@@ -678,7 +678,8 @@ static int dbc_1st(BYTE c)
 				return 1;
 		}
 #else						/* SBCS fixed code page */
-	if (c != 0) return 0;	/* Always false */
+	if(c != 0)
+		return 0; /* Always false */
 #endif
 	return 0;
 }
@@ -703,7 +704,8 @@ static int dbc_2nd(BYTE c)
 				return 1;
 		}
 #else						/* SBCS fixed code page */
-	if (c != 0) return 0;	/* Always false */
+	if(c != 0)
+		return 0; /* Always false */
 #endif
 	return 0;
 }
@@ -3059,9 +3061,10 @@ const TCHAR **path /* Pointer to pointer to the segment in the path string */
 			c = ExCvt[c & 0x7F];		/* To upper SBC extended character */
 		}
 #elif FF_CODE_PAGE < 900
-		if (c >= 0x80) {				/* Is SBC extended character? */
-			c = ExCvt[c & 0x7F];		/* To upper SBC extended character */
-		}
+			if(c >= 0x80)
+				{ /* Is SBC extended character? */
+					c = ExCvt[c & 0x7F]; /* To upper SBC extended character */
+				}
 #endif
 			if(dbc_1st(c))
 				{ /* Check if it is a DBC 1st byte */
@@ -3817,7 +3820,7 @@ BYTE mode /* Access mode and open mode flags */
 
 	/* Get logical drive number */
 	mode &=
-	    FF_FS_READONLY ? FA_READ : FA_READ | FA_WRITE | FA_CREATE_ALWAYS | FA_CREATE_NEW | FA_OPEN_ALWAYS | FA_OPEN_APPEND;
+	FF_FS_READONLY ? FA_READ : FA_READ | FA_WRITE | FA_CREATE_ALWAYS | FA_CREATE_NEW | FA_OPEN_ALWAYS | FA_OPEN_APPEND;
 	res = mount_volume(&path, &fs, mode);
 	if(res == FR_OK)
 		{
@@ -4816,7 +4819,7 @@ const TCHAR *path /* Pointer to the directory path */
 				}
 #endif
 						}
-				} FREE_NAMBUF();
+				}FREE_NAMBUF();
 			if(res == FR_NO_FILE)
 				res = FR_NO_PATH;
 		}
@@ -4883,7 +4886,7 @@ FILINFO *fno /* Pointer to file information to return */
 							res = dir_next(dp, 0); /* Increment index for next */
 							if(res == FR_NO_FILE)
 								res = FR_OK; /* Ignore end of directory now */
-						} FREE_NAMBUF();
+						}FREE_NAMBUF();
 				}
 		}
 	LEAVE_FF(fs, res);
@@ -4969,7 +4972,7 @@ FILINFO *fno /* Pointer to file information to return */
 							if(fno)
 								get_fileinfo(&dj, fno);
 						}
-				} FREE_NAMBUF();
+				}FREE_NAMBUF();
 		}
 
 	LEAVE_FF(dj.obj.fs, res);
@@ -5248,7 +5251,7 @@ FRESULT f_unlink(const TCHAR *path /* Pointer to the file or directory path */
 							if(res == FR_OK)
 								res = sync_fs(fs);
 						}
-				} FREE_NAMBUF();
+				}FREE_NAMBUF();
 		}
 
 	LEAVE_FF(fs, res);
@@ -5341,7 +5344,7 @@ FRESULT f_mkdir(const TCHAR *path /* Pointer to the directory path */
 						{
 							remove_chain(&sobj, dcl, 0); /* Could not register, remove the allocated cluster */
 						}
-				} FREE_NAMBUF();
+				}FREE_NAMBUF();
 		}
 
 	LEAVE_FF(fs, res);
@@ -5455,7 +5458,7 @@ const TCHAR *path_new /* Pointer to the new name */
 								}
 						}
 					/* End of the critical section */
-				} FREE_NAMBUF();
+				}FREE_NAMBUF();
 		}
 
 	LEAVE_FF(fs, res);
@@ -6636,10 +6639,9 @@ FRESULT f_fdisk (
 /* Get a String from the File                                            */
 /*-----------------------------------------------------------------------*/
 
-TCHAR* f_gets (
-	TCHAR* buff,	/* Pointer to the buffer to store read string */
-	int len,		/* Size of string buffer (items) */
-	FIL* fp			/* Pointer to the file object */
+TCHAR* f_gets(TCHAR *buff, /* Pointer to the buffer to store read string */
+int len, /* Size of string buffer (items) */
+FIL *fp /* Pointer to the file object */
 )
 {
 	int nc = 0;
@@ -6744,23 +6746,25 @@ TCHAR* f_gets (
 	}
 
 #else			/* Byte-by-byte read without any conversion (ANSI/OEM API) */
-	len -= 1;	/* Make a room for the terminator */
-	while (nc < len) {
-		f_read(fp, s, 1, &rc);	/* Get a byte */
-		if (rc != 1) break;		/* EOF? */
-		dc = s[0];
-		if (FF_USE_STRFUNC == 2 && dc == '\r') continue;
-		*p++ = (TCHAR)dc; nc++;
-		if (dc == '\n') break;
-	}
+	len -= 1; /* Make a room for the terminator */
+	while(nc < len)
+		{
+			f_read(fp, s, 1, &rc); /* Get a byte */
+			if(rc != 1)
+				break; /* EOF? */
+			dc = s[0];
+			if(FF_USE_STRFUNC == 2 && dc == '\r')
+				continue;
+			*p++ = (TCHAR) dc;
+			nc++;
+			if(dc == '\n')
+				break;
+		}
 #endif
 
-	*p = 0;		/* Terminate the string */
-	return nc ? buff : 0;	/* When no data read due to EOF or error, return with error. */
+	*p = 0; /* Terminate the string */
+	return nc ? buff : 0; /* When no data read due to EOF or error, return with error. */
 }
-
-
-
 
 #if !FF_FS_READONLY
 #include <stdarg.h>
@@ -6773,22 +6777,22 @@ TCHAR* f_gets (
 
 /* Output buffer and work area */
 
-typedef struct {
-	FIL *fp;		/* Ptr to the writing file */
-	int idx, nchr;	/* Write index of buf[] (-1:error), number of encoding units written */
+typedef struct
+{
+	FIL *fp; /* Ptr to the writing file */
+	int idx, nchr; /* Write index of buf[] (-1:error), number of encoding units written */
 #if FF_USE_LFN && FF_LFN_UNICODE == 1
 	WCHAR hs;
 #elif FF_USE_LFN && FF_LFN_UNICODE == 2
 	BYTE bs[4];
 	UINT wi, ct;
 #endif
-	BYTE buf[SZ_PUTC_BUF];	/* Write buffer */
+	BYTE buf[SZ_PUTC_BUF]; /* Write buffer */
 } putbuff;
-
 
 /* Buffered file write with code conversion */
 
-static void putc_bfd (putbuff* pb, TCHAR c)
+static void putc_bfd(putbuff *pb, TCHAR c)
 {
 	UINT n;
 	int i, nc;
@@ -6800,13 +6804,15 @@ static void putc_bfd (putbuff* pb, TCHAR c)
 #endif
 #endif
 
-	if (FF_USE_STRFUNC == 2 && c == '\n') {	 /* LF -> CRLF conversion */
-		putc_bfd(pb, '\r');
-	}
+	if(FF_USE_STRFUNC == 2 && c == '\n')
+		{ /* LF -> CRLF conversion */
+			putc_bfd(pb, '\r');
+		}
 
-	i = pb->idx;			/* Write index of pb->buf[] */
-	if (i < 0) return;		/* In write error? */
-	nc = pb->nchr;			/* Write unit counter */
+	i = pb->idx; /* Write index of pb->buf[] */
+	if(i < 0)
+		return; /* In write error? */
+	nc = pb->nchr; /* Write unit counter */
 
 #if FF_USE_LFN && FF_LFN_UNICODE
 #if FF_LFN_UNICODE == 1		/* UTF-16 input */
@@ -6905,76 +6911,64 @@ static void putc_bfd (putbuff* pb, TCHAR c)
 #endif
 
 #else							/* ANSI/OEM input (without re-encoding) */
-	pb->buf[i++] = (BYTE)c;
+	pb->buf[i++] = (BYTE) c;
 #endif
 
-	if (i >= (int)(sizeof pb->buf) - 4) {	/* Write buffered characters to the file */
-		f_write(pb->fp, pb->buf, (UINT)i, &n);
-		i = (n == (UINT)i) ? 0 : -1;
-	}
+	if(i >= (int) (sizeof pb->buf) - 4)
+		{ /* Write buffered characters to the file */
+			f_write(pb->fp, pb->buf, (UINT) i, &n);
+			i = (n == (UINT) i) ? 0 : -1;
+		}
 	pb->idx = i;
 	pb->nchr = nc + 1;
 }
 
-
 /* Flush remaining characters in the buffer */
 
-static int putc_flush (putbuff* pb)
+static int putc_flush(putbuff *pb)
 {
 	UINT nw;
 
-	if (   pb->idx >= 0	/* Flush buffered characters to the file */
-		&& f_write(pb->fp, pb->buf, (UINT)pb->idx, &nw) == FR_OK
-		&& (UINT)pb->idx == nw) return pb->nchr;
+	if(pb->idx >= 0 /* Flush buffered characters to the file */
+	&& f_write(pb->fp, pb->buf, (UINT) pb->idx, &nw) == FR_OK && (UINT) pb->idx == nw)
+		return pb->nchr;
 	return -1;
 }
 
-
 /* Initialize write buffer */
 
-static void putc_init (putbuff* pb, FIL* fp)
+static void putc_init(putbuff *pb, FIL *fp)
 {
-	memset(pb, 0, sizeof (putbuff));
+	memset(pb, 0, sizeof(putbuff));
 	pb->fp = fp;
 }
 
-
-
-int f_putc (
-	TCHAR c,	/* A character to be output */
-	FIL* fp		/* Pointer to the file object */
+int f_putc(TCHAR c, /* A character to be output */
+FIL *fp /* Pointer to the file object */
 )
 {
 	putbuff pb;
 
-
 	putc_init(&pb, fp);
-	putc_bfd(&pb, c);	/* Put the character */
+	putc_bfd(&pb, c); /* Put the character */
 	return putc_flush(&pb);
 }
-
-
-
 
 /*-----------------------------------------------------------------------*/
 /* Put a String to the File                                              */
 /*-----------------------------------------------------------------------*/
 
-int f_puts (
-	const TCHAR* str,	/* Pointer to the string to be output */
-	FIL* fp				/* Pointer to the file object */
+int f_puts(const TCHAR *str, /* Pointer to the string to be output */
+FIL *fp /* Pointer to the file object */
 )
 {
 	putbuff pb;
 
-
 	putc_init(&pb, fp);
-	while (*str) putc_bfd(&pb, *str++);		/* Put the string */
+	while(*str)
+		putc_bfd(&pb, *str++); /* Put the string */
 	return putc_flush(&pb);
 }
-
-
-
 
 /*-----------------------------------------------------------------------*/
 /* Put a Formatted String to the File (with sub-functions)               */
@@ -6982,55 +6976,76 @@ int f_puts (
 #if FF_PRINT_FLOAT && FF_INTDEF == 2
 #include <math.h>
 
-static int ilog10 (double n)	/* Calculate log10(n) in integer output */
+static int ilog10(double n) /* Calculate log10(n) in integer output */
 {
 	int rv = 0;
 
-	while (n >= 10) {	/* Decimate digit in right shift */
-		if (n >= 100000) {
-			n /= 100000; rv += 5;
-		} else {
-			n /= 10; rv++;
+	while(n >= 10)
+		{ /* Decimate digit in right shift */
+			if(n >= 100000)
+				{
+					n /= 100000;
+					rv += 5;
+				}
+			else
+				{
+					n /= 10;
+					rv++;
+				}
 		}
-	}
-	while (n < 1) {		/* Decimate digit in left shift */
-		if (n < 0.00001) {
-			n *= 100000; rv -= 5;
-		} else {
-			n *= 10; rv--;
+	while(n < 1)
+		{ /* Decimate digit in left shift */
+			if(n < 0.00001)
+				{
+					n *= 100000;
+					rv -= 5;
+				}
+			else
+				{
+					n *= 10;
+					rv--;
+				}
 		}
-	}
 	return rv;
 }
 
-
-static double i10x (int n)	/* Calculate 10^n in integer input */
+static double i10x(int n) /* Calculate 10^n in integer input */
 {
 	double rv = 1;
 
-	while (n > 0) {		/* Left shift */
-		if (n >= 5) {
-			rv *= 100000; n -= 5;
-		} else {
-			rv *= 10; n--;
+	while(n > 0)
+		{ /* Left shift */
+			if(n >= 5)
+				{
+					rv *= 100000;
+					n -= 5;
+				}
+			else
+				{
+					rv *= 10;
+					n--;
+				}
 		}
-	}
-	while (n < 0) {		/* Right shift */
-		if (n <= -5) {
-			rv /= 100000; n += 5;
-		} else {
-			rv /= 10; n++;
+	while(n < 0)
+		{ /* Right shift */
+			if(n <= -5)
+				{
+					rv /= 100000;
+					n += 5;
+				}
+			else
+				{
+					rv /= 10;
+					n++;
+				}
 		}
-	}
 	return rv;
 }
 
-
-static void ftoa (
-	char* buf,	/* Buffer to output the floating point string */
-	double val,	/* Value to output */
-	int prec,	/* Number of fractional digits */
-	TCHAR fmt	/* Notation */
+static void ftoa(char *buf, /* Buffer to output the floating point string */
+double val, /* Value to output */
+int prec, /* Number of fractional digits */
+TCHAR fmt /* Notation */
 )
 {
 	int d;
@@ -7040,73 +7055,105 @@ static void ftoa (
 	const char *er = 0;
 	const char ds = FF_PRINT_FLOAT == 2 ? ',' : '.';
 
-
-	if (isnan(val)) {			/* Not a number? */
-		er = "NaN";
-	} else {
-		if (prec < 0) prec = 6;	/* Default precision? (6 fractional digits) */
-		if (val < 0) {			/* Negative? */
-			val = 0 - val; sign = '-';
-		} else {
-			sign = '+';
+	if(isnan(val))
+		{ /* Not a number? */
+			er = "NaN";
 		}
-		if (isinf(val)) {		/* Infinite? */
-			er = "INF";
-		} else {
-			if (fmt == 'f') {	/* Decimal notation? */
-				val += i10x(0 - prec) / 2;	/* Round (nearest) */
-				m = ilog10(val);
-				if (m < 0) m = 0;
-				if (m + prec + 3 >= SZ_NUM_BUF) er = "OV";	/* Buffer overflow? */
-			} else {			/* E notation */
-				if (val != 0) {		/* Not a true zero? */
-					val += i10x(ilog10(val) - prec) / 2;	/* Round (nearest) */
-					e = ilog10(val);
-					if (e > 99 || prec + 7 >= SZ_NUM_BUF) {	/* Buffer overflow or E > +99? */
-						er = "OV";
-					} else {
-						if (e < -99) e = -99;
-						val /= i10x(e);	/* Normalize */
-					}
+	else
+		{
+			if(prec < 0)
+				prec = 6; /* Default precision? (6 fractional digits) */
+			if(val < 0)
+				{ /* Negative? */
+					val = 0 - val;
+					sign = '-';
 				}
-			}
-		}
-		if (!er) {	/* Not error condition */
-			if (sign == '-') *buf++ = sign;	/* Add a - if negative value */
-			do {				/* Put decimal number */
-				if (m == -1) *buf++ = ds;	/* Insert a decimal separator when get into fractional part */
-				w = i10x(m);				/* Snip the highest digit d */
-				d = (int)(val / w); val -= d * w;
-				*buf++ = (char)('0' + d);	/* Put the digit */
-			} while (--m >= -prec);			/* Output all digits specified by prec */
-			if (fmt != 'f') {	/* Put exponent if needed */
-				*buf++ = (char)fmt;
-				if (e < 0) {
-					e = 0 - e; *buf++ = '-';
-				} else {
-					*buf++ = '+';
+			else
+				{
+					sign = '+';
 				}
-				*buf++ = (char)('0' + e / 10);
-				*buf++ = (char)('0' + e % 10);
-			}
+			if(isinf(val))
+				{ /* Infinite? */
+					er = "INF";
+				}
+			else
+				{
+					if(fmt == 'f')
+						{ /* Decimal notation? */
+							val += i10x(0 - prec) / 2; /* Round (nearest) */
+							m = ilog10(val);
+							if(m < 0)
+								m = 0;
+							if(m + prec + 3 >= SZ_NUM_BUF)
+								er = "OV"; /* Buffer overflow? */
+						}
+					else
+						{ /* E notation */
+							if(val != 0)
+								{ /* Not a true zero? */
+									val += i10x(ilog10(val) - prec) / 2; /* Round (nearest) */
+									e = ilog10(val);
+									if(e > 99 || prec + 7 >= SZ_NUM_BUF)
+										{ /* Buffer overflow or E > +99? */
+											er = "OV";
+										}
+									else
+										{
+											if(e < -99)
+												e = -99;
+											val /= i10x(e); /* Normalize */
+										}
+								}
+						}
+				}
+			if(!er)
+				{ /* Not error condition */
+					if(sign == '-')
+						*buf++ = sign; /* Add a - if negative value */
+					do
+						{ /* Put decimal number */
+							if(m == -1)
+								*buf++ = ds; /* Insert a decimal separator when get into fractional part */
+							w = i10x(m); /* Snip the highest digit d */
+							d = (int) (val / w);
+							val -= d * w;
+							*buf++ = (char) ('0' + d); /* Put the digit */
+						}
+					while(--m >= -prec); /* Output all digits specified by prec */
+					if(fmt != 'f')
+						{ /* Put exponent if needed */
+							*buf++ = (char) fmt;
+							if(e < 0)
+								{
+									e = 0 - e;
+									*buf++ = '-';
+								}
+							else
+								{
+									*buf++ = '+';
+								}
+							*buf++ = (char) ('0' + e / 10);
+							*buf++ = (char) ('0' + e % 10);
+						}
+				}
 		}
-	}
-	if (er) {	/* Error condition */
-		if (sign) *buf++ = sign;		/* Add sign if needed */
-		do {		/* Put error symbol */
-			*buf++ = *er++;
-		} while (*er);
-	}
-	*buf = 0;	/* Term */
+	if(er)
+		{ /* Error condition */
+			if(sign)
+				*buf++ = sign; /* Add sign if needed */
+			do
+				{ /* Put error symbol */
+					*buf++ = *er++;
+				}
+			while(*er);
+		}
+	*buf = 0; /* Term */
 }
 #endif	/* FF_PRINT_FLOAT && FF_INTDEF == 2 */
 
-
-
-int f_printf (
-	FIL* fp,			/* Pointer to the file object */
-	const TCHAR* fmt,	/* Pointer to the format string */
-	...					/* Optional arguments... */
+int f_printf(FIL *fp, /* Pointer to the file object */
+const TCHAR *fmt, /* Pointer to the format string */
+... /* Optional arguments... */
 )
 {
 	va_list arp;
@@ -7123,110 +7170,155 @@ int f_printf (
 	TCHAR nul = 0;
 	char d, str[SZ_NUM_BUF];
 
-
 	putc_init(&pb, fp);
 
 	va_start(arp, fmt);
 
-	for (;;) {
-		tc = *fmt++;
-		if (tc == 0) break;			/* End of format string */
-		if (tc != '%') {			/* Not an escape character (pass-through) */
-			putc_bfd(&pb, tc);
-			continue;
-		}
-		f = w = 0; pad = ' '; prec = -1;	/* Initialize parms */
-		tc = *fmt++;
-		if (tc == '0') {			/* Flag: '0' padded */
-			pad = '0'; tc = *fmt++;
-		} else if (tc == '-') {		/* Flag: Left aligned */
-			f = 2; tc = *fmt++;
-		}
-		if (tc == '*') {			/* Minimum width from an argument */
-			w = va_arg(arp, int);
+	for(;;)
+		{
 			tc = *fmt++;
-		} else {
-			while (IsDigit(tc)) {	/* Minimum width */
-				w = w * 10 + tc - '0';
-				tc = *fmt++;
-			}
-		}
-		if (tc == '.') {			/* Precision */
+			if(tc == 0)
+				break; /* End of format string */
+			if(tc != '%')
+				{ /* Not an escape character (pass-through) */
+					putc_bfd(&pb, tc);
+					continue;
+				}
+			f = w = 0;
+			pad = ' ';
+			prec = -1; /* Initialize parms */
 			tc = *fmt++;
-			if (tc == '*') {		/* Precision from an argument */
-				prec = va_arg(arp, int);
-				tc = *fmt++;
-			} else {
-				prec = 0;
-				while (IsDigit(tc)) {	/* Precision */
-					prec = prec * 10 + tc - '0';
+			if(tc == '0')
+				{ /* Flag: '0' padded */
+					pad = '0';
 					tc = *fmt++;
 				}
-			}
-		}
-		if (tc == 'l') {			/* Size: long int */
-			f |= 4; tc = *fmt++;
+			else if(tc == '-')
+				{ /* Flag: Left aligned */
+					f = 2;
+					tc = *fmt++;
+				}
+			if(tc == '*')
+				{ /* Minimum width from an argument */
+					w = va_arg(arp, int);
+					tc = *fmt++;
+				}
+			else
+				{
+					while(IsDigit(tc))
+						{ /* Minimum width */
+							w = w * 10 + tc - '0';
+							tc = *fmt++;
+						}
+				}
+			if(tc == '.')
+				{ /* Precision */
+					tc = *fmt++;
+					if(tc == '*')
+						{ /* Precision from an argument */
+							prec = va_arg(arp, int);
+							tc = *fmt++;
+						}
+					else
+						{
+							prec = 0;
+							while(IsDigit(tc))
+								{ /* Precision */
+									prec = prec * 10 + tc - '0';
+									tc = *fmt++;
+								}
+						}
+				}
+			if(tc == 'l')
+				{ /* Size: long int */
+					f |= 4;
+					tc = *fmt++;
 #if FF_PRINT_LLI && FF_INTDEF == 2
-			if (tc == 'l') {		/* Size: long long int */
-				f |= 8; tc = *fmt++;
-			}
+					if(tc == 'l')
+						{ /* Size: long long int */
+							f |= 8;
+							tc = *fmt++;
+						}
 #endif
-		}
-		if (tc == 0) break;			/* End of format string */
-		switch (tc) {				/* Atgument type is... */
-		case 'b':					/* Unsigned binary */
-			r = 2; break;
+				}
+			if(tc == 0)
+				break; /* End of format string */
+			switch(tc)
+				{ /* Atgument type is... */
+				case 'b': /* Unsigned binary */
+					r = 2;
+					break;
 
-		case 'o':					/* Unsigned octal */
-			r = 8; break;
+				case 'o': /* Unsigned octal */
+					r = 8;
+					break;
 
-		case 'd':					/* Signed decimal */
-		case 'u': 					/* Unsigned decimal */
-			r = 10; break;
+				case 'd': /* Signed decimal */
+				case 'u': /* Unsigned decimal */
+					r = 10;
+					break;
 
-		case 'x':					/* Unsigned hexadecimal (lower case) */
-		case 'X': 					/* Unsigned hexadecimal (upper case) */
-			r = 16; break;
+				case 'x': /* Unsigned hexadecimal (lower case) */
+				case 'X': /* Unsigned hexadecimal (upper case) */
+					r = 16;
+					break;
 
-		case 'c':					/* Character */
-			putc_bfd(&pb, (TCHAR)va_arg(arp, int));
-			continue;
+				case 'c': /* Character */
+					putc_bfd(&pb, (TCHAR) va_arg(arp, int));
+					continue;
 
-		case 's':					/* String */
-			tp = va_arg(arp, TCHAR*);	/* Get a pointer argument */
-			if (!tp) tp = &nul;		/* Null ptr generates a null string */
-			for (j = 0; tp[j]; j++) ;	/* j = tcslen(tp) */
-			if (prec >= 0 && j > (UINT)prec) j = prec;	/* Limited length of string body */
-			for ( ; !(f & 2) && j < w; j++) putc_bfd(&pb, pad);	/* Left pads */
-			while (*tp && prec--) putc_bfd(&pb, *tp++);	/* Body */
-			while (j++ < w) putc_bfd(&pb, ' ');			/* Right pads */
-			continue;
+				case 's': /* String */
+					tp = va_arg(arp, TCHAR*); /* Get a pointer argument */
+					if(!tp)
+						tp = &nul; /* Null ptr generates a null string */
+					for(j = 0; tp[j]; j++)
+						; /* j = tcslen(tp) */
+					if(prec >= 0 && j > (UINT) prec)
+						j = prec; /* Limited length of string body */
+					for(; !(f & 2) && j < w; j++)
+						putc_bfd(&pb, pad); /* Left pads */
+					while(*tp && prec--)
+						putc_bfd(&pb, *tp++); /* Body */
+					while(j++ < w)
+						putc_bfd(&pb, ' '); /* Right pads */
+					continue;
 #if FF_PRINT_FLOAT && FF_INTDEF == 2
-		case 'f':					/* Floating point (decimal) */
-		case 'e':					/* Floating point (e) */
-		case 'E':					/* Floating point (E) */
-			ftoa(str, va_arg(arp, double), prec, tc);	/* Make a floating point string */
-			for (j = strlen(str); !(f & 2) && j < w; j++) putc_bfd(&pb, pad);	/* Left pads */
-			for (i = 0; str[i]; putc_bfd(&pb, str[i++])) ;	/* Body */
-			while (j++ < w) putc_bfd(&pb, ' ');	/* Right pads */
-			continue;
+				case 'f': /* Floating point (decimal) */
+				case 'e': /* Floating point (e) */
+				case 'E': /* Floating point (E) */
+					ftoa(str, va_arg(arp, double), prec, tc); /* Make a floating point string */
+					for(j = strlen(str); !(f & 2) && j < w; j++)
+						putc_bfd(&pb, pad); /* Left pads */
+					for(i = 0; str[i]; putc_bfd(&pb, str[i++]))
+						; /* Body */
+					while(j++ < w)
+						putc_bfd(&pb, ' '); /* Right pads */
+					continue;
 #endif
-		default:					/* Unknown type (pass-through) */
-			putc_bfd(&pb, tc); continue;
-		}
+				default: /* Unknown type (pass-through) */
+					putc_bfd(&pb, tc);
+					continue;
+				}
 
-		/* Get an integer argument and put it in numeral */
+			/* Get an integer argument and put it in numeral */
 #if FF_PRINT_LLI && FF_INTDEF == 2
-		if (f & 8) {		/* long long argument? */
-			v = (QWORD)va_arg(arp, long long);
-		} else if (f & 4) {	/* long argument? */
-			v = (tc == 'd') ? (QWORD)(long long)va_arg(arp, long) : (QWORD)va_arg(arp, unsigned long);
-		} else {			/* int/short/char argument */
-			v = (tc == 'd') ? (QWORD)(long long)va_arg(arp, int) : (QWORD)va_arg(arp, unsigned int);
-		}
-		if (tc == 'd' && (v & 0x8000000000000000)) {	/* Negative value? */
-			v = 0 - v; f |= 1;
-		}
+			if(f & 8)
+				{ /* long long argument? */
+					v = (QWORD) va_arg(arp, long long);
+				}
+			else if(f & 4)
+				{ /* long argument? */
+					v = (tc == 'd') ? (QWORD) (long long) va_arg(arp, long) : (QWORD) va_arg(arp, unsigned long);
+				}
+			else
+				{ /* int/short/char argument */
+					v = (tc == 'd') ? (QWORD) (long long) va_arg(arp, int) : (QWORD) va_arg(arp, unsigned int);
+				}
+			if(tc == 'd' && (v & 0x8000000000000000))
+				{ /* Negative value? */
+					v = 0 - v;
+					f |= 1;
+				}
 #else
 		if (f & 4) {	/* long argument? */
 			v = (DWORD)va_arg(arp, long);
@@ -7237,24 +7329,33 @@ int f_printf (
 			v = 0 - v; f |= 1;
 		}
 #endif
-		i = 0;
-		do {	/* Make an integer number string */
-			d = (char)(v % r); v /= r;
-			if (d > 9) d += (tc == 'x') ? 0x27 : 0x07;
-			str[i++] = d + '0';
-		} while (v && i < SZ_NUM_BUF);
-		if (f & 1) str[i++] = '-';	/* Sign */
-		/* Write it */
-		for (j = i; !(f & 2) && j < w; j++) {	/* Left pads */
-			putc_bfd(&pb, pad);
+			i = 0;
+			do
+				{ /* Make an integer number string */
+					d = (char) (v % r);
+					v /= r;
+					if(d > 9)
+						d += (tc == 'x') ? 0x27 : 0x07;
+					str[i++] = d + '0';
+				}
+			while(v && i < SZ_NUM_BUF);
+			if(f & 1)
+				str[i++] = '-'; /* Sign */
+			/* Write it */
+			for(j = i; !(f & 2) && j < w; j++)
+				{ /* Left pads */
+					putc_bfd(&pb, pad);
+				}
+			do
+				{ /* Body */
+					putc_bfd(&pb, (TCHAR) str[--i]);
+				}
+			while(i);
+			while(j++ < w)
+				{ /* Right pads */
+					putc_bfd(&pb, ' ');
+				}
 		}
-		do {				/* Body */
-			putc_bfd(&pb, (TCHAR)str[--i]);
-		} while (i);
-		while (j++ < w) {	/* Right pads */
-			putc_bfd(&pb, ' ');
-		}
-	}
 
 	va_end(arp);
 

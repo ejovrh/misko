@@ -233,7 +233,7 @@ int main(void)
 	f_close(&fil);
 
 	//Now let's try and write a file "write.txt"
-	fres = f_open(&fil, "write.txt", FA_WRITE | FA_OPEN_ALWAYS | FA_CREATE_ALWAYS);
+	fres = f_open(&fil, "write.txt", FA_WRITE | FA_OPEN_APPEND);
 	if(fres == FR_OK)
 		{
 			myprintf("I was able to open 'write.txt' for writing\r\n");
@@ -244,12 +244,12 @@ int main(void)
 		}
 
 	//Copy in a string
-	strncpy((char*) readBuf, "a new file is made!", 19);
+	strncpy((char*) readBuf, "\r\na new file is made!", 21);
 	UINT bytesWrote;
-	fres = f_write(&fil, readBuf, 19, &bytesWrote);
+	fres = f_write(&fil, readBuf, 21, &bytesWrote);
 	if(fres == FR_OK)
 		{
-			myprintf("Wrote %i bytes to 'write.txt'!\r\n", bytesWrote);
+			myprintf("wrote %i bytes to 'write.txt'!\r\n", bytesWrote);
 		}
 	else
 		{
