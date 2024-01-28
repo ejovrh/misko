@@ -12,7 +12,7 @@ typedef struct	// adxl345c_t actual
 	uint16_t _CS_Pin;  // SPI chip select GPIO pin
 } __adxl345_t;
 
-static __adxl345_t __ADXL345 __attribute__ ((section (".data")));  // preallocate __ADXL345 object in .data
+static __adxl345_t  __ADXL345  __attribute__ ((section (".data")));  // preallocate __ADXL345 object in .data
 
 #define SPI_TIMEOUT 10	// SPI timeout in SysTicks
 #define REG_CNT 30	// 64 registers
@@ -122,7 +122,7 @@ void _ISR(void)  // ISR for the ADXL345 accelerometer
 		}
 }
 
-static __adxl345_t __ADXL345 =  // instantiate adxl345c_t actual and set function pointers
+static __adxl345_t  __ADXL345 =  // instantiate adxl345c_t actual and set function pointers
 	{  //
 	.public.ISR = &_ISR,	// device ISR
 	.public.ReadByte = &_ReadByte,	// reads a byte from device
