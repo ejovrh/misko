@@ -96,7 +96,8 @@ void myprintf(const char *fmt, ...);
 /* USER CODE BEGIN 0 */
 void myprintf(const char *fmt, ...)
 {
-	static char buffer[256];
+	static char buffer[256] =
+		{0};
 	va_list args;
 	va_start(args, fmt);
 	vsnprintf(buffer, sizeof(buffer), fmt, args);
@@ -204,33 +205,33 @@ int main(void)
 
 	myprintf("SD card stats:\r\n%10lu KiB total drive space.\r\n%10lu KiB available.\r\n", total_sectors / 2, free_sectors / 2);
 
-	//Now let's try to open file "test.txt"
-	fres = f_open(&fil, "test.txt", FA_READ);
-	if(fres != FR_OK)
-		{
-			myprintf("f_open error (%i)\r\n");
-			while(1)
-				;
-		}
-	myprintf("I was able to open 'test.txt' for reading!\r\n");
-
-	//Read 30 bytes from "test.txt" on the SD card
+//	//Now let's try to open file "test.txt"
+//	fres = f_open(&fil, "test.txt", FA_READ);
+//	if(fres != FR_OK)
+//		{
+//			myprintf("f_open error (%i)\r\n");
+//			while(1)
+//				;
+//		}
+//	myprintf("I was able to open 'test.txt' for reading!\r\n");
+//
+//	//Read 30 bytes from "test.txt" on the SD card
 	BYTE readBuf[30];
-
-	//We can either use f_read OR f_gets to get data out of files
-	//f_gets is a wrapper on f_read that does some string formatting for us
-//	TCHAR *rres = f_gets((TCHAR*) readBuf, 30, &fil);
-//	if(rres != 0)
-//		{
-//			myprintf("Read string from 'test.txt' contents: %s\r\n", readBuf);
-//		}
-//	else
-//		{
-//			myprintf("f_gets error (%i)\r\n", fres);
-//		}
-
-	//Be a tidy kiwi - don't forget to close your file!
-	f_close(&fil);
+//
+//	//We can either use f_read OR f_gets to get data out of files
+//	//f_gets is a wrapper on f_read that does some string formatting for us
+////	TCHAR *rres = f_gets((TCHAR*) readBuf, 30, &fil);
+////	if(rres != 0)
+////		{
+////			myprintf("Read string from 'test.txt' contents: %s\r\n", readBuf);
+////		}
+////	else
+////		{
+////			myprintf("f_gets error (%i)\r\n", fres);
+////		}
+//
+//	//Be a tidy kiwi - don't forget to close your file!
+//	f_close(&fil);
 
 	//Now let's try and write a file "write.txt"
 	fres = f_open(&fil, "write.txt", FA_WRITE | FA_OPEN_APPEND);
@@ -244,7 +245,7 @@ int main(void)
 		}
 
 	//Copy in a string
-	strncpy((char*) readBuf, "\r\na new file is made!", 21);
+	strncpy((char*) readBuf, "a new file is made!\r\n", 21);
 	UINT bytesWrote;
 	fres = f_write(&fil, readBuf, 21, &bytesWrote);
 	if(fres == FR_OK)
