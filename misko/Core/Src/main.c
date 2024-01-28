@@ -219,15 +219,15 @@ int main(void)
 
 	//We can either use f_read OR f_gets to get data out of files
 	//f_gets is a wrapper on f_read that does some string formatting for us
-	TCHAR *rres = f_gets((TCHAR*) readBuf, 30, &fil);
-	if(rres != 0)
-		{
-			myprintf("Read string from 'test.txt' contents: %s\r\n", readBuf);
-		}
-	else
-		{
-			myprintf("f_gets error (%i)\r\n", fres);
-		}
+//	TCHAR *rres = f_gets((TCHAR*) readBuf, 30, &fil);
+//	if(rres != 0)
+//		{
+//			myprintf("Read string from 'test.txt' contents: %s\r\n", readBuf);
+//		}
+//	else
+//		{
+//			myprintf("f_gets error (%i)\r\n", fres);
+//		}
 
 	//Be a tidy kiwi - don't forget to close your file!
 	f_close(&fil);

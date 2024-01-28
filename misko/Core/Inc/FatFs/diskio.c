@@ -35,14 +35,10 @@ DSTATUS disk_status(BYTE pdrv /* Physical drive nmuber to identify the drive */
 DSTATUS disk_initialize(BYTE pdrv /* Physical drive nmuber to identify the drive */
 )
 {
-	DSTATUS stat = RES_OK;
-
 	if(disk.is_initialized[pdrv] == 0)
-		{
-			disk.is_initialized[pdrv] = 1;
-			stat = disk.drv[pdrv]->disk_initialize(disk.lun[pdrv]);
-		}
-	return stat;
+		disk.is_initialized[pdrv] = 1;
+
+	return disk.drv[pdrv]->disk_initialize(disk.lun[pdrv]);
 }
 
 /*-----------------------------------------------------------------------*/

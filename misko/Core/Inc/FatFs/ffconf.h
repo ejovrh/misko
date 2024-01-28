@@ -49,7 +49,7 @@
 #define FF_USE_FORWARD	0
 /* This option switches f_forward() function. (0:Disable or 1:Enable) */
 
-#define FF_USE_STRFUNC	1
+#define FF_USE_STRFUNC	0
 #define FF_PRINT_LLI	1
 #define FF_PRINT_FLOAT	1
 #define FF_STRF_ENCODE	3
@@ -104,8 +104,8 @@
  /     0 - Include all code pages above and configured by f_setcp()
  */
 
-#define FF_USE_LFN		0
-#define FF_MAX_LFN		255
+#define FF_USE_LFN		1
+#define FF_MAX_LFN		63
 /* The FF_USE_LFN switches the support for LFN (long file name).
  /
  /   0: Disable LFN. FF_MAX_LFN has no effect.
@@ -123,7 +123,7 @@
  /  memory for the working buffer, memory management functions, ff_memalloc() and
  /  ff_memfree() exemplified in ffsystem.c, need to be added to the project. */
 
-#define FF_LFN_UNICODE	0
+#define FF_LFN_UNICODE	1
 /* This option switches the character encoding on the API when LFN is enabled.
  /
  /   0: ANSI/OEM in current CP (TCHAR = char)
@@ -134,7 +134,7 @@
  /  Also behavior of string I/O functions will be affected by this option.
  /  When LFN is not enabled, this option has no effect. */
 
-#define FF_LFN_BUF		255
+#define FF_LFN_BUF		63
 #define FF_SFN_BUF		12
 /* This set of options defines size of file name members in the FILINFO structure
  /  which is used to read out directory items. These values should be suffcient for
@@ -156,8 +156,8 @@
 #define FF_VOLUMES		1
 /* Number of volumes (logical drives) to be used. (1-10) */
 
-#define FF_STR_VOLUME_ID	0
-#define FF_VOLUME_STRS		"RAM","NAND","CF","SD","SD2","USB","USB2","USB3"
+#define FF_STR_VOLUME_ID	2
+#define FF_VOLUME_STRS		"sd"
 /* FF_STR_VOLUME_ID switches support for volume ID in arbitrary strings.
  /  When FF_STR_VOLUME_ID is set to 1 or 2, arbitrary strings can be used as drive
  /  number in the path name. FF_VOLUME_STRS defines the volume ID strings for each
@@ -177,8 +177,8 @@
  /  arbitrary physical drive and partition listed in the VolToPart[]. Also f_fdisk()
  /  function will be available. */
 
-#define FF_MIN_SS		512
-#define FF_MAX_SS		512
+#define FF_MIN_SS		2048
+#define FF_MAX_SS		2048
 /* This set of options configures the range of sector size to be supported. (512,
  /  1024, 2048 or 4096) Always set both 512 for most systems, generic memory card and
  /  harddisk, but a larger value may be required for on-board flash memory and some
@@ -214,7 +214,7 @@
  /  To enable exFAT, also LFN needs to be enabled. (FF_USE_LFN >= 1)
  /  Note that enabling exFAT discards ANSI C (C89) compatibility. */
 
-#define FF_FS_NORTC		0
+#define FF_FS_NORTC		1
 #define FF_NORTC_MON	1
 #define FF_NORTC_MDAY	1
 #define FF_NORTC_YEAR	2022
