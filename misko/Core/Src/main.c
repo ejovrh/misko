@@ -898,7 +898,7 @@ static void MX_GPIO_Init(void)
 	/*Configure GPIO pin : SD_CD_Pin */
 	GPIO_InitStruct.Pin = SD_CD_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
-	GPIO_InitStruct.Pull = GPIO_PULLUP;
+	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
 	HAL_GPIO_Init(SD_CD_GPIO_Port, &GPIO_InitStruct);
 
 	/*Configure GPIO pins : PB1 PB2 PB10 PB12
