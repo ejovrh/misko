@@ -135,7 +135,7 @@ typedef struct
 	WORD	ssize;			/* Sector size (512, 1024, 2048 or 4096) */
 #endif
 #if FF_USE_LFN
-	WCHAR*	lfnbuf;			/* LFN working buffer */
+	WCHAR *lfnbuf; /* LFN working buffer */
 #endif
 #if FF_FS_EXFAT
 	BYTE*	dirbuf;			/* Directory entry block scratchpad buffer for exFAT */
@@ -183,7 +183,7 @@ typedef struct
 	DWORD	c_ofs;			/* Offset in the containing directory (valid when file object and sclust != 0) */
 #endif
 #if FF_FS_LOCK
-	UINT	lockid;			/* File lock ID origin from 1 (index of file semaphore table Files[]) */
+	UINT lockid; /* File lock ID origin from 1 (index of file semaphore table Files[]) */
 #endif
 } FFOBJID;
 
@@ -220,7 +220,7 @@ typedef struct
 	BYTE *dir; /* Pointer to the directory item in the win[] */
 	BYTE fn[12]; /* SFN (in/out) {body[8],ext[3],status[1]} */
 #if FF_USE_LFN
-	DWORD	blk_ofs;		/* Offset of current entry block being processed (0xFFFFFFFF:Invalid) */
+	DWORD blk_ofs; /* Offset of current entry block being processed (0xFFFFFFFF:Invalid) */
 #endif
 #if FF_USE_FIND
 	const TCHAR* pat;		/* Pointer to the name matching pattern */
@@ -236,8 +236,8 @@ typedef struct
 	WORD ftime; /* Modified time */
 	BYTE fattrib; /* File attribute */
 #if FF_USE_LFN
-	TCHAR	altname[FF_SFN_BUF + 1];/* Alternative file name */
-	TCHAR	fname[FF_LFN_BUF + 1];	/* Primary file name */
+	TCHAR altname[FF_SFN_BUF + 1];/* Alternative file name */
+	TCHAR fname[FF_LFN_BUF + 1]; /* Primary file name */
 #else
 	TCHAR fname[12 + 1]; /* File name */
 #endif
@@ -342,9 +342,9 @@ DWORD get_fattime(void); /* Get current time */
 /* LFN support functions (defined in ffunicode.c) */
 
 #if FF_USE_LFN >= 1
-WCHAR ff_oem2uni (WCHAR oem, WORD cp);	/* OEM code to Unicode conversion */
-WCHAR ff_uni2oem (DWORD uni, WORD cp);	/* Unicode to OEM code conversion */
-DWORD ff_wtoupper (DWORD uni);			/* Unicode upper-case conversion */
+WCHAR ff_oem2uni(WCHAR oem, WORD cp); /* OEM code to Unicode conversion */
+WCHAR ff_uni2oem(DWORD uni, WORD cp); /* Unicode to OEM code conversion */
+DWORD ff_wtoupper(DWORD uni); /* Unicode upper-case conversion */
 #endif
 
 /* O/S dependent functions (samples available in ffsystem.c) */
