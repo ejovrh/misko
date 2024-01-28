@@ -214,7 +214,7 @@
  /  To enable exFAT, also LFN needs to be enabled. (FF_USE_LFN >= 1)
  /  Note that enabling exFAT discards ANSI C (C89) compatibility. */
 
-#define FF_FS_NORTC		0
+#define FF_FS_NORTC		1
 #define FF_NORTC_MON	1
 #define FF_NORTC_MDAY	1
 #define FF_NORTC_YEAR	2022
@@ -238,7 +238,7 @@
  /  bit1=1: Do not trust last allocated cluster number in the FSINFO.
  */
 
-#define FF_FS_LOCK		0
+#define FF_FS_LOCK		3
 /* The option FF_FS_LOCK switches file lock function to control duplicated file open
  /  and illegal operation to open objects. This option must be 0 when FF_FS_READONLY
  /  is 1.
