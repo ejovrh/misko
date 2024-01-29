@@ -151,14 +151,6 @@ int main(void)
 
 	if(HAL_TIM_OC_Start_IT(&htim1, TIM_CHANNEL_1) != HAL_OK)	// 125ms time base
 		Error_Handler();
-
-	char filename[] = "foo.out";
-	char data[] = "abcdefigfosiugodguso\r\n";
-	volatile unsigned int out = 0;
-
-	out = SD->Write(filename, data, strlen(data));
-
-	++out;
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
