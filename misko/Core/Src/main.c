@@ -30,6 +30,9 @@
 #if USE_SD
 #include "sd/sd.h"
 #endif
+#if USE_ORG1510MK4
+#include "org1510mk4/org1510mk4.h"
+#endif
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -142,9 +145,18 @@ int main(void)
 	HAL_DMAEx_List_LinkQ(&handle_GPDMA1_Channel6, &Queue_rx);
 	__HAL_LINKDMA(&hspi1, hdmarx, handle_GPDMA1_Channel6);
 
+#if USE_ADXL345
 	adxl345_ctor(&hspi1, SPI1_ADXL345_CS_GPIO_Port, SPI1_ADXL345_CS_Pin);  // initialize accelerometer object
+#endif
+#if USE_FM25W256
 	fm25w256_ctor(&hspi1, SPI1_FRAM_CS_GPIO_Port, SPI1_FRAM_CS_Pin);  //initialize FeRAM object
+#endif
+#if USE_SD
 	sd_ctor(&hspi1, SPI1_SD_CS_GPIO_Port, SPI1_SD_CS_Pin, SD_CD_GPIO_Port, SD_CD_Pin);  // initialize SD Card object
+#endif
+#if USE_ORG1510MK4
+	org1510mk4_ctor();  // initialise the GPS module object
+#endif
 
 	if(HAL_UART_Transmit_DMA(&huart3, (uint8_t*) aTxBuffer, 22) != HAL_OK)	// transmit hello world
 		Error_Handler();
