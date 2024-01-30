@@ -7,7 +7,7 @@
 <setting keepoldvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="25" unitdist="mil" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.005" altunitdist="mm" altunit="mm"/>
+<grid distance="1" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.005" altunitdist="mm" altunit="mm"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -2574,11 +2574,11 @@ type 0204, grid 5 mm</description>
 </package>
 </packages>
 </library>
-<library name="jumper">
+<library name="jumper" urn="urn:adsk.eagle:library:252">
 <description>&lt;b&gt;Jumpers&lt;/b&gt;&lt;p&gt;
 &lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
 <packages>
-<package name="SJW">
+<package name="SJW" urn="urn:adsk.eagle:footprint:15433/1" library_version="2">
 <description>&lt;b&gt;Solder jumper&lt;/b&gt;</description>
 <wire x1="1.905" y1="-1.524" x2="-1.905" y2="-1.524" width="0.1524" layer="21"/>
 <wire x1="1.905" y1="1.524" x2="2.159" y2="1.27" width="0.1524" layer="21" curve="-90"/>
@@ -2616,6 +2616,14 @@ type 0204, grid 5 mm</description>
 <rectangle x1="-1.1176" y1="0.5842" x2="-0.9906" y2="0.7112" layer="51"/>
 </package>
 </packages>
+<packages3d>
+<package3d name="SJW" urn="urn:adsk.eagle:package:15507/1" type="box" library_version="2">
+<description>Solder jumper</description>
+<packageinstances>
+<packageinstance name="SJW"/>
+</packageinstances>
+</package3d>
+</packages3d>
 </library>
 <library name="SIM800C">
 <packages>
@@ -5356,47 +5364,6 @@ You are welcome to use this library for commercial purposes. For attribution, we
 </package>
 </packages>
 </library>
-<library name="ORG1510-MK4 GPS module">
-<packages>
-<package name="PACKAGE">
-<wire x1="5" y1="-5" x2="-5" y2="-5" width="0.127" layer="21"/>
-<wire x1="-5" y1="5" x2="5" y2="5" width="0.127" layer="21"/>
-<rectangle x1="-3.2" y1="-5" x2="3.2" y2="5" layer="29"/>
-<smd name="WAKEUP_6" x="4.5182625" y="-2.54" dx="1.45" dy="0.86" layer="1" rot="R180"/>
-<smd name="CTS_7" x="4.5182625" y="-1.27" dx="1.45" dy="0.86" layer="1" rot="R180"/>
-<smd name="!RESET!_8" x="4.518265625" y="0" dx="1.45" dy="0.86" layer="1" rot="R180"/>
-<smd name="RTS_9" x="4.5182625" y="1.27" dx="1.45" dy="0.86" layer="1" rot="R180"/>
-<smd name="RX_10" x="4.518265625" y="2.54" dx="1.45" dy="0.86" layer="1" rot="R180"/>
-<smd name="1_ON_OFF" x="-4.393265625" y="2.54" dx="1.7" dy="0.86" layer="1" rot="R180"/>
-<smd name="2_1PPS" x="-4.5182625" y="1.27" dx="1.45" dy="0.86" layer="1" rot="R180"/>
-<smd name="3_TX" x="-4.518265625" y="0" dx="1.45" dy="0.86" layer="1" rot="R180"/>
-<smd name="4_VCC" x="-4.518265625" y="-1.27" dx="1.45" dy="0.86" layer="1" rot="R180"/>
-<smd name="5_GND" x="-4.5182625" y="-2.54" dx="1.45" dy="0.86" layer="1" rot="R180"/>
-<smd name="GND2" x="0" y="0" dx="6.3" dy="10" layer="1" rot="R180" cream="no"/>
-<pad name="GND4" x="0" y="-3.81" drill="0.35" rot="R180" thermals="no"/>
-<pad name="GND1" x="2.54" y="3.81" drill="0.35" rot="R180" thermals="no"/>
-<pad name="GND5" x="-2.54" y="3.81" drill="0.35" rot="R180" thermals="no"/>
-<text x="0" y="6" size="0.75" layer="25" font="vector" rot="R180" align="center">&gt;NAME</text>
-<text x="-3.81" y="-8.89" size="1.27" layer="27">&gt;VALUE</text>
-<wire x1="5" y1="-5" x2="5" y2="-3.2" width="0.127" layer="21"/>
-<wire x1="-5" y1="-5" x2="-5" y2="-3.2" width="0.127" layer="21"/>
-<wire x1="5" y1="5" x2="5" y2="3.2" width="0.127" layer="21"/>
-<wire x1="-5" y1="5" x2="-5" y2="3.2" width="0.127" layer="21"/>
-<text x="0" y="-6" size="0.75" layer="27" font="vector" rot="R180" align="center">&gt;VALUE</text>
-<pad name="GND6" x="2.54" y="-3.81" drill="0.35" rot="R180" thermals="no"/>
-<pad name="GND7" x="-2.54" y="-3.81" drill="0.35" rot="R180" thermals="no"/>
-<pad name="GND8" x="0" y="3.81" drill="0.35" rot="R180" thermals="no"/>
-<pad name="GND9" x="2.54" y="0" drill="0.35" rot="R180" thermals="no"/>
-<pad name="GND10" x="-2.54" y="0" drill="0.35" rot="R180" thermals="no"/>
-<pad name="GND11" x="0" y="0" drill="0.35" rot="R180" thermals="no"/>
-<circle x="-5.75" y="2.5" radius="0.1" width="0.5" layer="21"/>
-<pad name="GND12" x="4.08" y="-3.81" drill="0.35" rot="R180" thermals="no"/>
-<pad name="GND13" x="-4.08" y="-3.81" drill="0.35" rot="R180" thermals="no"/>
-<pad name="GND14" x="4.08" y="3.81" drill="0.35" rot="R180" thermals="no"/>
-<pad name="GND15" x="-4.08" y="3.81" drill="0.35" rot="R180" thermals="no"/>
-</package>
-</packages>
-</library>
 <library name="TPS3808 - Supervisory Circuit">
 <packages>
 <package name="SOT23-6">
@@ -5460,6 +5427,47 @@ You are welcome to use this library for commercial purposes. For attribution, we
 <text x="0" y="2.5" size="0.75" layer="25" align="center">&gt;NAME</text>
 <wire x1="-1.5" y1="-2" x2="1.5" y2="-2" width="0.127" layer="21"/>
 <circle x="-3" y="1.5" radius="0.1" width="0.3" layer="21"/>
+</package>
+</packages>
+</library>
+<library name="ORG1510-MK4 GPS module">
+<packages>
+<package name="SMD">
+<wire x1="5" y1="-5" x2="-5" y2="-5" width="0.127" layer="21"/>
+<wire x1="-5" y1="5" x2="5" y2="5" width="0.127" layer="21"/>
+<rectangle x1="-3.2" y1="-5" x2="3.2" y2="5" layer="29"/>
+<smd name="WAKEUP_6" x="4.5182625" y="-2.54" dx="1.45" dy="0.86" layer="1" rot="R180"/>
+<smd name="CTS_7" x="4.5182625" y="-1.27" dx="1.45" dy="0.86" layer="1" rot="R180"/>
+<smd name="!RESET!_8" x="4.518265625" y="0" dx="1.45" dy="0.86" layer="1" rot="R180"/>
+<smd name="RTS_9" x="4.5182625" y="1.27" dx="1.45" dy="0.86" layer="1" rot="R180"/>
+<smd name="RX_10" x="4.518265625" y="2.54" dx="1.45" dy="0.86" layer="1" rot="R180"/>
+<smd name="1_ON_OFF" x="-4.393265625" y="2.54" dx="1.7" dy="0.86" layer="1" rot="R180"/>
+<smd name="2_1PPS" x="-4.5182625" y="1.27" dx="1.45" dy="0.86" layer="1" rot="R180"/>
+<smd name="3_TX" x="-4.518265625" y="0" dx="1.45" dy="0.86" layer="1" rot="R180"/>
+<smd name="4_VCC" x="-4.518265625" y="-1.27" dx="1.45" dy="0.86" layer="1" rot="R180"/>
+<smd name="5_GND" x="-4.5182625" y="-2.54" dx="1.45" dy="0.86" layer="1" rot="R180"/>
+<smd name="GND2" x="0" y="0" dx="6.3" dy="10" layer="1" rot="R180" cream="no"/>
+<pad name="GND4" x="0" y="-3.81" drill="0.35" rot="R180" thermals="no"/>
+<pad name="GND1" x="2.54" y="3.81" drill="0.35" rot="R180" thermals="no"/>
+<pad name="GND5" x="-2.54" y="3.81" drill="0.35" rot="R180" thermals="no"/>
+<text x="0" y="6" size="0.75" layer="25" font="vector" rot="R180" align="center">&gt;NAME</text>
+<text x="-3.81" y="-8.89" size="1.27" layer="27">&gt;VALUE</text>
+<wire x1="5" y1="-5" x2="5" y2="-3.2" width="0.127" layer="21"/>
+<wire x1="-5" y1="-5" x2="-5" y2="-3.2" width="0.127" layer="21"/>
+<wire x1="5" y1="5" x2="5" y2="3.2" width="0.127" layer="21"/>
+<wire x1="-5" y1="5" x2="-5" y2="3.2" width="0.127" layer="21"/>
+<text x="0" y="-6" size="0.75" layer="27" font="vector" rot="R180" align="center">&gt;VALUE</text>
+<pad name="GND6" x="2.54" y="-3.81" drill="0.35" rot="R180" thermals="no"/>
+<pad name="GND7" x="-2.54" y="-3.81" drill="0.35" rot="R180" thermals="no"/>
+<pad name="GND8" x="0" y="3.81" drill="0.35" rot="R180" thermals="no"/>
+<pad name="GND9" x="2.54" y="0" drill="0.35" rot="R180" thermals="no"/>
+<pad name="GND10" x="-2.54" y="0" drill="0.35" rot="R180" thermals="no"/>
+<pad name="GND11" x="0" y="0" drill="0.35" rot="R180" thermals="no"/>
+<circle x="-5.75" y="2.5" radius="0.1" width="0.5" layer="21"/>
+<pad name="GND12" x="4.08" y="-3.81" drill="0.35" rot="R180" thermals="no"/>
+<pad name="GND13" x="-4.08" y="-3.81" drill="0.35" rot="R180" thermals="no"/>
+<pad name="GND14" x="4.08" y="3.81" drill="0.35" rot="R180" thermals="no"/>
+<pad name="GND15" x="-4.08" y="3.81" drill="0.35" rot="R180" thermals="no"/>
 </package>
 </packages>
 </library>
@@ -5778,7 +5786,8 @@ design rules under a new name.</description>
 <attribute name="SUPPLIER" value="Texas Instruments" x="184.5" y="33.5" size="1.778" layer="28" rot="MR180" display="off"/>
 <attribute name="VALUE" x="181.0456" y="37.945" size="2.0828" layer="28" ratio="10" rot="SMR180"/>
 </element>
-<element name="SJ1" library="jumper" package="SJW" value="RESET" x="182" y="24" smashed="yes" rot="R270">
+<element name="SJ1" library="jumper" library_urn="urn:adsk.eagle:library:252" package="SJW" package3d_urn="urn:adsk.eagle:package:15507/1" value="RESET" x="182" y="24" smashed="yes" rot="R270">
+<attribute name="POPULARITY" value="3" x="182" y="24" size="1.778" layer="27" rot="R270" display="off"/>
 <attribute name="VALUE" x="182" y="23" size="0.02" layer="27" rot="R270"/>
 </element>
 <element name="L1" library="DJNR3015-1R5 Inductor" package="FFF" value="DJNR3015-1R5" x="155.75" y="80.5" smashed="yes" rot="MR180">
@@ -6041,11 +6050,6 @@ design rules under a new name.</description>
 <attribute name="NAME" x="42.545" y="-12.7" size="1.27" layer="26" rot="MR0"/>
 <attribute name="VALUE" x="42.545" y="-15.24" size="1.27" layer="28" rot="MR0"/>
 </element>
-<element name="GPS:ORG1510:IC2" library="ORG1510-MK4 GPS module" package="PACKAGE" value="ORG1510MK4" x="38.1" y="-15.875" smashed="yes">
-<attribute name="NAME" x="38.1" y="-9.875" size="0.75" layer="25" font="vector" rot="R180" align="center"/>
-<attribute name="VALUE" x="34.29" y="-24.765" size="1.27" layer="27"/>
-<attribute name="VALUE" x="38.1" y="-21.875" size="0.75" layer="27" font="vector" rot="R180" align="center"/>
-</element>
 <element name="GPS:VOLTAGE_SUPERVISOR:C1" library="rcl" package="C0402" value="1n / 16V" x="27.305" y="-15.875" smashed="yes" rot="MR90">
 <attribute name="NAME" x="27.94" y="-16.51" size="1.27" layer="26" rot="MR90"/>
 <attribute name="VALUE" x="25.4" y="-16.51" size="1.27" layer="28" rot="MR90"/>
@@ -6086,10 +6090,6 @@ design rules under a new name.</description>
 <attribute name="NAME" x="-36.195" y="49.53" size="1.27" layer="26" rot="MR90"/>
 <attribute name="VALUE" x="-38.735" y="49.53" size="1.27" layer="28" rot="MR90"/>
 </element>
-<element name="GPS:SUPERCAP+CHARGER:R18" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0402" package3d_urn="urn:adsk.eagle:package:26058/1" value="1k" x="-38.735" y="50.165" smashed="yes" rot="MR90">
-<attribute name="NAME" x="-38.1" y="49.53" size="1.27" layer="26" rot="MR90"/>
-<attribute name="VALUE" x="-40.64" y="49.53" size="1.27" layer="28" rot="MR90"/>
-</element>
 <element name="GPS:SUPERCAP+CHARGER:R40" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0402" package3d_urn="urn:adsk.eagle:package:26058/1" value="150k" x="-31.115" y="50.165" smashed="yes" rot="MR90">
 <attribute name="NAME" x="-29.845" y="49.53" size="1.27" layer="26" rot="MR90"/>
 <attribute name="VALUE" x="-33.655" y="49.53" size="1.27" layer="28" rot="MR90"/>
@@ -6097,6 +6097,11 @@ design rules under a new name.</description>
 <element name="GPS:SUPERCAP+CHARGER:R41" library="resistor" library_urn="urn:adsk.eagle:library:348" package="R0402" package3d_urn="urn:adsk.eagle:package:26058/1" value="150k" x="-33.02" y="50.165" smashed="yes" rot="MR90">
 <attribute name="NAME" x="-31.75" y="49.53" size="1.27" layer="26" rot="MR90"/>
 <attribute name="VALUE" x="-35.56" y="49.53" size="1.27" layer="28" rot="MR90"/>
+</element>
+<element name="GPS:ORG1510:IC1" library="ORG1510-MK4 GPS module" package="SMD" value="ORG1510-MK4" x="38.1" y="-15.875" smashed="yes">
+<attribute name="NAME" x="38.1" y="-9.875" size="0.75" layer="25" font="vector" rot="R180" align="center"/>
+<attribute name="VALUE" x="34.29" y="-24.765" size="1.27" layer="27"/>
+<attribute name="VALUE" x="38.1" y="-21.875" size="0.75" layer="27" font="vector" rot="R180" align="center"/>
 </element>
 </elements>
 <signals>
@@ -6385,16 +6390,16 @@ design rules under a new name.</description>
 <contactref element="BRD1" pad="CN7_8"/>
 <contactref element="BRD1" pad="CN7_22"/>
 <polygon width="0.1" layer="1" rank="6">
-<vertex x="-2.75" y="86"/>
-<vertex x="72.25" y="86"/>
-<vertex x="72.25" y="-6"/>
-<vertex x="-2.75" y="-6"/>
+<vertex x="-1" y="84"/>
+<vertex x="71" y="84"/>
+<vertex x="71" y="-1"/>
+<vertex x="-1" y="-1"/>
 </polygon>
 <polygon width="0.1" layer="16" rank="6">
-<vertex x="-2.75" y="86"/>
-<vertex x="72.25" y="86"/>
-<vertex x="72.25" y="-6"/>
-<vertex x="-2.75" y="-6"/>
+<vertex x="-1" y="84"/>
+<vertex x="71" y="84"/>
+<vertex x="71" y="-1"/>
+<vertex x="-1" y="-1"/>
 </polygon>
 <wire x1="5.79" y1="43.14" x2="5.83" y2="43.18" width="0.25" layer="1"/>
 <wire x1="5.83" y1="43.18" x2="11.43" y2="43.18" width="0.25" layer="1"/>
@@ -6413,21 +6418,6 @@ design rules under a new name.</description>
 <contactref element="GPS:VOLTAGE_SUPERVISOR:C1" pad="2"/>
 <contactref element="GPS:VOLTAGE_SUPERVISOR:C2" pad="2"/>
 <contactref element="GPS:ORG1510:C2" pad="2"/>
-<contactref element="GPS:ORG1510:IC2" pad="GND7"/>
-<contactref element="GPS:ORG1510:IC2" pad="GND9"/>
-<contactref element="GPS:ORG1510:IC2" pad="GND4"/>
-<contactref element="GPS:ORG1510:IC2" pad="GND1"/>
-<contactref element="GPS:ORG1510:IC2" pad="GND14"/>
-<contactref element="GPS:ORG1510:IC2" pad="GND12"/>
-<contactref element="GPS:ORG1510:IC2" pad="GND15"/>
-<contactref element="GPS:ORG1510:IC2" pad="GND10"/>
-<contactref element="GPS:ORG1510:IC2" pad="GND11"/>
-<contactref element="GPS:ORG1510:IC2" pad="GND6"/>
-<contactref element="GPS:ORG1510:IC2" pad="5_GND"/>
-<contactref element="GPS:ORG1510:IC2" pad="GND5"/>
-<contactref element="GPS:ORG1510:IC2" pad="GND13"/>
-<contactref element="GPS:ORG1510:IC2" pad="GND8"/>
-<contactref element="GPS:ORG1510:IC2" pad="GND2"/>
 <contactref element="GPS:ORG1510:C22" pad="2"/>
 <contactref element="GPS:ORG1510:C31" pad="2"/>
 <contactref element="GPS:SUPERCAP+CHARGER:IC2" pad="GND"/>
@@ -6435,6 +6425,21 @@ design rules under a new name.</description>
 <contactref element="GPS:SUPERCAP+CHARGER:C1" pad="2"/>
 <contactref element="GPS:SUPERCAP+CHARGER:R14" pad="1"/>
 <contactref element="GPS:SUPERCAP+CHARGER:C38" pad="2"/>
+<contactref element="GPS:ORG1510:IC1" pad="GND14"/>
+<contactref element="GPS:ORG1510:IC1" pad="5_GND"/>
+<contactref element="GPS:ORG1510:IC1" pad="GND10"/>
+<contactref element="GPS:ORG1510:IC1" pad="GND7"/>
+<contactref element="GPS:ORG1510:IC1" pad="GND12"/>
+<contactref element="GPS:ORG1510:IC1" pad="GND15"/>
+<contactref element="GPS:ORG1510:IC1" pad="GND13"/>
+<contactref element="GPS:ORG1510:IC1" pad="GND8"/>
+<contactref element="GPS:ORG1510:IC1" pad="GND11"/>
+<contactref element="GPS:ORG1510:IC1" pad="GND4"/>
+<contactref element="GPS:ORG1510:IC1" pad="GND9"/>
+<contactref element="GPS:ORG1510:IC1" pad="GND6"/>
+<contactref element="GPS:ORG1510:IC1" pad="GND1"/>
+<contactref element="GPS:ORG1510:IC1" pad="GND2"/>
+<contactref element="GPS:ORG1510:IC1" pad="GND5"/>
 <wire x1="177.5" y1="74.05" x2="180.55" y2="73" width="0" layer="19" extent="1-16"/>
 <wire x1="174.46" y1="73.58" x2="177.5" y2="74.05" width="0" layer="19" extent="1-16"/>
 <wire x1="173.25" y1="73.55" x2="174.46" y2="73.58" width="0" layer="19" extent="1-16"/>
@@ -6523,8 +6528,6 @@ design rules under a new name.</description>
 <wire x1="127.1" y1="36.65" x2="143.82" y2="43.525" width="0" layer="19" extent="1-16"/>
 <wire x1="135.25" y1="115.46" x2="140.85" y2="83" width="0" layer="19" extent="1-1"/>
 <wire x1="64.21" y1="40.6" x2="93.3" y2="67.5" width="0" layer="19" extent="1-1"/>
-<wire x1="66.75" y1="27.9" x2="64.21" y2="40.6" width="0" layer="19" extent="1-1"/>
-<wire x1="66.75" y1="12.66" x2="66.75" y2="27.9" width="0" layer="19" extent="1-1"/>
 <wire x1="42.18" y1="-12.065" x2="66.75" y2="12.66" width="0" layer="19" extent="1-1"/>
 <wire x1="40.64" y1="-12.065" x2="42.18" y2="-12.065" width="0" layer="19" extent="1-1"/>
 <wire x1="41.26" y1="-13.335" x2="40.64" y2="-12.065" width="0" layer="19" extent="16-16"/>
@@ -6556,10 +6559,6 @@ design rules under a new name.</description>
 <wire x1="-15.555" y1="-15.24" x2="-8.495" y2="-14.48" width="0" layer="19" extent="1-16"/>
 <wire x1="-15.62" y1="-12.76" x2="-15.555" y2="-15.24" width="0" layer="19" extent="1-16"/>
 <wire x1="-18.97" y1="-15.24" x2="-15.555" y2="-15.24" width="0" layer="19" extent="1-16"/>
-<wire x1="5.79" y1="25.36" x2="15.905" y2="-12.77" width="0" layer="19" extent="16-16"/>
-<wire x1="5.79" y1="27.9" x2="5.79" y2="25.36" width="0" layer="19" extent="1-1"/>
-<wire x1="3.25" y1="27.9" x2="5.79" y2="27.9" width="0" layer="19" extent="1-1"/>
-<wire x1="5.79" y1="43.14" x2="5.79" y2="27.9" width="0" layer="19" extent="1-1"/>
 <wire x1="-34.925" y1="50.815" x2="5.79" y2="43.14" width="0" layer="19" extent="16-16"/>
 <wire x1="-36.83" y1="49.515" x2="-34.925" y2="50.815" width="0" layer="19" extent="16-16"/>
 <wire x1="-34.34" y1="60.91" x2="-34.925" y2="50.815" width="0" layer="19" extent="1-16"/>
@@ -6965,8 +6964,8 @@ design rules under a new name.</description>
 <wire x1="187.521" y1="36.021" x2="187.521" y2="40.850734375" width="0.25" layer="16"/>
 <contactref element="BRD1" pad="CN10_28"/>
 <contactref element="BRD1" pad="CN10_35"/>
-<contactref element="GPS:ORG1510:IC2" pad="RX_10"/>
 <contactref element="GPS:ORG1510:C31" pad="1"/>
+<contactref element="GPS:ORG1510:IC1" pad="RX_10"/>
 <wire x1="66.75" y1="17.74" x2="125.13" y2="57.293" width="0" layer="19" extent="1-1"/>
 <wire x1="64.21" y1="7.58" x2="66.75" y2="17.74" width="0" layer="19" extent="1-1"/>
 <wire x1="42.618265625" y1="-13.335" x2="64.21" y2="7.58" width="0" layer="19" extent="1-1"/>
@@ -7031,8 +7030,8 @@ design rules under a new name.</description>
 <wire x1="183.2046" y1="32.5602" x2="183.2046" y2="31.7954" width="0.25" layer="16"/>
 <contactref element="BRD1" pad="CN10_37"/>
 <contactref element="BRD1" pad="CN10_26"/>
-<contactref element="GPS:ORG1510:IC2" pad="3_TX"/>
 <contactref element="GPS:ORG1510:C22" pad="1"/>
+<contactref element="GPS:ORG1510:IC1" pad="3_TX"/>
 <wire x1="66.75" y1="20.28" x2="183.2046" y2="31.7954" width="0" layer="19" extent="16-16"/>
 <wire x1="64.21" y1="5.04" x2="66.75" y2="20.28" width="0" layer="19" extent="1-1"/>
 <wire x1="33.64" y1="-15.875" x2="64.21" y2="5.04" width="0" layer="19" extent="16-16"/>
@@ -7744,14 +7743,12 @@ design rules under a new name.</description>
 <contactref element="GPS:SUPERCAP+CHARGER:R40" pad="2"/>
 <contactref element="GPS:SUPERCAP+CHARGER:IC2" pad="SEL"/>
 <contactref element="GPS:SUPERCAP+CHARGER:IC2" pad="FB"/>
-<contactref element="GPS:SUPERCAP+CHARGER:R18" pad="1"/>
 <contactref element="GPS:SUPERCAP+CHARGER:C38" pad="1"/>
 <contactref element="GPS:VOLTAGE_SUPERVISOR:R18" pad="2"/>
 <contactref element="GPS:VOLTAGE_SUPERVISOR:IC2" pad="VDD"/>
 <contactref element="GPS:VOLTAGE_SUPERVISOR:C2" pad="1"/>
 <wire x1="-31.115" y1="50.815" x2="5.79" y2="32.98" width="0" layer="19" extent="16-16"/>
 <wire x1="-34.925" y1="49.515" x2="-31.115" y2="50.815" width="0" layer="19" extent="16-16"/>
-<wire x1="-38.735" y1="49.515" x2="-34.925" y2="49.515" width="0" layer="19" extent="16-16"/>
 <wire x1="-36.44" y1="59.96" x2="-34.925" y2="49.515" width="0" layer="19" extent="1-16"/>
 <wire x1="-36.44" y1="60.61" x2="-36.44" y2="59.96" width="0" layer="19" extent="1-1"/>
 <wire x1="-32.24" y1="61.9" x2="-36.44" y2="60.61" width="0" layer="19" extent="1-1"/>
@@ -7908,7 +7905,7 @@ design rules under a new name.</description>
 <contactref element="BRD1" pad="CN10_33"/>
 <wire x1="64.21" y1="10.12" x2="56.555" y2="10.12" width="0.25" layer="1"/>
 <wire x1="56.555" y1="10.12" x2="56.515" y2="10.16" width="0.25" layer="1"/>
-<contactref element="GPS:ORG1510:IC2" pad="WAKEUP_6"/>
+<contactref element="GPS:ORG1510:IC1" pad="WAKEUP_6"/>
 <wire x1="42.6182625" y1="-18.415" x2="56.515" y2="10.16" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="SPI1_SCK" class="2">
@@ -7950,11 +7947,19 @@ design rules under a new name.</description>
 <wire x1="13.955" y1="-14.87" x2="56.515" y2="15.24" width="0" layer="19" extent="1-1"/>
 <wire x1="4.445" y1="-10.8966" x2="13.955" y2="-14.87" width="0" layer="19" extent="1-16"/>
 </signal>
-<signal name="PB6" class="2">
+<signal name="GPS_!RESET!" class="2">
 <contactref element="BRD1" pad="CN10_3"/>
+<contactref element="GPS:ORG1510:IC1" pad="!RESET!_8"/>
+<wire x1="64.21" y1="48.22" x2="56.555" y2="48.22" width="0.25" layer="1"/>
+<wire x1="56.555" y1="48.22" x2="56.515" y2="48.26" width="0.25" layer="1"/>
+<wire x1="42.618265625" y1="-15.875" x2="56.515" y2="48.26" width="0" layer="19" extent="1-1"/>
 </signal>
-<signal name="PB7" class="2">
+<signal name="SUPERCAP_!EN!" class="2">
 <contactref element="BRD1" pad="CN10_5"/>
+<contactref element="GPS:SUPERCAP+CHARGER:IC2" pad="EN"/>
+<wire x1="64.21" y1="45.68" x2="56.555" y2="45.68" width="0.25" layer="1"/>
+<wire x1="56.555" y1="45.68" x2="56.515" y2="45.72" width="0.25" layer="1"/>
+<wire x1="-36.44" y1="59.31" x2="56.515" y2="45.72" width="0" layer="19" extent="1-1"/>
 </signal>
 <signal name="ANAL_SW_CTRL" class="2">
 <contactref element="BRD1" pad="CN10_36"/>
@@ -7984,11 +7989,6 @@ design rules under a new name.</description>
 <signal name="PA2" class="2">
 <contactref element="BRD1" pad="CN7_32"/>
 </signal>
-<signal name="GPS:SUPERCAP+CHARGER:EN" class="2">
-<contactref element="GPS:SUPERCAP+CHARGER:IC2" pad="EN"/>
-<contactref element="GPS:SUPERCAP+CHARGER:R18" pad="2"/>
-<wire x1="-38.735" y1="50.815" x2="-36.44" y2="59.31" width="0" layer="19" extent="1-16"/>
-</signal>
 <signal name="GPS:SUPERCAP+CHARGER:VMID" class="2">
 <contactref element="GPS:SUPERCAP+CHARGER:C34" pad="2"/>
 <contactref element="GPS:SUPERCAP+CHARGER:IC2" pad="VMID"/>
@@ -8015,11 +8015,11 @@ design rules under a new name.</description>
 </signal>
 <signal name="GPS:VGPS" class="1">
 <contactref element="GPS:ORG1510:C2" pad="1"/>
-<contactref element="GPS:ORG1510:IC2" pad="4_VCC"/>
 <contactref element="GPS:SUPERCAP+CHARGER:C24" pad="+"/>
 <contactref element="GPS:SUPERCAP+CHARGER:IC2" pad="VOUT2"/>
 <contactref element="GPS:SUPERCAP+CHARGER:IC2" pad="VOUT1"/>
 <contactref element="GPS:SUPERCAP+CHARGER:C34" pad="1"/>
+<contactref element="GPS:ORG1510:IC1" pad="4_VCC"/>
 <wire x1="-36.44" y1="62.56" x2="-22.545" y2="65.405" width="0" layer="19" extent="1-1"/>
 <wire x1="-36.44" y1="61.91" x2="-36.44" y2="62.56" width="0" layer="19" extent="1-1"/>
 <wire x1="-44.955" y1="64.77" x2="-36.44" y2="62.56" width="0" layer="19" extent="1-16"/>
@@ -8029,7 +8029,7 @@ design rules under a new name.</description>
 <signal name="GPS:GPS_ON_OFF" class="2">
 <contactref element="GPS:VOLTAGE_SUPERVISOR:IC2" pad="!RESET!"/>
 <contactref element="GPS:VOLTAGE_SUPERVISOR:R18" pad="1"/>
-<contactref element="GPS:ORG1510:IC2" pad="1_ON_OFF"/>
+<contactref element="GPS:ORG1510:IC1" pad="1_ON_OFF"/>
 <wire x1="29.845" y1="-15.225" x2="33.706734375" y2="-13.335" width="0" layer="19" extent="1-16"/>
 <wire x1="29.5148" y1="-14.5796" x2="29.845" y2="-15.225" width="0" layer="19" extent="1-16"/>
 </signal>

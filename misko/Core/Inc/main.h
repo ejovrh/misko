@@ -117,6 +117,10 @@ void Error_Handler(void);
 #define USB_FS_OVCR_EXTI_IRQn EXTI2_IRQn
 #define SWO_Pin GPIO_PIN_3
 #define SWO_GPIO_Port GPIOB
+#define GPS_RESET_Pin GPIO_PIN_6
+#define GPS_RESET_GPIO_Port GPIOB
+#define SUPERCAP_EN_Pin GPIO_PIN_7
+#define SUPERCAP_EN_GPIO_Port GPIOB
 #define Anal_SW_CTRL_Pin GPIO_PIN_8
 #define Anal_SW_CTRL_GPIO_Port GPIOB
 

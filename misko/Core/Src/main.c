@@ -754,6 +754,9 @@ static void MX_GPIO_Init(void)
 	HAL_GPIO_WritePin(GPIOC, GPS_Green_LED_Pin | GPS_Red_LED_Pin, GPIO_PIN_SET);
 
 	/*Configure GPIO pin Output Level */
+	HAL_GPIO_WritePin(GPIOB, GPS_RESET_Pin | SUPERCAP_EN_Pin, GPIO_PIN_RESET);
+
+	/*Configure GPIO pin Output Level */
 	HAL_GPIO_WritePin(Anal_SW_CTRL_GPIO_Port, Anal_SW_CTRL_Pin, GPIO_PIN_SET);
 
 	/*Configure GPIO pins : Blue_User_Button_Pin ADXL345_INT1_Pin */
@@ -803,8 +806,8 @@ static void MX_GPIO_Init(void)
 	HAL_GPIO_Init(SD_CD_GPIO_Port, &GPIO_InitStruct);
 
 	/*Configure GPIO pins : PB1 PB2 PB10 PB12
-	 PB13 PB6 PB7 */
-	GPIO_InitStruct.Pin = GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_10 | GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_6 | GPIO_PIN_7;
+	 PB13 */
+	GPIO_InitStruct.Pin = GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_10 | GPIO_PIN_12 | GPIO_PIN_13;
 	GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
@@ -840,6 +843,13 @@ static void MX_GPIO_Init(void)
 	GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(USB_FS_OVCR_GPIO_Port, &GPIO_InitStruct);
+
+	/*Configure GPIO pins : GPS_RESET_Pin SUPERCAP_EN_Pin */
+	GPIO_InitStruct.Pin = GPS_RESET_Pin | SUPERCAP_EN_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
 	/*Configure GPIO pin : Anal_SW_CTRL_Pin */
 	GPIO_InitStruct.Pin = Anal_SW_CTRL_Pin;

@@ -15897,31 +15897,11 @@ JST PH 2-pin thru-home side entry</description>
 </deviceset>
 </devicesets>
 </library>
-<library name="jumper">
+<library name="jumper" urn="urn:adsk.eagle:library:252">
 <description>&lt;b&gt;Jumpers&lt;/b&gt;&lt;p&gt;
 &lt;author&gt;Created by librarian@cadsoft.de&lt;/author&gt;</description>
 <packages>
-<package name="SJ">
-<description>&lt;b&gt;Solder jumper&lt;/b&gt;</description>
-<wire x1="1.397" y1="-1.016" x2="-1.397" y2="-1.016" width="0.1524" layer="21"/>
-<wire x1="1.397" y1="1.016" x2="1.651" y2="0.762" width="0.1524" layer="21" curve="-90"/>
-<wire x1="-1.651" y1="0.762" x2="-1.397" y2="1.016" width="0.1524" layer="21" curve="-90"/>
-<wire x1="-1.651" y1="-0.762" x2="-1.397" y2="-1.016" width="0.1524" layer="21" curve="90"/>
-<wire x1="1.397" y1="-1.016" x2="1.651" y2="-0.762" width="0.1524" layer="21" curve="90"/>
-<wire x1="1.651" y1="-0.762" x2="1.651" y2="0.762" width="0.1524" layer="21"/>
-<wire x1="-1.651" y1="-0.762" x2="-1.651" y2="0.762" width="0.1524" layer="21"/>
-<wire x1="-1.397" y1="1.016" x2="1.397" y2="1.016" width="0.1524" layer="21"/>
-<wire x1="1.016" y1="0" x2="1.524" y2="0" width="0.1524" layer="51"/>
-<wire x1="-1.016" y1="0" x2="-1.524" y2="0" width="0.1524" layer="51"/>
-<wire x1="-0.254" y1="-0.127" x2="-0.254" y2="0.127" width="1.27" layer="51" curve="-180" cap="flat"/>
-<wire x1="0.254" y1="0.127" x2="0.254" y2="-0.127" width="1.27" layer="51" curve="-180" cap="flat"/>
-<smd name="1" x="-0.762" y="0" dx="1.1684" dy="1.6002" layer="1"/>
-<smd name="2" x="0.762" y="0" dx="1.1684" dy="1.6002" layer="1"/>
-<text x="-1.651" y="1.143" size="1.27" layer="25" ratio="10">&gt;NAME</text>
-<text x="0.4001" y="0" size="0.02" layer="27">&gt;VALUE</text>
-<rectangle x1="-0.0762" y1="-0.9144" x2="0.0762" y2="0.9144" layer="29"/>
-</package>
-<package name="SJW">
+<package name="SJW" urn="urn:adsk.eagle:footprint:15433/1" library_version="2">
 <description>&lt;b&gt;Solder jumper&lt;/b&gt;</description>
 <wire x1="1.905" y1="-1.524" x2="-1.905" y2="-1.524" width="0.1524" layer="21"/>
 <wire x1="1.905" y1="1.524" x2="2.159" y2="1.27" width="0.1524" layer="21" curve="-90"/>
@@ -15958,9 +15938,43 @@ JST PH 2-pin thru-home side entry</description>
 <rectangle x1="-1.4732" y1="0.2032" x2="-1.3462" y2="0.3302" layer="51"/>
 <rectangle x1="-1.1176" y1="0.5842" x2="-0.9906" y2="0.7112" layer="51"/>
 </package>
+<package name="SJ" urn="urn:adsk.eagle:footprint:15432/1" library_version="2">
+<description>&lt;b&gt;Solder jumper&lt;/b&gt;</description>
+<wire x1="1.397" y1="-1.016" x2="-1.397" y2="-1.016" width="0.1524" layer="21"/>
+<wire x1="1.397" y1="1.016" x2="1.651" y2="0.762" width="0.1524" layer="21" curve="-90"/>
+<wire x1="-1.651" y1="0.762" x2="-1.397" y2="1.016" width="0.1524" layer="21" curve="-90"/>
+<wire x1="-1.651" y1="-0.762" x2="-1.397" y2="-1.016" width="0.1524" layer="21" curve="90"/>
+<wire x1="1.397" y1="-1.016" x2="1.651" y2="-0.762" width="0.1524" layer="21" curve="90"/>
+<wire x1="1.651" y1="-0.762" x2="1.651" y2="0.762" width="0.1524" layer="21"/>
+<wire x1="-1.651" y1="-0.762" x2="-1.651" y2="0.762" width="0.1524" layer="21"/>
+<wire x1="-1.397" y1="1.016" x2="1.397" y2="1.016" width="0.1524" layer="21"/>
+<wire x1="1.016" y1="0" x2="1.524" y2="0" width="0.1524" layer="51"/>
+<wire x1="-1.016" y1="0" x2="-1.524" y2="0" width="0.1524" layer="51"/>
+<wire x1="-0.254" y1="-0.127" x2="-0.254" y2="0.127" width="1.27" layer="51" curve="-180" cap="flat"/>
+<wire x1="0.254" y1="0.127" x2="0.254" y2="-0.127" width="1.27" layer="51" curve="-180" cap="flat"/>
+<smd name="1" x="-0.762" y="0" dx="1.1684" dy="1.6002" layer="1"/>
+<smd name="2" x="0.762" y="0" dx="1.1684" dy="1.6002" layer="1"/>
+<text x="-1.651" y="1.143" size="1.27" layer="25" ratio="10">&gt;NAME</text>
+<text x="0.4001" y="0" size="0.02" layer="27">&gt;VALUE</text>
+<rectangle x1="-0.0762" y1="-0.9144" x2="0.0762" y2="0.9144" layer="29"/>
+</package>
 </packages>
+<packages3d>
+<package3d name="SJW" urn="urn:adsk.eagle:package:15507/1" type="box" library_version="2">
+<description>Solder jumper</description>
+<packageinstances>
+<packageinstance name="SJW"/>
+</packageinstances>
+</package3d>
+<package3d name="SJ" urn="urn:adsk.eagle:package:15471/1" type="box" library_version="2">
+<description>Solder jumper</description>
+<packageinstances>
+<packageinstance name="SJ"/>
+</packageinstances>
+</package3d>
+</packages3d>
 <symbols>
-<symbol name="SJ">
+<symbol name="SJ" urn="urn:adsk.eagle:symbol:15431/1" library_version="2">
 <wire x1="0.381" y1="0.635" x2="0.381" y2="-0.635" width="1.27" layer="94" curve="-180" cap="flat"/>
 <wire x1="-0.381" y1="-0.635" x2="-0.381" y2="0.635" width="1.27" layer="94" curve="-180" cap="flat"/>
 <wire x1="2.54" y1="0" x2="1.651" y2="0" width="0.1524" layer="94"/>
@@ -15972,7 +15986,7 @@ JST PH 2-pin thru-home side entry</description>
 </symbol>
 </symbols>
 <devicesets>
-<deviceset name="SJ" prefix="SJ" uservalue="yes">
+<deviceset name="SJ" urn="urn:adsk.eagle:component:15508/2" prefix="SJ" uservalue="yes" library_version="2">
 <description>SMD solder &lt;b&gt;JUMPER&lt;/b&gt;</description>
 <gates>
 <gate name="1" symbol="SJ" x="0" y="0"/>
@@ -15983,8 +15997,13 @@ JST PH 2-pin thru-home side entry</description>
 <connect gate="1" pin="1" pad="1"/>
 <connect gate="1" pin="2" pad="2"/>
 </connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:15471/1"/>
+</package3dinstances>
 <technologies>
-<technology name=""/>
+<technology name="">
+<attribute name="POPULARITY" value="33" constant="no"/>
+</technology>
 </technologies>
 </device>
 <device name="W" package="SJW">
@@ -15992,8 +16011,13 @@ JST PH 2-pin thru-home side entry</description>
 <connect gate="1" pin="1" pad="1"/>
 <connect gate="1" pin="2" pad="2"/>
 </connects>
+<package3dinstances>
+<package3dinstance package3d_urn="urn:adsk.eagle:package:15507/1"/>
+</package3dinstances>
 <technologies>
-<technology name=""/>
+<technology name="">
+<attribute name="POPULARITY" value="3" constant="no"/>
+</technology>
 </technologies>
 </device>
 </devices>
@@ -31095,93 +31119,6 @@ DIN A4, landscape with location and doc. field</description>
 </deviceset>
 </devicesets>
 </library>
-<library name="ORG1510-MK4 GPS module">
-<packages>
-<package name="PACKAGE">
-<wire x1="5" y1="-5" x2="-5" y2="-5" width="0.127" layer="21"/>
-<wire x1="-5" y1="5" x2="5" y2="5" width="0.127" layer="21"/>
-<rectangle x1="-3.2" y1="-5" x2="3.2" y2="5" layer="29"/>
-<smd name="WAKEUP_6" x="4.5182625" y="-2.54" dx="1.45" dy="0.86" layer="1" rot="R180"/>
-<smd name="CTS_7" x="4.5182625" y="-1.27" dx="1.45" dy="0.86" layer="1" rot="R180"/>
-<smd name="!RESET!_8" x="4.518265625" y="0" dx="1.45" dy="0.86" layer="1" rot="R180"/>
-<smd name="RTS_9" x="4.5182625" y="1.27" dx="1.45" dy="0.86" layer="1" rot="R180"/>
-<smd name="RX_10" x="4.518265625" y="2.54" dx="1.45" dy="0.86" layer="1" rot="R180"/>
-<smd name="1_ON_OFF" x="-4.393265625" y="2.54" dx="1.7" dy="0.86" layer="1" rot="R180"/>
-<smd name="2_1PPS" x="-4.5182625" y="1.27" dx="1.45" dy="0.86" layer="1" rot="R180"/>
-<smd name="3_TX" x="-4.518265625" y="0" dx="1.45" dy="0.86" layer="1" rot="R180"/>
-<smd name="4_VCC" x="-4.518265625" y="-1.27" dx="1.45" dy="0.86" layer="1" rot="R180"/>
-<smd name="5_GND" x="-4.5182625" y="-2.54" dx="1.45" dy="0.86" layer="1" rot="R180"/>
-<smd name="GND2" x="0" y="0" dx="6.3" dy="10" layer="1" rot="R180" cream="no"/>
-<pad name="GND4" x="0" y="-3.81" drill="0.35" rot="R180" thermals="no"/>
-<pad name="GND1" x="2.54" y="3.81" drill="0.35" rot="R180" thermals="no"/>
-<pad name="GND5" x="-2.54" y="3.81" drill="0.35" rot="R180" thermals="no"/>
-<text x="0" y="6" size="0.75" layer="25" font="vector" rot="R180" align="center">&gt;NAME</text>
-<text x="-3.81" y="-8.89" size="1.27" layer="27">&gt;VALUE</text>
-<wire x1="5" y1="-5" x2="5" y2="-3.2" width="0.127" layer="21"/>
-<wire x1="-5" y1="-5" x2="-5" y2="-3.2" width="0.127" layer="21"/>
-<wire x1="5" y1="5" x2="5" y2="3.2" width="0.127" layer="21"/>
-<wire x1="-5" y1="5" x2="-5" y2="3.2" width="0.127" layer="21"/>
-<text x="0" y="-6" size="0.75" layer="27" font="vector" rot="R180" align="center">&gt;VALUE</text>
-<pad name="GND6" x="2.54" y="-3.81" drill="0.35" rot="R180" thermals="no"/>
-<pad name="GND7" x="-2.54" y="-3.81" drill="0.35" rot="R180" thermals="no"/>
-<pad name="GND8" x="0" y="3.81" drill="0.35" rot="R180" thermals="no"/>
-<pad name="GND9" x="2.54" y="0" drill="0.35" rot="R180" thermals="no"/>
-<pad name="GND10" x="-2.54" y="0" drill="0.35" rot="R180" thermals="no"/>
-<pad name="GND11" x="0" y="0" drill="0.35" rot="R180" thermals="no"/>
-<circle x="-5.75" y="2.5" radius="0.1" width="0.5" layer="21"/>
-<pad name="GND12" x="4.08" y="-3.81" drill="0.35" rot="R180" thermals="no"/>
-<pad name="GND13" x="-4.08" y="-3.81" drill="0.35" rot="R180" thermals="no"/>
-<pad name="GND14" x="4.08" y="3.81" drill="0.35" rot="R180" thermals="no"/>
-<pad name="GND15" x="-4.08" y="3.81" drill="0.35" rot="R180" thermals="no"/>
-</package>
-</packages>
-<symbols>
-<symbol name="SYMBOL">
-<pin name="1_FORCE-ON" x="-20.32" y="5.08" visible="pin" length="middle" direction="in"/>
-<pin name="2_1PPS" x="-20.32" y="2.54" visible="pin" length="middle" direction="out"/>
-<pin name="3_TX" x="-20.32" y="0" visible="pin" length="middle" direction="out"/>
-<pin name="4_VCC" x="-20.32" y="-2.54" visible="pin" length="middle" direction="pwr"/>
-<pin name="5_GND" x="-20.32" y="-5.08" visible="pin" length="middle" direction="pwr"/>
-<pin name="WAKEUP_6" x="20.32" y="-5.08" visible="pin" length="middle" direction="out" rot="R180"/>
-<pin name="RTS_7" x="20.32" y="-2.54" visible="pin" length="middle" rot="R180"/>
-<pin name="!RESET!_8" x="20.32" y="0" visible="pin" length="middle" direction="in" rot="R180"/>
-<pin name="CTS_9" x="20.32" y="2.54" visible="pin" length="middle" rot="R180"/>
-<pin name="RX_10" x="20.32" y="5.08" visible="pin" length="middle" direction="in" rot="R180"/>
-<wire x1="-15.24" y1="7.62" x2="15.24" y2="7.62" width="0.254" layer="94"/>
-<wire x1="15.24" y1="7.62" x2="15.24" y2="-7.62" width="0.254" layer="94"/>
-<wire x1="15.24" y1="-7.62" x2="-15.24" y2="-7.62" width="0.254" layer="94"/>
-<wire x1="-15.24" y1="-7.62" x2="-15.24" y2="7.62" width="0.254" layer="94"/>
-<text x="-15.24" y="10.16" size="1.778" layer="95">&gt;NAME</text>
-<text x="-15.24" y="-10.16" size="1.778" layer="96" align="top-left">&gt;VALUE</text>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="ORG1510-MK4" prefix="IC" uservalue="yes">
-<gates>
-<gate name="G$1" symbol="SYMBOL" x="27.94" y="-2.54"/>
-</gates>
-<devices>
-<device name="" package="PACKAGE">
-<connects>
-<connect gate="G$1" pin="!RESET!_8" pad="!RESET!_8"/>
-<connect gate="G$1" pin="1_FORCE-ON" pad="1_ON_OFF"/>
-<connect gate="G$1" pin="2_1PPS" pad="2_1PPS"/>
-<connect gate="G$1" pin="3_TX" pad="3_TX"/>
-<connect gate="G$1" pin="4_VCC" pad="4_VCC"/>
-<connect gate="G$1" pin="5_GND" pad="5_GND GND1 GND2 GND4 GND5 GND6 GND7 GND8 GND9 GND10 GND11 GND12 GND13 GND14 GND15"/>
-<connect gate="G$1" pin="CTS_9" pad="RTS_9"/>
-<connect gate="G$1" pin="RTS_7" pad="CTS_7"/>
-<connect gate="G$1" pin="RX_10" pad="RX_10"/>
-<connect gate="G$1" pin="WAKEUP_6" pad="WAKEUP_6"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="TPS3808 - Supervisory Circuit">
 <packages>
 <package name="WSON-6">
@@ -31436,6 +31373,93 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <connect gate="G$1" pin="VIN" pad="VIN1 VIN2"/>
 <connect gate="G$1" pin="VMID" pad="VMID"/>
 <connect gate="G$1" pin="VOUT" pad="VOUT1 VOUT2"/>
+</connects>
+<technologies>
+<technology name=""/>
+</technologies>
+</device>
+</devices>
+</deviceset>
+</devicesets>
+</library>
+<library name="ORG1510-MK4 GPS module">
+<packages>
+<package name="SMD">
+<wire x1="5" y1="-5" x2="-5" y2="-5" width="0.127" layer="21"/>
+<wire x1="-5" y1="5" x2="5" y2="5" width="0.127" layer="21"/>
+<rectangle x1="-3.2" y1="-5" x2="3.2" y2="5" layer="29"/>
+<smd name="WAKEUP_6" x="4.5182625" y="-2.54" dx="1.45" dy="0.86" layer="1" rot="R180"/>
+<smd name="CTS_7" x="4.5182625" y="-1.27" dx="1.45" dy="0.86" layer="1" rot="R180"/>
+<smd name="!RESET!_8" x="4.518265625" y="0" dx="1.45" dy="0.86" layer="1" rot="R180"/>
+<smd name="RTS_9" x="4.5182625" y="1.27" dx="1.45" dy="0.86" layer="1" rot="R180"/>
+<smd name="RX_10" x="4.518265625" y="2.54" dx="1.45" dy="0.86" layer="1" rot="R180"/>
+<smd name="1_ON_OFF" x="-4.393265625" y="2.54" dx="1.7" dy="0.86" layer="1" rot="R180"/>
+<smd name="2_1PPS" x="-4.5182625" y="1.27" dx="1.45" dy="0.86" layer="1" rot="R180"/>
+<smd name="3_TX" x="-4.518265625" y="0" dx="1.45" dy="0.86" layer="1" rot="R180"/>
+<smd name="4_VCC" x="-4.518265625" y="-1.27" dx="1.45" dy="0.86" layer="1" rot="R180"/>
+<smd name="5_GND" x="-4.5182625" y="-2.54" dx="1.45" dy="0.86" layer="1" rot="R180"/>
+<smd name="GND2" x="0" y="0" dx="6.3" dy="10" layer="1" rot="R180" cream="no"/>
+<pad name="GND4" x="0" y="-3.81" drill="0.35" rot="R180" thermals="no"/>
+<pad name="GND1" x="2.54" y="3.81" drill="0.35" rot="R180" thermals="no"/>
+<pad name="GND5" x="-2.54" y="3.81" drill="0.35" rot="R180" thermals="no"/>
+<text x="0" y="6" size="0.75" layer="25" font="vector" rot="R180" align="center">&gt;NAME</text>
+<text x="-3.81" y="-8.89" size="1.27" layer="27">&gt;VALUE</text>
+<wire x1="5" y1="-5" x2="5" y2="-3.2" width="0.127" layer="21"/>
+<wire x1="-5" y1="-5" x2="-5" y2="-3.2" width="0.127" layer="21"/>
+<wire x1="5" y1="5" x2="5" y2="3.2" width="0.127" layer="21"/>
+<wire x1="-5" y1="5" x2="-5" y2="3.2" width="0.127" layer="21"/>
+<text x="0" y="-6" size="0.75" layer="27" font="vector" rot="R180" align="center">&gt;VALUE</text>
+<pad name="GND6" x="2.54" y="-3.81" drill="0.35" rot="R180" thermals="no"/>
+<pad name="GND7" x="-2.54" y="-3.81" drill="0.35" rot="R180" thermals="no"/>
+<pad name="GND8" x="0" y="3.81" drill="0.35" rot="R180" thermals="no"/>
+<pad name="GND9" x="2.54" y="0" drill="0.35" rot="R180" thermals="no"/>
+<pad name="GND10" x="-2.54" y="0" drill="0.35" rot="R180" thermals="no"/>
+<pad name="GND11" x="0" y="0" drill="0.35" rot="R180" thermals="no"/>
+<circle x="-5.75" y="2.5" radius="0.1" width="0.5" layer="21"/>
+<pad name="GND12" x="4.08" y="-3.81" drill="0.35" rot="R180" thermals="no"/>
+<pad name="GND13" x="-4.08" y="-3.81" drill="0.35" rot="R180" thermals="no"/>
+<pad name="GND14" x="4.08" y="3.81" drill="0.35" rot="R180" thermals="no"/>
+<pad name="GND15" x="-4.08" y="3.81" drill="0.35" rot="R180" thermals="no"/>
+</package>
+</packages>
+<symbols>
+<symbol name="ORG1510-MK4">
+<pin name="FORCE-ON" x="-20.32" y="5.08" visible="pin" length="middle" direction="in"/>
+<pin name="1PPS" x="-20.32" y="2.54" visible="pin" length="middle" direction="out"/>
+<pin name="TX" x="20.32" y="2.54" visible="pin" length="middle" direction="out" rot="R180"/>
+<pin name="VCC" x="-20.32" y="-2.54" visible="pin" length="middle" direction="pwr"/>
+<pin name="GND" x="-20.32" y="-5.08" visible="pin" length="middle" direction="pwr"/>
+<pin name="WAKEUP" x="20.32" y="-5.08" visible="pin" length="middle" direction="out" rot="R180"/>
+<pin name="RTS" x="20.32" y="-2.54" visible="pin" length="middle" rot="R180"/>
+<pin name="!RESET!" x="-20.32" y="0" visible="pin" length="middle" direction="in"/>
+<pin name="CTS" x="20.32" y="0" visible="pin" length="middle" rot="R180"/>
+<pin name="RX" x="20.32" y="5.08" visible="pin" length="middle" direction="in" rot="R180"/>
+<wire x1="-15.24" y1="10.16" x2="15.24" y2="10.16" width="0.254" layer="94"/>
+<wire x1="15.24" y1="10.16" x2="15.24" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="15.24" y1="-10.16" x2="-15.24" y2="-10.16" width="0.254" layer="94"/>
+<wire x1="-15.24" y1="-10.16" x2="-15.24" y2="10.16" width="0.254" layer="94"/>
+<text x="-15.24" y="12.7" size="1.778" layer="95">&gt;NAME</text>
+<text x="-15.24" y="-12.7" size="1.778" layer="96" align="top-left">&gt;VALUE</text>
+</symbol>
+</symbols>
+<devicesets>
+<deviceset name="ORG1510-MK4" prefix="IC" uservalue="yes">
+<gates>
+<gate name="G$1" symbol="ORG1510-MK4" x="27.94" y="-2.54"/>
+</gates>
+<devices>
+<device name="" package="SMD">
+<connects>
+<connect gate="G$1" pin="!RESET!" pad="!RESET!_8"/>
+<connect gate="G$1" pin="1PPS" pad="2_1PPS"/>
+<connect gate="G$1" pin="CTS" pad="RTS_9"/>
+<connect gate="G$1" pin="FORCE-ON" pad="1_ON_OFF"/>
+<connect gate="G$1" pin="GND" pad="5_GND GND1 GND2 GND4 GND5 GND6 GND7 GND8 GND9 GND10 GND11 GND12 GND13 GND14 GND15"/>
+<connect gate="G$1" pin="RTS" pad="CTS_7"/>
+<connect gate="G$1" pin="RX" pad="RX_10"/>
+<connect gate="G$1" pin="TX" pad="3_TX"/>
+<connect gate="G$1" pin="VCC" pad="4_VCC"/>
+<connect gate="G$1" pin="WAKEUP" pad="WAKEUP_6"/>
 </connects>
 <technologies>
 <technology name=""/>
@@ -31925,15 +31949,15 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <port name="VGPS" side="left" coord="-5.08" direction="pwr"/>
 <port name="RX" side="right" coord="2.54" direction="in"/>
 <port name="TX" side="right" coord="-2.54" direction="out"/>
-<port name="WAKEUP" side="left" coord="5.08" direction="out"/>
+<port name="WAKEUP" side="left" coord="2.54" direction="out"/>
 <port name="FORCE-ON" side="left" coord="0" direction="in"/>
+<port name="!RESET!" side="left" coord="5.08" direction="in"/>
 </ports>
 <variantdefs>
 </variantdefs>
 <parts>
 <part name="ORG1510-MK4" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A5L-LOC" device="" value="ORG1510-mk4 GPS Module"/>
 <part name="C2" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="C-EU" device="C0402" package3d_urn="urn:adsk.eagle:package:26136/1" value="1u / 16V"/>
-<part name="IC2" library="ORG1510-MK4 GPS module" deviceset="ORG1510-MK4" device="" value="ORG1510MK4"/>
 <part name="C22" library="rcl" deviceset="C-EU" device="C0402" value="18p / 16V"/>
 <part name="C31" library="rcl" deviceset="C-EU" device="C0402" value="18p / 16V"/>
 <part name="SUPPLY13" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
@@ -31941,6 +31965,7 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <part name="SUPPLY15" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY16" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY1" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
+<part name="IC1" library="ORG1510-MK4 GPS module" deviceset="ORG1510-MK4" device="" value="ORG1510-MK4"/>
 </parts>
 <sheets>
 <sheet>
@@ -31956,10 +31981,6 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <attribute name="NAME" x="58.42" y="25.4" size="1.778" layer="95"/>
 <attribute name="VALUE" x="58.42" y="22.86" size="1.778" layer="96"/>
 </instance>
-<instance part="IC2" gate="G$1" x="91.44" y="76.2" smashed="yes">
-<attribute name="NAME" x="78.74" y="86.36" size="1.778" layer="95"/>
-<attribute name="VALUE" x="78.74" y="66.04" size="1.778" layer="96"/>
-</instance>
 <instance part="C22" gate="G$1" x="10.16" y="25.4" smashed="yes">
 <attribute name="NAME" x="12.7" y="25.4" size="1.778" layer="95"/>
 <attribute name="VALUE" x="12.7" y="22.86" size="1.778" layer="96"/>
@@ -31971,8 +31992,8 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <instance part="SUPPLY13" gate="G$1" x="55.88" y="15.24" smashed="yes">
 <attribute name="VALUE" x="55.88" y="12.7" size="1.778" layer="96" rot="R270" align="center-left"/>
 </instance>
-<instance part="SUPPLY14" gate="G$1" x="71.12" y="66.04" smashed="yes">
-<attribute name="VALUE" x="71.12" y="63.5" size="1.778" layer="96" rot="R270" align="center-left"/>
+<instance part="SUPPLY14" gate="G$1" x="76.2" y="68.58" smashed="yes">
+<attribute name="VALUE" x="76.2" y="66.04" size="1.778" layer="96" rot="R270" align="center-left"/>
 </instance>
 <instance part="SUPPLY15" gate="G$1" x="10.16" y="15.24" smashed="yes">
 <attribute name="VALUE" x="10.16" y="12.7" size="1.778" layer="96" rot="R270" align="center-left"/>
@@ -31982,6 +32003,10 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 </instance>
 <instance part="SUPPLY1" gate="G$1" x="76.2" y="15.24" smashed="yes">
 <attribute name="VALUE" x="76.2" y="12.7" size="1.778" layer="96" rot="R270" align="center-left"/>
+</instance>
+<instance part="IC1" gate="G$1" x="96.52" y="78.74" smashed="yes">
+<attribute name="NAME" x="81.28" y="91.44" size="1.778" layer="95"/>
+<attribute name="VALUE" x="81.28" y="66.04" size="1.778" layer="96" align="top-left"/>
 </instance>
 </instances>
 <busses>
@@ -31994,9 +32019,9 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <wire x1="55.88" y1="17.78" x2="55.88" y2="20.32" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="IC2" gate="G$1" pin="5_GND"/>
 <pinref part="SUPPLY14" gate="G$1" pin="GND"/>
-<wire x1="71.12" y1="68.58" x2="71.12" y2="71.12" width="0.1524" layer="91"/>
+<wire x1="76.2" y1="71.12" x2="76.2" y2="73.66" width="0.1524" layer="91"/>
+<pinref part="IC1" gate="G$1" pin="GND"/>
 </segment>
 <segment>
 <pinref part="C22" gate="G$1" pin="2"/>
@@ -32016,9 +32041,9 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 </net>
 <net name="WAKEUP" class="2">
 <segment>
-<wire x1="111.76" y1="71.12" x2="127" y2="71.12" width="0.1524" layer="91"/>
-<label x="127" y="71.12" size="1.778" layer="95"/>
-<pinref part="IC2" gate="G$1" pin="WAKEUP_6"/>
+<wire x1="116.84" y1="73.66" x2="132.08" y2="73.66" width="0.1524" layer="91"/>
+<label x="132.08" y="73.66" size="1.778" layer="95"/>
+<pinref part="IC1" gate="G$1" pin="WAKEUP"/>
 </segment>
 </net>
 <net name="VGPS" class="1">
@@ -32028,23 +32053,23 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <wire x1="55.88" y1="27.94" x2="55.88" y2="30.48" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<pinref part="IC2" gate="G$1" pin="4_VCC"/>
-<wire x1="71.12" y1="73.66" x2="55.88" y2="73.66" width="0.1524" layer="91"/>
-<label x="55.88" y="73.66" size="1.778" layer="95" rot="R180"/>
+<wire x1="76.2" y1="76.2" x2="60.96" y2="76.2" width="0.1524" layer="91"/>
+<label x="60.96" y="76.2" size="1.778" layer="95" rot="R180"/>
+<pinref part="IC1" gate="G$1" pin="VCC"/>
 </segment>
 </net>
 <net name="FORCE-ON" class="2">
 <segment>
-<wire x1="55.88" y1="81.28" x2="71.12" y2="81.28" width="0.1524" layer="91"/>
-<label x="55.88" y="81.28" size="1.778" layer="95" rot="R180"/>
-<pinref part="IC2" gate="G$1" pin="1_FORCE-ON"/>
+<wire x1="60.96" y1="83.82" x2="76.2" y2="83.82" width="0.1524" layer="91"/>
+<label x="60.96" y="83.82" size="1.778" layer="95" rot="R180"/>
+<pinref part="IC1" gate="G$1" pin="FORCE-ON"/>
 </segment>
 </net>
 <net name="RX" class="2">
 <segment>
-<label x="127" y="81.28" size="1.778" layer="95"/>
-<wire x1="111.76" y1="81.28" x2="127" y2="81.28" width="0.1524" layer="91"/>
-<pinref part="IC2" gate="G$1" pin="RX_10"/>
+<label x="132.08" y="83.82" size="1.778" layer="95"/>
+<wire x1="116.84" y1="83.82" x2="132.08" y2="83.82" width="0.1524" layer="91"/>
+<pinref part="IC1" gate="G$1" pin="RX"/>
 </segment>
 <segment>
 <pinref part="C31" gate="G$1" pin="1"/>
@@ -32054,14 +32079,21 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 </net>
 <net name="TX" class="2">
 <segment>
-<label x="55.88" y="76.2" size="1.778" layer="95" rot="R180"/>
-<wire x1="71.12" y1="76.2" x2="55.88" y2="76.2" width="0.1524" layer="91"/>
-<pinref part="IC2" gate="G$1" pin="3_TX"/>
+<label x="132.08" y="81.28" size="1.778" layer="95"/>
+<wire x1="116.84" y1="81.28" x2="132.08" y2="81.28" width="0.1524" layer="91"/>
+<pinref part="IC1" gate="G$1" pin="TX"/>
 </segment>
 <segment>
 <pinref part="C22" gate="G$1" pin="1"/>
 <wire x1="10.16" y1="27.94" x2="10.16" y2="33.02" width="0.1524" layer="91"/>
 <label x="10.16" y="33.02" size="1.778" layer="95" rot="R90"/>
+</segment>
+</net>
+<net name="!RESET!" class="2">
+<segment>
+<pinref part="IC1" gate="G$1" pin="!RESET!"/>
+<wire x1="76.2" y1="78.74" x2="60.96" y2="78.74" width="0.1524" layer="91"/>
+<label x="60.96" y="78.74" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 </nets>
@@ -32228,6 +32260,7 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <port name="GND" side="bottom" coord="0" direction="pwr"/>
 <port name="3V3" side="left" coord="0" direction="pwr"/>
 <port name="VOUT" side="right" coord="0" direction="pwr"/>
+<port name="!EN!" side="left" coord="-5.08" direction="in"/>
 </ports>
 <variantdefs>
 </variantdefs>
@@ -32246,7 +32279,6 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <part name="SUPPLY19" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="R14" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:26058/1" value="10k"/>
 <part name="SUPPLY20" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
-<part name="R18" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:26058/1" value="1k"/>
 <part name="SUPPLY21" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY1" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY2" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
@@ -32308,10 +32340,6 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <instance part="SUPPLY20" gate="G$1" x="116.84" y="66.04" smashed="yes">
 <attribute name="VALUE" x="116.84" y="63.5" size="1.778" layer="96" align="center-left"/>
 </instance>
-<instance part="R18" gate="G$1" x="43.18" y="68.58" smashed="yes">
-<attribute name="NAME" x="40.64" y="71.12" size="1.778" layer="95"/>
-<attribute name="VALUE" x="40.64" y="66.04" size="1.778" layer="96"/>
-</instance>
 <instance part="SUPPLY21" gate="G$1" x="30.48" y="81.28" smashed="yes">
 <attribute name="VALUE" x="30.48" y="78.74" size="1.778" layer="96" rot="R180" align="center-left"/>
 </instance>
@@ -32357,12 +32385,11 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <label x="76.2" y="22.86" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
-<net name="EN" class="2">
+<net name="!EN!" class="2">
 <segment>
 <pinref part="IC2" gate="G$1" pin="EN"/>
-<pinref part="R18" gate="G$1" pin="2"/>
 <wire x1="48.26" y1="68.58" x2="66.04" y2="68.58" width="0.1524" layer="91"/>
-<label x="50.8" y="68.58" size="1.778" layer="95"/>
+<label x="48.26" y="68.58" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 <net name="VOUT" class="1">
@@ -32396,8 +32423,7 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <pinref part="SUPPLY17" gate="G$1" pin="3V3"/>
 <wire x1="22.86" y1="93.98" x2="30.48" y2="93.98" width="0.1524" layer="91"/>
 <pinref part="R40" gate="G$1" pin="2"/>
-<wire x1="30.48" y1="93.98" x2="38.1" y2="93.98" width="0.1524" layer="91"/>
-<wire x1="38.1" y1="93.98" x2="48.26" y2="93.98" width="0.1524" layer="91"/>
+<wire x1="30.48" y1="93.98" x2="48.26" y2="93.98" width="0.1524" layer="91"/>
 <wire x1="48.26" y1="93.98" x2="58.42" y2="93.98" width="0.1524" layer="91"/>
 <junction x="48.26" y="93.98"/>
 <label x="50.8" y="93.98" size="1.778" layer="95"/>
@@ -32410,9 +32436,6 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <wire x1="58.42" y1="88.9" x2="58.42" y2="93.98" width="0.1524" layer="91"/>
 <wire x1="66.04" y1="88.9" x2="58.42" y2="88.9" width="0.1524" layer="91"/>
 <junction x="58.42" y="88.9"/>
-<pinref part="R18" gate="G$1" pin="1"/>
-<wire x1="38.1" y1="68.58" x2="38.1" y2="93.98" width="0.1524" layer="91"/>
-<junction x="38.1" y="93.98"/>
 <pinref part="C38" gate="G$1" pin="1"/>
 <junction x="30.48" y="93.98"/>
 </segment>
@@ -32460,6 +32483,8 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <port name="GPS_RX" side="left" coord="5.08" direction="in"/>
 <port name="GPS_WKUP" side="left" coord="-2.54" direction="out"/>
 <port name="GPS_PWR_CTRL" side="left" coord="-5.08" direction="in"/>
+<port name="!RESET!" side="left" coord="-7.62" direction="in"/>
+<port name="SC_!EN!" side="left" coord="-12.7" direction="in"/>
 </ports>
 <variantdefs>
 </variantdefs>
@@ -32544,16 +32569,16 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <net name="GPS_PWR_CTRL" class="2">
 <segment>
 <wire x1="78.74" y1="109.22" x2="66.04" y2="109.22" width="0.1524" layer="91"/>
-<label x="66.04" y="144.78" size="1.778" layer="95" xref="yes"/>
+<label x="66.04" y="144.78" size="1.778" layer="95" rot="R90" xref="yes"/>
 <wire x1="66.04" y1="109.22" x2="66.04" y2="144.78" width="0.1524" layer="91"/>
 <portref moduleinst="VOLTAGE_SUPERVISOR" port="!MR!"/>
 </segment>
 </net>
 <net name="GPS_WKUP" class="2">
 <segment>
-<wire x1="157.48" y1="111.76" x2="144.78" y2="111.76" width="0.1524" layer="91"/>
-<wire x1="144.78" y1="111.76" x2="144.78" y2="144.78" width="0.1524" layer="91"/>
-<label x="144.78" y="144.78" size="1.778" layer="95" xref="yes"/>
+<wire x1="157.48" y1="109.22" x2="144.78" y2="109.22" width="0.1524" layer="91"/>
+<wire x1="144.78" y1="109.22" x2="144.78" y2="144.78" width="0.1524" layer="91"/>
+<label x="144.78" y="144.78" size="1.778" layer="95" rot="R90" xref="yes"/>
 <portref moduleinst="ORG1510" port="WAKEUP"/>
 </segment>
 </net>
@@ -32610,6 +32635,22 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <portref moduleinst="ORG1510" port="TX"/>
 </segment>
 </net>
+<net name="!RESET!" class="2">
+<segment>
+<portref moduleinst="ORG1510" port="!RESET!"/>
+<wire x1="157.48" y1="111.76" x2="149.86" y2="111.76" width="0.1524" layer="91"/>
+<wire x1="149.86" y1="111.76" x2="149.86" y2="144.78" width="0.1524" layer="91"/>
+<label x="149.86" y="144.78" size="1.778" layer="95" rot="R90" xref="yes"/>
+</segment>
+</net>
+<net name="SC_!EN!" class="2">
+<segment>
+<portref moduleinst="SUPERCAP+CHARGER" port="!EN!"/>
+<wire x1="81.28" y1="58.42" x2="50.8" y2="58.42" width="0.1524" layer="91"/>
+<wire x1="50.8" y1="58.42" x2="50.8" y2="144.78" width="0.1524" layer="91"/>
+<label x="50.8" y="144.78" size="1.778" layer="95" rot="R90" xref="yes"/>
+</segment>
+</net>
 </nets>
 </sheet>
 </sheets>
@@ -32652,7 +32693,7 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <part name="LED3" library="led" library_urn="urn:adsk.eagle:library:259" deviceset="LED" device="SQR2X5" package3d_urn="urn:adsk.eagle:package:15800/1" value="green"/>
 <part name="R16" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
 <part name="R15" library="rcl" deviceset="R-EU_" device="R0805" value="1k"/>
-<part name="SJ1" library="jumper" deviceset="SJ" device="W" value="RESET"/>
+<part name="SJ1" library="jumper" library_urn="urn:adsk.eagle:library:252" deviceset="SJ" device="W" package3d_urn="urn:adsk.eagle:package:15507/1" value="RESET"/>
 <part name="C12" library="rcl" deviceset="C-EU" device="C0805" value="1µF"/>
 <part name="C11" library="rcl" deviceset="C-EU" device="C0805" value="1µF"/>
 <part name="C13" library="rcl" deviceset="C-EU" device="C0805" value="10µF"/>
@@ -33302,7 +33343,7 @@ ejovrh rev.3</text>
 <label x="7.62" y="116.84" size="1.778" layer="95"/>
 </segment>
 </bus>
-<bus name="GPS_UART:GPS_SW_SERIAL_TX,GPS_TX">
+<bus name="UART1:GPS_SW_SERIAL_TX,GPS_TX">
 <segment>
 <wire x1="254" y1="198.12" x2="254" y2="223.52" width="0.762" layer="92"/>
 <label x="254" y="223.52" size="1.778" layer="95"/>
@@ -35466,18 +35507,28 @@ ejovrh rev.3</text>
 <label x="175.26" y="111.76" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="PB6" class="2">
+<net name="GPS_!RESET!" class="2">
 <segment>
 <wire x1="43.18" y1="60.96" x2="33.02" y2="60.96" width="0.1524" layer="91"/>
 <pinref part="BRD1" gate="CN10" pin="PB6"/>
 <label x="33.02" y="60.96" size="1.778" layer="95" rot="R180"/>
 </segment>
+<segment>
+<portref moduleinst="GPS" port="!RESET!"/>
+<wire x1="281.94" y1="187.96" x2="271.78" y2="187.96" width="0.1524" layer="91"/>
+<label x="271.78" y="187.96" size="1.778" layer="95" rot="R180"/>
+</segment>
 </net>
-<net name="PB7" class="2">
+<net name="SUPERCAP_!EN!" class="2">
 <segment>
 <wire x1="43.18" y1="58.42" x2="33.02" y2="58.42" width="0.1524" layer="91"/>
 <pinref part="BRD1" gate="CN10" pin="PB7"/>
 <label x="33.02" y="58.42" size="1.778" layer="95" rot="R180"/>
+</segment>
+<segment>
+<portref moduleinst="GPS" port="SC_!EN!"/>
+<wire x1="281.94" y1="182.88" x2="271.78" y2="182.88" width="0.1524" layer="91"/>
+<label x="271.78" y="182.88" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 <net name="ANAL_SW_CTRL" class="2">
