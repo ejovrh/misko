@@ -35112,15 +35112,15 @@ DIN A4, landscape with location and doc. field</description>
 </packages>
 <symbols>
 <symbol name="SYMBOL">
-<pin name="1_ON_OFF" x="-20.32" y="5.08" visible="pin" length="middle" direction="in"/>
+<pin name="1_FORCE-ON" x="-20.32" y="5.08" visible="pin" length="middle" direction="in"/>
 <pin name="2_1PPS" x="-20.32" y="2.54" visible="pin" length="middle" direction="out"/>
 <pin name="3_TX" x="-20.32" y="0" visible="pin" length="middle" direction="out"/>
 <pin name="4_VCC" x="-20.32" y="-2.54" visible="pin" length="middle" direction="pwr"/>
 <pin name="5_GND" x="-20.32" y="-5.08" visible="pin" length="middle" direction="pwr"/>
 <pin name="WAKEUP_6" x="20.32" y="-5.08" visible="pin" length="middle" direction="out" rot="R180"/>
-<pin name="CTS_7" x="20.32" y="-2.54" visible="pin" length="middle" rot="R180"/>
+<pin name="RTS_7" x="20.32" y="-2.54" visible="pin" length="middle" rot="R180"/>
 <pin name="!RESET!_8" x="20.32" y="0" visible="pin" length="middle" direction="in" rot="R180"/>
-<pin name="RTS_9" x="20.32" y="2.54" visible="pin" length="middle" rot="R180"/>
+<pin name="CTS_9" x="20.32" y="2.54" visible="pin" length="middle" rot="R180"/>
 <pin name="RX_10" x="20.32" y="5.08" visible="pin" length="middle" direction="in" rot="R180"/>
 <wire x1="-15.24" y1="7.62" x2="15.24" y2="7.62" width="0.254" layer="94"/>
 <wire x1="15.24" y1="7.62" x2="15.24" y2="-7.62" width="0.254" layer="94"/>
@@ -35139,13 +35139,13 @@ DIN A4, landscape with location and doc. field</description>
 <device name="" package="PACKAGE">
 <connects>
 <connect gate="G$1" pin="!RESET!_8" pad="!RESET!_8"/>
-<connect gate="G$1" pin="1_ON_OFF" pad="1_ON_OFF"/>
+<connect gate="G$1" pin="1_FORCE-ON" pad="1_ON_OFF"/>
 <connect gate="G$1" pin="2_1PPS" pad="2_1PPS"/>
 <connect gate="G$1" pin="3_TX" pad="3_TX"/>
 <connect gate="G$1" pin="4_VCC" pad="4_VCC"/>
 <connect gate="G$1" pin="5_GND" pad="5_GND GND1 GND2 GND4 GND5 GND6 GND7 GND8 GND9 GND10 GND11 GND12 GND13 GND14 GND15"/>
-<connect gate="G$1" pin="CTS_7" pad="CTS_7"/>
-<connect gate="G$1" pin="RTS_9" pad="RTS_9"/>
+<connect gate="G$1" pin="CTS_9" pad="RTS_9"/>
+<connect gate="G$1" pin="RTS_7" pad="CTS_7"/>
 <connect gate="G$1" pin="RX_10" pad="RX_10"/>
 <connect gate="G$1" pin="WAKEUP_6" pad="WAKEUP_6"/>
 </connects>
@@ -35898,10 +35898,10 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <ports>
 <port name="GND" side="bottom" coord="0" direction="pwr"/>
 <port name="VGPS" side="left" coord="-5.08" direction="pwr"/>
-<port name="GPS_ON_OFF" side="left" coord="0" direction="in"/>
-<port name="GPS_TX" side="right" coord="-2.54" direction="out"/>
-<port name="GPS_SW_SERIAL_TX" side="right" coord="2.54" direction="in"/>
-<port name="GPS_WAKEUP_PIN" side="left" coord="5.08" direction="out"/>
+<port name="RX" side="right" coord="2.54" direction="in"/>
+<port name="TX" side="right" coord="-2.54" direction="out"/>
+<port name="WAKEUP" side="left" coord="5.08" direction="out"/>
+<port name="FORCE-ON" side="left" coord="0" direction="in"/>
 </ports>
 <variantdefs>
 </variantdefs>
@@ -35989,38 +35989,14 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <label x="76.2" y="27.94" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
-<net name="GPS_WAKEUP_PIN" class="2">
+<net name="WAKEUP" class="2">
 <segment>
 <wire x1="111.76" y1="71.12" x2="127" y2="71.12" width="0.1524" layer="91"/>
 <label x="127" y="71.12" size="1.778" layer="95"/>
 <pinref part="IC2" gate="G$1" pin="WAKEUP_6"/>
 </segment>
 </net>
-<net name="GPS_SW_SERIAL_TX" class="2">
-<segment>
-<label x="127" y="81.28" size="1.778" layer="95"/>
-<wire x1="111.76" y1="81.28" x2="127" y2="81.28" width="0.1524" layer="91"/>
-<pinref part="IC2" gate="G$1" pin="RX_10"/>
-</segment>
-<segment>
-<pinref part="C31" gate="G$1" pin="1"/>
-<wire x1="33.02" y1="27.94" x2="33.02" y2="33.02" width="0.1524" layer="91"/>
-<label x="33.02" y="33.02" size="1.778" layer="95" rot="R90"/>
-</segment>
-</net>
-<net name="GPS_TX" class="2">
-<segment>
-<label x="55.88" y="76.2" size="1.778" layer="95" rot="R180"/>
-<wire x1="71.12" y1="76.2" x2="55.88" y2="76.2" width="0.1524" layer="91"/>
-<pinref part="IC2" gate="G$1" pin="3_TX"/>
-</segment>
-<segment>
-<pinref part="C22" gate="G$1" pin="1"/>
-<wire x1="10.16" y1="27.94" x2="10.16" y2="33.02" width="0.1524" layer="91"/>
-<label x="10.16" y="33.02" size="1.778" layer="95" rot="R90"/>
-</segment>
-</net>
-<net name="VGPS" class="0">
+<net name="VGPS" class="1">
 <segment>
 <label x="55.88" y="30.48" size="1.778" layer="95" rot="R90"/>
 <pinref part="C2" gate="G$1" pin="1"/>
@@ -36032,11 +36008,35 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <label x="55.88" y="73.66" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="GPS_ON_OFF" class="2">
+<net name="FORCE-ON" class="2">
 <segment>
 <wire x1="55.88" y1="81.28" x2="71.12" y2="81.28" width="0.1524" layer="91"/>
 <label x="55.88" y="81.28" size="1.778" layer="95" rot="R180"/>
-<pinref part="IC2" gate="G$1" pin="1_ON_OFF"/>
+<pinref part="IC2" gate="G$1" pin="1_FORCE-ON"/>
+</segment>
+</net>
+<net name="RX" class="2">
+<segment>
+<label x="127" y="81.28" size="1.778" layer="95"/>
+<wire x1="111.76" y1="81.28" x2="127" y2="81.28" width="0.1524" layer="91"/>
+<pinref part="IC2" gate="G$1" pin="RX_10"/>
+</segment>
+<segment>
+<pinref part="C31" gate="G$1" pin="1"/>
+<wire x1="33.02" y1="27.94" x2="33.02" y2="33.02" width="0.1524" layer="91"/>
+<label x="33.02" y="33.02" size="1.778" layer="95" rot="R90"/>
+</segment>
+</net>
+<net name="TX" class="2">
+<segment>
+<label x="55.88" y="76.2" size="1.778" layer="95" rot="R180"/>
+<wire x1="71.12" y1="76.2" x2="55.88" y2="76.2" width="0.1524" layer="91"/>
+<pinref part="IC2" gate="G$1" pin="3_TX"/>
+</segment>
+<segment>
+<pinref part="C22" gate="G$1" pin="1"/>
+<wire x1="10.16" y1="27.94" x2="10.16" y2="33.02" width="0.1524" layer="91"/>
+<label x="10.16" y="33.02" size="1.778" layer="95" rot="R90"/>
 </segment>
 </net>
 </nets>
@@ -36047,14 +36047,14 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <ports>
 <port name="GND" side="bottom" coord="0" direction="pwr"/>
 <port name="3V3" side="left" coord="-5.08" direction="pwr"/>
-<port name="GPS_ON_OFF" side="right" coord="0" direction="out"/>
-<port name="GPS_POWER_CTL_PIN" side="left" coord="2.54" direction="in"/>
-<port name="VGPS" side="left" coord="0" direction="pas"/>
+<port name="!RESET!" side="right" coord="0" direction="out"/>
+<port name="!MR!" side="left" coord="2.54" direction="in"/>
+<port name="SENSE" side="right" coord="-5.08" direction="hiz"/>
 </ports>
 <variantdefs>
 </variantdefs>
 <parts>
-<part name="FRAME1" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A5L-LOC" device=""/>
+<part name="TPS3808_VOLTAGE_SUPERVISOR" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A5L-LOC" device="" value="TPS3808 Voltage Supervisor"/>
 <part name="IC2" library="TPS3808 - Supervisory Circuit" deviceset="TPS3808" device="SOT23-6" value="TPS3808G33DBVT"/>
 <part name="R18" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:26058/1" value="1M"/>
 <part name="SUPPLY14" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
@@ -36073,7 +36073,7 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <plain>
 </plain>
 <instances>
-<instance part="FRAME1" gate="G$1" x="0" y="0" smashed="yes">
+<instance part="TPS3808_VOLTAGE_SUPERVISOR" gate="G$1" x="0" y="0" smashed="yes">
 <attribute name="DRAWING_NAME" x="140.97" y="15.24" size="2.54" layer="94"/>
 <attribute name="LAST_DATE_TIME" x="140.97" y="10.16" size="2.286" layer="94"/>
 <attribute name="SHEET" x="154.305" y="5.08" size="2.54" layer="94"/>
@@ -36144,26 +36144,14 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <label x="73.66" y="22.86" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
-<net name="GPS_POWER_CTL_PIN" class="2">
+<net name="!MR!" class="2">
 <segment>
 <wire x1="76.2" y1="81.28" x2="68.58" y2="81.28" width="0.1524" layer="91"/>
 <pinref part="IC2" gate="G$1" pin="!MR!"/>
 <label x="68.58" y="81.28" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="VGPS" class="0">
-<segment>
-<pinref part="IC2" gate="G$1" pin="SENSE"/>
-<wire x1="76.2" y1="83.82" x2="68.58" y2="83.82" width="0.1524" layer="91"/>
-<label x="68.58" y="83.82" size="1.778" layer="95" rot="R180"/>
-</segment>
-<segment>
-<pinref part="C1" gate="G$1" pin="1"/>
-<wire x1="33.02" y1="22.86" x2="33.02" y2="27.94" width="0.1524" layer="91"/>
-<label x="33.02" y="27.94" size="1.778" layer="95" rot="R90"/>
-</segment>
-</net>
-<net name="GPS_ON_OFF" class="2">
+<net name="!RESET!" class="2">
 <segment>
 <wire x1="111.76" y1="83.82" x2="121.92" y2="83.82" width="0.1524" layer="91"/>
 <pinref part="IC2" gate="G$1" pin="!RESET!"/>
@@ -36194,20 +36182,32 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <label x="58.42" y="10.16" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
+<net name="SENSE" class="1">
+<segment>
+<pinref part="IC2" gate="G$1" pin="SENSE"/>
+<wire x1="76.2" y1="83.82" x2="68.58" y2="83.82" width="0.1524" layer="91"/>
+<label x="68.58" y="83.82" size="1.778" layer="95" rot="R180"/>
+</segment>
+<segment>
+<pinref part="C1" gate="G$1" pin="1"/>
+<wire x1="33.02" y1="22.86" x2="33.02" y2="27.94" width="0.1524" layer="91"/>
+<label x="33.02" y="27.94" size="1.778" layer="95" rot="R90"/>
+</segment>
+</net>
 </nets>
 </sheet>
 </sheets>
 </module>
-<module name="SUPERCAP_CHARGER" prefix="" dx="35.56" dy="20.32">
+<module name="SUPERCAP+CHARGER" prefix="" dx="35.56" dy="20.32">
 <ports>
 <port name="GND" side="bottom" coord="0" direction="pwr"/>
 <port name="3V3" side="left" coord="0" direction="pwr"/>
-<port name="VGPS" side="right" coord="0" direction="pwr"/>
+<port name="VOUT" side="right" coord="0" direction="pwr"/>
 </ports>
 <variantdefs>
 </variantdefs>
 <parts>
-<part name="FRAME1" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A5L-LOC" device=""/>
+<part name="SUPERCAP+CHARGER" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A5L-LOC" device="" value="SuperCap + LTC4425 Charger"/>
 <part name="R41" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:26058/1" value="150k"/>
 <part name="R40" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:26058/1" value="150k"/>
 <part name="C38" library="rcl" deviceset="C-EU" device="C0402" value="0.1u / 16V"/>
@@ -36231,7 +36231,7 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <plain>
 </plain>
 <instances>
-<instance part="FRAME1" gate="G$1" x="0" y="0" smashed="yes">
+<instance part="SUPERCAP+CHARGER" gate="G$1" x="0" y="0" smashed="yes">
 <attribute name="DRAWING_NAME" x="140.97" y="15.24" size="2.54" layer="94"/>
 <attribute name="LAST_DATE_TIME" x="140.97" y="10.16" size="2.286" layer="94"/>
 <attribute name="SHEET" x="154.305" y="5.08" size="2.54" layer="94"/>
@@ -36340,7 +36340,7 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <label x="50.8" y="68.58" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="VGPS" class="0">
+<net name="VOUT" class="1">
 <segment>
 <pinref part="C24" gate="G$1" pin="+"/>
 <wire x1="149.86" y1="93.98" x2="160.02" y2="93.98" width="0.1524" layer="91"/>
@@ -36397,7 +36397,7 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <label x="66.04" y="10.16" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
-<net name="PFI_RET" class="0">
+<net name="PFI_RET" class="2">
 <segment>
 <pinref part="IC2" gate="G$1" pin="PFI_RET"/>
 <pinref part="R41" gate="G$1" pin="1"/>
@@ -36415,7 +36415,7 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <pinref part="IC2" gate="G$1" pin="PFI"/>
 </segment>
 </net>
-<net name="PROG" class="0">
+<net name="PROG" class="2">
 <segment>
 <pinref part="IC2" gate="G$1" pin="PROG"/>
 <pinref part="R14" gate="G$1" pin="2"/>
@@ -36427,14 +36427,14 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 </sheet>
 </sheets>
 </module>
-<module name="GPS" prefix="" dx="40.64" dy="30.48">
+<module name="GPS_SUBSYSTEM" prefix="" dx="40.64" dy="30.48">
 <ports>
 <port name="GND" side="bottom" coord="0" direction="pwr"/>
 <port name="3V3" side="left" coord="10.16" direction="pwr"/>
-<port name="GPS_POWER_CTL_PIN" side="left" coord="-5.08" direction="in"/>
 <port name="GPS_TX" side="left" coord="2.54" direction="out"/>
-<port name="GPS_SW_SERIAL_TX" side="left" coord="5.08" direction="in"/>
-<port name="GPS_WAKEUP_PIN" side="left" coord="-2.54" direction="out"/>
+<port name="GPS_RX" side="left" coord="5.08" direction="in"/>
+<port name="GPS_WKUP" side="left" coord="-2.54" direction="out"/>
+<port name="GPS_PWR_CTRL" side="left" coord="-5.08" direction="in"/>
 </ports>
 <variantdefs>
 </variantdefs>
@@ -36444,7 +36444,7 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <part name="SUPPLY15" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 <part name="SUPPLY16" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY17" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
-<part name="FRAME1" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A4L-LOC" device=""/>
+<part name="GPS_SUBSYSTEM" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A4L-LOC" device="" value="GPS Subsystem"/>
 <part name="SUPPLY1" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY2" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 </parts>
@@ -36453,33 +36453,33 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <plain>
 </plain>
 <moduleinsts>
-<moduleinst name="ORG1510" module="ORG1510" x="200.66" y="88.9">
-<attribute name="NAME" value="ORG1510" x="200.66" y="96.52" size="2.032" layer="95" align="bottom-center"/>
+<moduleinst name="ORG1510" module="ORG1510" x="180.34" y="106.68">
+<attribute name="NAME" value="ORG1510" x="180.34" y="114.3" size="2.032" layer="95" align="bottom-center"/>
 </moduleinst>
-<moduleinst name="VOLTAGE_SUPERVISOR" module="VOLTAGE_SUPERVISOR" x="124.46" y="88.9">
-<attribute name="NAME" value="VOLTAGE_SUPERVISOR" x="124.46" y="93.98" size="2.032" layer="95" align="bottom-center"/>
+<moduleinst name="VOLTAGE_SUPERVISOR" module="VOLTAGE_SUPERVISOR" x="104.14" y="106.68">
+<attribute name="NAME" value="VOLTAGE_SUPERVISOR" x="104.14" y="111.76" size="2.032" layer="95" align="bottom-center"/>
 </moduleinst>
-<moduleinst name="SUPERCAP_CHARGER" module="SUPERCAP_CHARGER" x="45.72" y="40.64">
-<attribute name="NAME" value="SUPERCAP_CHARGER" x="45.72" y="45.72" size="2.032" layer="95" align="bottom-center"/>
+<moduleinst name="SUPERCAP+CHARGER" module="SUPERCAP+CHARGER" x="104.14" y="63.5">
+<attribute name="NAME" value="SUPERCAP+CHARGER" x="104.14" y="68.58" size="2.032" layer="95" align="bottom-center"/>
 </moduleinst>
 </moduleinsts>
 <instances>
-<instance part="SUPPLY13" gate="G$1" x="200.66" y="66.04" smashed="yes">
-<attribute name="VALUE" x="200.66" y="63.5" size="1.778" layer="96" align="center-left"/>
+<instance part="SUPPLY13" gate="G$1" x="180.34" y="83.82" smashed="yes">
+<attribute name="VALUE" x="180.34" y="81.28" size="1.778" layer="96" align="center-left"/>
 </instance>
-<instance part="SUPPLY14" gate="G$1" x="124.46" y="68.58" smashed="yes">
-<attribute name="VALUE" x="124.46" y="66.04" size="1.778" layer="96" align="center-left"/>
+<instance part="SUPPLY14" gate="G$1" x="104.14" y="86.36" smashed="yes">
+<attribute name="VALUE" x="104.14" y="83.82" size="1.778" layer="96" align="center-left"/>
 </instance>
-<instance part="SUPPLY15" gate="G$1" x="93.98" y="83.82" smashed="yes" rot="R90">
-<attribute name="VALUE" x="88.9" y="83.82" size="1.778" layer="96" rot="R180" align="center-left"/>
+<instance part="SUPPLY15" gate="G$1" x="73.66" y="101.6" smashed="yes" rot="R90">
+<attribute name="VALUE" x="68.58" y="101.6" size="1.778" layer="96" rot="R180" align="center-left"/>
 </instance>
-<instance part="SUPPLY16" gate="G$1" x="45.72" y="20.32" smashed="yes">
-<attribute name="VALUE" x="45.72" y="17.78" size="1.778" layer="96" align="center-left"/>
+<instance part="SUPPLY16" gate="G$1" x="104.14" y="43.18" smashed="yes">
+<attribute name="VALUE" x="104.14" y="40.64" size="1.778" layer="96" align="center-left"/>
 </instance>
-<instance part="SUPPLY17" gate="G$1" x="15.24" y="40.64" smashed="yes" rot="R90">
-<attribute name="VALUE" x="10.16" y="40.64" size="1.778" layer="96" rot="R180" align="center-left"/>
+<instance part="SUPPLY17" gate="G$1" x="73.66" y="63.5" smashed="yes" rot="R90">
+<attribute name="VALUE" x="68.58" y="63.5" size="1.778" layer="96" rot="R180" align="center-left"/>
 </instance>
-<instance part="FRAME1" gate="G$1" x="0" y="0" smashed="yes">
+<instance part="GPS_SUBSYSTEM" gate="G$1" x="0" y="0" smashed="yes">
 <attribute name="DRAWING_NAME" x="217.17" y="15.24" size="2.54" layer="94"/>
 <attribute name="LAST_DATE_TIME" x="217.17" y="10.16" size="2.286" layer="94"/>
 <attribute name="SHEET" x="230.505" y="5.08" size="2.54" layer="94"/>
@@ -36498,17 +36498,17 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <segment>
 <portref moduleinst="VOLTAGE_SUPERVISOR" port="GND"/>
 <pinref part="SUPPLY14" gate="G$1" pin="GND"/>
-<wire x1="124.46" y1="71.12" x2="124.46" y2="73.66" width="0.1524" layer="91"/>
+<wire x1="104.14" y1="88.9" x2="104.14" y2="91.44" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <portref moduleinst="ORG1510" port="GND"/>
 <pinref part="SUPPLY13" gate="G$1" pin="GND"/>
-<wire x1="200.66" y1="68.58" x2="200.66" y2="73.66" width="0.1524" layer="91"/>
+<wire x1="180.34" y1="86.36" x2="180.34" y2="91.44" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<portref moduleinst="SUPERCAP_CHARGER" port="GND"/>
+<portref moduleinst="SUPERCAP+CHARGER" port="GND"/>
 <pinref part="SUPPLY16" gate="G$1" pin="GND"/>
-<wire x1="45.72" y1="22.86" x2="45.72" y2="25.4" width="0.1524" layer="91"/>
+<wire x1="104.14" y1="45.72" x2="104.14" y2="48.26" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="SUPPLY1" gate="G$1" pin="GND"/>
@@ -36516,72 +36516,73 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <label x="149.86" y="22.86" size="1.778" layer="95" xref="yes"/>
 </segment>
 </net>
-<net name="GPS_POWER_CTL_PIN" class="2">
+<net name="GPS_PWR_CTRL" class="2">
 <segment>
-<portref moduleinst="VOLTAGE_SUPERVISOR" port="GPS_POWER_CTL_PIN"/>
-<wire x1="99.06" y1="91.44" x2="86.36" y2="91.44" width="0.1524" layer="91"/>
-<label x="86.36" y="127" size="1.778" layer="95" xref="yes"/>
-<wire x1="86.36" y1="91.44" x2="86.36" y2="127" width="0.1524" layer="91"/>
+<wire x1="78.74" y1="109.22" x2="66.04" y2="109.22" width="0.1524" layer="91"/>
+<label x="66.04" y="144.78" size="1.778" layer="95" xref="yes"/>
+<wire x1="66.04" y1="109.22" x2="66.04" y2="144.78" width="0.1524" layer="91"/>
+<portref moduleinst="VOLTAGE_SUPERVISOR" port="!MR!"/>
 </segment>
 </net>
-<net name="GPS_WAKEUP_PIN" class="2">
+<net name="GPS_WKUP" class="2">
 <segment>
-<portref moduleinst="ORG1510" port="GPS_WAKEUP_PIN"/>
-<wire x1="177.8" y1="93.98" x2="165.1" y2="93.98" width="0.1524" layer="91"/>
-<wire x1="165.1" y1="93.98" x2="165.1" y2="127" width="0.1524" layer="91"/>
-<label x="165.1" y="127" size="1.778" layer="95" xref="yes"/>
+<wire x1="157.48" y1="111.76" x2="144.78" y2="111.76" width="0.1524" layer="91"/>
+<wire x1="144.78" y1="111.76" x2="144.78" y2="144.78" width="0.1524" layer="91"/>
+<label x="144.78" y="144.78" size="1.778" layer="95" xref="yes"/>
+<portref moduleinst="ORG1510" port="WAKEUP"/>
 </segment>
 </net>
-<net name="VGPS" class="0">
+<net name="VGPS" class="1">
 <segment>
-<portref moduleinst="VOLTAGE_SUPERVISOR" port="VGPS"/>
-<wire x1="99.06" y1="88.9" x2="76.2" y2="88.9" width="0.1524" layer="91"/>
-<wire x1="76.2" y1="88.9" x2="76.2" y2="40.64" width="0.1524" layer="91"/>
 <portref moduleinst="ORG1510" port="VGPS"/>
-<wire x1="177.8" y1="83.82" x2="165.1" y2="83.82" width="0.1524" layer="91"/>
-<wire x1="165.1" y1="83.82" x2="165.1" y2="40.64" width="0.1524" layer="91"/>
-<wire x1="165.1" y1="40.64" x2="76.2" y2="40.64" width="0.1524" layer="91"/>
-<junction x="76.2" y="40.64"/>
-<wire x1="76.2" y1="40.64" x2="68.58" y2="40.64" width="0.1524" layer="91"/>
-<label x="165.1" y="83.82" size="1.778" layer="95" rot="R180"/>
-<label x="86.36" y="88.9" size="1.778" layer="95" rot="R180"/>
-<portref moduleinst="SUPERCAP_CHARGER" port="VGPS"/>
+<wire x1="157.48" y1="101.6" x2="144.78" y2="101.6" width="0.1524" layer="91"/>
+<wire x1="144.78" y1="101.6" x2="144.78" y2="63.5" width="0.1524" layer="91"/>
+<wire x1="144.78" y1="63.5" x2="127" y2="63.5" width="0.1524" layer="91"/>
+<label x="144.78" y="88.9" size="1.778" layer="95"/>
+<wire x1="129.54" y1="101.6" x2="144.78" y2="101.6" width="0.1524" layer="91"/>
+<junction x="144.78" y="101.6"/>
+<portref moduleinst="SUPERCAP+CHARGER" port="VOUT"/>
 </segment>
 </net>
 <net name="GPS_ON_OFF" class="2">
 <segment>
-<portref moduleinst="VOLTAGE_SUPERVISOR" port="GPS_ON_OFF"/>
-<portref moduleinst="ORG1510" port="GPS_ON_OFF"/>
-<wire x1="149.86" y1="88.9" x2="177.8" y2="88.9" width="0.1524" layer="91"/>
-<label x="154.94" y="88.9" size="1.778" layer="95" rot="R270"/>
+<wire x1="129.54" y1="106.68" x2="157.48" y2="106.68" width="0.1524" layer="91"/>
+<label x="137.16" y="106.68" size="1.778" layer="95" rot="R90"/>
+<portref moduleinst="VOLTAGE_SUPERVISOR" port="!RESET!"/>
+<portref moduleinst="ORG1510" port="FORCE-ON"/>
 </segment>
 </net>
 <net name="3V3" class="1">
 <segment>
-<portref moduleinst="SUPERCAP_CHARGER" port="3V3"/>
+<portref moduleinst="SUPERCAP+CHARGER" port="3V3"/>
 <pinref part="SUPPLY17" gate="G$1" pin="3V3"/>
-<wire x1="17.78" y1="40.64" x2="22.86" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="76.2" y1="63.5" x2="81.28" y2="63.5" width="0.1524" layer="91"/>
 </segment>
 <segment>
 <pinref part="SUPPLY2" gate="G$1" pin="3V3"/>
 <wire x1="129.54" y1="22.86" x2="129.54" y2="12.7" width="0.1524" layer="91"/>
 <label x="129.54" y="12.7" size="1.778" layer="95" xref="yes"/>
 </segment>
-</net>
-<net name="GPS_SW_SERIAL_TX" class="0">
 <segment>
-<portref moduleinst="ORG1510" port="GPS_SW_SERIAL_TX"/>
-<wire x1="223.52" y1="91.44" x2="228.6" y2="91.44" width="0.1524" layer="91"/>
-<wire x1="228.6" y1="91.44" x2="228.6" y2="127" width="0.1524" layer="91"/>
-<label x="228.6" y="127" size="1.778" layer="95" rot="R90" xref="yes"/>
+<pinref part="SUPPLY15" gate="G$1" pin="3V3"/>
+<portref moduleinst="VOLTAGE_SUPERVISOR" port="3V3"/>
+<wire x1="78.74" y1="101.6" x2="76.2" y2="101.6" width="0.1524" layer="91"/>
 </segment>
 </net>
-<net name="GPS_TX" class="0">
+<net name="GPS_RX" class="2">
 <segment>
-<portref moduleinst="ORG1510" port="GPS_TX"/>
-<wire x1="223.52" y1="86.36" x2="236.22" y2="86.36" width="0.1524" layer="91"/>
-<wire x1="236.22" y1="86.36" x2="236.22" y2="127" width="0.1524" layer="91"/>
-<label x="236.22" y="127" size="1.778" layer="95" rot="R90" xref="yes"/>
+<wire x1="203.2" y1="109.22" x2="208.28" y2="109.22" width="0.1524" layer="91"/>
+<wire x1="208.28" y1="109.22" x2="208.28" y2="144.78" width="0.1524" layer="91"/>
+<label x="208.28" y="144.78" size="1.778" layer="95" rot="R90" xref="yes"/>
+<portref moduleinst="ORG1510" port="RX"/>
+</segment>
+</net>
+<net name="GPS_TX" class="2">
+<segment>
+<wire x1="203.2" y1="104.14" x2="215.9" y2="104.14" width="0.1524" layer="91"/>
+<wire x1="215.9" y1="104.14" x2="215.9" y2="144.78" width="0.1524" layer="91"/>
+<label x="215.9" y="144.78" size="1.778" layer="95" rot="R90" xref="yes"/>
+<portref moduleinst="ORG1510" port="TX"/>
 </segment>
 </net>
 </nets>
@@ -36757,7 +36758,7 @@ ejovrh rev.3</text>
 <moduleinst name="SD_CARD" module="SD_CARD" x="200.66" y="157.48">
 <attribute name="NAME" value="SD_CARD" x="200.66" y="170.18" size="2.032" layer="95" align="bottom-center"/>
 </moduleinst>
-<moduleinst name="GPS" module="GPS" x="307.34" y="195.58" offset="1000">
+<moduleinst name="GPS" module="GPS_SUBSYSTEM" x="307.34" y="195.58" offset="1000">
 <attribute name="NAME" value="GPS" x="307.34" y="205.74" size="2.032" layer="95" align="bottom-center"/>
 </moduleinst>
 </moduleinsts>
@@ -37325,8 +37326,8 @@ ejovrh rev.3</text>
 <instance part="SUPPLY13" gate="G$1" x="307.34" y="172.72" smashed="yes">
 <attribute name="VALUE" x="307.34" y="170.18" size="1.778" layer="96" align="center-left"/>
 </instance>
-<instance part="SUPPLY14" gate="G$1" x="279.4" y="205.74" smashed="yes" rot="R90">
-<attribute name="VALUE" x="274.32" y="205.74" size="1.778" layer="96" rot="R180" align="center-left"/>
+<instance part="SUPPLY14" gate="G$1" x="276.86" y="205.74" smashed="yes" rot="R90">
+<attribute name="VALUE" x="271.78" y="205.74" size="1.778" layer="96" rot="R180" align="center-left"/>
 </instance>
 </instances>
 <busses>
@@ -38562,9 +38563,9 @@ ejovrh rev.3</text>
 <wire x1="574.04" y1="-462.28" x2="546.1" y2="-462.28" width="0.1524" layer="91"/>
 </segment>
 <segment>
-<portref moduleinst="GPS" port="GPS_SW_SERIAL_TX"/>
 <wire x1="281.94" y1="200.66" x2="254" y2="200.66" width="0.1524" layer="91"/>
 <label x="256.54" y="200.66" size="1.778" layer="95"/>
+<portref moduleinst="GPS" port="GPS_RX"/>
 </segment>
 <segment>
 <pinref part="BRD1" gate="CN10" pin="PB14"/>
@@ -39545,6 +39546,7 @@ ejovrh rev.3</text>
 <segment>
 <portref moduleinst="GPS" port="3V3"/>
 <pinref part="SUPPLY14" gate="G$1" pin="3V3"/>
+<wire x1="279.4" y1="205.74" x2="281.94" y2="205.74" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="NRST" class="2">
@@ -39725,9 +39727,9 @@ ejovrh rev.3</text>
 <label x="88.9" y="73.66" size="1.778" layer="95"/>
 </segment>
 <segment>
-<portref moduleinst="GPS" port="GPS_POWER_CTL_PIN"/>
 <wire x1="281.94" y1="190.5" x2="271.78" y2="190.5" width="0.1524" layer="91"/>
 <label x="271.78" y="190.5" size="1.778" layer="95" rot="R180"/>
+<portref moduleinst="GPS" port="GPS_PWR_CTRL"/>
 </segment>
 </net>
 <net name="PC5" class="2">
@@ -39808,9 +39810,9 @@ ejovrh rev.3</text>
 <label x="33.02" y="88.9" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
-<portref moduleinst="GPS" port="GPS_WAKEUP_PIN"/>
 <wire x1="281.94" y1="193.04" x2="271.78" y2="193.04" width="0.1524" layer="91"/>
 <label x="271.78" y="193.04" size="1.778" layer="95" rot="R180"/>
+<portref moduleinst="GPS" port="GPS_WKUP"/>
 </segment>
 </net>
 <net name="SPI1_SCK" class="2">
