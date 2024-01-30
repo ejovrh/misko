@@ -112,15 +112,15 @@
 </packages>
 <symbols>
 <symbol name="SYMBOL">
-<pin name="1_ON_OFF" x="-20.32" y="5.08" visible="pin" length="middle" direction="in"/>
+<pin name="1_FORCE-ON" x="-20.32" y="5.08" visible="pin" length="middle" direction="in"/>
 <pin name="2_1PPS" x="-20.32" y="2.54" visible="pin" length="middle" direction="out"/>
 <pin name="3_TX" x="-20.32" y="0" visible="pin" length="middle" direction="out"/>
 <pin name="4_VCC" x="-20.32" y="-2.54" visible="pin" length="middle" direction="pwr"/>
 <pin name="5_GND" x="-20.32" y="-5.08" visible="pin" length="middle" direction="pwr"/>
 <pin name="WAKEUP_6" x="20.32" y="-5.08" visible="pin" length="middle" direction="out" rot="R180"/>
-<pin name="CTS_7" x="20.32" y="-2.54" visible="pin" length="middle" rot="R180"/>
+<pin name="RTS_7" x="20.32" y="-2.54" visible="pin" length="middle" rot="R180"/>
 <pin name="!RESET!_8" x="20.32" y="0" visible="pin" length="middle" direction="in" rot="R180"/>
-<pin name="RTS_9" x="20.32" y="2.54" visible="pin" length="middle" rot="R180"/>
+<pin name="CTS_9" x="20.32" y="2.54" visible="pin" length="middle" rot="R180"/>
 <pin name="RX_10" x="20.32" y="5.08" visible="pin" length="middle" direction="in" rot="R180"/>
 <wire x1="-15.24" y1="7.62" x2="15.24" y2="7.62" width="0.254" layer="94"/>
 <wire x1="15.24" y1="7.62" x2="15.24" y2="-7.62" width="0.254" layer="94"/>
@@ -139,13 +139,13 @@
 <device name="" package="PACKAGE">
 <connects>
 <connect gate="G$1" pin="!RESET!_8" pad="!RESET!_8"/>
-<connect gate="G$1" pin="1_ON_OFF" pad="1_ON_OFF"/>
+<connect gate="G$1" pin="1_FORCE-ON" pad="1_ON_OFF"/>
 <connect gate="G$1" pin="2_1PPS" pad="2_1PPS"/>
 <connect gate="G$1" pin="3_TX" pad="3_TX"/>
 <connect gate="G$1" pin="4_VCC" pad="4_VCC"/>
 <connect gate="G$1" pin="5_GND" pad="5_GND GND1 GND2 GND4 GND5 GND6 GND7 GND8 GND9 GND10 GND11 GND12 GND13 GND14 GND15"/>
-<connect gate="G$1" pin="CTS_7" pad="CTS_7"/>
-<connect gate="G$1" pin="RTS_9" pad="RTS_9"/>
+<connect gate="G$1" pin="CTS_9" pad="RTS_9"/>
+<connect gate="G$1" pin="RTS_7" pad="CTS_7"/>
 <connect gate="G$1" pin="RX_10" pad="RX_10"/>
 <connect gate="G$1" pin="WAKEUP_6" pad="WAKEUP_6"/>
 </connects>
