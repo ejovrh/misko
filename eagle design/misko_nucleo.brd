@@ -7,7 +7,7 @@
 <setting keepoldvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="1" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.005" altunitdist="mm" altunit="mm"/>
+<grid distance="0.25" unitdist="mm" unit="mm" style="lines" multiple="1" display="yes" altdistance="0.005" altunitdist="mm" altunit="mm"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="2" name="Route2" color="1" fill="3" visible="no" active="no"/>
@@ -7710,6 +7710,8 @@ design rules under a new name.</description>
 </signal>
 <signal name="VBAT" class="2">
 <contactref element="BRD1" pad="CN7_33"/>
+<wire x1="4.63" y1="11.5" x2="12.08" y2="11.5" width="0.25" layer="1"/>
+<wire x1="3.25" y1="10.12" x2="4.63" y2="11.5" width="0.25" layer="1"/>
 </signal>
 <signal name="VDD">
 <contactref element="BRD1" pad="CN7_5"/>

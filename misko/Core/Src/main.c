@@ -52,6 +52,9 @@
 
 /* Private variables ---------------------------------------------------------*/
 ADC_HandleTypeDef hadc1;
+DMA_NodeTypeDef Node_GPDMA1_Channel5;
+DMA_QListTypeDef List_GPDMA1_Channel5;
+DMA_HandleTypeDef handle_GPDMA1_Channel5;
 
 FDCAN_HandleTypeDef hfdcan1;
 
@@ -73,11 +76,17 @@ PCD_HandleTypeDef hpcd_USB_DRD_FS;
 
 /* USER CODE BEGIN PV */
 uint8_t aTxBuffer[] = "\rnucleo-h503rb start\r\n";
+volatile uint32_t __adc_dma_buffer[ADC_CHANNELS] =  // store for ADC readout
+	{0};
+volatile uint32_t __adc_results[ADC_CHANNELS] =  // store ADC average data
+	{0};
+double _VddaConversionConstant;  // constant values pre-computed in main()
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void PeriphCommonClock_Config(void);
+static void MPU_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_GPDMA1_Init(void);
 static void MX_USART1_UART_Init(void);
@@ -111,6 +120,9 @@ int main(void)
 
 	/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
 	HAL_Init();
+
+	/* MPU Configuration--------------------------------------------------------*/
+	MPU_Config();
 
 	/* USER CODE BEGIN Init */
 
@@ -163,6 +175,9 @@ int main(void)
 
 	if(HAL_TIM_OC_Start_IT(&htim1, TIM_CHANNEL_1) != HAL_OK)	// 125ms time base
 		Error_Handler();
+
+	_VddaConversionConstant = (VREFINT_CAL_VREF * *VREFINT_CAL_ADDR) / 4095.0;  // 1203.95604
+	HAL_ADC_Start_DMA(&hadc1, (uint32_t*) __adc_dma_buffer, ADC_CHANNELS);  // start DMA
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
@@ -280,15 +295,15 @@ static void MX_ADC1_Init(void)
 	hadc1.Init.ClockPrescaler = ADC_CLOCK_ASYNC_DIV1;
 	hadc1.Init.Resolution = ADC_RESOLUTION_12B;
 	hadc1.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-	hadc1.Init.ScanConvMode = ADC_SCAN_DISABLE;
+	hadc1.Init.ScanConvMode = ADC_SCAN_ENABLE;
 	hadc1.Init.EOCSelection = ADC_EOC_SINGLE_CONV;
 	hadc1.Init.LowPowerAutoWait = DISABLE;
 	hadc1.Init.ContinuousConvMode = DISABLE;
-	hadc1.Init.NbrOfConversion = 1;
+	hadc1.Init.NbrOfConversion = 4;
 	hadc1.Init.DiscontinuousConvMode = DISABLE;
-	hadc1.Init.ExternalTrigConv = ADC_EXTERNALTRIG_T1_TRGO2;
+	hadc1.Init.ExternalTrigConv = ADC_EXTERNALTRIG_T1_TRGO;
 	hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_RISING;
-	hadc1.Init.DMAContinuousRequests = DISABLE;
+	hadc1.Init.DMAContinuousRequests = ENABLE;
 	hadc1.Init.SamplingMode = ADC_SAMPLING_MODE_NORMAL;
 	hadc1.Init.Overrun = ADC_OVR_DATA_PRESERVED;
 	hadc1.Init.OversamplingMode = DISABLE;
@@ -299,12 +314,41 @@ static void MX_ADC1_Init(void)
 
 	/** Configure Regular Channel
 	 */
-	sConfig.Channel = ADC_CHANNEL_VREFINT;
+	sConfig.Channel = ADC_CHANNEL_0;
 	sConfig.Rank = ADC_REGULAR_RANK_1;
-	sConfig.SamplingTime = ADC_SAMPLETIME_2CYCLES_5;
+	sConfig.SamplingTime = ADC_SAMPLETIME_640CYCLES_5;
 	sConfig.SingleDiff = ADC_SINGLE_ENDED;
-	sConfig.OffsetNumber = ADC_OFFSET_NONE;
+	sConfig.OffsetNumber = ADC_OFFSET_4;
 	sConfig.Offset = 0;
+	sConfig.OffsetSign = ADC_OFFSET_SIGN_NEGATIVE;
+	sConfig.OffsetSaturation = DISABLE;
+	if(HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+		{
+			Error_Handler();
+		}
+
+	/** Configure Regular Channel
+	 */
+	sConfig.Channel = ADC_CHANNEL_VBAT;
+	sConfig.Rank = ADC_REGULAR_RANK_2;
+	if(HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+		{
+			Error_Handler();
+		}
+
+	/** Configure Regular Channel
+	 */
+	sConfig.Channel = ADC_CHANNEL_TEMPSENSOR;
+	sConfig.Rank = ADC_REGULAR_RANK_3;
+	if(HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
+		{
+			Error_Handler();
+		}
+
+	/** Configure Regular Channel
+	 */
+	sConfig.Channel = ADC_CHANNEL_VREFINT;
+	sConfig.Rank = ADC_REGULAR_RANK_4;
 	if(HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
 		{
 			Error_Handler();
@@ -382,6 +426,8 @@ static void MX_GPDMA1_Init(void)
 	HAL_NVIC_EnableIRQ(GPDMA1_Channel2_IRQn);
 	HAL_NVIC_SetPriority(GPDMA1_Channel3_IRQn, 0, 0);
 	HAL_NVIC_EnableIRQ(GPDMA1_Channel3_IRQn);
+	HAL_NVIC_SetPriority(GPDMA1_Channel5_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(GPDMA1_Channel5_IRQn);
 	HAL_NVIC_SetPriority(GPDMA1_Channel6_IRQn, 0, 0);
 	HAL_NVIC_EnableIRQ(GPDMA1_Channel6_IRQn);
 	HAL_NVIC_SetPriority(GPDMA1_Channel7_IRQn, 0, 0);
@@ -516,10 +562,6 @@ static void MX_TIM1_Init(void)
 		{0};
 	TIM_MasterConfigTypeDef sMasterConfig =
 		{0};
-	TIM_OC_InitTypeDef sConfigOC =
-		{0};
-	TIM_BreakDeadTimeConfigTypeDef sBreakDeadTimeConfig =
-		{0};
 
 	/* USER CODE BEGIN TIM1_Init 1 */
 
@@ -540,47 +582,10 @@ static void MX_TIM1_Init(void)
 		{
 			Error_Handler();
 		}
-	if(HAL_TIM_OC_Init(&htim1) != HAL_OK)
-		{
-			Error_Handler();
-		}
-	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+	sMasterConfig.MasterOutputTrigger = TIM_TRGO_UPDATE;
 	sMasterConfig.MasterOutputTrigger2 = TIM_TRGO2_RESET;
 	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
 	if(HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
-		{
-			Error_Handler();
-		}
-	sConfigOC.OCMode = TIM_OCMODE_TOGGLE;
-	sConfigOC.Pulse = 0;
-	sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-	sConfigOC.OCNPolarity = TIM_OCNPOLARITY_HIGH;
-	sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-	sConfigOC.OCIdleState = TIM_OCIDLESTATE_RESET;
-	sConfigOC.OCNIdleState = TIM_OCNIDLESTATE_RESET;
-	if(HAL_TIM_OC_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
-		{
-			Error_Handler();
-		}
-	sConfigOC.OCMode = TIM_OCMODE_TIMING;
-	if(HAL_TIM_OC_ConfigChannel(&htim1, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
-		{
-			Error_Handler();
-		}
-	sBreakDeadTimeConfig.OffStateRunMode = TIM_OSSR_DISABLE;
-	sBreakDeadTimeConfig.OffStateIDLEMode = TIM_OSSI_DISABLE;
-	sBreakDeadTimeConfig.LockLevel = TIM_LOCKLEVEL_OFF;
-	sBreakDeadTimeConfig.DeadTime = 0;
-	sBreakDeadTimeConfig.BreakState = TIM_BREAK_DISABLE;
-	sBreakDeadTimeConfig.BreakPolarity = TIM_BREAKPOLARITY_HIGH;
-	sBreakDeadTimeConfig.BreakFilter = 0;
-	sBreakDeadTimeConfig.BreakAFMode = TIM_BREAK_AFMODE_INPUT;
-	sBreakDeadTimeConfig.Break2State = TIM_BREAK2_DISABLE;
-	sBreakDeadTimeConfig.Break2Polarity = TIM_BREAK2POLARITY_HIGH;
-	sBreakDeadTimeConfig.Break2Filter = 0;
-	sBreakDeadTimeConfig.Break2AFMode = TIM_BREAK_AFMODE_INPUT;
-	sBreakDeadTimeConfig.AutomaticOutput = TIM_AUTOMATICOUTPUT_DISABLE;
-	if(HAL_TIMEx_ConfigBreakDeadTime(&htim1, &sBreakDeadTimeConfig) != HAL_OK)
 		{
 			Error_Handler();
 		}
@@ -897,6 +902,39 @@ void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
 		}
 }
 /* USER CODE END 4 */
+
+/* MPU Configuration */
+
+void MPU_Config(void)
+{
+	MPU_Region_InitTypeDef MPU_InitStruct =
+		{0};
+	MPU_Attributes_InitTypeDef MPU_AttributesInit =
+		{0};
+
+	/* Disables the MPU */
+	HAL_MPU_Disable();
+
+	/** Initializes and configures the Region and the memory to be protected
+	 */
+	MPU_InitStruct.Enable = MPU_REGION_ENABLE;
+	MPU_InitStruct.Number = MPU_REGION_NUMBER0;
+	MPU_InitStruct.BaseAddress = 0x08FFF810;
+	MPU_InitStruct.LimitAddress = 0x08FFF819;
+	MPU_InitStruct.AttributesIndex = MPU_ATTRIBUTES_NUMBER0;
+	MPU_InitStruct.AccessPermission = MPU_REGION_ALL_RO;
+	MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_DISABLE;
+	MPU_InitStruct.IsShareable = MPU_ACCESS_NOT_SHAREABLE;
+
+	HAL_MPU_ConfigRegion(&MPU_InitStruct);
+	MPU_AttributesInit.Number = MPU_REGION_NUMBER0;
+	MPU_AttributesInit.Attributes = MPU_DEVICE_nGnRnE | MPU_WRITE_THROUGH | MPU_TRANSIENT | MPU_NO_ALLOCATE;
+
+	HAL_MPU_ConfigMemoryAttributes(&MPU_AttributesInit);
+	/* Enables the MPU */
+	HAL_MPU_Enable(MPU_HFNMI_PRIVDEF);
+
+}
 
 /**
  * @brief  This function is executed in case of error occurrence.
