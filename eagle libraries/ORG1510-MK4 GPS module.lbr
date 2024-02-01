@@ -37,7 +37,7 @@
 <layer number="26" name="bNames" color="7" fill="1" visible="no" active="yes"/>
 <layer number="27" name="tValues" color="7" fill="1" visible="no" active="yes"/>
 <layer number="28" name="bValues" color="7" fill="1" visible="no" active="yes"/>
-<layer number="29" name="tStop" color="7" fill="3" visible="no" active="yes"/>
+<layer number="29" name="tStop" color="7" fill="3" visible="yes" active="yes"/>
 <layer number="30" name="bStop" color="7" fill="6" visible="no" active="yes"/>
 <layer number="31" name="tCream" color="7" fill="4" visible="no" active="yes"/>
 <layer number="32" name="bCream" color="7" fill="5" visible="no" active="yes"/>
@@ -47,9 +47,9 @@
 <layer number="36" name="bGlue" color="7" fill="5" visible="no" active="yes"/>
 <layer number="37" name="tTest" color="7" fill="1" visible="no" active="yes"/>
 <layer number="38" name="bTest" color="7" fill="1" visible="no" active="yes"/>
-<layer number="39" name="tKeepout" color="4" fill="11" visible="yes" active="yes"/>
+<layer number="39" name="tKeepout" color="4" fill="11" visible="no" active="yes"/>
 <layer number="40" name="bKeepout" color="1" fill="11" visible="no" active="yes"/>
-<layer number="41" name="tRestrict" color="4" fill="10" visible="yes" active="yes"/>
+<layer number="41" name="tRestrict" color="4" fill="10" visible="no" active="yes"/>
 <layer number="42" name="bRestrict" color="1" fill="10" visible="no" active="yes"/>
 <layer number="43" name="vRestrict" color="2" fill="10" visible="no" active="yes"/>
 <layer number="44" name="Drills" color="7" fill="1" visible="no" active="yes"/>
@@ -58,7 +58,7 @@
 <layer number="47" name="Measures" color="7" fill="1" visible="no" active="yes"/>
 <layer number="48" name="Document" color="7" fill="1" visible="no" active="yes"/>
 <layer number="49" name="Reference" color="7" fill="1" visible="no" active="yes"/>
-<layer number="51" name="tDocu" color="7" fill="1" visible="yes" active="yes"/>
+<layer number="51" name="tDocu" color="7" fill="1" visible="no" active="yes"/>
 <layer number="52" name="bDocu" color="7" fill="1" visible="no" active="yes"/>
 <layer number="90" name="Modules" color="5" fill="1" visible="yes" active="yes"/>
 <layer number="91" name="Nets" color="2" fill="1" visible="yes" active="yes"/>
@@ -75,7 +75,6 @@
 <package name="SMD">
 <wire x1="5" y1="-5" x2="-5" y2="-5" width="0.127" layer="21"/>
 <wire x1="-5" y1="5" x2="5" y2="5" width="0.127" layer="21"/>
-<rectangle x1="-3.2" y1="-5" x2="3.2" y2="5" layer="29"/>
 <smd name="WAKEUP_6" x="4.5182625" y="-2.54" dx="1.45" dy="0.86" layer="1" rot="R180"/>
 <smd name="CTS_7" x="4.5182625" y="-1.27" dx="1.45" dy="0.86" layer="1" rot="R180"/>
 <smd name="!RESET!_8" x="4.518265625" y="0" dx="1.45" dy="0.86" layer="1" rot="R180"/>
@@ -86,7 +85,7 @@
 <smd name="3_TX" x="-4.518265625" y="0" dx="1.45" dy="0.86" layer="1" rot="R180"/>
 <smd name="4_VCC" x="-4.518265625" y="-1.27" dx="1.45" dy="0.86" layer="1" rot="R180"/>
 <smd name="5_GND" x="-4.5182625" y="-2.54" dx="1.45" dy="0.86" layer="1" rot="R180"/>
-<smd name="GND2" x="0" y="0" dx="6.3" dy="10" layer="1" rot="R180" cream="no"/>
+<smd name="GND2" x="0" y="0" dx="6.3" dy="9" layer="1" rot="R180" cream="no"/>
 <pad name="GND4" x="0" y="-3.81" drill="0.35" rot="R180" thermals="no"/>
 <pad name="GND1" x="2.54" y="3.81" drill="0.35" rot="R180" thermals="no"/>
 <pad name="GND5" x="-2.54" y="3.81" drill="0.35" rot="R180" thermals="no"/>
@@ -102,12 +101,17 @@
 <pad name="GND8" x="0" y="3.81" drill="0.35" rot="R180" thermals="no"/>
 <pad name="GND9" x="2.54" y="0" drill="0.35" rot="R180" thermals="no"/>
 <pad name="GND10" x="-2.54" y="0" drill="0.35" rot="R180" thermals="no"/>
-<pad name="GND11" x="0" y="0" drill="0.35" rot="R180" thermals="no"/>
 <circle x="-5.75" y="2.5" radius="0.1" width="0.5" layer="21"/>
 <pad name="GND12" x="4.08" y="-3.81" drill="0.35" rot="R180" thermals="no"/>
 <pad name="GND13" x="-4.08" y="-3.81" drill="0.35" rot="R180" thermals="no"/>
 <pad name="GND14" x="4.08" y="3.81" drill="0.35" rot="R180" thermals="no"/>
 <pad name="GND15" x="-4.08" y="3.81" drill="0.35" rot="R180" thermals="no"/>
+<polygon width="0.127" layer="29">
+<vertex x="-0.9" y="1.25" curve="90"/>
+<vertex x="0" y="0.35" curve="90"/>
+<vertex x="0.9" y="1.25" curve="90"/>
+<vertex x="0" y="2.15" curve="90"/>
+</polygon>
 </package>
 </packages>
 <symbols>
@@ -142,7 +146,7 @@
 <connect gate="G$1" pin="1PPS" pad="2_1PPS"/>
 <connect gate="G$1" pin="CTS" pad="RTS_9"/>
 <connect gate="G$1" pin="FORCE-ON" pad="1_ON_OFF"/>
-<connect gate="G$1" pin="GND" pad="5_GND GND1 GND2 GND4 GND5 GND6 GND7 GND8 GND9 GND10 GND11 GND12 GND13 GND14 GND15"/>
+<connect gate="G$1" pin="GND" pad="5_GND GND1 GND2 GND4 GND5 GND6 GND7 GND8 GND9 GND10 GND12 GND13 GND14 GND15"/>
 <connect gate="G$1" pin="RTS" pad="CTS_7"/>
 <connect gate="G$1" pin="RX" pad="RX_10"/>
 <connect gate="G$1" pin="TX" pad="3_TX"/>
