@@ -305,7 +305,7 @@ static void MX_ADC1_Init(void)
 	hadc1.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_RISING;
 	hadc1.Init.DMAContinuousRequests = ENABLE;
 	hadc1.Init.SamplingMode = ADC_SAMPLING_MODE_NORMAL;
-	hadc1.Init.Overrun = ADC_OVR_DATA_PRESERVED;
+	hadc1.Init.Overrun = ADC_OVR_DATA_OVERWRITTEN;
 	hadc1.Init.OversamplingMode = DISABLE;
 	if(HAL_ADC_Init(&hadc1) != HAL_OK)
 		{
@@ -318,10 +318,8 @@ static void MX_ADC1_Init(void)
 	sConfig.Rank = ADC_REGULAR_RANK_1;
 	sConfig.SamplingTime = ADC_SAMPLETIME_640CYCLES_5;
 	sConfig.SingleDiff = ADC_SINGLE_ENDED;
-	sConfig.OffsetNumber = ADC_OFFSET_4;
+	sConfig.OffsetNumber = ADC_OFFSET_NONE;
 	sConfig.Offset = 0;
-	sConfig.OffsetSign = ADC_OFFSET_SIGN_NEGATIVE;
-	sConfig.OffsetSaturation = DISABLE;
 	if(HAL_ADC_ConfigChannel(&hadc1, &sConfig) != HAL_OK)
 		{
 			Error_Handler();
@@ -354,7 +352,7 @@ static void MX_ADC1_Init(void)
 			Error_Handler();
 		}
 	/* USER CODE BEGIN ADC1_Init 2 */
-
+	HAL_ADCEx_Calibration_Start(&hadc1, ADC_SINGLE_ENDED);
 	/* USER CODE END ADC1_Init 2 */
 
 }
@@ -611,7 +609,7 @@ static void MX_USART1_UART_Init(void)
 
 	/* USER CODE END USART1_Init 1 */
 	huart1.Instance = USART1;
-	huart1.Init.BaudRate = 115200;
+	huart1.Init.BaudRate = 9600;
 	huart1.Init.WordLength = UART_WORDLENGTH_8B;
 	huart1.Init.StopBits = UART_STOPBITS_1;
 	huart1.Init.Parity = UART_PARITY_NONE;
@@ -870,7 +868,7 @@ static void MX_GPIO_Init(void)
 	HAL_NVIC_SetPriority(EXTI9_IRQn, 1, 0);
 	HAL_NVIC_EnableIRQ(EXTI9_IRQn);
 
-	HAL_NVIC_SetPriority(EXTI13_IRQn, 0, 0);
+	HAL_NVIC_SetPriority(EXTI13_IRQn, 4, 0);
 	HAL_NVIC_EnableIRQ(EXTI13_IRQn);
 
 	/* USER CODE BEGIN MX_GPIO_Init_2 */
@@ -886,12 +884,16 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 		{
 			HAL_GPIO_TogglePin(User_LED_GPIO_Port, User_LED_Pin);
 			HAL_GPIO_TogglePin(GPS_Green_LED_GPIO_Port, GPS_Green_LED_Pin);
+
+			return;
 		}
 
 	if(GPIO_Pin == ADXL345_INT1_Pin)  // accelerometer interrupt (act. or inact.)
-		ADXL345->ISR();  // execute the ISR callback
+		{
+			ADXL345->ISR();  // execute the ISR callback
+			return;
+		}
 }
-
 // EXTI falling edge callback
 void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
 {

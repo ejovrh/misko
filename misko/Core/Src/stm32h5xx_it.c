@@ -80,7 +80,7 @@ extern DMA_HandleTypeDef handle_GPDMA1_Channel0;
 extern UART_HandleTypeDef huart1;
 extern UART_HandleTypeDef huart3;
 /* USER CODE BEGIN EV */
-//extern adxl345_t ADXL345;
+
 /* USER CODE END EV */
 
 /******************************************************************************/
