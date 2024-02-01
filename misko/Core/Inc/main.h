@@ -130,6 +130,19 @@ void Error_Handler(void);
 #define USE_FM25W256 1	// use the memory
 #define USE_SD 1	// use the SD card
 #define USE_ORG1510MK4 1 // use the GPS module
+
+#define OFF 0	// global device states
+#define ON 1
+
+#define ADC_CHANNELS 4	// how many ADC channels are we using
+#define ADC_MEASURE_ITERATIONS 4 // average over one second (time-base is timer1 on a 125ms)
+enum mj000_adcchannels
+{  // order is important! - this MCU has ranking and the order of ADC channels is defined by ranking
+	  Vgps,  // SuperCap voltage  - PA0
+	  Vbat,  // battery voltage - nucleo CN7, pin 33
+	  Temperature,  // internal temperature sensor
+	  Vrefint  // internal reference voltage
+};
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus
