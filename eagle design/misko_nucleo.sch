@@ -16357,126 +16357,6 @@ Source: &lt;a href= "http://www.hirose.co.jp/cataloge_hp/e58605370.pdf"&gt;Data 
 </deviceset>
 </devicesets>
 </library>
-<library name="DS1394U-33+ RTC SPI Module">
-<packages>
-<package name="10UMAX">
-<wire x1="1.5" y1="1.5" x2="1.5" y2="-1.5" width="0.127" layer="21"/>
-<wire x1="1.5" y1="-1.5" x2="-1.5" y2="-1.5" width="0.127" layer="21"/>
-<wire x1="-1.5" y1="-1.5" x2="-1.5" y2="1" width="0.127" layer="21"/>
-<wire x1="-1" y1="1.5" x2="1.5" y2="1.5" width="0.127" layer="21"/>
-<wire x1="-1" y1="1.5" x2="-1.5" y2="1" width="0.127" layer="21"/>
-<smd name="VCC" x="2" y="1" dx="1" dy="0.2" layer="1"/>
-<smd name="!INT!" x="2" y="0.5" dx="1" dy="0.2" layer="1"/>
-<smd name="SCLK" x="2" y="0" dx="1" dy="0.2" layer="1"/>
-<smd name="DOUT" x="2" y="-0.5" dx="1" dy="0.2" layer="1"/>
-<smd name="DIN" x="2" y="-1" dx="1" dy="0.2" layer="1"/>
-<smd name="GND" x="-2" y="-1" dx="1" dy="0.2" layer="1"/>
-<smd name="!CS!" x="-2" y="-0.5" dx="1" dy="0.2" layer="1"/>
-<smd name="VBACK" x="-2" y="0" dx="1" dy="0.2" layer="1"/>
-<smd name="X2" x="-2" y="0.5" dx="1" dy="0.2" layer="1"/>
-<smd name="X1" x="-2" y="1" dx="1" dy="0.2" layer="1"/>
-<text x="-3" y="2" size="1.27" layer="25">&gt;NAME</text>
-<text x="-3.5" y="-3.5" size="1.27" layer="27">&gt;VALUE</text>
-</package>
-</packages>
-<symbols>
-<symbol name="DS1394">
-<pin name="X1" x="-15.24" y="5.08" length="middle"/>
-<pin name="X2" x="-15.24" y="2.54" length="middle"/>
-<pin name="VBACK" x="-15.24" y="0" length="middle"/>
-<pin name="!CS!" x="-15.24" y="-2.54" length="middle"/>
-<pin name="GND" x="-15.24" y="-5.08" length="middle"/>
-<pin name="DOUT" x="15.24" y="-2.54" length="middle" rot="R180"/>
-<pin name="DIN" x="15.24" y="-5.08" length="middle" rot="R180"/>
-<pin name="!INT!" x="15.24" y="2.54" length="middle" rot="R180"/>
-<pin name="VCC" x="15.24" y="5.08" length="middle" rot="R180"/>
-<pin name="SCLK" x="15.24" y="0" length="middle" rot="R180"/>
-<wire x1="-10.16" y1="10.16" x2="10.16" y2="10.16" width="0.254" layer="94"/>
-<wire x1="10.16" y1="10.16" x2="10.16" y2="-10.16" width="0.254" layer="94"/>
-<wire x1="10.16" y1="-10.16" x2="-10.16" y2="-10.16" width="0.254" layer="94"/>
-<wire x1="-10.16" y1="-10.16" x2="-10.16" y2="10.16" width="0.254" layer="94"/>
-<text x="-7.62" y="12.7" size="1.778" layer="94">&gt;NAME</text>
-<text x="-7.62" y="-12.7" size="1.778" layer="94">&gt;VALUE</text>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="DS1394U-33+" prefix="IC">
-<gates>
-<gate name="G$1" symbol="DS1394" x="0" y="-2.54"/>
-</gates>
-<devices>
-<device name="" package="10UMAX">
-<connects>
-<connect gate="G$1" pin="!CS!" pad="!CS!"/>
-<connect gate="G$1" pin="!INT!" pad="!INT!"/>
-<connect gate="G$1" pin="DIN" pad="DIN"/>
-<connect gate="G$1" pin="DOUT" pad="DOUT"/>
-<connect gate="G$1" pin="GND" pad="GND"/>
-<connect gate="G$1" pin="SCLK" pad="SCLK"/>
-<connect gate="G$1" pin="VBACK" pad="VBACK"/>
-<connect gate="G$1" pin="VCC" pad="VCC"/>
-<connect gate="G$1" pin="X1" pad="X1"/>
-<connect gate="G$1" pin="X2" pad="X2"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
-<library name="LFXTAL016178R 32.768kHz crystal">
-<packages>
-<package name="SMD">
-<smd name="XTAL1" x="-2.75" y="-1.15" dx="1.27" dy="0.635" layer="1" rot="R90"/>
-<smd name="XTAL2" x="-2.75" y="1.15" dx="1.27" dy="0.635" layer="1" rot="R90"/>
-<wire x1="4.5" y1="2" x2="-4.5" y2="2" width="0.127" layer="21"/>
-<wire x1="-4.5" y1="2" x2="-4.5" y2="-2" width="0.127" layer="21"/>
-<wire x1="-4.5" y1="-2" x2="4.5" y2="-2" width="0.127" layer="21"/>
-<wire x1="4.5" y1="-2" x2="4.5" y2="2" width="0.127" layer="21"/>
-<text x="-4" y="3" size="1.27" layer="25">&gt;NAME</text>
-<text x="-4" y="-4" size="1.27" layer="27">&gt;VALUE</text>
-<rectangle x1="2.45" y1="0.5" x2="3.05" y2="1.8" layer="1"/>
-<rectangle x1="2.45" y1="-1.8" x2="3.05" y2="-0.5" layer="1" rot="R180"/>
-<wire x1="-3.81" y1="1.27" x2="-3.81" y2="-1.27" width="0.127" layer="21"/>
-</package>
-</packages>
-<symbols>
-<symbol name="OSCILATOR">
-<polygon width="0.254" layer="94">
-<vertex x="-2.54" y="5.08"/>
-<vertex x="2.54" y="5.08"/>
-<vertex x="2.54" y="-5.08"/>
-<vertex x="-2.54" y="-5.08"/>
-</polygon>
-<wire x1="-5.08" y1="5.08" x2="-5.08" y2="-5.08" width="0.254" layer="94"/>
-<wire x1="5.08" y1="5.08" x2="5.08" y2="-5.08" width="0.254" layer="94"/>
-<pin name="XTAL1" x="-10.16" y="0" length="middle"/>
-<pin name="XTAL2" x="10.16" y="0" length="middle" rot="R180"/>
-<text x="-2.54" y="7.62" size="1.27" layer="94">&gt;NAME</text>
-<text x="-2.54" y="-7.62" size="1.27" layer="94">&gt;VALUE</text>
-</symbol>
-</symbols>
-<devicesets>
-<deviceset name="LFXTAL016178R" prefix="Q">
-<gates>
-<gate name="G$1" symbol="OSCILATOR" x="0" y="0"/>
-</gates>
-<devices>
-<device name="" package="SMD">
-<connects>
-<connect gate="G$1" pin="XTAL1" pad="XTAL1"/>
-<connect gate="G$1" pin="XTAL2" pad="XTAL2"/>
-</connects>
-<technologies>
-<technology name=""/>
-</technologies>
-</device>
-</devices>
-</deviceset>
-</devicesets>
-</library>
 <library name="transistor-small-signal" urn="urn:adsk.eagle:library:401">
 <description>&lt;b&gt;Small Signal Transistors&lt;/b&gt;&lt;p&gt;
 Packages from :&lt;br&gt;
@@ -35150,11 +35030,12 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <part name="FERAM" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="DINA5_L" device="" value="FM25W256 FeRAM"/>
 <part name="SUPPLY1" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 <part name="SUPPLY8" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
-<part name="C22" library="rcl" deviceset="C-EU" device="C0805" value="0.1u / 16V"/>
 <part name="SUPPLY2" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
-<part name="SUPPLY3" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY5" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 <part name="IC1" library="FM25W256 FERAM" deviceset="FM25W256" device="-SOIC" value="FM25W256"/>
+<part name="C1" library="rcl" deviceset="C-EU" device="C0402" value="0.1u / 16V"/>
+<part name="SUPPLY4" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="SUPPLY6" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 </parts>
 <sheets>
 <sheet>
@@ -35166,21 +35047,14 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <attribute name="LAST_DATE_TIME" x="140.97" y="10.16" size="2.286" layer="94"/>
 <attribute name="SHEET" x="154.305" y="5.08" size="2.54" layer="94"/>
 </instance>
-<instance part="SUPPLY1" gate="G$1" x="66.04" y="17.78" smashed="yes">
-<attribute name="VALUE" x="66.04" y="22.86" size="1.778" layer="96" rot="R180" align="center"/>
+<instance part="SUPPLY1" gate="G$1" x="66.04" y="27.94" smashed="yes">
+<attribute name="VALUE" x="66.04" y="33.02" size="1.778" layer="96" rot="R180" align="center"/>
 </instance>
-<instance part="SUPPLY8" gate="G$1" x="76.2" y="7.62" smashed="yes">
-<attribute name="VALUE" x="76.2" y="5.08" size="1.778" layer="96" rot="R180" align="center"/>
-</instance>
-<instance part="C22" gate="G$1" x="106.68" y="83.82" smashed="yes" rot="R180">
-<attribute name="NAME" x="109.22" y="86.36" size="1.778" layer="95"/>
-<attribute name="VALUE" x="109.22" y="83.82" size="1.778" layer="96"/>
+<instance part="SUPPLY8" gate="G$1" x="76.2" y="10.16" smashed="yes">
+<attribute name="VALUE" x="76.2" y="7.62" size="1.778" layer="96" rot="R180" align="center"/>
 </instance>
 <instance part="SUPPLY2" gate="G$1" x="66.04" y="71.12" smashed="yes">
 <attribute name="VALUE" x="66.04" y="68.58" size="1.778" layer="96" rot="R180" align="center"/>
-</instance>
-<instance part="SUPPLY3" gate="G$1" x="106.68" y="93.98" smashed="yes" rot="R180">
-<attribute name="VALUE" x="106.68" y="96.52" size="1.778" layer="96" align="center"/>
 </instance>
 <instance part="SUPPLY5" gate="G$1" x="119.38" y="81.28" smashed="yes" rot="R270">
 <attribute name="VALUE" x="124.46" y="81.28" size="1.778" layer="96" rot="R180" align="center"/>
@@ -35189,6 +35063,16 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <attribute name="NAME" x="78.74" y="87.63" size="1.778" layer="95"/>
 <attribute name="VALUE" x="78.74" y="66.04" size="1.778" layer="96"/>
 </instance>
+<instance part="C1" gate="G$1" x="38.1" y="20.32" smashed="yes">
+<attribute name="NAME" x="35.56" y="17.78" size="1.778" layer="95" rot="R180"/>
+<attribute name="VALUE" x="35.56" y="20.32" size="1.778" layer="96" rot="R180"/>
+</instance>
+<instance part="SUPPLY4" gate="G$1" x="38.1" y="27.94" smashed="yes">
+<attribute name="VALUE" x="38.1" y="33.02" size="1.778" layer="96" rot="R180" align="center"/>
+</instance>
+<instance part="SUPPLY6" gate="G$1" x="38.1" y="10.16" smashed="yes">
+<attribute name="VALUE" x="38.1" y="7.62" size="1.778" layer="96" rot="R180" align="center"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -35196,8 +35080,8 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <net name="GND" class="0">
 <segment>
 <pinref part="SUPPLY8" gate="G$1" pin="GND"/>
-<wire x1="76.2" y1="10.16" x2="76.2" y2="15.24" width="0.1524" layer="91"/>
-<label x="76.2" y="15.24" size="1.778" layer="95" xref="yes"/>
+<wire x1="76.2" y1="12.7" x2="76.2" y2="27.94" width="0.1524" layer="91"/>
+<label x="76.2" y="27.94" size="1.778" layer="95" xref="yes"/>
 </segment>
 <segment>
 <wire x1="73.66" y1="73.66" x2="66.04" y2="73.66" width="0.1524" layer="91"/>
@@ -35205,24 +35089,26 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <pinref part="IC1" gate="G$1" pin="GND"/>
 </segment>
 <segment>
-<pinref part="C22" gate="G$1" pin="2"/>
-<wire x1="106.68" y1="91.44" x2="106.68" y2="88.9" width="0.1524" layer="91"/>
-<pinref part="SUPPLY3" gate="G$1" pin="GND"/>
+<pinref part="C1" gate="G$1" pin="2"/>
+<pinref part="SUPPLY6" gate="G$1" pin="GND"/>
+<wire x1="38.1" y1="15.24" x2="38.1" y2="12.7" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="3V3" class="0">
 <segment>
-<wire x1="66.04" y1="7.62" x2="66.04" y2="15.24" width="0.1524" layer="91"/>
-<label x="66.04" y="7.62" size="1.778" layer="95" rot="R180" xref="yes"/>
+<wire x1="66.04" y1="10.16" x2="66.04" y2="25.4" width="0.1524" layer="91"/>
+<label x="66.04" y="10.16" size="1.778" layer="95" rot="R180" xref="yes"/>
 <pinref part="SUPPLY1" gate="G$1" pin="3V3"/>
 </segment>
 <segment>
-<wire x1="99.06" y1="81.28" x2="106.68" y2="81.28" width="0.1524" layer="91"/>
-<pinref part="C22" gate="G$1" pin="1"/>
-<wire x1="106.68" y1="81.28" x2="116.84" y2="81.28" width="0.1524" layer="91"/>
-<junction x="106.68" y="81.28"/>
+<wire x1="99.06" y1="81.28" x2="116.84" y2="81.28" width="0.1524" layer="91"/>
 <pinref part="SUPPLY5" gate="G$1" pin="3V3"/>
 <pinref part="IC1" gate="G$1" pin="VCC"/>
+</segment>
+<segment>
+<pinref part="C1" gate="G$1" pin="1"/>
+<pinref part="SUPPLY4" gate="G$1" pin="3V3"/>
+<wire x1="38.1" y1="25.4" x2="38.1" y2="22.86" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="SPI1_MOSI" class="2">
@@ -35287,7 +35173,7 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <part name="SD-CARD" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A5L-LOC" device="" value="SD Card"/>
 <part name="SUPPLY4" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 <part name="SUPPLY6" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
-<part name="C31" library="rcl" deviceset="C-EU" device="C0805" value="0.1u / 16V"/>
+<part name="C31" library="rcl" deviceset="C-EU" device="C0402" value="0.1u / 16V"/>
 <part name="IC1" library="Molex SD-47309 SD Card Slot" deviceset="MICROSD_SPI_MODE" device="" value="47309-2651"/>
 <part name="SUPPLY1" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY2" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
@@ -35633,7 +35519,7 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 </variantdefs>
 <parts>
 <part name="TPS3808_VOLTAGE_SUPERVISOR" library="frames" library_urn="urn:adsk.eagle:library:229" deviceset="A5L-LOC" device="" value="TPS3808 Voltage Supervisor"/>
-<part name="IC2" library="TPS3808 - Supervisory Circuit" deviceset="TPS3808" device="SOT23-6" value="TPS3808G33DBVT"/>
+<part name="IC2" library="TPS3808 - Supervisory Circuit" deviceset="TPS3808" device="WSON6" value="TPS3808G33DBVT"/>
 <part name="R18" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:26058/1" value="100k"/>
 <part name="SUPPLY14" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 <part name="SUPPLY15" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
@@ -35645,13 +35531,12 @@ The library has been designed by&lt;a href="https://www.facebook.com/groups/eagl
 <part name="SUPPLY19" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 <part name="SUPPLY1" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY2" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
-<part name="R1" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R0402" package3d_urn="urn:adsk.eagle:package:26058/1" value="100k"/>
-<part name="SUPPLY3" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 </parts>
 <sheets>
 <sheet>
 <plain>
-<text x="25.4" y="58.42" size="1.778" layer="97" align="top-left">50ms delay
+<text x="88.9" y="78.74" size="1.27" layer="97" align="top-left">Ct open
+50ms delay
 DS. p. 11</text>
 </plain>
 <instances>
@@ -35699,13 +35584,6 @@ DS. p. 11</text>
 </instance>
 <instance part="SUPPLY2" gate="G$1" x="58.42" y="25.4" smashed="yes">
 <attribute name="VALUE" x="58.293" y="28.575" size="1.778" layer="96" align="bottom-center"/>
-</instance>
-<instance part="R1" gate="G$1" x="22.86" y="63.5" smashed="yes" rot="R90">
-<attribute name="NAME" x="24.13" y="64.9986" size="1.778" layer="95"/>
-<attribute name="VALUE" x="24.13" y="62.738" size="1.778" layer="96"/>
-</instance>
-<instance part="SUPPLY3" gate="G$1" x="22.86" y="76.2" smashed="yes">
-<attribute name="VALUE" x="22.86" y="81.28" size="1.778" layer="96" rot="R270" align="center-right"/>
 </instance>
 </instances>
 <busses>
@@ -35770,11 +35648,6 @@ DS. p. 11</text>
 <wire x1="58.42" y1="22.86" x2="58.42" y2="10.16" width="0.1524" layer="91"/>
 <label x="58.42" y="10.16" size="1.778" layer="95" xref="yes"/>
 </segment>
-<segment>
-<pinref part="R1" gate="G$1" pin="2"/>
-<wire x1="22.86" y1="68.58" x2="22.86" y2="73.66" width="0.1524" layer="91"/>
-<pinref part="SUPPLY3" gate="G$1" pin="3V3"/>
-</segment>
 </net>
 <net name="SENSE" class="1">
 <segment>
@@ -35793,11 +35666,6 @@ DS. p. 11</text>
 <pinref part="IC2" gate="G$1" pin="CT"/>
 <wire x1="76.2" y1="78.74" x2="68.58" y2="78.74" width="0.1524" layer="91"/>
 <label x="68.58" y="78.74" size="1.778" layer="95" rot="R180"/>
-</segment>
-<segment>
-<pinref part="R1" gate="G$1" pin="1"/>
-<wire x1="22.86" y1="58.42" x2="22.86" y2="53.34" width="0.1524" layer="91"/>
-<label x="22.86" y="53.34" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
 </nets>
@@ -35820,7 +35688,7 @@ DS. p. 11</text>
 <part name="C38" library="rcl" deviceset="C-EU" device="C0402" value="0.1u / 16V"/>
 <part name="C24" library="EECS5R5H155 Supercap" deviceset="EECS5R5H155" device="" value="1.5F"/>
 <part name="C34" library="rcl" deviceset="C-EU" device="C1210" value="100u / 16V"/>
-<part name="IC2" library="LTC4425 Supercap Charger" deviceset="LTC4425" device="MSOP-12"/>
+<part name="IC2" library="LTC4425 Supercap Charger" deviceset="LTC4425" device="DFN-12" value="LTC4425EDD#PBF"/>
 <part name="SUPPLY16" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY17" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
 <part name="SUPPLY18" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
@@ -35864,7 +35732,7 @@ DS. p. 11</text>
 </instance>
 <instance part="IC2" gate="G$1" x="83.82" y="83.82" smashed="yes">
 <attribute name="NAME" x="73.66" y="101.6" size="1.778" layer="95" font="vector"/>
-<attribute name="VALUE" x="73.66" y="68.58" size="1.778" layer="96" font="vector"/>
+<attribute name="VALUE" x="81.28" y="101.6" size="1.778" layer="96" font="vector"/>
 </instance>
 <instance part="SUPPLY16" gate="G$1" x="83.82" y="53.34" smashed="yes">
 <attribute name="VALUE" x="83.82" y="50.8" size="1.778" layer="96" align="center-left"/>
@@ -36257,10 +36125,6 @@ DS. p. 11</text>
 <part name="C27" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="C-EU" device="C0805" package3d_urn="urn:adsk.eagle:package:26137/1" value="0.1µF"/>
 <part name="X1" library="con-hirose" library_urn="urn:adsk.eagle:library:152" deviceset="FH12-30S-0.5S" device="H" package3d_urn="urn:adsk.eagle:package:7308/1"/>
 <part name="C14" library="rcl" deviceset="C-EU" device="C0805" value="2.2µF / 25V"/>
-<part name="IC5" library="DS1394U-33+ RTC SPI Module" deviceset="DS1394U-33+" device=""/>
-<part name="C21" library="rcl" deviceset="C-EU" device="C0805" value="0.1µF"/>
-<part name="R26" library="rcl" deviceset="R-EU_" device="R0805" value="10k"/>
-<part name="Q3" library="LFXTAL016178R 32.768kHz crystal" deviceset="LFXTAL016178R" device=""/>
 <part name="C18" library="rcl" library_urn="urn:adsk.eagle:library:334" deviceset="CPOL-EU" device="E5-10.5" package3d_urn="urn:adsk.eagle:package:23372/2" value="1000µF"/>
 <part name="D4" library="diode" library_urn="urn:adsk.eagle:library:210" deviceset="BAT60J" device="" package3d_urn="urn:adsk.eagle:package:43461/1" value=" BAT60AE6327 "/>
 <part name="CONN1" library="MX-67503-1230 USB Mini-B SMT straight socket" deviceset="MX-67503-1230" device="" value="USB mini B"/>
@@ -36635,22 +36499,6 @@ ejovrh rev.3</text>
 <attribute name="NAME" x="661.416" y="-891.921" size="1.778" layer="95" rot="R180"/>
 <attribute name="VALUE" x="661.416" y="-886.841" size="1.778" layer="96" rot="R180"/>
 </instance>
-<instance part="IC5" gate="G$1" x="789.94" y="-850.9" smashed="yes">
-<attribute name="NAME" x="782.32" y="-838.2" size="1.778" layer="94"/>
-<attribute name="VALUE" x="782.32" y="-863.6" size="1.778" layer="94"/>
-</instance>
-<instance part="C21" gate="G$1" x="815.34" y="-843.28" smashed="yes" rot="R180">
-<attribute name="NAME" x="813.816" y="-843.661" size="1.778" layer="95" rot="R180"/>
-<attribute name="VALUE" x="813.816" y="-838.581" size="1.778" layer="96" rot="R180"/>
-</instance>
-<instance part="R26" gate="G$1" x="754.38" y="-858.52" smashed="yes" rot="R90">
-<attribute name="NAME" x="752.8814" y="-862.33" size="1.778" layer="95" rot="R90"/>
-<attribute name="VALUE" x="757.682" y="-862.33" size="1.778" layer="96" rot="R90"/>
-</instance>
-<instance part="Q3" gate="G$1" x="754.38" y="-830.58" smashed="yes" rot="R180">
-<attribute name="NAME" x="756.92" y="-838.2" size="1.27" layer="94" rot="R180"/>
-<attribute name="VALUE" x="756.92" y="-822.96" size="1.27" layer="94" rot="R180"/>
-</instance>
 <instance part="C18" gate="G$1" x="784.86" y="-127" smashed="yes">
 <attribute name="NAME" x="786.003" y="-126.5174" size="1.778" layer="95"/>
 <attribute name="VALUE" x="786.003" y="-131.5974" size="1.778" layer="96"/>
@@ -36892,7 +36740,7 @@ ejovrh rev.3</text>
 <label x="7.62" y="116.84" size="1.778" layer="95"/>
 </segment>
 </bus>
-<bus name="UART1:GPS_SW_SERIAL_TX,GPS_TX">
+<bus name="UART1:GPS_MCU_RX,GPS_MCU_TX">
 <segment>
 <wire x1="254" y1="198.12" x2="254" y2="223.52" width="0.762" layer="92"/>
 <label x="254" y="223.52" size="1.778" layer="95"/>
@@ -36908,7 +36756,7 @@ ejovrh rev.3</text>
 <segment>
 <pinref part="U1" gate="A" pin="VCC"/>
 <wire x1="574.04" y1="-454.66" x2="546.1" y2="-454.66" width="0.1524" layer="91"/>
-<label x="546.1" y="-454.66" size="1.778" layer="95"/>
+<label x="546.1" y="-454.66" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
 <pinref part="R14" gate="G$1" pin="1"/>
@@ -36938,7 +36786,7 @@ ejovrh rev.3</text>
 <segment>
 <pinref part="U5" gate="A" pin="VCC"/>
 <wire x1="695.96" y1="-457.2" x2="723.9" y2="-457.2" width="0.1524" layer="91"/>
-<label x="695.96" y="-457.2" size="1.778" layer="95"/>
+<label x="695.96" y="-457.2" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
 <pinref part="LED3" gate="G$1" pin="A"/>
@@ -36969,19 +36817,6 @@ ejovrh rev.3</text>
 <pinref part="C12" gate="G$1" pin="2"/>
 <wire x1="662.94" y1="-853.44" x2="673.1" y2="-853.44" width="0.1524" layer="91"/>
 <label x="673.1" y="-853.44" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="IC5" gate="G$1" pin="VCC"/>
-<pinref part="C21" gate="G$1" pin="1"/>
-<wire x1="805.18" y1="-845.82" x2="815.34" y2="-845.82" width="0.1524" layer="91"/>
-<wire x1="815.34" y1="-845.82" x2="822.96" y2="-845.82" width="0.1524" layer="91"/>
-<junction x="815.34" y="-845.82"/>
-<label x="822.96" y="-845.82" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="R26" gate="G$1" pin="1"/>
-<wire x1="754.38" y1="-863.6" x2="754.38" y2="-868.68" width="0.1524" layer="91"/>
-<label x="754.38" y="-868.68" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="IC2" gate="A" pin="FB"/>
@@ -37192,7 +37027,7 @@ ejovrh rev.3</text>
 <segment>
 <pinref part="U1" gate="A" pin="GND"/>
 <wire x1="574.04" y1="-469.9" x2="565.15" y2="-469.9" width="0.1524" layer="91"/>
-<label x="565.15" y="-469.9" size="1.778" layer="95" ratio="9"/>
+<label x="565.15" y="-469.9" size="1.778" layer="95" ratio="9" rot="R180"/>
 </segment>
 <segment>
 <pinref part="U5" gate="A" pin="GND"/>
@@ -37203,16 +37038,6 @@ ejovrh rev.3</text>
 <pinref part="R30" gate="G$1" pin="2"/>
 <wire x1="805.18" y1="-93.98" x2="805.18" y2="-99.06" width="0.1524" layer="91"/>
 <label x="805.18" y="-99.06" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="C21" gate="G$1" pin="2"/>
-<wire x1="815.34" y1="-838.2" x2="815.34" y2="-833.12" width="0.1524" layer="91"/>
-<label x="815.34" y="-833.12" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="IC5" gate="G$1" pin="GND"/>
-<wire x1="774.7" y1="-855.98" x2="764.54" y2="-855.98" width="0.1524" layer="91"/>
-<label x="764.54" y="-855.98" size="1.778" layer="95"/>
 </segment>
 <segment>
 <pinref part="IC2" gate="A" pin="POWERPAD"/>
@@ -37755,12 +37580,12 @@ ejovrh rev.3</text>
 <segment>
 <pinref part="U5" gate="A" pin="S"/>
 <wire x1="723.9" y1="-462.28" x2="695.96" y2="-462.28" width="0.1524" layer="91"/>
-<label x="695.96" y="-462.28" size="1.778" layer="95"/>
+<label x="695.96" y="-462.28" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
 <pinref part="U1" gate="A" pin="S"/>
 <wire x1="574.04" y1="-459.74" x2="546.1" y2="-459.74" width="0.1524" layer="91"/>
-<label x="546.1" y="-459.74" size="1.778" layer="95"/>
+<label x="546.1" y="-459.74" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
 <pinref part="U2" gate="A" pin="PA7_(AD7)"/>
@@ -37779,22 +37604,12 @@ ejovrh rev.3</text>
 <wire x1="566.42" y1="-861.06" x2="538.48" y2="-861.06" width="0.1524" layer="91"/>
 <label x="538.48" y="-861.06" size="1.778" layer="95"/>
 </segment>
-<segment>
-<pinref part="IC5" gate="G$1" pin="DIN"/>
-<wire x1="805.18" y1="-855.98" x2="822.96" y2="-855.98" width="0.1524" layer="91"/>
-<label x="822.96" y="-855.98" size="1.778" layer="95"/>
-</segment>
 </net>
 <net name="SPI_MISO_PIN" class="2">
 <segment>
 <pinref part="U2" gate="A" pin="(MISO/PCINT3)_PB3"/>
 <wire x1="668.02" y1="127" x2="675.64" y2="127" width="0.1524" layer="91"/>
 <label x="675.64" y="127" size="1.778" layer="95"/>
-</segment>
-<segment>
-<pinref part="IC5" gate="G$1" pin="DOUT"/>
-<wire x1="805.18" y1="-853.44" x2="822.96" y2="-853.44" width="0.1524" layer="91"/>
-<label x="822.96" y="-853.44" size="1.778" layer="95"/>
 </segment>
 </net>
 <net name="GPS_SW_SERIAL_RX" class="2">
@@ -37811,10 +37626,10 @@ ejovrh rev.3</text>
 <segment>
 <pinref part="U1" gate="A" pin="B2"/>
 <wire x1="574.04" y1="-464.82" x2="546.1" y2="-464.82" width="0.1524" layer="91"/>
-<label x="546.1" y="-464.82" size="1.778" layer="95"/>
+<label x="546.1" y="-464.82" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="GPS_SW_SERIAL_TX" class="2">
+<net name="GPS_MCU_RX" class="2">
 <segment>
 <pinref part="U2" gate="A" pin="(OC1A/PCINT5)_PB5"/>
 <wire x1="668.02" y1="121.92" x2="675.64" y2="121.92" width="0.1524" layer="91"/>
@@ -37822,7 +37637,7 @@ ejovrh rev.3</text>
 </segment>
 <segment>
 <pinref part="U1" gate="A" pin="B1"/>
-<label x="546.1" y="-462.28" size="1.778" layer="95"/>
+<label x="546.1" y="-462.28" size="1.778" layer="95" rot="R180"/>
 <wire x1="574.04" y1="-462.28" x2="546.1" y2="-462.28" width="0.1524" layer="91"/>
 </segment>
 <segment>
@@ -37871,11 +37686,6 @@ ejovrh rev.3</text>
 <wire x1="566.42" y1="-858.52" x2="538.48" y2="-858.52" width="0.1524" layer="91"/>
 <label x="538.48" y="-858.52" size="1.778" layer="95"/>
 </segment>
-<segment>
-<pinref part="IC5" gate="G$1" pin="SCLK"/>
-<wire x1="805.18" y1="-850.9" x2="822.96" y2="-850.9" width="0.1524" layer="91"/>
-<label x="822.96" y="-850.9" size="1.778" layer="95"/>
-</segment>
 </net>
 <net name="SPI_SS_FRAM_PIN" class="2">
 <segment>
@@ -37884,11 +37694,11 @@ ejovrh rev.3</text>
 <label x="675.64" y="137.16" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="GPS_TX" class="2">
+<net name="GPS_MCU_TX" class="2">
 <segment>
 <pinref part="U5" gate="A" pin="B2"/>
 <wire x1="723.9" y1="-467.36" x2="695.96" y2="-467.36" width="0.1524" layer="91"/>
-<label x="695.96" y="-467.36" size="1.778" layer="95"/>
+<label x="695.96" y="-467.36" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
 <portref moduleinst="GPS" port="GPS_TX"/>
@@ -37905,7 +37715,7 @@ ejovrh rev.3</text>
 <segment>
 <pinref part="U5" gate="A" pin="B1"/>
 <wire x1="723.9" y1="-464.82" x2="695.96" y2="-464.82" width="0.1524" layer="91"/>
-<label x="695.96" y="-464.82" size="1.778" layer="95"/>
+<label x="695.96" y="-464.82" size="1.778" layer="95" rot="R180"/>
 </segment>
 <segment>
 <pinref part="IC4" gate="G$1" pin="TXD"/>
@@ -38173,13 +37983,6 @@ ejovrh rev.3</text>
 <label x="820.42" y="-86.36" size="1.778" layer="95"/>
 </segment>
 </net>
-<net name="VGPS" class="0">
-<segment>
-<pinref part="IC5" gate="G$1" pin="VBACK"/>
-<wire x1="774.7" y1="-850.9" x2="734.06" y2="-850.9" width="0.1524" layer="91"/>
-<label x="734.06" y="-850.9" size="1.778" layer="95"/>
-</segment>
-</net>
 <net name="BLUETOOTH_RX" class="2">
 <segment>
 <pinref part="U1" gate="A" pin="A"/>
@@ -38424,14 +38227,6 @@ ejovrh rev.3</text>
 </net>
 <net name="SPI_SS_RTC_PIN" class="2">
 <segment>
-<pinref part="IC5" gate="G$1" pin="!CS!"/>
-<pinref part="R26" gate="G$1" pin="2"/>
-<wire x1="774.7" y1="-853.44" x2="754.38" y2="-853.44" width="0.1524" layer="91"/>
-<wire x1="754.38" y1="-853.44" x2="734.06" y2="-853.44" width="0.1524" layer="91"/>
-<junction x="754.38" y="-853.44"/>
-<label x="734.06" y="-853.44" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="U2" gate="A" pin="(OC3C/INT5)_PE5"/>
 <wire x1="581.66" y1="185.42" x2="546.1" y2="185.42" width="0.1524" layer="91"/>
 <label x="546.1" y="185.42" size="1.778" layer="95"/>
@@ -38439,30 +38234,9 @@ ejovrh rev.3</text>
 </net>
 <net name="RTC_INT_INTERRUPT_PIN" class="2">
 <segment>
-<pinref part="IC5" gate="G$1" pin="!INT!"/>
-<wire x1="805.18" y1="-848.36" x2="822.96" y2="-848.36" width="0.1524" layer="91"/>
-<label x="822.96" y="-848.36" size="1.778" layer="95"/>
-</segment>
-<segment>
 <pinref part="U2" gate="A" pin="(SDA/INT1)_PD1"/>
 <wire x1="668.02" y1="157.48" x2="675.64" y2="157.48" width="0.1524" layer="91"/>
 <label x="675.64" y="157.48" size="1.778" layer="95"/>
-</segment>
-</net>
-<net name="RTC_XTAL2" class="2">
-<segment>
-<pinref part="IC5" gate="G$1" pin="X2"/>
-<pinref part="Q3" gate="G$1" pin="XTAL2"/>
-<wire x1="774.7" y1="-848.36" x2="744.22" y2="-848.36" width="0.1524" layer="91"/>
-<wire x1="744.22" y1="-848.36" x2="744.22" y2="-830.58" width="0.1524" layer="91"/>
-</segment>
-</net>
-<net name="RTC_XTAL1" class="2">
-<segment>
-<pinref part="IC5" gate="G$1" pin="X1"/>
-<pinref part="Q3" gate="G$1" pin="XTAL1"/>
-<wire x1="774.7" y1="-845.82" x2="764.54" y2="-845.82" width="0.1524" layer="91"/>
-<wire x1="764.54" y1="-845.82" x2="764.54" y2="-830.58" width="0.1524" layer="91"/>
 </segment>
 </net>
 <net name="GPRS_NETLIGHT" class="2">
