@@ -67,6 +67,8 @@ TIM_HandleTypeDef htim1;
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart3;
+DMA_NodeTypeDef Node_GPDMA1_Channel3;
+DMA_QListTypeDef List_GPDMA1_Channel3;
 DMA_HandleTypeDef handle_GPDMA1_Channel3;
 DMA_HandleTypeDef handle_GPDMA1_Channel2;
 DMA_HandleTypeDef handle_GPDMA1_Channel1;
@@ -75,12 +77,15 @@ DMA_HandleTypeDef handle_GPDMA1_Channel0;
 PCD_HandleTypeDef hpcd_USB_DRD_FS;
 
 /* USER CODE BEGIN PV */
-uint8_t aTxBuffer[] = "\rnucleo-h503rb start\r\n";
+uint8_t VCPTxBuffer[82] = "\rnucleo-h503rb start\r\n";
+uint8_t VCPRxBuffer[82] = "\0";
+uint8_t VCPRxChar;
 volatile uint32_t __adc_dma_buffer[ADC_CHANNELS] =  // store for ADC readout
 	{0};
 volatile uint32_t __adc_results[ADC_CHANNELS] =  // store ADC average data
 	{0};
 double _VddaConversionConstant;  // constant values pre-computed in main()
+static uint8_t len = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -170,7 +175,10 @@ int main(void)
 	org1510mk4_ctor();  // initialise the GPS module object
 #endif
 
-	if(HAL_UART_Transmit_DMA(&huart3, (uint8_t*) aTxBuffer, 22) != HAL_OK)	// transmit hello world
+	if(HAL_UART_Transmit_DMA(&huart3, (uint8_t*) VCPTxBuffer, (uint16_t) strlen((const char*) VCPTxBuffer)) != HAL_OK)  // transmit hello world over VCP
+		Error_Handler();
+
+	if(HAL_UART_Receive_IT(&huart3, &VCPRxChar, 1) != HAL_OK)  // receive whatever from VCP
 		Error_Handler();
 
 	if(HAL_TIM_OC_Start_IT(&htim1, TIM_CHANNEL_1) != HAL_OK)	// 125ms time base
@@ -757,10 +765,10 @@ static void MX_GPIO_Init(void)
 	HAL_GPIO_WritePin(GPIOC, GPS_Green_LED_Pin | GPS_Red_LED_Pin, GPIO_PIN_SET);
 
 	/*Configure GPIO pin Output Level */
-	HAL_GPIO_WritePin(GPIOB, GPS_RESET_Pin | SUPERCAP_EN_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOB, GPS_RESET_Pin | Anal_SW_CTRL_Pin, GPIO_PIN_SET);
 
 	/*Configure GPIO pin Output Level */
-	HAL_GPIO_WritePin(Anal_SW_CTRL_GPIO_Port, Anal_SW_CTRL_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(SUPERCAP_EN_GPIO_Port, SUPERCAP_EN_Pin, GPIO_PIN_RESET);
 
 	/*Configure GPIO pins : Blue_User_Button_Pin ADXL345_INT1_Pin */
 	GPIO_InitStruct.Pin = Blue_User_Button_Pin | ADXL345_INT1_Pin;
@@ -847,19 +855,19 @@ static void MX_GPIO_Init(void)
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(USB_FS_OVCR_GPIO_Port, &GPIO_InitStruct);
 
-	/*Configure GPIO pins : GPS_RESET_Pin SUPERCAP_EN_Pin */
-	GPIO_InitStruct.Pin = GPS_RESET_Pin | SUPERCAP_EN_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
-
-	/*Configure GPIO pin : Anal_SW_CTRL_Pin */
-	GPIO_InitStruct.Pin = Anal_SW_CTRL_Pin;
+	/*Configure GPIO pins : GPS_RESET_Pin Anal_SW_CTRL_Pin */
+	GPIO_InitStruct.Pin = GPS_RESET_Pin | Anal_SW_CTRL_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
 	GPIO_InitStruct.Pull = GPIO_PULLUP;
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(Anal_SW_CTRL_GPIO_Port, &GPIO_InitStruct);
+	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+	/*Configure GPIO pin : SUPERCAP_EN_Pin */
+	GPIO_InitStruct.Pin = SUPERCAP_EN_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(SUPERCAP_EN_GPIO_Port, &GPIO_InitStruct);
 
 	/* EXTI interrupt init*/
 	HAL_NVIC_SetPriority(EXTI2_IRQn, 0, 0);
@@ -885,6 +893,8 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 			HAL_GPIO_TogglePin(User_LED_GPIO_Port, User_LED_Pin);
 			HAL_GPIO_TogglePin(GPS_Green_LED_GPIO_Port, GPS_Green_LED_Pin);
 
+//			ORG1510MK4->Power(on);
+
 			return;
 		}
 
@@ -901,6 +911,59 @@ void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
 		{
 			;  // TODO - disable read/write operations
 			// TODO - also make sure that before any read/write, this GPIO state is checked
+		}
+}
+
+//
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+	if(huart == &huart1)
+		{
+//			HAL_UART_Transmit_DMA(&huart3, ORG1510MK4->NMEA, 82);  // send GPS to VCP
+			;
+		}
+
+	if(huart == &huart3)
+		{
+			VCPRxBuffer[len++] = VCPRxChar;
+
+//			if(VCPRxChar == '\r')
+//				{
+//					VCPRxBuffer[len++] = '\n';
+//
+//					if(HAL_UART_Transmit_DMA(&huart1, VCPRxBuffer, len) != HAL_OK)  // send VCP input to GPS
+//						Error_Handler();
+//
+//					VCPRxBuffer[0] = '\0';
+//					len = 0;
+//				}
+			if(VCPRxChar == '0')
+				ORG1510MK4->Power(off);
+
+			if(VCPRxChar == '1')
+				ORG1510MK4->Power(on);
+
+			if(VCPRxChar == '2')
+				ORG1510MK4->Power(backup);
+
+			if(VCPRxChar == '3')
+				ORG1510MK4->Power(wakeup);
+
+			if(VCPRxChar == '4')
+				ORG1510MK4->Power(standby);
+
+			if(VCPRxChar == '5')
+				ORG1510MK4->Power(periodic);
+
+			if(VCPRxChar == '6')
+				ORG1510MK4->Power(alwayslocate);
+
+			if(VCPRxChar == '7')
+				ORG1510MK4->Power(reset);
+
+			if(HAL_UART_Receive_IT(&huart3, &VCPRxChar, 1) != HAL_OK)  // receive whatever from VCP
+				Error_Handler();
+
 		}
 }
 /* USER CODE END 4 */
