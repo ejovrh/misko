@@ -38,9 +38,10 @@ static uint8_t _NMEA[NMEA_BUFFER_LEN];  // NMEA incoming buffer
 // stop LOCUS logging: $PMTK185,1*23
 // enable SBAS: $PMTK355*31
 
-// workaround for a blocking issue
-static inline void _wait(uint32_t i)
+// wait time in ms
+static inline void _wait(const uint16_t ms)
 {
+	uint32_t i = (HAL_RCC_GetSysClockFreq() / 1000) * (ms / 5);
 	while(i--)
 		;
 }
@@ -140,7 +141,7 @@ static void _Power(const org1510mk4_power_t state)
 		{
 #if DIRTY_POWER_MODE_CHANGE
 			HAL_GPIO_WritePin(GPS_PWR_CTRL_GPIO_Port, GPS_PWR_CTRL_Pin, GPIO_PIN_SET);	// set high
-			_wait(8000000);	 // wait 1s
+			_wait(1000);	 // wait 1s
 			HAL_GPIO_WritePin(GPS_PWR_CTRL_GPIO_Port, GPS_PWR_CTRL_Pin, GPIO_PIN_RESET);	// set low
 
 			__ORG1510MK4.currentPowerMode = state;	// save the current power mode
@@ -159,7 +160,7 @@ static void _Power(const org1510mk4_power_t state)
 				{
 					// get out of backup: ("off" state can also be a backup state)
 					HAL_GPIO_WritePin(GPS_PWR_CTRL_GPIO_Port, GPS_PWR_CTRL_Pin, GPIO_PIN_SET);	// set high
-					_wait(8000000);	 // wait 1s
+					_wait(1000);	 // wait 1s
 					HAL_GPIO_WritePin(GPS_PWR_CTRL_GPIO_Port, GPS_PWR_CTRL_Pin, GPIO_PIN_RESET);	// set low
 
 					while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin) == GPIO_PIN_RESET)
@@ -244,7 +245,7 @@ static void _Power(const org1510mk4_power_t state)
 		{
 #if DIRTY_POWER_MODE_CHANGE
 			HAL_GPIO_WritePin(GPS_RESET_GPIO_Port, GPS_RESET_Pin, GPIO_PIN_RESET);  // take GPS module into reset
-			_wait(4000000);  // wait 500ms
+			_wait(200);  // wait 200ms
 			HAL_GPIO_WritePin(GPS_RESET_GPIO_Port, GPS_RESET_Pin, GPIO_PIN_SET);  // take GPS module out of reset
 #else
 			if(__ORG1510MK4.currentPowerMode == state)  // if the module is already in this state
@@ -261,11 +262,13 @@ static void _Power(const org1510mk4_power_t state)
 
 			// finally: reset
 			HAL_GPIO_WritePin(GPS_RESET_GPIO_Port, GPS_RESET_Pin, GPIO_PIN_RESET);  // take GPS module into reset
-			_wait(4000000);  // wait 500ms
+			_wait(200);  // wait 200ms
 			HAL_GPIO_WritePin(GPS_RESET_GPIO_Port, GPS_RESET_Pin, GPIO_PIN_SET);  // take GPS module out of reset
 
+			while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin) == GPIO_PIN_RESET)
+				;						// wait until the wakeup pin goes high
+
 			__ORG1510MK4.public.Power(wakeup);	// then, wake up
-			_wait(4000000);  // wait 500ms
 			return;
 #endif
 		}
