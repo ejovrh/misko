@@ -101,8 +101,7 @@ static void _Power(const org1510mk4_power_t state)
 
 							while(__adc_results[Vgps] < 3000)  // wait until the supply voltage is high enough (or the module is awake)
 								{
-									break;
-									// FIXME - blocks ADC somehow
+									break;  // FIXME - blocks ADC somehow
 									;
 								}
 
@@ -151,10 +150,10 @@ static void _Power(const org1510mk4_power_t state)
 				return;  // do nothing
 
 			if(__ORG1510MK4.currentPowerMode == off)  // if the module is powered off
-				{
-					__ORG1510MK4.public.Power(on);	// first power on,
-					__ORG1510MK4.currentPowerMode = backup;  // then cheat the mode into backup
-				}
+				__ORG1510MK4.public.Power(on);	// first power on,
+
+			if(__ORG1510MK4.currentPowerMode == on)  // if the module is powered on
+				__ORG1510MK4.currentPowerMode = backup;  // then cheat the mode into backup
 
 			if(__ORG1510MK4.currentPowerMode == backup)  // if in backup mode
 				{
@@ -162,6 +161,9 @@ static void _Power(const org1510mk4_power_t state)
 					HAL_GPIO_WritePin(GPS_PWR_CTRL_GPIO_Port, GPS_PWR_CTRL_Pin, GPIO_PIN_SET);	// set high
 					_wait(8000000);	 // wait 1s
 					HAL_GPIO_WritePin(GPS_PWR_CTRL_GPIO_Port, GPS_PWR_CTRL_Pin, GPIO_PIN_RESET);	// set low
+
+					while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin) == GPIO_PIN_RESET)
+						;						// wait until the wakeup pin goes high
 				}
 
 			if(__ORG1510MK4.currentPowerMode > wakeup)  // if the module is in a lighter sleep state
@@ -187,6 +189,9 @@ static void _Power(const org1510mk4_power_t state)
 				return;  // do nothing
 
 			HAL_UART_Transmit_DMA(&huart1, (const uint8_t*) "$PMTK161,0*28\r\n", 15);  // then go into standby
+
+			while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin))
+				;						// wait until the wakeup pin goes low
 
 			__ORG1510MK4.currentPowerMode = state;	// save the current power mode
 			return;
