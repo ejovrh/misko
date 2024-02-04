@@ -1,6 +1,8 @@
 #include "org1510mk4/org1510mk4.h"
 
 #if defined(USE_ORG1510MK4)	// if this particular device is active
+#include <stdio.h>
+#include <string.h>
 
 extern ADC_HandleTypeDef hadc1;  // TODO - move out of here
 extern volatile uint32_t __adc_dma_buffer[ADC_CHANNELS];  // store for ADC readout
@@ -8,35 +10,35 @@ extern volatile uint32_t __adc_results[ADC_CHANNELS];  // store ADC average data
 
 typedef struct	// org1510mk4c_t actual
 {
+	UART_HandleTypeDef *huart;  // HAL UART instance over which to communicate with the GPS module
 	volatile org1510mk4_power_t currentPowerMode;  // current power mode of the GPS module
 
 	org1510mk4_t public;  // public struct
 } __org1510mk4_t;
 
-static __org1510mk4_t __ORG1510MK4 __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
-
-extern UART_HandleTypeDef huart1;  //
+static __org1510mk4_t  __ORG1510MK4  __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
 
 #define DIRTY_POWER_MODE_CHANGE 0	// circumvents power mode change safeguards to e.g. deliberately drain the capacitor
 #define NMEA_BUFFER_LEN 82	// officially, a NMEA sentence is 80 characters long. 2 more to account for \r\n
 
 static uint8_t _NMEA[NMEA_BUFFER_LEN];  // NMEA incoming buffer
 
-// all NMEA off: 	$PMTK314,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*28
-// NMEA RMC 5s: 	$PMTK314,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*2D
-// normal NMEA: $PMTK314,1,1,1,1,1,5,0,0,0,0,0,0,0,0,0,0,0,0,0*2C
-// firmware info: $PMTK605*31
+// all NMEA off: 	PMTK314,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+// NMEA RMC 5s: 	PMTK314,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+// normal NMEA: PMTK314,1,1,1,1,1,5,0,0,0,0,0,0,0,0,0,0,0,0,0
+// firmware info: PMTK605*31
 //	output: $PMTK705,AXN_3.8_3333_16042118,0000,V3.8.1 GP+GL,*6F
 
-// disable 1PPS: $PMTK255,1*2D
-// 	also: $PMTK285,0,0*3D
-// enable active interference cancellation: $PMTK286,1*23
-// pedestrian mode: $PMTK886,1*29 (slower than 5m/s)
-// vehicle mode: $PMTK886,0*28 (faster than 5m/s)
-// set WGS84 datum: $PMTK330,0*2E
-// use gps, glonass, galileo, not galileo_full, beidou: $PMTK353,1,1,1,0,1*2B (action failed - test)
-// stop LOCUS logging: $PMTK185,1*23
-// enable SBAS: $PMTK355*31
+// disable 1PPS: PMTK255,0
+// 	also: PMTK285,0,0
+// enable active interference cancellation: PMTK286,1
+// pedestrian mode: PMTK886,1 (slower than 5m/s)
+// vehicle mode: PMTK886,0 (faster than 5m/s)
+// set WGS84 datum: PMTK330,0
+// use gps, glonass, galileo, not galileo_full, beidou: PMTK353,1,1,0,0,1 (action failed - test)
+// use gps, glonass, galileo, not galileo_full, beidou: PMTK353,1,1,1,0,1 (action failed - test)
+// stop LOCUS logging: PMTK185,1
+// enable SBAS: PMTK355
 
 // wait time in ms
 static inline void _wait(const uint16_t ms)
@@ -44,6 +46,19 @@ static inline void _wait(const uint16_t ms)
 	uint32_t i = (HAL_RCC_GetSysClockFreq() / 1000) * (ms / 5);
 	while(i--)
 		;
+}
+
+// calculates NMEA checksum
+// https://nmeachecksum.eqth.net
+static uint8_t calculate_checksum(const char *str, const uint8_t len)
+{
+	//XOR of all the bytes between the $ and the * (not including the delimiters themselves)
+	uint8_t retval = 0;
+
+	for(uint8_t i = 0; i < len + 1; i++)	// go over the whole input string
+		retval ^= *(str + i);  // XOR the characters
+
+	return retval;	// return the XOR
 }
 
 // GPS module power mode change control function
@@ -126,8 +141,9 @@ static void _Power(const org1510mk4_power_t state)
 
 			if(__ORG1510MK4.currentPowerMode > backup)  // if the module is in some operating mode
 				{
-					HAL_UART_Transmit_DMA(&huart1, (const uint8_t*) "$PMTK225,4*2F\r\n", 15);  // send backup mode command
+					__ORG1510MK4.public.Write("PMTK225,4");  // send backup mode command
 
+					// FIXME - sometimes this is blocking
 					while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin))
 						;						// wait until the wakeup pin goes low
 				}
@@ -163,12 +179,18 @@ static void _Power(const org1510mk4_power_t state)
 					_wait(1000);	 // wait 1s
 					HAL_GPIO_WritePin(GPS_PWR_CTRL_GPIO_Port, GPS_PWR_CTRL_Pin, GPIO_PIN_RESET);	// set low
 
+					// FIXME - sometimes this is blocking
 					while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin) == GPIO_PIN_RESET)
 						;						// wait until the wakeup pin goes high
 				}
 
 			if(__ORG1510MK4.currentPowerMode > wakeup)  // if the module is in a lighter sleep state
-				HAL_UART_Transmit_DMA(&huart1, (const uint8_t*) "$PMTK225,0*2B\r\n", 15);  // wakeup command - transit into full power mode
+				{
+					while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin) == GPIO_PIN_RESET)
+						;						// wait until the wakeup pin goes high
+
+					__ORG1510MK4.public.Write("PMTK225,0");  // wakeup command - transit into full power mode
+				}
 
 			__ORG1510MK4.currentPowerMode = state;	// save the current power mode
 			return;
@@ -189,8 +211,9 @@ static void _Power(const org1510mk4_power_t state)
 			if(__ORG1510MK4.currentPowerMode < wakeup)  // if the module is not awake
 				return;  // do nothing
 
-			HAL_UART_Transmit_DMA(&huart1, (const uint8_t*) "$PMTK161,0*28\r\n", 15);  // then go into standby
+			__ORG1510MK4.public.Write("PMTK161,0");  // send standby sleep command
 
+			// FIXME - sometimes this is blocking
 			while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin))
 				;						// wait until the wakeup pin goes low
 
@@ -234,7 +257,7 @@ static void _Power(const org1510mk4_power_t state)
 			if(__ORG1510MK4.currentPowerMode < wakeup)  // if the module is not awake
 				return;  // do nothing
 
-			HAL_UART_Transmit_DMA(&huart1, (const uint8_t*) "$PMTK225,9*22\r\n", 15);  // DS. ch. 4.3.14
+			__ORG1510MK4.public.Write("PMTK225,9");  // send command for AlwaysLocate backup mode
 
 			__ORG1510MK4.currentPowerMode = state;	// save the current power mode
 			return;
@@ -260,7 +283,7 @@ static void _Power(const org1510mk4_power_t state)
 					__ORG1510MK4.public.Power(wakeup);	// then, wake up
 				}
 
-			HAL_UART_Transmit_DMA(&huart1, (const uint8_t*) "$PMTK104*37\r\n", 13);
+			__ORG1510MK4.public.Write("PMTK104");  // send reset command
 			_wait(100);
 
 			// finally: reset
@@ -268,6 +291,7 @@ static void _Power(const org1510mk4_power_t state)
 			_wait(200);  // wait 200ms
 			HAL_GPIO_WritePin(GPS_RESET_GPIO_Port, GPS_RESET_Pin, GPIO_PIN_SET);  // take GPS module out of reset
 
+			// FIXME - sometimes this is blocking
 			while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin) == GPIO_PIN_RESET)
 				;						// wait until the wakeup pin goes high
 
@@ -283,30 +307,35 @@ static void _Read(void)
 	;
 }
 
-//
-static void _Write(void)
+// writes a NEMA sentence to the GPS module
+// 	format is "PMTK313,1" - i.e. no $, checksum and no "\r\n"
+static void _Write(const char *str)
 {
-	;
+	char outstr[82] = "\0";  // buffer for assembling the output string
+	uint8_t len = (uint8_t) strlen(str);	// length of incoming string
+
+	if(len > 76)	// invalid length: 82 - 2 (delimiters) - 3 (checksum) = 77
+		return;  // get out
+
+	sprintf(outstr, "$%s*%02X\r\n", str, calculate_checksum(str, len));  // assemble the raw NEMA command w. prefix, checksum and delimiters
+
+	HAL_UART_Transmit_DMA(__ORG1510MK4.huart, (const uint8_t*) outstr, (uint16_t) strlen(outstr));  // send assembled string to GPS module
 }
 
-static __org1510mk4_t __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
+static __org1510mk4_t  __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
 	{  //
 	.public.Power = &_Power,	// GPS module power mode change control function
 	.public.Read = &_Read,	//
-	.public.Write = &_Write  //
+	.public.Write = &_Write  // writes a NEMA sentence to the GPS module
 	};
 
-org1510mk4_t* org1510mk4_ctor(void)  //
+org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *in_huart)  //
 {
+	__ORG1510MK4.huart = in_huart;	// store UART object
 	__ORG1510MK4.public.NMEA = _NMEA;  // tie in NMEA sentence buffer
-	__ORG1510MK4.currentPowerMode = 0;	// set to off by default
+	__ORG1510MK4.currentPowerMode = 0;  // TODO - read from FeRAM, for now set to off by default
 
-//	__ORG1510MK4.public.Power(wakeup);
-//	__ORG1510MK4.public.Power(reset);
-//	HAL_UART_Transmit_DMA(&huart1, (const uint8_t*) "$PMTK314,1,1,1,1,1,5,0,0,0,0,0,0,0,0,0,0,0,0,0*2C\r\n", 51);  // DS. ch. 4.3.14
-//	HAL_UART_Transmit_DMA(&huart1, (const uint8_t*) "$PMTK314,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*2D", 51);
-
-	HAL_UART_Receive_DMA(&huart1, _NMEA, 82);
+	HAL_UART_Receive_DMA(__ORG1510MK4.huart, _NMEA, NMEA_BUFFER_LEN);  //
 
 	return &__ORG1510MK4.public;  // set pointer to ORG1510MK4 public part
 }

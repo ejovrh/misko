@@ -22,10 +22,10 @@ typedef struct	// struct describing the GPS module functionality
 	uint8_t *NMEA;  //
 	void (*Power)(const org1510mk4_power_t state);  // GPS module power mode change control function
 	void (*Read)(void);  //
-	void (*Write)(void);  //
+	void (*Write)(const char *str);  // writes a NEMA sentence to the GPS module
 } org1510mk4_t;
 
-org1510mk4_t* org1510mk4_ctor(void);  // the ORG1510MK4 constructor
+org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *in_huart);  // the ORG1510MK4 constructor
 
 extern org1510mk4_t *const ORG1510MK4;  // declare pointer to public struct part
 
