@@ -155,6 +155,15 @@ int main(void)
 	MX_FDCAN1_Init();
 	MX_ADC1_Init();
 	/* USER CODE BEGIN 2 */
+	// 125ms time base
+	if(HAL_TIM_OC_Start_IT(&htim1, TIM_CHANNEL_1) != HAL_OK)
+		Error_Handler();
+
+	// start ADC
+	_VddaConversionConstant = (VREFINT_CAL_VREF * *VREFINT_CAL_ADDR) / 4095.0;  // 1203.95604
+	HAL_ADC_Start_DMA(&hadc1, (uint32_t*) __adc_dma_buffer, ADC_CHANNELS);
+
+	// SPI DMA stuff
 	MX_Queue_tx_Config();
 	HAL_DMAEx_List_LinkQ(&handle_GPDMA1_Channel7, &Queue_tx);
 	__HAL_LINKDMA(&hspi1, hdmatx, handle_GPDMA1_Channel7);
@@ -162,6 +171,15 @@ int main(void)
 	HAL_DMAEx_List_LinkQ(&handle_GPDMA1_Channel6, &Queue_rx);
 	__HAL_LINKDMA(&hspi1, hdmarx, handle_GPDMA1_Channel6);
 
+	// transmit hello world over VCP
+	if(HAL_UART_Transmit_DMA(&huart3, (uint8_t*) VCPTxBuffer, (uint16_t) strlen((const char*) VCPTxBuffer)) != HAL_OK)
+		Error_Handler();
+
+	// receive whatever from VCP
+	if(HAL_UART_Receive_IT(&huart3, &VCPRxChar, 1) != HAL_OK)
+		Error_Handler();
+
+	// start peripheral devices
 #if USE_ADXL345
 	adxl345_ctor(&hspi1, SPI1_ADXL345_CS_GPIO_Port, SPI1_ADXL345_CS_Pin);  // initialize accelerometer object
 #endif
@@ -174,18 +192,6 @@ int main(void)
 #if USE_ORG1510MK4
 	org1510mk4_ctor();  // initialise the GPS module object
 #endif
-
-	if(HAL_UART_Transmit_DMA(&huart3, (uint8_t*) VCPTxBuffer, (uint16_t) strlen((const char*) VCPTxBuffer)) != HAL_OK)  // transmit hello world over VCP
-		Error_Handler();
-
-	if(HAL_UART_Receive_IT(&huart3, &VCPRxChar, 1) != HAL_OK)  // receive whatever from VCP
-		Error_Handler();
-
-	if(HAL_TIM_OC_Start_IT(&htim1, TIM_CHANNEL_1) != HAL_OK)	// 125ms time base
-		Error_Handler();
-
-	_VddaConversionConstant = (VREFINT_CAL_VREF * *VREFINT_CAL_ADDR) / 4095.0;  // 1203.95604
-	HAL_ADC_Start_DMA(&hadc1, (uint32_t*) __adc_dma_buffer, ADC_CHANNELS);  // start DMA
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
@@ -885,6 +891,7 @@ static void MX_GPIO_Init(void)
 }
 
 /* USER CODE BEGIN 4 */
+
 // EXTI rising edge callback
 void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 {
@@ -904,6 +911,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 			return;
 		}
 }
+
 // EXTI falling edge callback
 void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
 {
@@ -914,12 +922,12 @@ void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
 		}
 }
 
-//
+// UART reception
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if(huart == &huart1)
 		{
-//			HAL_UART_Transmit_DMA(&huart3, ORG1510MK4->NMEA, 82);  // send GPS to VCP
+			HAL_UART_Transmit_DMA(&huart3, ORG1510MK4->NMEA, 82);  // send GPS to VCP
 			;
 		}
 
@@ -937,6 +945,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 //					VCPRxBuffer[0] = '\0';
 //					len = 0;
 //				}
+
 			if(VCPRxChar == '0')
 				ORG1510MK4->Power(off);
 
@@ -963,7 +972,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 			if(HAL_UART_Receive_IT(&huart3, &VCPRxChar, 1) != HAL_OK)  // receive whatever from VCP
 				Error_Handler();
-
 		}
 }
 /* USER CODE END 4 */

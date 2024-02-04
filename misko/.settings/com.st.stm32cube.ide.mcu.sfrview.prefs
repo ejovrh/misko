@@ -1,2 +1,2 @@
 eclipse.preferences.version=1
-sfrviewstate={"fFavorites"\:{"fLists"\:{}},"fProperties"\:{"fNodeProperties"\:{}}}
+sfrviewstate={"fFavorites"\:{"fLists"\:{}},"fProperties"\:{"fNodeProperties"\:{"STM32H503/USART1/USART_ICR"\:{"fNodeProperties"\:{"autoupdate"\:"false"}},"STM32H503/USART1/USART_ISR_enabled"\:{"fNodeProperties"\:{"autoupdate"\:"false"}},"STM32H503/USART3/USART_ISR_enabled"\:{"fNodeProperties"\:{"autoupdate"\:"false"}},"STM32H503/USART3/USART_ISR_disabled"\:{"fNodeProperties"\:{"autoupdate"\:"false"}},"STM32H503/USART3/USART_ICR"\:{"fNodeProperties"\:{"autoupdate"\:"false"}}}}}
