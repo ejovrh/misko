@@ -254,11 +254,14 @@ static void _Power(const org1510mk4_power_t state)
 			if(__ORG1510MK4.currentPowerMode == backup)  // if the module is in backup
 				__ORG1510MK4.public.Power(wakeup);	// first, wake up
 
-			if(__ORG1510MK4.currentPowerMode == off)  // if the module is in backup
+			if(__ORG1510MK4.currentPowerMode == off)  // if the module is powered off
 				{
 					__ORG1510MK4.public.Power(on);	// first, turn on
 					__ORG1510MK4.public.Power(wakeup);	// then, wake up
 				}
+
+			HAL_UART_Transmit_DMA(&huart1, (const uint8_t*) "$PMTK104*37\r\n", 13);
+			_wait(100);
 
 			// finally: reset
 			HAL_GPIO_WritePin(GPS_RESET_GPIO_Port, GPS_RESET_Pin, GPIO_PIN_RESET);  // take GPS module into reset
@@ -301,7 +304,7 @@ org1510mk4_t* org1510mk4_ctor(void)  //
 //	__ORG1510MK4.public.Power(wakeup);
 //	__ORG1510MK4.public.Power(reset);
 //	HAL_UART_Transmit_DMA(&huart1, (const uint8_t*) "$PMTK314,1,1,1,1,1,5,0,0,0,0,0,0,0,0,0,0,0,0,0*2C\r\n", 51);  // DS. ch. 4.3.14
-	HAL_UART_Transmit_DMA(&huart1, (const uint8_t*) "$PMTK314,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*2D", 51);
+//	HAL_UART_Transmit_DMA(&huart1, (const uint8_t*) "$PMTK314,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*2D", 51);
 
 	HAL_UART_Receive_DMA(&huart1, _NMEA, 82);
 

@@ -900,7 +900,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 			HAL_GPIO_TogglePin(User_LED_GPIO_Port, User_LED_Pin);
 			HAL_GPIO_TogglePin(GPS_Green_LED_GPIO_Port, GPS_Green_LED_Pin);
 
-//			ORG1510MK4->Power(on);
+			HAL_UART_Transmit_DMA(&huart1, (const uint8_t*) "$PMTK314,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0*2D\r\n", 51);
 
 			return;
 		}
