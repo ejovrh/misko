@@ -29,6 +29,8 @@ static uint8_t _NMEA[NMEA_BUFFER_LEN];  // NMEA incoming buffer
 // firmware info: PMTK605*31
 //	output: $PMTK705,AXN_3.8_3333_16042118,0000,V3.8.1 GP+GL,*6F
 
+// $PMTK414*33 !!! will give $PMTK514,0,0,1,1,5,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0*36\r\n (which was set in _init()
+
 // wait time in ms
 static inline void _wait(const uint16_t ms)
 {
@@ -60,7 +62,7 @@ static void _init(void)
 	__ORG1510MK4.public.Write("PMTK301,2");  // set DGPS to SBAS
 	__ORG1510MK4.public.Write("PMTK286,1");  // enable active interference cancellation
 	__ORG1510MK4.public.Write("PMTK356,0");  // disable HDOP theshold
-
+	__ORG1510MK4.public.Write("PMTK386,0");  // disable speed threshold for static navigation
 	__ORG1510MK4.public.Write("PMTK255,0"); 	// disable 1PPS
 	__ORG1510MK4.public.Write("PMTK285,0,0"); 	// 	also disable 1PPS
 
@@ -322,6 +324,9 @@ static void _Power(const org1510mk4_power_t state)
 
 			__ORG1510MK4.public.Power(wakeup);	// then, wake up
 
+			while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin) == GPIO_PIN_RESET)
+				;						// wait until the wakeup pin goes high
+
 			_init();  // re-initialize the module
 			return;
 #endif
@@ -331,7 +336,8 @@ static void _Power(const org1510mk4_power_t state)
 //
 static void _Read(void)
 {
-	;
+	__ORG1510MK4.public.Write("PMTK414");
+
 }
 
 //
@@ -352,8 +358,10 @@ static void _Write(const char *str)
 
 	sprintf(outstr, "$%s*%02X\r\n", str, calculate_checksum(str, len));  // assemble the raw NEMA command w. prefix, checksum and delimiters
 
-	if(HAL_UART_Transmit_DMA(__ORG1510MK4.huart, (const uint8_t*) outstr, (uint16_t) strlen(outstr)) != HAL_OK)  // send assembled string to GPS module
-		Error_Handler();
+	while(HAL_UART_Transmit_IT(__ORG1510MK4.huart, (const uint8_t*) outstr, (uint16_t) strlen(outstr)) != HAL_OK)
+		;  // send assembled string to GPS module & wait for completion
+
+	_wait(50);	// always wait a while. stuff works better that way...
 }
 
 static __org1510mk4_t __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
@@ -371,6 +379,7 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *in_huart)  //
 	__ORG1510MK4.currentPowerMode = 0;  // TODO - read from FeRAM, for now set to off by default
 
 //	_init();  // initialize the module
+	__ORG1510MK4.public.Power(wakeup);
 
 	HAL_UART_Receive_DMA(__ORG1510MK4.huart, _NMEA, NMEA_BUFFER_LEN);  //
 

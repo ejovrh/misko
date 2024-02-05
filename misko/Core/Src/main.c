@@ -70,7 +70,6 @@ UART_HandleTypeDef huart3;
 DMA_NodeTypeDef Node_GPDMA1_Channel3;
 DMA_QListTypeDef List_GPDMA1_Channel3;
 DMA_HandleTypeDef handle_GPDMA1_Channel3;
-DMA_HandleTypeDef handle_GPDMA1_Channel2;
 DMA_HandleTypeDef handle_GPDMA1_Channel1;
 DMA_HandleTypeDef handle_GPDMA1_Channel0;
 
@@ -434,8 +433,6 @@ static void MX_GPDMA1_Init(void)
 	HAL_NVIC_EnableIRQ(GPDMA1_Channel0_IRQn);
 	HAL_NVIC_SetPriority(GPDMA1_Channel1_IRQn, 0, 0);
 	HAL_NVIC_EnableIRQ(GPDMA1_Channel1_IRQn);
-	HAL_NVIC_SetPriority(GPDMA1_Channel2_IRQn, 0, 0);
-	HAL_NVIC_EnableIRQ(GPDMA1_Channel2_IRQn);
 	HAL_NVIC_SetPriority(GPDMA1_Channel3_IRQn, 0, 0);
 	HAL_NVIC_EnableIRQ(GPDMA1_Channel3_IRQn);
 	HAL_NVIC_SetPriority(GPDMA1_Channel5_IRQn, 0, 0);
@@ -900,21 +897,8 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 			HAL_GPIO_TogglePin(User_LED_GPIO_Port, User_LED_Pin);
 			HAL_GPIO_TogglePin(GPS_Green_LED_GPIO_Port, GPS_Green_LED_Pin);
 
-			ORG1510MK4->Write("PMTK314,0,0,1,1,5,0,0,0,0,0,0,0,0,0,0,0,0,1,0");
-
-//			ORG1510MK4->Write("PMTK330,0");  // set WGS84 datum
-//			ORG1510MK4->Write("PMTK185,1");  // stop LOCUS logging
-//			ORG1510MK4->Write("PMTK355"); 	// enable SBAS
-//			ORG1510MK4->Write("PMTK301,2");  // set DGPS to SBAS
-//			ORG1510MK4->Write("PMTK286,1");  // enable active interference cancellation
-//			ORG1510MK4->Write("PMTK356,0");  // disable HDOP theshold
-//
-//			ORG1510MK4->Write("PMTK255,0"); 	// disable 1PPS
-//			ORG1510MK4->Write("PMTK285,0,0"); 	// 	also disable 1PPS
-//			ORG1510MK4->Write("PMTK886,1");  // pedestrian mode  (slower than 5m/s)
-//			//	__ORG1510MK4.public.Write("PMTK886,0"); // vehicle mode (faster than 5m/s)
-//			ORG1510MK4->Write("PMTK353,1,1,0,0,1");  // use gps, glonass, not galileo, not galileo_full, beidou (action failed - test)
-//			ORG1510MK4->Write("PMTK353,1,1,1,0,1");  // use gps, glonass, galileo, not galileo_full, beidou (action failed - test)
+//			ORG1510MK4->Write("PMTK514,0,1,1,1,1,5,0,0,0,0,0,0,0,0,0,0,0,0,0");
+			ORG1510MK4->Read();
 
 			return;
 		}
@@ -953,7 +937,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 //				{
 //					VCPRxBuffer[len++] = '\n';
 //
-//					if(HAL_UART_Transmit_DMA(&huart1, VCPRxBuffer, len) != HAL_OK)  // send VCP input to GPS
+//					if(HAL_UART_Transmit_IT(&huart1, VCPRxBuffer, len) != HAL_OK)  // send VCP input to GPS
 //						Error_Handler();
 //
 //					VCPRxBuffer[0] = '\0';
