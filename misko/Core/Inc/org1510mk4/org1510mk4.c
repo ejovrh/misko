@@ -352,7 +352,8 @@ static void _Write(const char *str)
 
 	sprintf(outstr, "$%s*%02X\r\n", str, calculate_checksum(str, len));  // assemble the raw NEMA command w. prefix, checksum and delimiters
 
-	HAL_UART_Transmit_DMA(__ORG1510MK4.huart, (const uint8_t*) outstr, (uint16_t) strlen(outstr));  // send assembled string to GPS module
+	if(HAL_UART_Transmit_DMA(__ORG1510MK4.huart, (const uint8_t*) outstr, (uint16_t) strlen(outstr)) != HAL_OK)  // send assembled string to GPS module
+		Error_Handler();
 }
 
 static __org1510mk4_t __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
