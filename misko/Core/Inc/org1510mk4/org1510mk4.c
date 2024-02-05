@@ -16,10 +16,10 @@ typedef struct	// org1510mk4c_t actual
 	org1510mk4_t public;  // public struct
 } __org1510mk4_t;
 
-static __org1510mk4_t  __ORG1510MK4  __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
+static __org1510mk4_t __ORG1510MK4 __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
 
 #define DIRTY_POWER_MODE_CHANGE 0	// circumvents power mode change safeguards to e.g. deliberately drain the capacitor
-#define NMEA_BUFFER_LEN 82	// officially, a NMEA sentence is 80 characters long. 2 more to account for \r\n
+#define NMEA_BUFFER_LEN 82	// officially, a NMEA sentence (from $ to \n) is 80 characters long. 2 more to account for \r\n
 
 static uint8_t _NMEA[NMEA_BUFFER_LEN];  // NMEA incoming buffer
 
@@ -28,17 +28,6 @@ static uint8_t _NMEA[NMEA_BUFFER_LEN];  // NMEA incoming buffer
 // normal NMEA: PMTK314,1,1,1,1,1,5,0,0,0,0,0,0,0,0,0,0,0,0,0
 // firmware info: PMTK605*31
 //	output: $PMTK705,AXN_3.8_3333_16042118,0000,V3.8.1 GP+GL,*6F
-
-// disable 1PPS: PMTK255,0
-// 	also: PMTK285,0,0
-// enable active interference cancellation: PMTK286,1
-// pedestrian mode: PMTK886,1 (slower than 5m/s)
-// vehicle mode: PMTK886,0 (faster than 5m/s)
-// set WGS84 datum: PMTK330,0
-// use gps, glonass, galileo, not galileo_full, beidou: PMTK353,1,1,0,0,1 (action failed - test)
-// use gps, glonass, galileo, not galileo_full, beidou: PMTK353,1,1,1,0,1 (action failed - test)
-// stop LOCUS logging: PMTK185,1
-// enable SBAS: PMTK355
 
 // wait time in ms
 static inline void _wait(const uint16_t ms)
@@ -50,15 +39,51 @@ static inline void _wait(const uint16_t ms)
 
 // calculates NMEA checksum
 // https://nmeachecksum.eqth.net
+// XOR of all the bytes between the $ and the * (not including the delimiters themselves)
 static uint8_t calculate_checksum(const char *str, const uint8_t len)
 {
-	//XOR of all the bytes between the $ and the * (not including the delimiters themselves)
 	uint8_t retval = 0;
 
 	for(uint8_t i = 0; i < len + 1; i++)	// go over the whole input string
 		retval ^= *(str + i);  // XOR the characters
 
 	return retval;	// return the XOR
+}
+
+// init function for GPS module
+static void _init(void)
+{
+//	__ORG1510MK4.public.Power(wakeup);	// power up & bring into normal mode
+	__ORG1510MK4.public.Write("PMTK330,0");  // set WGS84 datum
+	__ORG1510MK4.public.Write("PMTK185,1");  // stop LOCUS logging
+	__ORG1510MK4.public.Write("PMTK355"); 	// enable SBAS
+	__ORG1510MK4.public.Write("PMTK301,2");  // set DGPS to SBAS
+	__ORG1510MK4.public.Write("PMTK286,1");  // enable active interference cancellation
+	__ORG1510MK4.public.Write("PMTK356,0");  // disable HDOP theshold
+
+	__ORG1510MK4.public.Write("PMTK255,0"); 	// disable 1PPS
+	__ORG1510MK4.public.Write("PMTK285,0,0"); 	// 	also disable 1PPS
+
+	__ORG1510MK4.public.Write("PMTK886,1");  // pedestrian mode  (slower than 5m/s)
+//	__ORG1510MK4.public.Write("PMTK886,0"); // vehicle mode (faster than 5m/s)
+	__ORG1510MK4.public.Write("PMTK353,1,1,0,0,1");  // use gps, glonass, not galileo, not galileo_full, beidou (action failed - test)
+	__ORG1510MK4.public.Write("PMTK353,1,1,1,0,1");  // use gps, glonass, galileo, not galileo_full, beidou (action failed - test)
+
+	/* NMEA sentences:
+	 * 0 GLL - Geographical Position-Latitude/Longitude
+	 * 0 RMC - Recommended Minimum Specific GNSS Data
+	 * 1 VTG - Course over Ground and Ground Speed
+	 * 1 GGA - Global Positioning System Fix Data
+	 * 5 GSA - GNSS DOP and Active Satellites
+	 * 0 GSV - GNSS Satellites in View
+	 * ...
+	 * 1 ZDA - UTC Date/Time and Local Time Zone Offset
+	 * 0 MCHN - ???
+	 */
+	__ORG1510MK4.public.Write("PMTK314,0,0,1,1,5,0,0,0,0,0,0,0,0,0,0,0,0,1,0");  //
+//
+//	__ORG1510MK4.public.Power(off);  // power off
+
 }
 
 // GPS module power mode change control function
@@ -296,6 +321,8 @@ static void _Power(const org1510mk4_power_t state)
 				;						// wait until the wakeup pin goes high
 
 			__ORG1510MK4.public.Power(wakeup);	// then, wake up
+
+			_init();  // re-initialize the module
 			return;
 #endif
 		}
@@ -307,6 +334,12 @@ static void _Read(void)
 	;
 }
 
+//
+void _Parse(void)
+{
+
+}
+
 // writes a NEMA sentence to the GPS module
 // 	format is "PMTK313,1" - i.e. no $, checksum and no "\r\n"
 static void _Write(const char *str)
@@ -314,17 +347,18 @@ static void _Write(const char *str)
 	char outstr[82] = "\0";  // buffer for assembling the output string
 	uint8_t len = (uint8_t) strlen(str);	// length of incoming string
 
-	if(len > 76)	// invalid length: 82 - 2 (delimiters) - 3 (checksum) = 77
-		return;  // get out
+	if(len > 77)	// invalid length: 82 - 2 (delimiters) - 3 (checksum) = 77
+		return;  // invalid length, get out
 
 	sprintf(outstr, "$%s*%02X\r\n", str, calculate_checksum(str, len));  // assemble the raw NEMA command w. prefix, checksum and delimiters
 
 	HAL_UART_Transmit_DMA(__ORG1510MK4.huart, (const uint8_t*) outstr, (uint16_t) strlen(outstr));  // send assembled string to GPS module
 }
 
-static __org1510mk4_t  __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
+static __org1510mk4_t __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
 	{  //
 	.public.Power = &_Power,	// GPS module power mode change control function
+	.public.Parse = &_Parse,	//
 	.public.Read = &_Read,	//
 	.public.Write = &_Write  // writes a NEMA sentence to the GPS module
 	};
@@ -334,6 +368,8 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *in_huart)  //
 	__ORG1510MK4.huart = in_huart;	// store UART object
 	__ORG1510MK4.public.NMEA = _NMEA;  // tie in NMEA sentence buffer
 	__ORG1510MK4.currentPowerMode = 0;  // TODO - read from FeRAM, for now set to off by default
+
+//	_init();  // initialize the module
 
 	HAL_UART_Receive_DMA(__ORG1510MK4.huart, _NMEA, NMEA_BUFFER_LEN);  //
 

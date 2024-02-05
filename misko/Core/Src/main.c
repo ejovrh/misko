@@ -900,7 +900,22 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 			HAL_GPIO_TogglePin(User_LED_GPIO_Port, User_LED_Pin);
 			HAL_GPIO_TogglePin(GPS_Green_LED_GPIO_Port, GPS_Green_LED_Pin);
 
-			ORG1510MK4->Write("PMTK314,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");
+			ORG1510MK4->Write("PMTK314,0,0,1,1,5,0,0,0,0,0,0,0,0,0,0,0,0,1,0");
+
+//			ORG1510MK4->Write("PMTK330,0");  // set WGS84 datum
+//			ORG1510MK4->Write("PMTK185,1");  // stop LOCUS logging
+//			ORG1510MK4->Write("PMTK355"); 	// enable SBAS
+//			ORG1510MK4->Write("PMTK301,2");  // set DGPS to SBAS
+//			ORG1510MK4->Write("PMTK286,1");  // enable active interference cancellation
+//			ORG1510MK4->Write("PMTK356,0");  // disable HDOP theshold
+//
+//			ORG1510MK4->Write("PMTK255,0"); 	// disable 1PPS
+//			ORG1510MK4->Write("PMTK285,0,0"); 	// 	also disable 1PPS
+//			ORG1510MK4->Write("PMTK886,1");  // pedestrian mode  (slower than 5m/s)
+//			//	__ORG1510MK4.public.Write("PMTK886,0"); // vehicle mode (faster than 5m/s)
+//			ORG1510MK4->Write("PMTK353,1,1,0,0,1");  // use gps, glonass, not galileo, not galileo_full, beidou (action failed - test)
+//			ORG1510MK4->Write("PMTK353,1,1,1,0,1");  // use gps, glonass, galileo, not galileo_full, beidou (action failed - test)
+
 			return;
 		}
 
