@@ -7,11 +7,11 @@
 extern ADC_HandleTypeDef hadc1;  // TODO - move out of here
 extern volatile uint32_t __adc_dma_buffer[ADC_CHANNELS];  // store for ADC readout
 extern volatile uint32_t __adc_results[ADC_CHANNELS];  // store ADC average data
-extern UART_HandleTypeDef huart3;
 
 typedef struct	// org1510mk4c_t actual
 {
-	UART_HandleTypeDef *huart;  // HAL UART instance over which to communicate with the GPS module
+	UART_HandleTypeDef *uart_gps;  // HAL UART instance over which to communicate with the GPS module
+	UART_HandleTypeDef *uart_sys;  // HAL UART instance over which the whole device communicates with a host computer/VCP
 	volatile org1510mk4_power_t currentPowerMode;  // current power mode of the GPS module
 
 	org1510mk4_t public;  // public struct
@@ -348,7 +348,7 @@ static void _Read(void)
 //
 void _Parse(void)
 {
-	HAL_UART_Transmit_DMA(&huart3, ORG1510MK4->NMEA, 82);  // send GPS to VCP
+	HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, ORG1510MK4->NMEA, 82);  // send GPS to VCP
 
 }
 
@@ -364,7 +364,7 @@ static void _Write(const char *str)
 
 	sprintf(outstr, "$%s*%02X\r\n", str, calculate_checksum(str, len));  // assemble the raw NEMA command w. prefix, checksum and delimiters
 
-	while(HAL_UART_Transmit_IT(__ORG1510MK4.huart, (const uint8_t*) outstr, (uint16_t) strlen(outstr)) != HAL_OK)
+	while(HAL_UART_Transmit_IT(__ORG1510MK4.uart_gps, (const uint8_t*) outstr, (uint16_t) strlen(outstr)) != HAL_OK)
 		;  // send assembled string to GPS module & wait for completion
 
 	_wait(50);	// always wait a while. stuff works better that way...
@@ -378,16 +378,17 @@ static __org1510mk4_t __ORG1510MK4 =  // instantiate org1510mk4_t actual and set
 	.public.Write = &_Write  // writes a NEMA sentence to the GPS module
 	};
 
-org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *in_huart)  //
+org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys)  //
 {
-	__ORG1510MK4.huart = in_huart;	// store UART object
+	__ORG1510MK4.uart_gps = gps;  // store GPS module UART object
+	__ORG1510MK4.uart_sys = sys;  // store system UART object
 	__ORG1510MK4.public.NMEA = _NMEA;  // tie in NMEA sentence buffer
 	__ORG1510MK4.currentPowerMode = 0;  // TODO - read from FeRAM, for now set to off by default
 
 //	_init();  // initialize the module
 	__ORG1510MK4.public.Power(wakeup);
 
-	HAL_UART_Receive_DMA(__ORG1510MK4.huart, _NMEA, NMEA_BUFFER_LEN);  //
+	HAL_UART_Receive_DMA(__ORG1510MK4.uart_gps, _NMEA, NMEA_BUFFER_LEN);  //
 
 	return &__ORG1510MK4.public;  // set pointer to ORG1510MK4 public part
 }

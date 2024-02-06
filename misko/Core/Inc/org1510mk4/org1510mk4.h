@@ -26,7 +26,7 @@ typedef struct	// struct describing the GPS module functionality
 	void (*Write)(const char *str);  // writes a NEMA sentence to the GPS module
 } org1510mk4_t;
 
-org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *in_huart);  // the ORG1510MK4 constructor
+org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys);  // the ORG1510MK4 constructor
 
 extern org1510mk4_t *const ORG1510MK4;  // declare pointer to public struct part
 

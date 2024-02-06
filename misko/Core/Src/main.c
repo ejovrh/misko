@@ -189,7 +189,7 @@ int main(void)
 	sd_ctor(&hspi1, SPI1_SD_CS_GPIO_Port, SPI1_SD_CS_Pin, SD_CD_GPIO_Port, SD_CD_Pin);  // initialize SD Card object
 #endif
 #if USE_ORG1510MK4
-	org1510mk4_ctor(&huart1);  // initialise the GPS module object
+	org1510mk4_ctor(&huart1, &huart3);  // initialise the GPS module object
 #endif
 	/* USER CODE END 2 */
 
