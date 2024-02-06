@@ -7,6 +7,7 @@
 extern ADC_HandleTypeDef hadc1;  // TODO - move out of here
 extern volatile uint32_t __adc_dma_buffer[ADC_CHANNELS];  // store for ADC readout
 extern volatile uint32_t __adc_results[ADC_CHANNELS];  // store ADC average data
+extern UART_HandleTypeDef huart3;
 
 typedef struct	// org1510mk4c_t actual
 {
@@ -56,6 +57,8 @@ static uint8_t calculate_checksum(const char *str, const uint8_t len)
 static void _init(void)
 {
 //	__ORG1510MK4.public.Power(wakeup);	// power up & bring into normal mode
+	__ORG1510MK4.public.Write("PMTK314,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");  // shut the damn thing off first
+
 	__ORG1510MK4.public.Write("PMTK330,0");  // set WGS84 datum
 	__ORG1510MK4.public.Write("PMTK185,1");  // stop LOCUS logging
 	__ORG1510MK4.public.Write("PMTK355"); 	// enable SBAS
@@ -327,7 +330,9 @@ static void _Power(const org1510mk4_power_t state)
 			while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin) == GPIO_PIN_RESET)
 				;						// wait until the wakeup pin goes high
 
-			_init();  // re-initialize the module
+			_wait(450);  // first wait for module power-up
+			_init();  // then re-initialize the module
+
 			return;
 #endif
 		}
@@ -343,6 +348,7 @@ static void _Read(void)
 //
 void _Parse(void)
 {
+	HAL_UART_Transmit_DMA(&huart3, ORG1510MK4->NMEA, 82);  // send GPS to VCP
 
 }
 

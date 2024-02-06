@@ -925,8 +925,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if(huart == &huart1)
 		{
-			HAL_UART_Transmit_DMA(&huart3, ORG1510MK4->NMEA, 82);  // send GPS to VCP
-			;
+			ORG1510MK4->Parse();
 		}
 
 	if(huart == &huart3)
