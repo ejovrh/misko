@@ -903,11 +903,13 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 			return;
 		}
 
+#if USE_ADXL345
 	if(GPIO_Pin == ADXL345_INT1_Pin)  // accelerometer interrupt (act. or inact.)
 		{
 			ADXL345->ISR();  // execute the ISR callback
 			return;
 		}
+#endif
 }
 
 // EXTI falling edge callback
@@ -920,7 +922,7 @@ void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
 		}
 }
 
-// UART reception
+// UART complete reception
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if(huart == &huart1)
@@ -969,6 +971,20 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 			if(HAL_UART_Receive_IT(&huart3, &VCPRxChar, 1) != HAL_OK)  // receive whatever from VCP
 				Error_Handler();
+		}
+}
+
+// UART half-complete reception
+void HAL_UART_RxHalfCpltCallback(UART_HandleTypeDef *huart)
+{
+	if(huart == &huart1)
+		{
+			ORG1510MK4->Parse();
+		}
+
+	if(huart == &huart3)
+		{
+			;
 		}
 }
 /* USER CODE END 4 */
