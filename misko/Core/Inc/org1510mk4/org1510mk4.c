@@ -388,8 +388,8 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 //	_init();  // initialize the module
 	__ORG1510MK4.public.Power(wakeup);
 
-	__HAL_UART_ENABLE_IT(__ORG1510MK4.uart_gps, UART_IT_IDLE);
-	HAL_UART_Receive_DMA(__ORG1510MK4.uart_gps, _NMEA, NMEA_BUFFER_LEN);  //
+	__HAL_UART_ENABLE_IT(__ORG1510MK4.uart_gps, UART_IT_IDLE);	// enable idle line interrupt
+	HAL_UARTEx_ReceiveToIdle_DMA(__ORG1510MK4.uart_gps, _NMEA, NMEA_BUFFER_LEN);	// start reception
 
 	return &__ORG1510MK4.public;  // set pointer to ORG1510MK4 public part
 }

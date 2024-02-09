@@ -136,6 +136,7 @@ void Error_Handler(void);
 
 #define ADC_CHANNELS 4	// how many ADC channels are we using
 #define ADC_MEASURE_ITERATIONS 8 // average over one second (time-base is timer1 on a 125ms)
+
 enum mj000_adcchannels
 {  // order is important! - this MCU has ranking and the order of ADC channels is defined by ranking
 	  Vgps,  // SuperCap voltage  - PA0

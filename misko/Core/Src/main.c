@@ -973,20 +973,6 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 				Error_Handler();
 		}
 }
-
-// UART half-complete reception
-void HAL_UART_RxHalfCpltCallback(UART_HandleTypeDef *huart)
-{
-	if(huart == &huart1)
-		{
-			ORG1510MK4->Parse();
-		}
-
-	if(huart == &huart3)
-		{
-			;
-		}
-}
 /* USER CODE END 4 */
 
 /* MPU Configuration */
