@@ -21,7 +21,7 @@ typedef struct	// struct describing the GPS module functionality
 {
 	uint8_t *NMEA;  //
 	void (*Power)(const org1510mk4_power_t state);  // GPS module power mode change control function
-	void (*Parse)(void);	//
+	void (*Parse)(uint16_t Size);  //
 	void (*Read)(void);  //
 	void (*Write)(const char *str);  // writes a NEMA sentence to the GPS module
 } org1510mk4_t;

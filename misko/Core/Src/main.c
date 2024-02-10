@@ -67,8 +67,6 @@ TIM_HandleTypeDef htim1;
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart3;
-DMA_NodeTypeDef Node_GPDMA1_Channel3;
-DMA_QListTypeDef List_GPDMA1_Channel3;
 DMA_HandleTypeDef handle_GPDMA1_Channel3;
 DMA_HandleTypeDef handle_GPDMA1_Channel1;
 DMA_HandleTypeDef handle_GPDMA1_Channel0;
@@ -927,7 +925,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 {
 	if(huart == &huart1)
 		{
-			ORG1510MK4->Parse();
+			;
 		}
 
 	if(huart == &huart3)
@@ -972,6 +970,15 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 			if(HAL_UART_Receive_IT(&huart3, &VCPRxChar, 1) != HAL_OK)  // receive whatever from VCP
 				Error_Handler();
 		}
+}
+
+void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
+{
+	if(huart == &huart1)
+		{
+			ORG1510MK4->Parse(Size);
+		}
+
 }
 /* USER CODE END 4 */
 

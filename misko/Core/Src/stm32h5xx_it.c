@@ -73,8 +73,6 @@ extern DMA_HandleTypeDef handle_GPDMA1_Channel7;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel6;
 extern SPI_HandleTypeDef hspi1;
 extern TIM_HandleTypeDef htim1;
-extern DMA_NodeTypeDef Node_GPDMA1_Channel3;
-extern DMA_QListTypeDef List_GPDMA1_Channel3;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel3;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel1;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel0;
@@ -474,11 +472,7 @@ void USART1_IRQHandler(void)
 	/* USER CODE END USART1_IRQn 0 */
 	HAL_UART_IRQHandler(&huart1);
 	/* USER CODE BEGIN USART1_IRQn 1 */
-	if(__HAL_UART_GET_FLAG(&huart1, UART_FLAG_IDLE))
-		{
-			__HAL_UART_CLEAR_IDLEFLAG(&huart1);
-			HAL_UART_RxCpltCallback(&huart1);
-		}
+
 	/* USER CODE END USART1_IRQn 1 */
 }
 

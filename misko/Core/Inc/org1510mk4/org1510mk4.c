@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "lwrb\lwrb.h"
+
 extern ADC_HandleTypeDef hadc1;  // TODO - move out of here
 extern volatile uint32_t __adc_dma_buffer[ADC_CHANNELS];  // store for ADC readout
 extern volatile uint32_t __adc_results[ADC_CHANNELS];  // store ADC average data
@@ -23,6 +25,15 @@ static __org1510mk4_t __ORG1510MK4 __attribute__ ((section (".data")));  // prea
 #define NMEA_BUFFER_LEN 82	// officially, a NMEA sentence (from $ to \n) is 80 characters long. 2 more to account for \r\n
 
 static uint8_t _NMEA[NMEA_BUFFER_LEN];  // NMEA incoming buffer
+
+#define ARRAY_LEN(x)            (sizeof(x) / sizeof((x)[0]))
+
+#define UART_DMA_RX_BUFFER_LEN 64
+static uint8_t usart_rx_dma_buffer[UART_DMA_RX_BUFFER_LEN];
+
+#define LWRB_BUFFER_LEN 256
+lwrb_t lwrb;
+uint8_t lwrb_buffer[LWRB_BUFFER_LEN];
 
 // all NMEA off: 	PMTK314,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 // NMEA RMC 5s: 	PMTK314,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -85,8 +96,10 @@ static void _init(void)
 	 * 1 ZDA - UTC Date/Time and Local Time Zone Offset
 	 * 0 MCHN - ???
 	 */
-	__ORG1510MK4.public.Write("PMTK314,0,0,1,1,5,0,0,0,0,0,0,0,0,0,0,0,0,1,0");  //
-//
+//	__ORG1510MK4.public.Write("PMTK314,0,0,1,1,5,0,0,0,0,0,0,0,0,0,0,0,0,1,0");  //
+	__ORG1510MK4.public.Write("PMTK314,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0");  //
+
+	//
 //	__ORG1510MK4.public.Power(off);  // power off
 
 }
@@ -346,10 +359,90 @@ static void _Read(void)
 }
 
 //
-void _Parse(void)
+void usart_process_data(const void *data, size_t len)
 {
-	HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, ORG1510MK4->NMEA, 82);  // send GPS to VCP
+	lwrb_write(&lwrb, data, len); /* Write data to receive buffer */
+}
 
+//
+void rx_start(void)
+{
+	if(HAL_OK != HAL_UARTEx_ReceiveToIdle_DMA(__ORG1510MK4.uart_gps, usart_rx_dma_buffer, UART_DMA_RX_BUFFER_LEN))  // start reception)
+		Error_Handler();
+
+	__HAL_DMA_DISABLE_IT(__ORG1510MK4.uart_gps->hdmarx, DMA_IT_HT);
+}
+
+//
+void _Parse(uint16_t Size)
+{
+
+	static volatile size_t old_pos;
+	volatile size_t pos;
+	volatile size_t n = __HAL_DMA_GET_COUNTER(__ORG1510MK4.uart_gps->hdmarx);
+
+	if(n == 0)
+		return;
+
+	pos = UART_DMA_RX_BUFFER_LEN - n;  // number of transferred bytes
+
+	if(pos != old_pos)
+		{
+			if(pos > old_pos)
+				{
+					/* Current position is over previous one
+					 *
+					 * Processing is done in "linear" mode.
+					 *
+					 * Application processing is fast with single data block,
+					 * length is simply calculated by subtracting pointers
+					 *
+					 * [   0   ]
+					 * [   1   ] <- old_pos |------------------------------------|
+					 * [   2   ]            |                                    |
+					 * [   3   ]            | Single block (len = pos - old_pos) |
+					 * [   4   ]            |                                    |
+					 * [   5   ]            |------------------------------------|
+					 * [   6   ] <- pos
+					 * [   7   ]
+					 * [ N - 1 ]
+					 */
+					usart_process_data(&usart_rx_dma_buffer[old_pos], pos - old_pos);
+				}
+			else
+				{
+					/*
+					 * Processing is done in "overflow" mode..
+					 *
+					 * Application must process data twice,
+					 * since there are 2 linear memory blocks to handle
+					 *
+					 * [   0   ]            |---------------------------------|
+					 * [   1   ]            | Second block (len = pos)        |
+					 * [   2   ]            |---------------------------------|
+					 * [   3   ] <- pos
+					 * [   4   ] <- old_pos |---------------------------------|
+					 * [   5   ]            |                                 |
+					 * [   6   ]            | First block (len = N - old_pos) |
+					 * [   7   ]            |                                 |
+					 * [ N - 1 ]            |---------------------------------|
+					 */
+					usart_process_data(&usart_rx_dma_buffer[old_pos], ARRAY_LEN(usart_rx_dma_buffer) - old_pos);
+
+					if(pos > 0)
+						{
+							usart_process_data(&usart_rx_dma_buffer[0], pos);
+						}
+				}
+
+			old_pos = pos; /* Save current position as old for next transfers */
+
+//			HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, usart_rx_dma_buffer, UART_DMA_RX_BUFFER_LEN);  // send GPS to VCP
+		}
+
+	HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, usart_rx_dma_buffer, UART_DMA_RX_BUFFER_LEN);  // send GPS to VCP
+
+	rx_start();
 }
 
 // writes a NEMA sentence to the GPS module
@@ -385,11 +478,12 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 	__ORG1510MK4.public.NMEA = _NMEA;  // tie in NMEA sentence buffer
 	__ORG1510MK4.currentPowerMode = 0;  // TODO - read from FeRAM, for now set to off by default
 
-//	_init();  // initialize the module
-	__ORG1510MK4.public.Power(wakeup);
+	lwrb_init(&lwrb, lwrb_buffer, sizeof(lwrb_buffer));
 
-	__HAL_UART_ENABLE_IT(__ORG1510MK4.uart_gps, UART_IT_IDLE);	// enable idle line interrupt
-	HAL_UARTEx_ReceiveToIdle_DMA(__ORG1510MK4.uart_gps, _NMEA, NMEA_BUFFER_LEN);	// start reception
+	rx_start();  // start DMA reception
+
+	//	_init();  // initialize the module
+	__ORG1510MK4.public.Power(wakeup);  // wake the module
 
 	return &__ORG1510MK4.public;  // set pointer to ORG1510MK4 public part
 }
