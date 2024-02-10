@@ -73,6 +73,8 @@ extern DMA_HandleTypeDef handle_GPDMA1_Channel7;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel6;
 extern SPI_HandleTypeDef hspi1;
 extern TIM_HandleTypeDef htim1;
+extern DMA_NodeTypeDef Node_GPDMA1_Channel3;
+extern DMA_QListTypeDef List_GPDMA1_Channel3;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel3;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel1;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel0;

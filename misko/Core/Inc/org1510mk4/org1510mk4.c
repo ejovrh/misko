@@ -96,8 +96,8 @@ static void _init(void)
 	 * 1 ZDA - UTC Date/Time and Local Time Zone Offset
 	 * 0 MCHN - ???
 	 */
-//	__ORG1510MK4.public.Write("PMTK314,0,0,1,1,5,0,0,0,0,0,0,0,0,0,0,0,0,1,0");  //
-	__ORG1510MK4.public.Write("PMTK314,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0");  //
+	__ORG1510MK4.public.Write("PMTK314,0,0,1,1,5,0,0,0,0,0,0,0,0,0,0,0,0,1,0");  //
+//	__ORG1510MK4.public.Write("PMTK314,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0");  //
 
 	//
 //	__ORG1510MK4.public.Power(off);  // power off
@@ -370,7 +370,7 @@ void rx_start(void)
 	if(HAL_OK != HAL_UARTEx_ReceiveToIdle_DMA(__ORG1510MK4.uart_gps, usart_rx_dma_buffer, UART_DMA_RX_BUFFER_LEN))  // start reception)
 		Error_Handler();
 
-	__HAL_DMA_DISABLE_IT(__ORG1510MK4.uart_gps->hdmarx, DMA_IT_HT);
+//	__HAL_DMA_DISABLE_IT(__ORG1510MK4.uart_gps->hdmarx, DMA_IT_HT);
 }
 
 //
@@ -436,13 +436,9 @@ void _Parse(uint16_t Size)
 				}
 
 			old_pos = pos; /* Save current position as old for next transfers */
-
-//			HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, usart_rx_dma_buffer, UART_DMA_RX_BUFFER_LEN);  // send GPS to VCP
 		}
 
 	HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, usart_rx_dma_buffer, UART_DMA_RX_BUFFER_LEN);  // send GPS to VCP
-
-	rx_start();
 }
 
 // writes a NEMA sentence to the GPS module
