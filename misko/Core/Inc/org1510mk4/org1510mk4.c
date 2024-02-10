@@ -28,9 +28,6 @@ static uint8_t _NMEA[NMEA_BUFFER_LEN];  // NMEA incoming buffer
 
 #define ARRAY_LEN(x)            (sizeof(x) / sizeof((x)[0]))
 
-#define UART_DMA_RX_BUFFER_LEN 64
-static uint8_t usart_rx_dma_buffer[UART_DMA_RX_BUFFER_LEN];
-
 #define LWRB_BUFFER_LEN 256
 lwrb_t lwrb;
 uint8_t lwrb_buffer[LWRB_BUFFER_LEN];
@@ -367,78 +364,41 @@ void usart_process_data(const void *data, size_t len)
 //
 void rx_start(void)
 {
-	if(HAL_OK != HAL_UARTEx_ReceiveToIdle_DMA(__ORG1510MK4.uart_gps, usart_rx_dma_buffer, UART_DMA_RX_BUFFER_LEN))  // start reception)
+	if(HAL_OK != HAL_UARTEx_ReceiveToIdle_DMA(__ORG1510MK4.uart_gps, _NMEA, NMEA_BUFFER_LEN))  // start reception)
 		Error_Handler();
 
 //	__HAL_DMA_DISABLE_IT(__ORG1510MK4.uart_gps->hdmarx, DMA_IT_HT);
 }
 
-//
-void _Parse(uint16_t Size)
+// transfer data from circular DMA RX buffer into ringbuffer
+// 	double buffering
+void _Parse(const uint16_t Size)
 {
-
 	static volatile size_t old_pos;
-	volatile size_t pos;
-	volatile size_t n = __HAL_DMA_GET_COUNTER(__ORG1510MK4.uart_gps->hdmarx);
 
-	if(n == 0)
+	if(Size == 0)  // CHECKME - needed?
 		return;
 
-	pos = UART_DMA_RX_BUFFER_LEN - n;  // number of transferred bytes
-
-	if(pos != old_pos)
+	if(Size != old_pos)  // new data came in, so...
 		{
-			if(pos > old_pos)
+			if(Size > old_pos)	// compare positions: liner or overflow mode
 				{
-					/* Current position is over previous one
-					 *
-					 * Processing is done in "linear" mode.
-					 *
-					 * Application processing is fast with single data block,
-					 * length is simply calculated by subtracting pointers
-					 *
-					 * [   0   ]
-					 * [   1   ] <- old_pos |------------------------------------|
-					 * [   2   ]            |                                    |
-					 * [   3   ]            | Single block (len = pos - old_pos) |
-					 * [   4   ]            |                                    |
-					 * [   5   ]            |------------------------------------|
-					 * [   6   ] <- pos
-					 * [   7   ]
-					 * [ N - 1 ]
-					 */
-					usart_process_data(&usart_rx_dma_buffer[old_pos], pos - old_pos);
+					// current position ahead of previous one -- processing is done in "linear" mode.
+					usart_process_data(&_NMEA[old_pos], Size);	// write out n bytes of data from DMA buffer at old_pos
 				}
 			else
 				{
-					/*
-					 * Processing is done in "overflow" mode..
-					 *
-					 * Application must process data twice,
-					 * since there are 2 linear memory blocks to handle
-					 *
-					 * [   0   ]            |---------------------------------|
-					 * [   1   ]            | Second block (len = pos)        |
-					 * [   2   ]            |---------------------------------|
-					 * [   3   ] <- pos
-					 * [   4   ] <- old_pos |---------------------------------|
-					 * [   5   ]            |                                 |
-					 * [   6   ]            | First block (len = N - old_pos) |
-					 * [   7   ]            |                                 |
-					 * [ N - 1 ]            |---------------------------------|
-					 */
-					usart_process_data(&usart_rx_dma_buffer[old_pos], ARRAY_LEN(usart_rx_dma_buffer) - old_pos);
+					// current position is in front of previous one -- processing is done in "overflow" mode
+					usart_process_data(&_NMEA[old_pos], NMEA_BUFFER_LEN - old_pos);  // write until the end of the buffer
 
-					if(pos > 0)
-						{
-							usart_process_data(&usart_rx_dma_buffer[0], pos);
-						}
+					if(Size > 0)
+						usart_process_data(&_NMEA[0], Size);	// write
 				}
 
-			old_pos = pos; /* Save current position as old for next transfers */
+			old_pos = Size;  // save current position for next iteration
 		}
 
-	HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, usart_rx_dma_buffer, UART_DMA_RX_BUFFER_LEN);  // send GPS to VCP
+	HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, _NMEA, NMEA_BUFFER_LEN);  // send GPS to VCP
 }
 
 // writes a NEMA sentence to the GPS module
