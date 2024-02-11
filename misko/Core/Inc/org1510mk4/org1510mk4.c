@@ -4,7 +4,13 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "lwrb\lwrb.h"
+#include "lwrb\lwrb.h"	// Lightweight RingBuffer - https://docs.majerle.eu/projects/lwrb/en/latest/index.html
+
+#define DIRTY_POWER_MODE_CHANGE 0	// circumvents power mode change safeguards to e.g. deliberately drain the capacitor
+#define DEBUG_LWRB_FREE 1 // data member indicating LwRB free space
+
+#define GPS_DMA_INPUT_BUFFER_LEN 64	// officially, a NMEA sentence (from $ to \n) is 80 characters long. 2 more to account for \r\n
+#define LWRB_BUFFER_LEN 256	// LwRB buffer size
 
 extern ADC_HandleTypeDef hadc1;  // TODO - move out of here
 extern volatile uint32_t __adc_dma_buffer[ADC_CHANNELS];  // store for ADC readout
@@ -16,18 +22,17 @@ typedef struct	// org1510mk4c_t actual
 	UART_HandleTypeDef *uart_sys;  // HAL UART instance over which the whole device communicates with a host computer/VCP
 	volatile org1510mk4_power_t currentPowerMode;  // current power mode of the GPS module
 
+#if DEBUG_LWRB_FREE
+	uint16_t lwrb_free;  // ringbuffer free memory
+#endif
+
 	org1510mk4_t public;  // public struct
 } __org1510mk4_t;
 
-static __org1510mk4_t    __ORG1510MK4    __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
+static __org1510mk4_t __ORG1510MK4 __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
 
-#define DIRTY_POWER_MODE_CHANGE 0	// circumvents power mode change safeguards to e.g. deliberately drain the capacitor
-
-#define NMEA_BUFFER_LEN 64	// officially, a NMEA sentence (from $ to \n) is 80 characters long. 2 more to account for \r\n
-static uint8_t _NMEA[NMEA_BUFFER_LEN];  // NMEA incoming buffer
-
-#define LWRB_BUFFER_LEN 256
-lwrb_t lwrb;
+static uint8_t gps_dma_input_buffer[GPS_DMA_INPUT_BUFFER_LEN];  // 1st circular buffer: incoming GPS UART DMA data
+lwrb_t lwrb;	// 2nd circular buffer: accumulate and then process
 uint8_t lwrb_buffer[LWRB_BUFFER_LEN];
 
 // all NMEA off: 	PMTK314,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -356,11 +361,11 @@ static void _Read(void)
 //
 void rx_start(void)
 {
-	if(HAL_OK != HAL_UARTEx_ReceiveToIdle_DMA(__ORG1510MK4.uart_gps, _NMEA, NMEA_BUFFER_LEN))  // start reception)
+	if(HAL_OK != HAL_UARTEx_ReceiveToIdle_DMA(__ORG1510MK4.uart_gps, gps_dma_input_buffer, GPS_DMA_INPUT_BUFFER_LEN))  // start reception)
 		Error_Handler();
 }
 
-// transfer data from circular DMA RX buffer into ringbuffer
+// transfer data from circular DMA RX buffer into ring buffe
 // 	double buffering
 void _Parse(uint16_t pos)
 {
@@ -371,23 +376,64 @@ void _Parse(uint16_t pos)
 		{
 			if(pos > old_pos)
 				{
-					lwrb_write(&lwrb, &_NMEA[old_pos], pos - old_pos);
+					lwrb_write(&lwrb, &gps_dma_input_buffer[old_pos], pos - old_pos);
 				}
 			else
 				{
-					lwrb_write(&lwrb, &_NMEA[old_pos], NMEA_BUFFER_LEN - old_pos);
+					lwrb_write(&lwrb, &gps_dma_input_buffer[old_pos], GPS_DMA_INPUT_BUFFER_LEN - old_pos);
 
 					if(pos > 0)
 						{
-							lwrb_write(&lwrb, &_NMEA[0], pos);
+							lwrb_write(&lwrb, &gps_dma_input_buffer[0], pos);
 						}
 				}
 			old_pos = pos;
 		}
 
-	// process ringbuffer data
+#if DEBUG_LWRB_FREE
+	__ORG1510MK4.lwrb_free = (uint16_t) lwrb_get_free(&lwrb);  // have free memory value visible
 
-	HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, _NMEA, (uint16_t) strlen((const char*) _NMEA));  // send GPS to VCP
+	if(__ORG1510MK4.lwrb_free == 0)  // LwRB memory used up: hang here
+		Error_Handler();
+#endif
+
+	lwrb_sz_t nmea_start_pos;  // position store for NMEA sentence start - not needed at all
+	if(lwrb_find(&lwrb, "$", 1, 0, &nmea_start_pos))  // starting from the current read pointer location, find the NMEA sentence start marker
+		{
+			lwrb_sz_t nmea_terminator_pos;	// position store for NMEA terminator start position
+			if(lwrb_find(&lwrb, "\r\n", 2, 0, &nmea_terminator_pos))  // starting from current read pointer location, find the terminator start
+				{
+					uint8_t out[82] = "\0";  // output box for uart dma tx
+
+					if(nmea_terminator_pos > lwrb.r)  // linear region
+						{
+							volatile lwrb_sz_t len = nmea_terminator_pos - lwrb.r + 2;  // the terminators are from the current read pointer len away
+
+							lwrb_read(&lwrb, &out, len);	// read out len characters into out
+						}
+					else  // overflow region
+						{
+							// the terminators are in overflow:
+							volatile lwrb_sz_t rest = GPS_DMA_INPUT_BUFFER_LEN - lwrb.r;  // from the current read pointer to buffer end
+							volatile lwrb_sz_t extra = nmea_terminator_pos - rest + 2;	// then from buffer start some more
+
+							lwrb_read(&lwrb, &out, rest);  // read out len characters into out
+							lwrb_read(&lwrb, &out[rest], extra);  // read out len characters into out
+						}
+
+					HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, out, (uint16_t) strlen((const char*) out));  // send GPS to VCP
+				}
+			else
+				{
+					// TODO - no NMEA end found
+				}
+		}
+	else
+		{
+			// TODO - no NMEA start found
+		}
+
+	// process ringbuffer data
 }
 
 // writes a NEMA sentence to the GPS module
@@ -408,7 +454,7 @@ static void _Write(const char *str)
 	_wait(50);	// always wait a while. stuff works better that way...
 }
 
-static __org1510mk4_t    __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
+static __org1510mk4_t __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
 	{  //
 	.public.Power = &_Power,	// GPS module power mode change control function
 	.public.Parse = &_Parse,	//
@@ -420,7 +466,7 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 {
 	__ORG1510MK4.uart_gps = gps;  // store GPS module UART object
 	__ORG1510MK4.uart_sys = sys;  // store system UART object
-	__ORG1510MK4.public.NMEA = _NMEA;  // tie in NMEA sentence buffer
+//	__ORG1510MK4.public.NMEA = gps_dma_input_buffer;  // tie in NMEA sentence buffer
 	__ORG1510MK4.currentPowerMode = 0;  // TODO - read from FeRAM, for now set to off by default
 
 	lwrb_init(&lwrb, lwrb_buffer, sizeof(lwrb_buffer));
