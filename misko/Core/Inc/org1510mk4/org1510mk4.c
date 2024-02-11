@@ -22,13 +22,11 @@ typedef struct	// org1510mk4c_t actual
 static __org1510mk4_t __ORG1510MK4 __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
 
 #define DIRTY_POWER_MODE_CHANGE 0	// circumvents power mode change safeguards to e.g. deliberately drain the capacitor
-#define NMEA_BUFFER_LEN 82	// officially, a NMEA sentence (from $ to \n) is 80 characters long. 2 more to account for \r\n
+#define NMEA_BUFFER_LEN 64	// officially, a NMEA sentence (from $ to \n) is 80 characters long. 2 more to account for \r\n
 
 static uint8_t _NMEA[NMEA_BUFFER_LEN];  // NMEA incoming buffer
 
-#define ARRAY_LEN(x)            (sizeof(x) / sizeof((x)[0]))
-
-#define LWRB_BUFFER_LEN 256
+#define LWRB_BUFFER_LEN 1024
 lwrb_t lwrb;
 uint8_t lwrb_buffer[LWRB_BUFFER_LEN];
 
@@ -356,49 +354,37 @@ static void _Read(void)
 }
 
 //
-void usart_process_data(const void *data, size_t len)
-{
-	lwrb_write(&lwrb, data, len); /* Write data to receive buffer */
-}
-
-//
 void rx_start(void)
 {
 	if(HAL_OK != HAL_UARTEx_ReceiveToIdle_DMA(__ORG1510MK4.uart_gps, _NMEA, NMEA_BUFFER_LEN))  // start reception)
 		Error_Handler();
-
-//	__HAL_DMA_DISABLE_IT(__ORG1510MK4.uart_gps->hdmarx, DMA_IT_HT);
 }
 
 // transfer data from circular DMA RX buffer into ringbuffer
 // 	double buffering
-void _Parse(const uint16_t Size)
+void _Parse(uint16_t pos)
 {
-	static volatile size_t old_pos;
+	static uint16_t old_pos;
 
-	if(Size == 0)  // CHECKME - needed?
-		return;
-
-	if(Size != old_pos)  // new data came in, so...
+	if(pos != old_pos)
 		{
-			if(Size > old_pos)	// compare positions: liner or overflow mode
+			if(pos > old_pos)
 				{
-					// current position ahead of previous one -- processing is done in "linear" mode.
-					usart_process_data(&_NMEA[old_pos], Size);	// write out n bytes of data from DMA buffer at old_pos
+					lwrb_write(&lwrb, &_NMEA[old_pos], pos - old_pos);
 				}
 			else
 				{
-					// current position is in front of previous one -- processing is done in "overflow" mode
-					usart_process_data(&_NMEA[old_pos], NMEA_BUFFER_LEN - old_pos);  // write until the end of the buffer
+					lwrb_write(&lwrb, &_NMEA[old_pos], NMEA_BUFFER_LEN - old_pos);
 
-					if(Size > 0)
-						usart_process_data(&_NMEA[0], Size);	// write
+					if(pos > 0)
+						{
+							lwrb_write(&lwrb, &_NMEA[0], pos);
+						}
 				}
-
-			old_pos = Size;  // save current position for next iteration
+			old_pos = pos;
 		}
 
-	HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, _NMEA, NMEA_BUFFER_LEN);  // send GPS to VCP
+	HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, _NMEA, (uint16_t) strlen((const char*) _NMEA));  // send GPS to VCP
 }
 
 // writes a NEMA sentence to the GPS module
