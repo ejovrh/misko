@@ -19,14 +19,14 @@ typedef struct	// org1510mk4c_t actual
 	org1510mk4_t public;  // public struct
 } __org1510mk4_t;
 
-static __org1510mk4_t __ORG1510MK4 __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
+static __org1510mk4_t    __ORG1510MK4    __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
 
 #define DIRTY_POWER_MODE_CHANGE 0	// circumvents power mode change safeguards to e.g. deliberately drain the capacitor
-#define NMEA_BUFFER_LEN 64	// officially, a NMEA sentence (from $ to \n) is 80 characters long. 2 more to account for \r\n
 
+#define NMEA_BUFFER_LEN 64	// officially, a NMEA sentence (from $ to \n) is 80 characters long. 2 more to account for \r\n
 static uint8_t _NMEA[NMEA_BUFFER_LEN];  // NMEA incoming buffer
 
-#define LWRB_BUFFER_LEN 1024
+#define LWRB_BUFFER_LEN 256
 lwrb_t lwrb;
 uint8_t lwrb_buffer[LWRB_BUFFER_LEN];
 
@@ -366,6 +366,7 @@ void _Parse(uint16_t pos)
 {
 	static uint16_t old_pos;
 
+	// fill ringbuffer
 	if(pos != old_pos)
 		{
 			if(pos > old_pos)
@@ -383,6 +384,8 @@ void _Parse(uint16_t pos)
 				}
 			old_pos = pos;
 		}
+
+	// process ringbuffer data
 
 	HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, _NMEA, (uint16_t) strlen((const char*) _NMEA));  // send GPS to VCP
 }
@@ -405,7 +408,7 @@ static void _Write(const char *str)
 	_wait(50);	// always wait a while. stuff works better that way...
 }
 
-static __org1510mk4_t __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
+static __org1510mk4_t    __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
 	{  //
 	.public.Power = &_Power,	// GPS module power mode change control function
 	.public.Parse = &_Parse,	//
@@ -422,6 +425,7 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 
 	lwrb_init(&lwrb, lwrb_buffer, sizeof(lwrb_buffer));
 
+	// TODO - move rx_start() into _Power()
 	rx_start();  // start DMA reception
 
 	//	_init();  // initialize the module
