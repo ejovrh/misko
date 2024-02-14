@@ -31,7 +31,7 @@ typedef struct	// org1510mk4c_t actual
 	org1510mk4_t public;  // public struct
 } __org1510mk4_t;
 
-static __org1510mk4_t __ORG1510MK4 __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
+static __org1510mk4_t                 __ORG1510MK4                 __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
 
 static uint8_t gps_dma_input_buffer[GPS_DMA_INPUT_BUFFER_LEN];  // 1st circular buffer: incoming GPS UART DMA data
 lwrb_t lwrb;	// 2nd circular buffer: accumulate and then process
@@ -98,7 +98,7 @@ static void _init(void)
 	 * 1 ZDA - UTC Date/Time and Local Time Zone Offset
 	 * 0 MCHN - ???
 	 */
-	__ORG1510MK4.public.Write("PMTK314,0,0,1,1,5,0,0,0,0,0,0,0,0,0,0,0,0,1,0");  //
+	__ORG1510MK4.public.Write("PMTK314,0,0,1,1,5,5,0,0,0,0,0,0,0,0,0,0,0,1,0");  //
 //	__ORG1510MK4.public.Write("PMTK314,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0");  //
 
 	//
@@ -174,7 +174,7 @@ static void _Power(const org1510mk4_power_t state)
 		}
 
 	if(state == backup)  // "backup mode", DS. ch. 4.3.15
-		{
+		{  // FIXME - module seems to reset when entering/exiting backup mode
 #if DIRTY_POWER_MODE_CHANGE
 			HAL_UART_Transmit_DMA(&huart1, (const uint8_t*) "$PMTK225,4*2F\r\n", 15);  // send backup mode command
 
@@ -189,8 +189,8 @@ static void _Power(const org1510mk4_power_t state)
 					__ORG1510MK4.public.Write("PMTK225,4");  // send backup mode command
 
 					// FIXME - sometimes this is blocking
-					while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin))
-						;						// wait until the wakeup pin goes low
+//					while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin))
+//						;						// wait until the wakeup pin goes low
 				}
 
 			__ORG1510MK4.currentPowerMode = state;	// save the current power mode
@@ -231,8 +231,9 @@ static void _Power(const org1510mk4_power_t state)
 
 			if(__ORG1510MK4.currentPowerMode > wakeup)  // if the module is in a lighter sleep state
 				{
-					while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin) == GPIO_PIN_RESET)
-						;						// wait until the wakeup pin goes high
+					// FIXME - blocks when transitioning from standby to wake
+//					while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin) == GPIO_PIN_RESET)
+//						;						// wait until the wakeup pin goes high
 
 					__ORG1510MK4.public.Write("PMTK225,0");  // wakeup command - transit into full power mode
 				}
@@ -243,7 +244,7 @@ static void _Power(const org1510mk4_power_t state)
 		}
 
 	if(state == standby)  // standby mode, DS. ch. 4.3.12
-		{
+		{  // FIXME - entering standby seems to reset the module
 #if DIRTY_POWER_MODE_CHANGE
 			HAL_UART_Transmit_DMA(&huart1, (const uint8_t*) "$PMTK161,0*28\r\n", 15);  // then go into standby
 
@@ -363,34 +364,43 @@ static void _Read(void)
 //
 void rx_start(void)
 {
-	if(HAL_OK != HAL_UARTEx_ReceiveToIdle_DMA(__ORG1510MK4.uart_gps, gps_dma_input_buffer, GPS_DMA_INPUT_BUFFER_LEN))  // start reception)
-		Error_Handler();
+	HAL_UARTEx_ReceiveToIdle_DMA(__ORG1510MK4.uart_gps, gps_dma_input_buffer, GPS_DMA_INPUT_BUFFER_LEN);
+
+//	if(HAL_OK != HAL_UARTEx_ReceiveToIdle_DMA(__ORG1510MK4.uart_gps, gps_dma_input_buffer, GPS_DMA_INPUT_BUFFER_LEN))  // start reception)
+//		Error_Handler();
 }
 
-// transfer data from circular DMA RX buffer into ring buffe
+// transfer data from circular DMA RX buffer into ring buffer
 // 	double buffering
-void _Parse(uint16_t pos)
+void _Parse(uint16_t high_pos)
 {
-	static uint16_t old_pos;
+	// high_pos indicates the position in the circular DMA reception buffer until which data is available
+	// it is NOT the length of new data
 
-	// fill ringbuffer
-	if(pos != old_pos)
+	// safeguard against an RX event interrupt where no new data has come in
+	if(high_pos == 0)  // no new data
+		return;
+
+	static uint16_t low_pos;
+
+	if(high_pos > low_pos)  // linear region
 		{
-			if(pos > old_pos)
-				{
-					lwrb_write(&lwrb, &gps_dma_input_buffer[old_pos], pos - old_pos);
-				}
-			else
-				{
-					lwrb_write(&lwrb, &gps_dma_input_buffer[old_pos], GPS_DMA_INPUT_BUFFER_LEN - old_pos);
-
-					if(pos > 0)
-						{
-							lwrb_write(&lwrb, &gps_dma_input_buffer[0], pos);
-						}
-				}
-			old_pos = pos;
+			// read in a linear fashion from DMA rcpt. buffer from beginning to end of new data
+			lwrb_write(&lwrb, &gps_dma_input_buffer[low_pos], high_pos - low_pos);  // (high_pos - low_pos) is length of new data
 		}
+	else	// overflow region
+		{
+			// read new data from current position until end of DMA rcpt. buffer
+			lwrb_write(&lwrb, &gps_dma_input_buffer[low_pos], GPS_DMA_INPUT_BUFFER_LEN - low_pos);  // -1 ?
+
+			// then, if there is more after the rollover
+			if(high_pos > 0)
+				{
+					// read from beginning of circular DMA buffer until the end position of new data
+					lwrb_write(&lwrb, &gps_dma_input_buffer[0], high_pos);
+				}
+		}
+	low_pos = high_pos;  // save position until data has been read
 
 #if DEBUG_LWRB_FREE
 	__ORG1510MK4.lwrb_free = (uint16_t) lwrb_get_free(&lwrb);  // have free memory value visible
@@ -465,7 +475,7 @@ static void _Write(const char *str)
 	_wait(50);	// always wait a while. stuff works better that way...
 }
 
-static __org1510mk4_t __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
+static __org1510mk4_t                 __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
 	{  //
 	.public.Power = &_Power,	// GPS module power mode change control function
 	.public.Parse = &_Parse,	//
