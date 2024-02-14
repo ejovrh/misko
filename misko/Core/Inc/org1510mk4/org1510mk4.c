@@ -3,6 +3,7 @@
 #if defined(USE_ORG1510MK4)	// if this particular device is active
 #include <stdio.h>
 #include <string.h>
+//#include <stdlib.h>
 
 #include "lwrb\lwrb.h"	// Lightweight RingBuffer - https://docs.majerle.eu/projects/lwrb/en/latest/index.html
 
@@ -16,11 +17,28 @@ extern ADC_HandleTypeDef hadc1;  // TODO - move out of here
 extern volatile uint32_t __adc_dma_buffer[ADC_CHANNELS];  // store for ADC readout
 extern volatile uint32_t __adc_results[ADC_CHANNELS];  // store ADC average data
 
+typedef enum gga_fix_t
+{
+	  none = 0,
+	  GPS = 1,
+	  SBAS = 2,
+	  na = 3,
+	  RTKfixed = 4,
+	  RTKfloat = 5,
+	  INS = 6
+} gga_fix_t;
+
 typedef struct	// org1510mk4c_t actual
 {
 	UART_HandleTypeDef *uart_gps;  // HAL UART instance over which to communicate with the GPS module
 	UART_HandleTypeDef *uart_sys;  // HAL UART instance over which the whole device communicates with a host computer/VCP
 	volatile org1510mk4_power_t currentPowerMode;  // current power mode of the GPS module
+	gga_fix_t fixIndicator;  //
+
+	uint16_t year;
+	uint8_t month;
+	uint8_t day;
+	int utc;
 
 #if DEBUG_LWRB_FREE
 	uint16_t lwrb_free;  // ringbuffer free memory
@@ -511,6 +529,37 @@ void _Parse(uint16_t high_pos)
 			// here we have a good sentence
 
 			// figure out if we have a fix or not
+			char foo[82];
+			strncpy(foo, out, 82);
+
+			char *gga = strstr((char*) &foo, "GGA");
+			if(gga != NULL)
+				{
+					char *token = strtok(gga, ",");
+
+					for(int i = 0; i < 2; i++)
+						{
+							token = strtok(NULL, ",");
+
+						}
+
+					__ORG1510MK4.fixIndicator = atoi(token);
+				}
+
+			char *zda = strstr((char*) &foo, "ZDA");
+			if(zda != NULL)
+				{
+					char *token = strtok(zda, ",");
+
+					token = strtok(NULL, ",");
+					__ORG1510MK4.utc = atoi(token);
+					token = strtok(NULL, ",");
+					__ORG1510MK4.day = atoi(token);
+					token = strtok(NULL, ",");
+					__ORG1510MK4.month = atoi(token);
+					token = strtok(NULL, ",");
+					__ORG1510MK4.year = atoi(token);
+				}
 
 			HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, out, (uint16_t) len);  // send GPS to VCP
 
