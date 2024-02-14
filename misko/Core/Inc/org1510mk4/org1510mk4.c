@@ -461,6 +461,7 @@ void _Parse(uint16_t high_pos)
 							if(nmea_terminator_pos > nmea_start_pos)  // linear region
 								{
 									__ORG1510MK4.linearlen = lwrb_read(&lwrb, &out, nmea_terminator_pos - nmea_start_pos);  // the terminators are from the current read pointer len away
+									nmea_start_pos = nmea_terminator_pos;  // save position for next iteration
 								}
 							else  // overflow region
 								{
@@ -470,12 +471,11 @@ void _Parse(uint16_t high_pos)
 
 									__ORG1510MK4.ovrflowlen = lwrb_read(&lwrb, &out, rest);  // read out len characters into out
 									__ORG1510MK4.ovrflowlen += lwrb_read(&lwrb, &out[rest], extra);  // read out len characters into out
+									nmea_start_pos = extra;  // save position for next iteration
 								}
-
-							nmea_start_pos = nmea_terminator_pos;  // save position for next iteration
+							parse_complete = 0;  // at this point we have the complete NMEA sentence in out[]
 						}
 				}
-			parse_complete = 0;  // at this point we have the complete NMEA sentence in out[]
 		}
 	else
 		{
