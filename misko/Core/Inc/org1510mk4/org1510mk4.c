@@ -95,13 +95,13 @@ static void _init(void)
 	 * 0 RMC - Recommended Minimum Specific GNSS Data
 	 * 1 VTG - Course over Ground and Ground Speed
 	 * 1 GGA - Global Positioning System Fix Data
-	 * 5 GSA - GNSS DOP and Active Satellites
-	 * 0 GSV - GNSS Satellites in View
+	 * 10 GSA - GNSS DOP and Active Satellites
+	 * 10 GSV - GNSS Satellites in View
 	 * ...
 	 * 1 ZDA - UTC Date/Time and Local Time Zone Offset
 	 * 0 MCHN - ???
 	 */
-	__ORG1510MK4.public.Write("PMTK314,0,0,1,1,5,5,0,0,0,0,0,0,0,0,0,0,0,1,0");  //
+	__ORG1510MK4.public.Write("PMTK314,0,0,1,1,10,10,0,0,0,0,0,0,0,0,0,0,0,1,0");  //
 //	__ORG1510MK4.public.Write("PMTK314,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0");  //
 
 	//
@@ -364,6 +364,35 @@ static void _Read(void)
 
 }
 
+// do we have a checksum mismatch? 1 - true, 0 - false
+uint8_t checksumMismatch(const char *sentence, const uint8_t len)
+{
+	const char *ptr = sentence;
+	uint8_t checksum = calculate_checksum(sentence, len - 1);  // calculate the input sentence as a whole first
+	uint8_t checksumInSentence = 0;
+
+	// convert the NMEA-reported checksum (in ASCII) into a number
+	while(*ptr != '\0' && *ptr != '\r' && *ptr != '\n')
+		{
+			if(*ptr >= '0' && *ptr <= '9')
+				{
+					checksumInSentence = (uint8_t) (checksumInSentence * 16 + (*ptr - '0'));
+				}
+			else if(*ptr >= 'A' && *ptr <= 'F')
+				{
+					checksumInSentence = (uint8_t) (checksumInSentence * 16 + (*ptr - 'A' + 10));
+				}
+			else if(*ptr >= 'a' && *ptr <= 'f')
+				{
+					checksumInSentence = (uint8_t) (checksumInSentence * 16 + (*ptr - 'a' + 10));
+				}
+
+			*ptr++;  // @suppress("Statement has no effect")
+		}
+
+	return (checksum == checksumInSentence) ? 0 : 1;	// compare the two sums
+}
+
 //
 void rx_start(void)
 {
@@ -446,7 +475,7 @@ void _Parse(uint16_t high_pos)
 							nmea_start_pos = nmea_terminator_pos;  // save position for next iteration
 						}
 				}
-			parse_complete = 0;
+			parse_complete = 0;  // at this point we have the complete NMEA sentence in out[]
 		}
 	else
 		{
@@ -458,14 +487,32 @@ void _Parse(uint16_t high_pos)
 							HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, out, (uint16_t) strlen((const char*) len));  // send GPS to VCP
 		#endif
 
-			// at this point we have the complete NMEA sentence
-			if(out[len - 5] != '*')  // no checksum field
+			// check for valid length
+			if(len > 82 || len == 0)  // too long - most likely not valid
 				{
-					parse_complete = 1;
+					parse_complete = 1;  // get out
 					return;
 				}
 
-			HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, out, len);  // send GPS to VCP
+			// check for existing checksum
+			if(out[len - 5] != '*')  // no checksum field
+				{
+					parse_complete = 1;  // get out
+					return;
+				}
+
+			// check for correct checksum
+			if(checksumMismatch((const char*) &out[1], (uint8_t) len - 6))  // advance start to the first checksum character and pass on
+				{
+					parse_complete = 1;  // if checksums dont match get out
+					return;
+				}
+
+			// here we have a good sentence
+
+			// figure out if we have a fix or not
+
+			HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, out, (uint16_t) len);  // send GPS to VCP
 
 			parse_complete = 1;
 		}
