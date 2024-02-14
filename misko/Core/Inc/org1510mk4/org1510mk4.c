@@ -10,6 +10,7 @@
 #define DEBUG_LWRB_FREE 1 // data member indicating LwRB free space
 
 // CHECKME - with 64 a hardfault occurs when hardfault after 22176 chars, lwrb_free 161, hal_dma_start_it() in a HT irq
+// most recent char_written number (after this commmit) is 9890
 #define GPS_DMA_INPUT_BUFFER_LEN 32	// officially, a NMEA sentence (from $ to \n) is 80 characters long. 2 more to account for \r\n
 #define LWRB_BUFFER_LEN 256	// LwRB buffer size
 
@@ -31,7 +32,7 @@ typedef struct	// org1510mk4c_t actual
 	org1510mk4_t public;  // public struct
 } __org1510mk4_t;
 
-static __org1510mk4_t                 __ORG1510MK4                 __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
+static __org1510mk4_t __ORG1510MK4 __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
 
 static uint8_t gps_dma_input_buffer[GPS_DMA_INPUT_BUFFER_LEN];  // 1st circular buffer: incoming GPS UART DMA data
 lwrb_t lwrb;	// 2nd circular buffer: accumulate and then process
@@ -419,15 +420,15 @@ void _Parse(uint16_t high_pos)
 
 					if(nmea_terminator_pos > lwrb.r)  // linear region
 						{
-							lwrb_sz_t len = nmea_terminator_pos - lwrb.r + 2;  // the terminators are from the current read pointer len away
+							lwrb_sz_t len = (lwrb_sz_t) (nmea_terminator_pos - lwrb.r + 2);  // the terminators are from the current read pointer len away
 
 							lwrb_read(&lwrb, &out, len);	// read out len characters into out
 						}
 					else  // overflow region
 						{
 							// the terminators are in overflow:
-							lwrb_sz_t rest = GPS_DMA_INPUT_BUFFER_LEN - lwrb.r;  // from the current read pointer to buffer end
-							lwrb_sz_t extra = nmea_terminator_pos - rest + 2;  // then from buffer start some more
+							lwrb_sz_t rest = (lwrb_sz_t) (GPS_DMA_INPUT_BUFFER_LEN - lwrb.r);  // from the current read pointer to buffer end
+							lwrb_sz_t extra = (lwrb_sz_t) (nmea_terminator_pos - rest + 2);  // then from buffer start some more
 
 							lwrb_read(&lwrb, &out, rest);  // read out len characters into out
 							lwrb_read(&lwrb, &out[rest], extra);  // read out len characters into out
@@ -475,7 +476,7 @@ static void _Write(const char *str)
 	_wait(50);	// always wait a while. stuff works better that way...
 }
 
-static __org1510mk4_t                 __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
+static __org1510mk4_t __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
 	{  //
 	.public.Power = &_Power,	// GPS module power mode change control function
 	.public.Parse = &_Parse,	//
