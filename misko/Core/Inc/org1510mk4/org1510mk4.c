@@ -9,7 +9,8 @@
 #define DIRTY_POWER_MODE_CHANGE 0	// circumvents power mode change safeguards to e.g. deliberately drain the capacitor
 #define DEBUG_LWRB_FREE 1 // data member indicating LwRB free space
 
-#define GPS_DMA_INPUT_BUFFER_LEN 64	// officially, a NMEA sentence (from $ to \n) is 80 characters long. 2 more to account for \r\n
+// CHECKME - with 64 a hardfault occurs when hardfault after 22176 chars, lwrb_free 161, hal_dma_start_it() in a HT irq
+#define GPS_DMA_INPUT_BUFFER_LEN 32	// officially, a NMEA sentence (from $ to \n) is 80 characters long. 2 more to account for \r\n
 #define LWRB_BUFFER_LEN 256	// LwRB buffer size
 
 extern ADC_HandleTypeDef hadc1;  // TODO - move out of here
@@ -24,6 +25,7 @@ typedef struct	// org1510mk4c_t actual
 
 #if DEBUG_LWRB_FREE
 	uint16_t lwrb_free;  // ringbuffer free memory
+	uint32_t char_written;	// characters written
 #endif
 
 	org1510mk4_t public;  // public struct
@@ -407,29 +409,38 @@ void _Parse(uint16_t pos)
 
 					if(nmea_terminator_pos > lwrb.r)  // linear region
 						{
-							volatile lwrb_sz_t len = nmea_terminator_pos - lwrb.r + 2;  // the terminators are from the current read pointer len away
+							lwrb_sz_t len = nmea_terminator_pos - lwrb.r + 2;  // the terminators are from the current read pointer len away
 
 							lwrb_read(&lwrb, &out, len);	// read out len characters into out
 						}
 					else  // overflow region
 						{
 							// the terminators are in overflow:
-							volatile lwrb_sz_t rest = GPS_DMA_INPUT_BUFFER_LEN - lwrb.r;  // from the current read pointer to buffer end
-							volatile lwrb_sz_t extra = nmea_terminator_pos - rest + 2;	// then from buffer start some more
+							lwrb_sz_t rest = GPS_DMA_INPUT_BUFFER_LEN - lwrb.r;  // from the current read pointer to buffer end
+							lwrb_sz_t extra = nmea_terminator_pos - rest + 2;  // then from buffer start some more
 
 							lwrb_read(&lwrb, &out, rest);  // read out len characters into out
 							lwrb_read(&lwrb, &out[rest], extra);  // read out len characters into out
 						}
+#if DEBUG_LWRB_FREE
+					uint16_t foo = (uint16_t) strlen((const char*) out);
+					__ORG1510MK4.char_written += foo;
 
+					HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, out, foo);  // send GPS to VCP
+#else
 					HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, out, (uint16_t) strlen((const char*) out));  // send GPS to VCP
+#endif
+
 				}
 			else
 				{
+					return;
 					// TODO - no NMEA end found
 				}
 		}
 	else
 		{
+			return;
 			// TODO - no NMEA start found
 		}
 
@@ -468,6 +479,9 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 	__ORG1510MK4.uart_sys = sys;  // store system UART object
 //	__ORG1510MK4.public.NMEA = gps_dma_input_buffer;  // tie in NMEA sentence buffer
 	__ORG1510MK4.currentPowerMode = 0;  // TODO - read from FeRAM, for now set to off by default
+#if DEBUG_LWRB_FREE
+	__ORG1510MK4.char_written = 0;	// characters written out to system UART
+#endif
 
 	lwrb_init(&lwrb, lwrb_buffer, sizeof(lwrb_buffer));
 
