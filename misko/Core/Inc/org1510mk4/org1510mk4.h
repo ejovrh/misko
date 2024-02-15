@@ -44,8 +44,8 @@ typedef struct gngga_t  // GNGGA sentence
 	char *fix_date;  // age of GPS fix data
 	gga_fix_t fix;	// type of GPS fix
 	uint8_t sat_used;  // satellites used for solution
-	double HDOP;  // Horizontal Dilution Of Precision
-	double alt_msl;  // altitude in meters above mean sea level
+	float HDOP;  // Horizontal Dilution Of Precision
+	float alt;  // altitude in meters above mean sea level
 } gngga_t;
 
 typedef struct org1510mk4_t  // struct describing the GPS module functionality

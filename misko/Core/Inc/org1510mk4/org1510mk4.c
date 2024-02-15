@@ -73,7 +73,7 @@ static uint8_t calculate_checksum(const char *str, const uint8_t len)
 }
 
 // do we have a checksum mismatch? 1 - true, 0 - false
-uint8_t checksumMismatch(const char *sentence, const uint8_t len)
+static uint8_t checksumMismatch(const char *sentence, const uint8_t len)
 {
 	const char *ptr = sentence;
 	uint8_t checksum = calculate_checksum(sentence, len - 1);  // calculate the input sentence as a whole first
@@ -395,7 +395,7 @@ static void _Read(void)
 }
 
 //
-void rx_start(void)
+static void rx_start(void)
 {
 	HAL_UARTEx_ReceiveToIdle_DMA(__ORG1510MK4.uart_gps, gps_dma_input_buffer, GPS_DMA_INPUT_BUFFER_LEN);
 
@@ -403,8 +403,85 @@ void rx_start(void)
 //		Error_Handler();
 }
 
+// parses NMEA str for ZDA data - time & date
+static void parse_zda(const __org1510mk4_t* device, const char *str)
+{
+	char *zda = strstr(str, "ZDA");  // first, check if ZDA exists in the input string
+
+	if(zda == NULL)  // if not, get out
+		return;
+
+	char temp[82] = "\0";  // create a temporary buffer
+
+	strncpy(temp, str, strlen(str));	// copy str into temp
+
+	// $GNZDA,163207.000,15,02,2024,,*4B
+	char *token = strtok(temp, ",");	// start to tokenize
+
+	token = strtok(NULL, ",");  // UTC time - 163207.000
+	device->public.zda->time = strncpy(device->public.zda->time, token, 6);
+
+	token = strtok(NULL, ",");  // day - 15
+	device->public.zda->day = (uint8_t) atoi(token);
+
+	token = strtok(NULL, ",");  // month - 02
+	device->public.zda->month = (uint8_t) atoi(token);
+
+	token = strtok(NULL, ",");  // year - 2024
+	device->public.zda->year = (uint16_t) atoi(token);
+
+	token = strtok(NULL, ",");  // local timezone offset
+	if(token)
+		device->public.zda->tz = (uint8_t) atoi(token);
+}
+
+// parses str for GGA data - fix indicator, HDOP, satellites used, etc.
+static void parse_gga(const __org1510mk4_t* device, const char *str)
+{
+	char *zda = strstr(str, "GGA");  // first, check if GGA exists in the input string
+
+	if(zda == NULL)  // if not, get out
+		return;
+
+	char temp[82] = "\0";  // create a temporary buffer
+
+	strncpy(temp, str, strlen(str));  // copy str into temp
+
+	// $GNGGA,161439.000,4547.8623,N,01554.9327,E,1,5,2.05,104.7,M,42.5,M,,*4E
+	char *token = strtok(temp, ",");	// start to tokenize
+
+	token = strtok(NULL, ",");  // UTC of this position report - 161439.000
+	device->public.gga->fix_date = strncpy(device->public.gga->fix_date, token, 6);
+
+	token = strtok(NULL, ",");  // latitude - 4547.8623
+	token = strtok(NULL, ",");  // north - N
+	token = strtok(NULL, ",");  // longitude - 01554.9327
+	token = strtok(NULL, ",");  // east - E
+
+	token = strtok(NULL, ",");  // GPS fix indicator - 1
+	device->public.gga->fix = atoi(token);
+
+	token = strtok(NULL, ",");  // satellites in use - 5
+	if(token)
+		device->public.gga->sat_used = (uint8_t) atoi(token);
+	else
+		device->public.gga->sat_used = 0;
+
+	token = strtok(NULL, ",");  // HDOP - 2.05
+	if(token)
+		device->public.gga->HDOP = (float) atof(token);
+	else
+		device->public.gga->HDOP = 0;
+
+	token = strtok(NULL, ",");  // alt - 104.7
+	if(token)
+		device->public.gga->alt = (float) atof(token);
+	else
+		device->public.gga->alt = 0;
+}
+
 // loads incoming NMEA string from DMA into a buffer and parses it
-void _Parse(uint16_t high_pos)
+static void _Parse(uint16_t high_pos)
 {
 	// high_pos indicates the position in the circular DMA reception buffer until which data is available
 	// it is NOT the length of new data
@@ -418,7 +495,7 @@ void _Parse(uint16_t high_pos)
 	static lwrb_sz_t len = 0;
 	uint8_t out[82];  // output box for GPS UART's DMA
 
-	// load into ringbuffer
+	// 1st buffering - load into ringbuffer
 	if(high_pos > low_pos)  // linear region
 		// read in a linear fashion from DMA rcpt. buffer from beginning to end of new data
 		lwrb_write(&lwrb, &gps_dma_input_buffer[low_pos], high_pos - low_pos);  // (high_pos - low_pos) is length of new data
@@ -442,9 +519,9 @@ void _Parse(uint16_t high_pos)
 		Error_Handler();
 #endif
 
-	// load NMEA sentence into out for parsing
 	if(parse_complete)
 		{
+			// 2nd buffering into LwRB & load NMEA sentence into out[] for parsing
 			static lwrb_sz_t nmea_start_pos;  // position store for NMEA sentence start - not needed at all
 			if(lwrb_find(&lwrb, "$", 1, 0, &nmea_start_pos))  // starting from the current read pointer location, find the NMEA sentence start marker
 				{
@@ -513,65 +590,8 @@ void _Parse(uint16_t high_pos)
 
 			// at this point we have a good sentence and we can start parsing
 
-			// figure out if we have a fix or not
-			char foo[82] = "\0";
-			strncpy((char*) foo, (const char*) out, 82);
-
-			char *gga = strstr((char*) &foo, "GGA");
-			if(gga != NULL)
-				{
-					// $GNGGA,161439.000,4547.8623,N,01554.9327,E,1,5,2.05,104.7,M,42.5,M,,*4E
-					char *token = strtok(gga, ",");
-
-					token = strtok(NULL, ",");	// UTC of this position report - 161439.000
-					__ORG1510MK4.public.gga->fix_date = strncpy(__ORG1510MK4.public.gga->fix_date, token, 6);
-
-					token = strtok(NULL, ",");	// latitude - 4547.8623
-					token = strtok(NULL, ",");	// north - N
-					token = strtok(NULL, ",");	// longitude - 01554.9327
-					token = strtok(NULL, ",");	// east - E
-					token = strtok(NULL, ",");	// GPS fix indicator - 1
-					__ORG1510MK4.public.gga->fix = atoi(token);
-
-					token = strtok(NULL, ",");  // satellites in use - 5
-					if(token)
-						__ORG1510MK4.public.gga->sat_used = (uint8_t) atoi(token);
-					else
-						__ORG1510MK4.public.gga->sat_used = 0;
-
-					token = strtok(NULL, ",");  // HDOP - 2.05
-					if(token)
-						__ORG1510MK4.public.gga->HDOP = atof(token);
-					else
-						__ORG1510MK4.public.gga->HDOP = 0;
-
-					token = strtok(NULL, ",");  // antenna altitude in meters above sea level - 104.7
-					if(token)
-						__ORG1510MK4.public.gga->alt_msl = atof(token);
-				}
-
-			char *zda = strstr((char*) &foo, "ZDA");
-			if(zda != NULL)
-				{
-					// $GNZDA,163207.000,15,02,2024,,*4B
-					char *token = strtok(zda, ",");
-
-					token = strtok(NULL, ",");	// UTC time - 163207.000
-					__ORG1510MK4.public.zda->time = strncpy(__ORG1510MK4.public.zda->time, token, 6);
-
-					token = strtok(NULL, ",");	// day -
-					__ORG1510MK4.public.zda->day = (uint8_t) atoi(token);
-
-					token = strtok(NULL, ",");	// month
-					__ORG1510MK4.public.zda->month = (uint8_t) atoi(token);
-
-					token = strtok(NULL, ",");	// year
-					__ORG1510MK4.public.zda->year = (uint16_t) atoi(token);
-
-					token = strtok(NULL, ",");	// local timezone offset
-					if(token)
-						__ORG1510MK4.public.zda->tz = (uint8_t) atoi(token);
-				}
+			parse_gga(&__ORG1510MK4, (const char*) out);	// parse for GGA data
+			parse_zda(&__ORG1510MK4, (const char*) out);	// parse for ZDA data
 
 			HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, out, (uint16_t) len);  // send GPS to VCP
 
