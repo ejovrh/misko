@@ -8,56 +8,40 @@
 #include "lwrb\lwrb.h"	// Lightweight RingBuffer - https://docs.majerle.eu/projects/lwrb/en/latest/index.html
 
 #define DIRTY_POWER_MODE_CHANGE 0	// circumvents power mode change safeguards to e.g. deliberately drain the capacitor
-#define DEBUG_LWRB_FREE 1 // data member indicating LwRB free space
+#define DEBUG_LWRB_FREE 0 // data member indicating LwRB free space
 
 #define GPS_DMA_INPUT_BUFFER_LEN 32	// officially, a NMEA sentence (from $ to \n) is 80 characters long. 2 more to account for \r\n
 #define LWRB_BUFFER_LEN 256	// LwRB buffer size
 
 extern ADC_HandleTypeDef hadc1;  // TODO - move out of here
-extern volatile uint32_t __adc_dma_buffer[ADC_CHANNELS];  // store for ADC readout
-extern volatile uint32_t __adc_results[ADC_CHANNELS];  // store ADC average data
-
-typedef enum gga_fix_t
-{
-	  none = 0,
-	  GPS = 1,
-	  SBAS = 2,
-	  na = 3,
-	  RTKfixed = 4,
-	  RTKfloat = 5,
-	  INS = 6
-} gga_fix_t;
+extern volatile uint32_t __adc_dma_buffer[ADC_CHANNELS];  // TODO - move out of here - store for ADC readout
+extern volatile uint32_t __adc_results[ADC_CHANNELS];  // TODO - move out of here - store ADC average data
 
 typedef struct	// org1510mk4c_t actual
 {
 	UART_HandleTypeDef *uart_gps;  // HAL UART instance over which to communicate with the GPS module
 	UART_HandleTypeDef *uart_sys;  // HAL UART instance over which the whole device communicates with a host computer/VCP
-	volatile org1510mk4_power_t currentPowerMode;  // current power mode of the GPS module
-	gga_fix_t fixIndicator;  //
-
-	uint16_t year;
-	uint8_t month;
-	uint8_t day;
-	char *utc;	// container for ZDA UTC time
 
 #if DEBUG_LWRB_FREE
 	uint16_t lwrb_free;  // ringbuffer free memory
 	uint32_t char_written;	// characters written
+	lwrb_sz_t ovrflowlen;  // amount of data written in overflow mode
+	lwrb_sz_t linearlen;  // amount of data written in linear mode
 #endif
-	lwrb_sz_t ovrflowlen;
-	lwrb_sz_t linearlen;
 
 	org1510mk4_t public;  // public struct
 } __org1510mk4_t;
 
 static __org1510mk4_t __ORG1510MK4 __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
 
+static lwrb_t lwrb;  // 2nd circular buffer for data processing
+static uint8_t lwrb_buffer[LWRB_BUFFER_LEN];	//
+static char _UTCtimestr[7];  // container for ZDA-derived UTC time
+static char _GGAfix_date[7];  // container for GGA-derived fix date
+static gnzda_t _zda;  // object for GNZDA data
+static gngga_t _gga;  // object for GNGGA data
 static uint8_t parse_complete;
-
 static uint8_t gps_dma_input_buffer[GPS_DMA_INPUT_BUFFER_LEN];  // 1st circular buffer: incoming GPS UART DMA data
-lwrb_t lwrb;	// 2nd circular buffer: accumulate and then process
-uint8_t lwrb_buffer[LWRB_BUFFER_LEN];
-char _utc[7];  //
 
 // all NMEA off: 	PMTK314,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 // NMEA RMC 5s: 	PMTK314,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -86,6 +70,35 @@ static uint8_t calculate_checksum(const char *str, const uint8_t len)
 		retval ^= *(str + i);  // XOR the characters
 
 	return retval;	// return the XOR
+}
+
+// do we have a checksum mismatch? 1 - true, 0 - false
+uint8_t checksumMismatch(const char *sentence, const uint8_t len)
+{
+	const char *ptr = sentence;
+	uint8_t checksum = calculate_checksum(sentence, len - 1);  // calculate the input sentence as a whole first
+	uint8_t checksumInSentence = 0;
+
+	// convert the NMEA-reported checksum (in ASCII) into a number
+	while(*ptr != '\0' && *ptr != '\r' && *ptr != '\n')
+		{
+			if(*ptr >= '0' && *ptr <= '9')
+				{
+					checksumInSentence = (uint8_t) (checksumInSentence * 16 + (*ptr - '0'));
+				}
+			else if(*ptr >= 'A' && *ptr <= 'F')
+				{
+					checksumInSentence = (uint8_t) (checksumInSentence * 16 + (*ptr - 'A' + 10));
+				}
+			else if(*ptr >= 'a' && *ptr <= 'f')
+				{
+					checksumInSentence = (uint8_t) (checksumInSentence * 16 + (*ptr - 'a' + 10));
+				}
+
+			*ptr++;  // @suppress("Statement has no effect")
+		}
+
+	return (checksum == checksumInSentence) ? 0 : 1;	// compare the two sums
 }
 
 // init function for GPS module
@@ -120,12 +133,10 @@ static void _init(void)
 	 * 1 ZDA - UTC Date/Time and Local Time Zone Offset
 	 * 0 MCHN - ???
 	 */
-	__ORG1510MK4.public.Write("PMTK314,0,0,1,1,10,10,0,0,0,0,0,0,0,0,0,0,0,1,0");  //
-//	__ORG1510MK4.public.Write("PMTK314,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,5,0");  //
+	// instruct module to spit out NMEA sentences as above
+	__ORG1510MK4.public.Write("PMTK314,0,0,1,1,10,10,0,0,0,0,0,0,0,0,0,0,0,1,0");
 
-	//
 //	__ORG1510MK4.public.Power(off);  // power off
-
 }
 
 // GPS module power mode change control function
@@ -145,19 +156,19 @@ static void _Power(const org1510mk4_power_t state)
 #if DIRTY_POWER_MODE_CHANGE
 			HAL_GPIO_WritePin(SUPERCAP_EN_GPIO_Port, SUPERCAP_EN_Pin, GPIO_PIN_RESET);	// turn off supercap charger
 
-			__ORG1510MK4.currentPowerMode = state;	// save the current power mode
+			__ORG1510MK4.public.PowerMode = state;	// save the current power mode
 			return;
 #else
-			if(__ORG1510MK4.currentPowerMode == state)  // if the module is already in this state
+			if(__ORG1510MK4.public.PowerMode == state)  // if the module is already in this state
 				return;  // do nothing
 
-			if(__ORG1510MK4.currentPowerMode > backup)	// if the module is in some operating mode
+			if(__ORG1510MK4.public.PowerMode > backup)	// if the module is in some operating mode
 				__ORG1510MK4.public.Power(backup);	// first go into backup mode
 
-			if(__ORG1510MK4.currentPowerMode <= backup)  // if the module is in backup mode (or less)
+			if(__ORG1510MK4.public.PowerMode <= backup)  // if the module is in backup mode (or less)
 				HAL_GPIO_WritePin(SUPERCAP_EN_GPIO_Port, SUPERCAP_EN_Pin, GPIO_PIN_RESET);	// then turn off supercap charger
 
-			__ORG1510MK4.currentPowerMode = state;	// save the current power mode
+			__ORG1510MK4.public.PowerMode = state;	// save the current power mode
 			return;
 #endif
 		}
@@ -167,13 +178,13 @@ static void _Power(const org1510mk4_power_t state)
 #if DIRTY_POWER_MODE_CHANGE
 			HAL_GPIO_WritePin(SUPERCAP_EN_GPIO_Port, SUPERCAP_EN_Pin, GPIO_PIN_SET);	// power on the supercap charger
 
-			__ORG1510MK4.currentPowerMode = state;	// save the current power mode
+			__ORG1510MK4.public.PowerMode = state;	// save the current power mode
 			return;
 #else
-			if(__ORG1510MK4.currentPowerMode == state)  // if the module is already in this state
+			if(__ORG1510MK4.public.PowerMode == state)  // if the module is already in this state
 				return;  // do nothing
 
-			if(__ORG1510MK4.currentPowerMode < wakeup)  // if the module was powered off
+			if(__ORG1510MK4.public.PowerMode < wakeup)  // if the module was powered off
 				{
 					if(HAL_ADC_GetState(&hadc1) == HAL_ADC_STATE_RESET)  // if the ADC is down
 						HAL_ADC_Start_DMA(&hadc1, (uint32_t*) __adc_dma_buffer, ADC_CHANNELS);	// start it
@@ -188,7 +199,7 @@ static void _Power(const org1510mk4_power_t state)
 									;
 								}
 
-							__ORG1510MK4.currentPowerMode = state;	// save the current power mode
+							__ORG1510MK4.public.PowerMode = state;	// save the current power mode
 							return;
 						}
 				}
@@ -200,13 +211,13 @@ static void _Power(const org1510mk4_power_t state)
 #if DIRTY_POWER_MODE_CHANGE
 			HAL_UART_Transmit_DMA(&huart1, (const uint8_t*) "$PMTK225,4*2F\r\n", 15);  // send backup mode command
 
-			__ORG1510MK4.currentPowerMode = state;	// save the current power mode
+			__ORG1510MK4.public.PowerMode = state;	// save the current power mode
 			return;
 #else
-			if(__ORG1510MK4.currentPowerMode == state)  // if the module is already in this state
+			if(__ORG1510MK4.public.PowerMode == state)  // if the module is already in this state
 				return;  // do nothing
 
-			if(__ORG1510MK4.currentPowerMode > backup)  // if the module is in some operating mode
+			if(__ORG1510MK4.public.PowerMode > backup)  // if the module is in some operating mode
 				{
 					__ORG1510MK4.public.Write("PMTK225,4");  // send backup mode command
 
@@ -215,7 +226,7 @@ static void _Power(const org1510mk4_power_t state)
 //						;						// wait until the wakeup pin goes low
 				}
 
-			__ORG1510MK4.currentPowerMode = state;	// save the current power mode
+			__ORG1510MK4.public.PowerMode = state;	// save the current power mode
 			return;
 #endif
 		}
@@ -227,19 +238,19 @@ static void _Power(const org1510mk4_power_t state)
 			_wait(1000);	 // wait 1s
 			HAL_GPIO_WritePin(GPS_PWR_CTRL_GPIO_Port, GPS_PWR_CTRL_Pin, GPIO_PIN_RESET);	// set low
 
-			__ORG1510MK4.currentPowerMode = state;	// save the current power mode
+			__ORG1510MK4.public.PowerMode = state;	// save the current power mode
 			return;
 #else
-			if(__ORG1510MK4.currentPowerMode == state)  // if the module is already in this state
+			if(__ORG1510MK4.public.PowerMode == state)  // if the module is already in this state
 				return;  // do nothing
 
-			if(__ORG1510MK4.currentPowerMode == off)  // if the module is powered off
+			if(__ORG1510MK4.public.PowerMode == off)  // if the module is powered off
 				__ORG1510MK4.public.Power(on);	// first power on,
 
-			if(__ORG1510MK4.currentPowerMode == on)  // if the module is powered on
-				__ORG1510MK4.currentPowerMode = backup;  // then cheat the mode into backup
+			if(__ORG1510MK4.public.PowerMode == on)  // if the module is powered on
+				__ORG1510MK4.public.PowerMode = backup;  // then cheat the mode into backup
 
-			if(__ORG1510MK4.currentPowerMode == backup)  // if in backup mode
+			if(__ORG1510MK4.public.PowerMode == backup)  // if in backup mode
 				{
 					// get out of backup: ("off" state can also be a backup state)
 					HAL_GPIO_WritePin(GPS_PWR_CTRL_GPIO_Port, GPS_PWR_CTRL_Pin, GPIO_PIN_SET);	// set high
@@ -251,7 +262,7 @@ static void _Power(const org1510mk4_power_t state)
 						;						// wait until the wakeup pin goes high
 				}
 
-			if(__ORG1510MK4.currentPowerMode > wakeup)  // if the module is in a lighter sleep state
+			if(__ORG1510MK4.public.PowerMode > wakeup)  // if the module is in a lighter sleep state
 				{
 					// FIXME - blocks when transitioning from standby to wake
 //					while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin) == GPIO_PIN_RESET)
@@ -260,7 +271,7 @@ static void _Power(const org1510mk4_power_t state)
 					__ORG1510MK4.public.Write("PMTK225,0");  // wakeup command - transit into full power mode
 				}
 
-			__ORG1510MK4.currentPowerMode = state;	// save the current power mode
+			__ORG1510MK4.public.PowerMode = state;	// save the current power mode
 			return;
 #endif
 		}
@@ -270,13 +281,13 @@ static void _Power(const org1510mk4_power_t state)
 #if DIRTY_POWER_MODE_CHANGE
 			HAL_UART_Transmit_DMA(&huart1, (const uint8_t*) "$PMTK161,0*28\r\n", 15);  // then go into standby
 
-			__ORG1510MK4.currentPowerMode = state;	// save the current power mode
+			__ORG1510MK4.public.PowerMode = state;	// save the current power mode
 			return;
 #else
-			if(__ORG1510MK4.currentPowerMode == state)  // if the module is already in this state
+			if(__ORG1510MK4.public.PowerMode == state)  // if the module is already in this state
 				return;  // do nothing
 
-			if(__ORG1510MK4.currentPowerMode < wakeup)  // if the module is not awake
+			if(__ORG1510MK4.public.PowerMode < wakeup)  // if the module is not awake
 				return;  // do nothing
 
 			__ORG1510MK4.public.Write("PMTK161,0");  // send standby sleep command
@@ -285,7 +296,7 @@ static void _Power(const org1510mk4_power_t state)
 			while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin))
 				;						// wait until the wakeup pin goes low
 
-			__ORG1510MK4.currentPowerMode = state;	// save the current power mode
+			__ORG1510MK4.public.PowerMode = state;	// save the current power mode
 			return;
 #endif
 		}
@@ -295,18 +306,18 @@ static void _Power(const org1510mk4_power_t state)
 #if DIRTY_POWER_MODE_CHANGE
 			// TODO - implement periodic mode
 
-			__ORG1510MK4.currentPowerMode = state;	// save the current power mode
+			__ORG1510MK4.public.PowerMode = state;	// save the current power mode
 			return;
 #else
-			if(__ORG1510MK4.currentPowerMode == state)  // if the module is already in this state
+			if(__ORG1510MK4.public.PowerMode == state)  // if the module is already in this state
 				return;  // do nothing
 
-			if(__ORG1510MK4.currentPowerMode < wakeup)  // if the module is not awake
+			if(__ORG1510MK4.public.PowerMode < wakeup)  // if the module is not awake
 				return;  // do nothing
 
 			// TODO - implement periodic mode
 
-			__ORG1510MK4.currentPowerMode = state;	// save the current power mode
+			__ORG1510MK4.public.PowerMode = state;	// save the current power mode
 			return;
 #endif
 		}
@@ -316,18 +327,18 @@ static void _Power(const org1510mk4_power_t state)
 #if DIRTY_POWER_MODE_CHANGE
 			HAL_UART_Transmit_DMA(&huart1, (const uint8_t*) "$PMTK225,9*22\r\n", 15);  // DS. ch. 4.3.14
 
-			__ORG1510MK4.currentPowerMode = state;	// save the current power mode
+			__ORG1510MK4.public.PowerMode = state;	// save the current power mode
 			return;
 #else
-			if(__ORG1510MK4.currentPowerMode == state)  // if the module is already in this state
+			if(__ORG1510MK4.public.PowerMode == state)  // if the module is already in this state
 				return;  // do nothing
 
-			if(__ORG1510MK4.currentPowerMode < wakeup)  // if the module is not awake
+			if(__ORG1510MK4.public.PowerMode < wakeup)  // if the module is not awake
 				return;  // do nothing
 
 			__ORG1510MK4.public.Write("PMTK225,9");  // send command for AlwaysLocate backup mode
 
-			__ORG1510MK4.currentPowerMode = state;	// save the current power mode
+			__ORG1510MK4.public.PowerMode = state;	// save the current power mode
 			return;
 #endif
 		}
@@ -339,13 +350,13 @@ static void _Power(const org1510mk4_power_t state)
 			_wait(200);  // wait 200ms
 			HAL_GPIO_WritePin(GPS_RESET_GPIO_Port, GPS_RESET_Pin, GPIO_PIN_SET);  // take GPS module out of reset
 #else
-			if(__ORG1510MK4.currentPowerMode == state)  // if the module is already in this state
+			if(__ORG1510MK4.public.PowerMode == state)  // if the module is already in this state
 				return;  // do nothing
 
-			if(__ORG1510MK4.currentPowerMode == backup)  // if the module is in backup
+			if(__ORG1510MK4.public.PowerMode == backup)  // if the module is in backup
 				__ORG1510MK4.public.Power(wakeup);	// first, wake up
 
-			if(__ORG1510MK4.currentPowerMode == off)  // if the module is powered off
+			if(__ORG1510MK4.public.PowerMode == off)  // if the module is powered off
 				{
 					__ORG1510MK4.public.Power(on);	// first, turn on
 					__ORG1510MK4.public.Power(wakeup);	// then, wake up
@@ -383,35 +394,6 @@ static void _Read(void)
 
 }
 
-// do we have a checksum mismatch? 1 - true, 0 - false
-uint8_t checksumMismatch(const char *sentence, const uint8_t len)
-{
-	const char *ptr = sentence;
-	uint8_t checksum = calculate_checksum(sentence, len - 1);  // calculate the input sentence as a whole first
-	uint8_t checksumInSentence = 0;
-
-	// convert the NMEA-reported checksum (in ASCII) into a number
-	while(*ptr != '\0' && *ptr != '\r' && *ptr != '\n')
-		{
-			if(*ptr >= '0' && *ptr <= '9')
-				{
-					checksumInSentence = (uint8_t) (checksumInSentence * 16 + (*ptr - '0'));
-				}
-			else if(*ptr >= 'A' && *ptr <= 'F')
-				{
-					checksumInSentence = (uint8_t) (checksumInSentence * 16 + (*ptr - 'A' + 10));
-				}
-			else if(*ptr >= 'a' && *ptr <= 'f')
-				{
-					checksumInSentence = (uint8_t) (checksumInSentence * 16 + (*ptr - 'a' + 10));
-				}
-
-			*ptr++;  // @suppress("Statement has no effect")
-		}
-
-	return (checksum == checksumInSentence) ? 0 : 1;	// compare the two sums
-}
-
 //
 void rx_start(void)
 {
@@ -421,8 +403,7 @@ void rx_start(void)
 //		Error_Handler();
 }
 
-// transfer data from circular DMA RX buffer into ring buffer
-// 	double buffering
+// loads incoming NMEA string from DMA into a buffer and parses it
 void _Parse(uint16_t high_pos)
 {
 	// high_pos indicates the position in the circular DMA reception buffer until which data is available
@@ -439,21 +420,17 @@ void _Parse(uint16_t high_pos)
 
 	// load into ringbuffer
 	if(high_pos > low_pos)  // linear region
-		{
-			// read in a linear fashion from DMA rcpt. buffer from beginning to end of new data
-			lwrb_write(&lwrb, &gps_dma_input_buffer[low_pos], high_pos - low_pos);  // (high_pos - low_pos) is length of new data
-		}
+		// read in a linear fashion from DMA rcpt. buffer from beginning to end of new data
+		lwrb_write(&lwrb, &gps_dma_input_buffer[low_pos], high_pos - low_pos);  // (high_pos - low_pos) is length of new data
 	else	// overflow region
 		{
 			// read new data from current position until end of DMA rcpt. buffer
-			lwrb_write(&lwrb, &gps_dma_input_buffer[low_pos], GPS_DMA_INPUT_BUFFER_LEN - low_pos);  // -1 ?
+			lwrb_write(&lwrb, &gps_dma_input_buffer[low_pos], GPS_DMA_INPUT_BUFFER_LEN - low_pos);
 
 			// then, if there is more after the rollover
 			if(high_pos > 0)
-				{
-					// read from beginning of circular DMA buffer until the end position of new data
-					lwrb_write(&lwrb, &gps_dma_input_buffer[0], high_pos);
-				}
+				// read from beginning of circular DMA buffer until the end position of new data
+				lwrb_write(&lwrb, &gps_dma_input_buffer[0], high_pos);
 		}
 
 	low_pos = high_pos;  // save position until data has been read
@@ -479,7 +456,11 @@ void _Parse(uint16_t high_pos)
 							// assemble the complete NMEA sentence
 							if(nmea_terminator_pos > nmea_start_pos)  // linear region
 								{
+#if DEBUG_LWRB_FREE
 									__ORG1510MK4.linearlen = lwrb_read(&lwrb, &out, nmea_terminator_pos - nmea_start_pos);  // the terminators are from the current read pointer len away
+#else
+									lwrb_read(&lwrb, &out, nmea_terminator_pos - nmea_start_pos);  // the terminators are from the current read pointer len away
+#endif
 									nmea_start_pos = nmea_terminator_pos;  // save position for next iteration
 								}
 							else  // overflow region
@@ -488,8 +469,13 @@ void _Parse(uint16_t high_pos)
 									lwrb_sz_t rest = (lwrb_sz_t) (GPS_DMA_INPUT_BUFFER_LEN - nmea_start_pos);  // from the current read pointer to buffer end
 									lwrb_sz_t extra = (lwrb_sz_t) (nmea_terminator_pos - rest);  // then from buffer start some more
 
+#if DEBUG_LWRB_FREE
 									__ORG1510MK4.ovrflowlen = lwrb_read(&lwrb, &out, rest);  // read out len characters into out
 									__ORG1510MK4.ovrflowlen += lwrb_read(&lwrb, &out[rest], extra);  // read out len characters into out
+#else
+									lwrb_read(&lwrb, &out, rest);  // read out len characters into out
+									lwrb_read(&lwrb, &out[rest], extra);  // read out len characters into out
+#endif
 									nmea_start_pos = extra;  // save position for next iteration
 								}
 							parse_complete = 0;  // at this point we have the complete NMEA sentence in out[]
@@ -499,15 +485,13 @@ void _Parse(uint16_t high_pos)
 	else
 		{
 			// parse out for NMEA sentences / fields
-#if DEBUG_LWRB_FREE
 			len = (uint16_t) strlen((const char*) out);
+#if DEBUG_LWRB_FREE
 			__ORG1510MK4.char_written += len;
-#else
-							HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, out, (uint16_t) strlen((const char*) len));  // send GPS to VCP
-		#endif
+#endif
 
 			// check for valid length
-			if(len > 82 || len == 0)  // too long - most likely not valid
+			if(len > 82 || len == 0)  // too long/too short - most likely not valid
 				{
 					parse_complete = 1;  // get out
 					return;
@@ -527,44 +511,72 @@ void _Parse(uint16_t high_pos)
 					return;
 				}
 
-			// here we have a good sentence
+			// at this point we have a good sentence and we can start parsing
 
 			// figure out if we have a fix or not
-			char foo[82];
+			char foo[82] = "\0";
 			strncpy((char*) foo, (const char*) out, 82);
 
 			char *gga = strstr((char*) &foo, "GGA");
 			if(gga != NULL)
 				{
+					// $GNGGA,161439.000,4547.8623,N,01554.9327,E,1,5,2.05,104.7,M,42.5,M,,*4E
 					char *token = strtok(gga, ",");
 
-					for(int i = 0; i < 6; i++)
-						token = strtok(NULL, ",");
+					token = strtok(NULL, ",");	// UTC of this position report - 161439.000
+					__ORG1510MK4.public.gga->fix_date = strncpy(__ORG1510MK4.public.gga->fix_date, token, 6);
 
-					__ORG1510MK4.fixIndicator = atoi(token);
+					token = strtok(NULL, ",");	// latitude - 4547.8623
+					token = strtok(NULL, ",");	// north - N
+					token = strtok(NULL, ",");	// longitude - 01554.9327
+					token = strtok(NULL, ",");	// east - E
+					token = strtok(NULL, ",");	// GPS fix indicator - 1
+					__ORG1510MK4.public.gga->fix = atoi(token);
+
+					token = strtok(NULL, ",");  // satellites in use - 5
+					if(token)
+						__ORG1510MK4.public.gga->sat_used = (uint8_t) atoi(token);
+					else
+						__ORG1510MK4.public.gga->sat_used = 0;
+
+					token = strtok(NULL, ",");  // HDOP - 2.05
+					if(token)
+						__ORG1510MK4.public.gga->HDOP = atof(token);
+					else
+						__ORG1510MK4.public.gga->HDOP = 0;
+
+					token = strtok(NULL, ",");  // antenna altitude in meters above sea level - 104.7
+					if(token)
+						__ORG1510MK4.public.gga->alt_msl = atof(token);
 				}
 
 			char *zda = strstr((char*) &foo, "ZDA");
 			if(zda != NULL)
 				{
+					// $GNZDA,163207.000,15,02,2024,,*4B
 					char *token = strtok(zda, ",");
 
-					token = strtok(NULL, ",");
-					__ORG1510MK4.utc = strncpy(__ORG1510MK4.utc, token, 6);
-					__ORG1510MK4.utc[7] = '\0';
-					token = strtok(NULL, ",");
-					__ORG1510MK4.day = (uint8_t) atoi(token);
-					token = strtok(NULL, ",");
-					__ORG1510MK4.month = (uint8_t) atoi(token);
-					token = strtok(NULL, ",");
-					__ORG1510MK4.year = (uint16_t) atoi(token);
+					token = strtok(NULL, ",");	// UTC time - 163207.000
+					__ORG1510MK4.public.zda->time = strncpy(__ORG1510MK4.public.zda->time, token, 6);
+
+					token = strtok(NULL, ",");	// day -
+					__ORG1510MK4.public.zda->day = (uint8_t) atoi(token);
+
+					token = strtok(NULL, ",");	// month
+					__ORG1510MK4.public.zda->month = (uint8_t) atoi(token);
+
+					token = strtok(NULL, ",");	// year
+					__ORG1510MK4.public.zda->year = (uint16_t) atoi(token);
+
+					token = strtok(NULL, ",");	// local timezone offset
+					if(token)
+						__ORG1510MK4.public.zda->tz = (uint8_t) atoi(token);
 				}
 
 			HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, out, (uint16_t) len);  // send GPS to VCP
 
 			parse_complete = 1;
 		}
-
 }
 
 // writes a NEMA sentence to the GPS module
@@ -598,8 +610,15 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 	__ORG1510MK4.uart_gps = gps;  // store GPS module UART object
 	__ORG1510MK4.uart_sys = sys;  // store system UART object
 //	__ORG1510MK4.public.NMEA = gps_dma_input_buffer;  // tie in NMEA sentence buffer
-	__ORG1510MK4.currentPowerMode = 0;  // TODO - read from FeRAM, for now set to off by default
-	__ORG1510MK4.utc = _utc;  // tie in container for ZDA UTC time
+	__ORG1510MK4.public.PowerMode = 0;  // TODO - read from FeRAM, for now set to off by default
+
+	__ORG1510MK4.public.gga = &_gga;	// tie in GNGGA-derived struct
+	__ORG1510MK4.public.gga->fix_date = _GGAfix_date;  // tie in container for GGA-derived fix date
+
+	__ORG1510MK4.public.zda = &_zda;	// tie in GNZDA-derived struct
+	__ORG1510MK4.public.zda->time = _UTCtimestr;  // tie in container for ZDA-derived UTC time
+	__ORG1510MK4.public.zda->tz = 0;	// initialize to 0
+
 #if DEBUG_LWRB_FREE
 	__ORG1510MK4.char_written = 0;	// characters written out to system UART
 #endif

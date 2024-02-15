@@ -17,11 +17,45 @@ typedef enum org1510mk4_power_t  // GPS module power states, DS. ch. 4.3.10, p. 
 	  reset = 7  // reset the module, DS. ch. 8.3.2
 } org1510mk4_power_t;
 
-typedef struct	// struct describing the GPS module functionality
+typedef struct gnzda_t	// GNZDA sentence struct
 {
-	uint8_t *NMEA;  //
+	char *time;  //	hhmmss time in UTC
+	uint8_t day;	// day of the month
+	uint8_t month;  // month of the year
+	uint16_t year;	// year
+	uint8_t tz;  // local time-zone offset from GMT
+} gnzda_t;
+
+typedef enum gga_fix_t	// GNGGA GPS fix type
+{
+	  none = 0,  // no fix
+	  GPS = 1,	// GPS fix
+	  SBAS = 2,  // SBAS/DGPS
+	  PPS = 3,	// PPS fix
+	  RTKfixed = 4,  // RealTime Kinematic fixed
+	  RTKfloat = 5,  // RealTime Kinematic float
+	  INS = 6,	// estimated (dead reckoning)
+	  manual = 7,  // manual input
+	  simulation = 8,  // simulation
+} gga_fix_t;
+
+typedef struct gngga_t  // GNGGA sentence
+{
+	char *fix_date;  // age of GPS fix data
+	gga_fix_t fix;	// type of GPS fix
+	uint8_t sat_used;  // satellites used for solution
+	double HDOP;  // Horizontal Dilution Of Precision
+	double alt_msl;  // altitude in meters above mean sea level
+} gngga_t;
+
+typedef struct org1510mk4_t  // struct describing the GPS module functionality
+{
+	gnzda_t *zda;  // ZDA-derived data
+	gngga_t *gga;  // GGA-derived data
+	uint8_t *NMEA;  //	last NMEA sentence
+	volatile org1510mk4_power_t PowerMode;  // current power mode of the GPS module
 	void (*Power)(const org1510mk4_power_t state);  // GPS module power mode change control function
-	void (*Parse)(const uint16_t Size);  //
+	void (*Parse)(const uint16_t Size);  // loads incoming NMEA string from DMA into a buffer and parses it
 	void (*Read)(void);  //
 	void (*Write)(const char *str);  // writes a NEMA sentence to the GPS module
 } org1510mk4_t;
