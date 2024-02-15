@@ -3,7 +3,7 @@
 #if defined(USE_ORG1510MK4)	// if this particular device is active
 #include <stdio.h>
 #include <string.h>
-//#include <stdlib.h>
+#include <stdlib.h>
 
 #include "lwrb\lwrb.h"	// Lightweight RingBuffer - https://docs.majerle.eu/projects/lwrb/en/latest/index.html
 
@@ -38,7 +38,7 @@ typedef struct	// org1510mk4c_t actual
 	uint16_t year;
 	uint8_t month;
 	uint8_t day;
-	int utc;
+	char *utc;	// container for ZDA UTC time
 
 #if DEBUG_LWRB_FREE
 	uint16_t lwrb_free;  // ringbuffer free memory
@@ -57,6 +57,7 @@ static uint8_t parse_complete;
 static uint8_t gps_dma_input_buffer[GPS_DMA_INPUT_BUFFER_LEN];  // 1st circular buffer: incoming GPS UART DMA data
 lwrb_t lwrb;	// 2nd circular buffer: accumulate and then process
 uint8_t lwrb_buffer[LWRB_BUFFER_LEN];
+char _utc[7];  //
 
 // all NMEA off: 	PMTK314,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 // NMEA RMC 5s: 	PMTK314,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -530,18 +531,15 @@ void _Parse(uint16_t high_pos)
 
 			// figure out if we have a fix or not
 			char foo[82];
-			strncpy(foo, out, 82);
+			strncpy((char*) foo, (const char*) out, 82);
 
 			char *gga = strstr((char*) &foo, "GGA");
 			if(gga != NULL)
 				{
 					char *token = strtok(gga, ",");
 
-					for(int i = 0; i < 2; i++)
-						{
-							token = strtok(NULL, ",");
-
-						}
+					for(int i = 0; i < 6; i++)
+						token = strtok(NULL, ",");
 
 					__ORG1510MK4.fixIndicator = atoi(token);
 				}
@@ -552,13 +550,14 @@ void _Parse(uint16_t high_pos)
 					char *token = strtok(zda, ",");
 
 					token = strtok(NULL, ",");
-					__ORG1510MK4.utc = atoi(token);
+					__ORG1510MK4.utc = strncpy(__ORG1510MK4.utc, token, 6);
+					__ORG1510MK4.utc[7] = '\0';
 					token = strtok(NULL, ",");
-					__ORG1510MK4.day = atoi(token);
+					__ORG1510MK4.day = (uint8_t) atoi(token);
 					token = strtok(NULL, ",");
-					__ORG1510MK4.month = atoi(token);
+					__ORG1510MK4.month = (uint8_t) atoi(token);
 					token = strtok(NULL, ",");
-					__ORG1510MK4.year = atoi(token);
+					__ORG1510MK4.year = (uint16_t) atoi(token);
 				}
 
 			HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, out, (uint16_t) len);  // send GPS to VCP
@@ -600,6 +599,7 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 	__ORG1510MK4.uart_sys = sys;  // store system UART object
 //	__ORG1510MK4.public.NMEA = gps_dma_input_buffer;  // tie in NMEA sentence buffer
 	__ORG1510MK4.currentPowerMode = 0;  // TODO - read from FeRAM, for now set to off by default
+	__ORG1510MK4.utc = _utc;  // tie in container for ZDA UTC time
 #if DEBUG_LWRB_FREE
 	__ORG1510MK4.char_written = 0;	// characters written out to system UART
 #endif
