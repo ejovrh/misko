@@ -40,7 +40,7 @@ static char _UTCtimestr[7];  // container for ZDA-derived UTC time
 static char _GGAfix_date[7];  // container for GGA-derived fix date
 static gnzda_t _zda;  // object for GNZDA data
 static gngga_t _gga;  // object for GNGGA data
-static uint8_t parse_complete;
+static uint8_t parse_complete;	// semaphore for parsing <-> ringbuffer load control
 static uint8_t gps_dma_input_buffer[GPS_DMA_INPUT_BUFFER_LEN];  // 1st circular buffer: incoming GPS UART DMA data
 
 // all NMEA off: 	PMTK314,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -222,8 +222,8 @@ static void _Power(const org1510mk4_power_t state)
 					__ORG1510MK4.public.Write("PMTK225,4");  // send backup mode command
 
 					// FIXME - sometimes this is blocking
-//					while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin))
-//						;						// wait until the wakeup pin goes low
+					while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin))
+						;  // wait until the wakeup pin goes low
 				}
 
 			__ORG1510MK4.public.PowerMode = state;	// save the current power mode
@@ -259,14 +259,14 @@ static void _Power(const org1510mk4_power_t state)
 
 					// FIXME - sometimes this is blocking
 					while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin) == GPIO_PIN_RESET)
-						;						// wait until the wakeup pin goes high
+						;  // wait until the wakeup pin goes high
 				}
 
 			if(__ORG1510MK4.public.PowerMode > wakeup)  // if the module is in a lighter sleep state
 				{
 					// FIXME - blocks when transitioning from standby to wake
-//					while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin) == GPIO_PIN_RESET)
-//						;						// wait until the wakeup pin goes high
+					while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin) == GPIO_PIN_RESET)
+						;  // wait until the wakeup pin goes high
 
 					__ORG1510MK4.public.Write("PMTK225,0");  // wakeup command - transit into full power mode
 				}
@@ -294,7 +294,7 @@ static void _Power(const org1510mk4_power_t state)
 
 			// FIXME - sometimes this is blocking
 			while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin))
-				;						// wait until the wakeup pin goes low
+				;  // wait until the wakeup pin goes low
 
 			__ORG1510MK4.public.PowerMode = state;	// save the current power mode
 			return;
@@ -377,7 +377,7 @@ static void _Power(const org1510mk4_power_t state)
 			__ORG1510MK4.public.Power(wakeup);	// then, wake up
 
 			while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin) == GPIO_PIN_RESET)
-				;						// wait until the wakeup pin goes high
+				;  // wait until the wakeup pin goes high
 
 			_wait(450);  // first wait for module power-up
 			_init();  // then re-initialize the module
@@ -515,7 +515,7 @@ static void load_into_1st_buffer(lwrb_t *rb, const uint16_t high_pos)
 }
 
 // buffer into the 2nd buffer and write out to out[]
-static uint8_t load_into_2nd_buffer(lwrb_t *rb, uint8_t *temp)
+static uint8_t load_into_2nd_buffer(lwrb_t *rb, uint8_t *temp, uint8_t *parse_flag)
 {
 	lwrb_sz_t retval = 0;
 
@@ -544,7 +544,7 @@ static uint8_t load_into_2nd_buffer(lwrb_t *rb, uint8_t *temp)
 							lwrb_sz_t rest = (lwrb_sz_t) (GPS_DMA_INPUT_BUFFER_LEN - nmea_start_pos);  // from the current read pointer to buffer end
 							lwrb_sz_t extra = (lwrb_sz_t) (nmea_terminator_pos - rest);  // then from buffer start some more
 
-							retval = lwrb_read(rb, temp, rest);  // read out len characters into out
+							retval += lwrb_read(rb, temp, rest);  // read out len characters into out
 							retval += lwrb_read(rb, &temp[retval], extra);  // read out len characters into out
 //							temp[retval + 1] = '\0';
 #if DEBUG_LWRB_FREE
@@ -552,11 +552,44 @@ static uint8_t load_into_2nd_buffer(lwrb_t *rb, uint8_t *temp)
 #endif
 							nmea_start_pos = extra;  // save position for next iteration
 						}
-					parse_complete = 0;  // at this point we have the complete NMEA sentence in out[]
+					*parse_flag = 0;  // at this point we have the complete NMEA sentence in out[]
 				}
 		}
 
 	return (uint8_t) retval;
+}
+
+// check basic NMEA sentence validity and return 1 if true, 0 otherwise
+static uint8_t NMEA_sentence_valid(uint8_t *out, uint8_t *prase_flag)
+{
+	uint8_t len = (uint8_t) strlen((const char*) out);  // first figure out the length
+	uint8_t fail = 0;  // failure flag for basic checks below
+
+	// check for valid length
+	if(len > 82 || len == 0)  // too long/too short - most likely not valid
+		fail = 1;
+
+	// check for existing checksum
+	if(out[len - 5] != '*')  // no checksum field
+		fail = 1;
+
+	// check for correct checksum
+	if(checksumMismatch((const char*) &out[1], (uint8_t) len - 6))  // advance start to the first checksum character and pass on
+		fail = 1;
+
+	if(fail)
+		{
+			*prase_flag = 1;  // get out
+			memset(out, '\0', 82);	// zero the buffer
+			return 0;
+		}
+	else
+		{
+#if DEBUG_LWRB_FREE
+	__ORG1510MK4.char_written += len;
+#endif
+			return 1;  // if we got until here, the input sentence is valid
+		}
 }
 
 // loads incoming NMEA string from DMA into a buffer and parses it
@@ -571,48 +604,20 @@ static void _Parse(uint16_t high_pos)
 
 	if(parse_complete)
 		{
-			load_into_2nd_buffer(&lwrb, out);  // buffer into the 2nd buffer and write out to out[]
+			load_into_2nd_buffer(&lwrb, out, &parse_complete);  // buffer into the 2nd buffer and write out to out[]
 		}
 	else
 		{
-			// parse out for NMEA sentences / fields
-			uint8_t len = (uint8_t) strlen((const char*) out);
-
-			// check for valid length
-			if(len > 82 || len == 0)  // too long/too short - most likely not valid
+			if(NMEA_sentence_valid(out, &parse_complete))  // check basic NMEA sentence validity
 				{
-					parse_complete = 1;  // get out
-					memset(out, '\0', 82);	// zero the buffer
-					return;
+					// at this point we have a good sentence and we can start parsing NMEA data
+					parse_gga(&__ORG1510MK4, (const char*) out);	// parse for GGA data
+					parse_zda(&__ORG1510MK4, (const char*) out);	// parse for ZDA data
+
+					HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, out, (uint16_t) strlen((const char*) out));  // send GPS to VCP
+
+					parse_complete = 1;
 				}
-
-			// check for existing checksum
-			if(out[len - 5] != '*')  // no checksum field
-				{
-					parse_complete = 1;  // get out
-					memset(out, '\0', 82);  // zero the buffer
-					return;
-				}
-
-			// check for correct checksum
-			if(checksumMismatch((const char*) &out[1], (uint8_t) len - 6))  // advance start to the first checksum character and pass on
-				{
-					parse_complete = 1;  // if checksums dont match get out
-					memset(out, '\0', 82);  // zero the buffer
-					return;
-				}
-
-#if DEBUG_LWRB_FREE
-			__ORG1510MK4.char_written += len;
-#endif
-
-			// at this point we have a good sentence and we can start parsing NMEA data
-			parse_gga(&__ORG1510MK4, (const char*) out);	// parse for GGA data
-			parse_zda(&__ORG1510MK4, (const char*) out);	// parse for ZDA data
-
-			HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, out, (uint16_t) len);  // send GPS to VCP
-
-			parse_complete = 1;
 		}
 }
 
