@@ -32,7 +32,7 @@ typedef struct	// org1510mk4c_t actual
 	org1510mk4_t public;  // public struct
 } __org1510mk4_t;
 
-static __org1510mk4_t                __ORG1510MK4                __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
+static __org1510mk4_t __ORG1510MK4 __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
 
 static lwrb_t lwrb;  // 2nd circular buffer for data processing
 static uint8_t lwrb_buffer[LWRB_BUFFER_LEN];	//
@@ -40,9 +40,12 @@ static char _UTCtimestr[7];  // container for ZDA-derived UTC time
 static char _GGAfix_date[7];  // container for GGA-derived fix date
 static gnzda_t _zda;  // object for ZDA messages
 static gngga_t _gga;  // object for GGA messages
+static coord_t _gga_lat;	// object for GGA latitude
+static coord_t _gga_lon;	// object for GGA longitude
 static vtg_t _vtg;	// object for VTG messages
 static uint8_t parse_complete;	// semaphore for parsing <-> ringbuffer load control
 static uint8_t gps_dma_input_buffer[GPS_DMA_INPUT_BUFFER_LEN];  // 1st circular buffer: incoming GPS UART DMA data
+static uint8_t out[82];  // output box for GPS UART's DMA
 
 // all NMEA off: 	PMTK314,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 // NMEA RMC 5s: 	PMTK314,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -404,6 +407,43 @@ static void rx_start(void)
 //		Error_Handler();
 }
 
+char* strtok_fr(char *s, char delim, char **save_ptr)
+{
+	char *tail;
+	char c;
+
+	if(s == NULL)
+		{
+			s = *save_ptr;
+		}
+	tail = s;
+	if((c = *tail) == '\0')
+		{
+			s = NULL;
+		}
+	else
+		{
+			do
+				{
+					if(c == delim)
+						{
+							*tail++ = '\0';
+							break;
+						}
+				}
+			while((c = *++tail) != '\0');
+		}
+	*save_ptr = tail;
+	return s;
+}
+
+char* strtok_f(char *s, char delim)
+{
+	static char *save_ptr;
+
+	return strtok_fr(s, delim, &save_ptr);
+}
+
 // parses NMEA str for ZDA data - time & date
 static void parse_zda(const __org1510mk4_t* device, const char *str)
 {
@@ -417,23 +457,12 @@ static void parse_zda(const __org1510mk4_t* device, const char *str)
 	strncpy(temp, str, strlen(str));	// copy str into temp
 
 	// $GNZDA,163207.000,15,02,2024,,*4B
-	char *token = strtok(temp, ",");	// start to tokenize
-
-	token = strtok(NULL, ",");  // UTC time - 163207.000
-	device->public.zda->time = strncpy(device->public.zda->time, token, 6);
-
-	token = strtok(NULL, ",");  // day - 15
-	device->public.zda->day = (uint8_t) atoi(token);
-
-	token = strtok(NULL, ",");  // month - 02
-	device->public.zda->month = (uint8_t) atoi(token);
-
-	token = strtok(NULL, ",");  // year - 2024
-	device->public.zda->year = (uint16_t) atoi(token);
-
-	token = strtok(NULL, ",");  // local timezone offset
-	if(token)
-		device->public.zda->tz = (uint8_t) atoi(token);
+	char *tok = strtok_f(temp, ',');	// start to tokenize
+	device->public.zda->time = strncpy(device->public.zda->time, strtok_f(NULL, ','), 6);  // UTC time - 163207.000
+	device->public.zda->day = (uint8_t) atoi(strtok_f(NULL, ','));  // day - 15
+	device->public.zda->month = (uint8_t) atoi(strtok_f(NULL, ','));  // month - 02
+	device->public.zda->year = (uint16_t) atoi(strtok_f(NULL, ','));  // year - 2024
+	device->public.zda->tz = (uint8_t) atoi(strtok_f(NULL, ','));  // local timezone offset
 }
 
 // parses str for GGA data - fix indicator, HDOP, satellites used, etc.
@@ -449,36 +478,25 @@ static void parse_gga(const __org1510mk4_t* device, const char *str)
 	strncpy(temp, str, strlen(str));  // copy str into temp
 
 	// $GNGGA,161439.000,4547.8623,N,01554.9327,E,1,5,2.05,104.7,M,42.5,M,,*4E
-	char *token = strtok(temp, ",");	// start to tokenize
+	char *tok = strtok_f(temp, ',');	// start to tokenize
+	device->public.gga->fix_date = strncpy(device->public.gga->fix_date, strtok_f(NULL, ','), 6);  // UTC of this position report - 161439.000
+	device->public.gga->lat = strtok_f(NULL, ',');  // latitude - 4547.8623
 
-	token = strtok(NULL, ",");  // UTC of this position report - 161439.000
-	device->public.gga->fix_date = strncpy(device->public.gga->fix_date, token, 6);
+	tok = strtok_f(NULL, ',');
+	device->public.gga->lat_dir = (cardinal_dir_t) *tok;  // north - N
 
-	token = strtok(NULL, ",");  // latitude - 4547.8623
-	token = strtok(NULL, ",");  // north - N
-	token = strtok(NULL, ",");  // longitude - 01554.9327
-	token = strtok(NULL, ",");  // east - E
+	device->public.gga->lon = strtok_f(NULL, ',');  // longitude - 01554.9327
 
-	token = strtok(NULL, ",");  // GPS fix indicator - 1
-	device->public.gga->fix = atoi(token);
-
-	token = strtok(NULL, ",");  // satellites in use - 5
-	if(token)
-		device->public.gga->sat_used = (uint8_t) atoi(token);
-	else
-		device->public.gga->sat_used = 0;
-
-	token = strtok(NULL, ",");  // HDOP - 2.05
-	if(token)
-		device->public.gga->HDOP = (float) atof(token);
-	else
-		device->public.gga->HDOP = 0;
-
-	token = strtok(NULL, ",");  // alt - 104.7
-	if(token)
-		device->public.gga->alt = (float) atof(token);
-	else
-		device->public.gga->alt = 0;
+	tok = strtok_f(NULL, ',');
+	device->public.gga->lon_dir = (cardinal_dir_t) *tok;  // east - E
+	device->public.gga->fix = (gga_fix_t) atoi(strtok_f(NULL, ','));  // GPS fix indicator - 1
+	device->public.gga->sat_used = (uint8_t) atoi(strtok_f(NULL, ','));  // satellites used for solution - 5
+	device->public.gga->HDOP = (float) atof(strtok_f(NULL, ','));  // horizontal dilution of position - 2.05
+	device->public.gga->alt = (float) atof(strtok_f(NULL, ','));  // alt - 104.7
+	strtok_f(NULL, ',');  // M
+	device->public.gga->geoid_sep = (float) atof(strtok_f(NULL, ','));  // geoid seperation - 42.5
+	strtok_f(NULL, ',');  // M
+	device->public.gga->dgps_age = (float) atof(strtok_f(NULL, ','));  // DGPS age
 }
 
 // parses str for VTG data - course over ground, .
@@ -494,38 +512,21 @@ static void parse_vtg(const __org1510mk4_t* device, const char *str)
 	strncpy(temp, str, strlen(str));  // copy str into temp
 
 	// $GNVTG,20.11,T,,M,2.50,N,4.63,K,A*17
-	char *token = strtok(temp, ",");	// start to tokenize
-
-	token = strtok(NULL, ",");  // heading of track made good in true north - 20.11
-	device->public.vtg->track_tn = (float) atof(token);
-
-	token = strtok(NULL, ",");  // T
-
-//	token = strtok(NULL, ",");  // heading of track made good in magnetic north - empty
-	if(token)
-		device->public.vtg->track_mn = (float) atof(token);
-	else
-		device->public.vtg->track_mn = 0;
-
-	token = strtok(NULL, ",");  // M
-
-	token = strtok(NULL, ",");  // speed in knots - 2.5
-	device->public.vtg->knots = (float) atof(token);
-
-	token = strtok(NULL, ",");  // N
-
-	token = strtok(NULL, ",");  // speed in kilometres per hour - 4.63
-	device->public.vtg->kph = (float) atof(token);
-
-	token = strtok(NULL, ",");  // K
-
-	token = strtok(NULL, ",");  // FAA mode indicator
-	if(token)
-		device->public.vtg->mode = (faa_mode_t) *token;
+	char *tok = strtok_f(temp, ',');	// start to tokenize
+	device->public.vtg->track_tn = (float) atof(strtok_f(NULL, ','));  // heading of track made good in true north - 20.11
+	strtok_f(NULL, ',');  // T
+	device->public.vtg->track_mn = (float) atof(strtok_f(NULL, ','));  // heading of track made good in magnetic north
+	strtok_f(NULL, ',');  // M
+	device->public.vtg->knots = (float) atof(strtok_f(NULL, ','));  // speed in knots - 2.5
+	strtok_f(NULL, ',');  // N
+	device->public.vtg->kph = (float) atof(strtok_f(NULL, ','));  // speed in kilometres per hour - 4.63
+	strtok_f(NULL, ',');  // K
+	tok = strtok_f(NULL, ',');
+	device->public.vtg->mode = (faa_mode_t) *tok;  // FAA mode indicator
 }
 
-// buffer NMEA sentences into DMA circular buffer
-static void load_into_1st_buffer(lwrb_t *rb, const uint16_t high_pos)
+// buffer NMEA sentences from DMA circular buffer (1st buffer) into ringbuffer (2nd buffer)
+static void load_into_ring_buffer(lwrb_t *rb, const uint16_t high_pos)
 {
 	static uint16_t low_pos;
 
@@ -558,8 +559,8 @@ static void load_into_1st_buffer(lwrb_t *rb, const uint16_t high_pos)
 #endif
 }
 
-// buffer into the 2nd buffer and write out to out[]
-static uint8_t load_into_2nd_buffer(lwrb_t *rb, uint8_t *temp, uint8_t *parse_flag)
+// load from 2nd buffer into out[82]
+static uint8_t load_one_NMEA_into_out(lwrb_t *rb, uint8_t *temp, uint8_t *parse_flag)
 {
 	lwrb_sz_t retval = 0;
 
@@ -590,7 +591,6 @@ static uint8_t load_into_2nd_buffer(lwrb_t *rb, uint8_t *temp, uint8_t *parse_fl
 
 							retval += lwrb_read(rb, temp, rest);  // read out len characters into out
 							retval += lwrb_read(rb, &temp[retval], extra);  // read out len characters into out
-//							temp[retval + 1] = '\0';
 #if DEBUG_LWRB_FREE
 							__ORG1510MK4.ovrflowlen = retval;
 #endif
@@ -642,13 +642,11 @@ static void _Parse(uint16_t high_pos)
 	// high_pos indicates the position in the circular DMA reception buffer until which data is available
 	// it is NOT the length of new data
 
-	static uint8_t out[82];  // output box for GPS UART's DMA
-
-	load_into_1st_buffer(&lwrb, high_pos);	// buffer incoming NMEA sentences into circular DMA buffer
+	load_into_ring_buffer(&lwrb, high_pos);  // buffer incoming NMEA sentences into circular DMA buffer
 
 	if(parse_complete)
 		{
-			load_into_2nd_buffer(&lwrb, out, &parse_complete);  // buffer into the 2nd buffer and write out to out[]
+			load_one_NMEA_into_out(&lwrb, out, &parse_complete);  // buffer into the 2nd buffer and write out to out[]
 		}
 	else
 		{
@@ -684,7 +682,7 @@ static void _Write(const char *str)
 	_wait(50);	// always wait a while. stuff works better that way...
 }
 
-static __org1510mk4_t                __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
+static __org1510mk4_t __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
 	{  //
 	.public.Power = &_Power,	// GPS module power mode change control function
 	.public.Parse = &_Parse,	//
@@ -700,6 +698,8 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 	__ORG1510MK4.public.PowerMode = 0;  // TODO - read from FeRAM, for now set to off by default
 
 	__ORG1510MK4.public.gga = &_gga;	// tie in GGA message struct
+	__ORG1510MK4.public.gga->lat = &_gga_lat;  // tie in latitude
+	__ORG1510MK4.public.gga->lon = &_gga_lon;  // tie in longitude
 	__ORG1510MK4.public.gga->fix_date = _GGAfix_date;  // tie in container for GGA-derived fix date
 
 	__ORG1510MK4.public.zda = &_zda;	// tie in ZDA message struct

@@ -39,13 +39,35 @@ typedef enum gga_fix_t	// GGA message struct
 	  simulation = 8,  // simulation
 } gga_fix_t;
 
+typedef enum cardinal_dir_t  // directions on the hemisphere - NSEW
+{  // ASCII character interpreted as integer
+	  na = 0,  // no ifx
+	  N = 78,  // north
+	  S = 83,  // south
+	  E = 69,  // east
+	  W = 87,  // west
+} cardinal_dir_t;
+
+typedef struct coord_t
+{
+	uint8_t h;  // hours
+	uint8_t m;  // minutes
+	uint8_t s;	// seconds
+} coord_t;
+
 typedef struct gngga_t  // GGA message
 {
 	char *fix_date;  // age of GPS fix data
+	coord_t *lat;  // latitude
+	cardinal_dir_t lat_dir;  // direction of latitude
+	coord_t *lon;  // longitude
+	cardinal_dir_t lon_dir;  // direction of longitude
 	gga_fix_t fix;	// type of GPS fix
 	uint8_t sat_used;  // satellites used for solution
 	float HDOP;  // Horizontal Dilution Of Precision
-	float alt;  // altitude in meters above mean sea level
+	float alt;  // orthometric height (MSL reference)
+	float geoid_sep;  // geoid separation in meters
+	float dgps_age;  // age of DGPS record
 } gngga_t;
 
 typedef enum faa_mode_t  // FAA mode indicator
