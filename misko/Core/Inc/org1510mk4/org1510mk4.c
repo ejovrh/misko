@@ -32,14 +32,15 @@ typedef struct	// org1510mk4c_t actual
 	org1510mk4_t public;  // public struct
 } __org1510mk4_t;
 
-static __org1510mk4_t __ORG1510MK4 __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
+static __org1510mk4_t                __ORG1510MK4                __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
 
 static lwrb_t lwrb;  // 2nd circular buffer for data processing
 static uint8_t lwrb_buffer[LWRB_BUFFER_LEN];	//
 static char _UTCtimestr[7];  // container for ZDA-derived UTC time
 static char _GGAfix_date[7];  // container for GGA-derived fix date
-static gnzda_t _zda;  // object for GNZDA data
-static gngga_t _gga;  // object for GNGGA data
+static gnzda_t _zda;  // object for ZDA messages
+static gngga_t _gga;  // object for GGA messages
+static vtg_t _vtg;	// object for VTG messages
 static uint8_t parse_complete;	// semaphore for parsing <-> ringbuffer load control
 static uint8_t gps_dma_input_buffer[GPS_DMA_INPUT_BUFFER_LEN];  // 1st circular buffer: incoming GPS UART DMA data
 
@@ -406,9 +407,9 @@ static void rx_start(void)
 // parses NMEA str for ZDA data - time & date
 static void parse_zda(const __org1510mk4_t* device, const char *str)
 {
-	char *zda = strstr(str, "ZDA");  // first, check if ZDA exists in the input string
+	char *msg = strstr(str, "ZDA");  // first, check if we have the correct message type
 
-	if(zda == NULL)  // if not, get out
+	if(msg == NULL)  // if not, get out
 		return;
 
 	char temp[82] = "\0";  // create a temporary buffer
@@ -438,9 +439,9 @@ static void parse_zda(const __org1510mk4_t* device, const char *str)
 // parses str for GGA data - fix indicator, HDOP, satellites used, etc.
 static void parse_gga(const __org1510mk4_t* device, const char *str)
 {
-	char *zda = strstr(str, "GGA");  // first, check if GGA exists in the input string
+	char *msg = strstr(str, "GGA");  // first, check if we have the correct message type
 
-	if(zda == NULL)  // if not, get out
+	if(msg == NULL)  // if not, get out
 		return;
 
 	char temp[82] = "\0";  // create a temporary buffer
@@ -478,6 +479,49 @@ static void parse_gga(const __org1510mk4_t* device, const char *str)
 		device->public.gga->alt = (float) atof(token);
 	else
 		device->public.gga->alt = 0;
+}
+
+// parses str for VTG data - course over ground, .
+static void parse_vtg(const __org1510mk4_t* device, const char *str)
+{
+	char *msg = strstr(str, "VTG");  // first, check if we have the correct message type
+
+	if(msg == NULL)  // if not, get out
+		return;
+
+	char temp[82] = "\0";  // create a temporary buffer
+
+	strncpy(temp, str, strlen(str));  // copy str into temp
+
+	// $GNVTG,20.11,T,,M,2.50,N,4.63,K,A*17
+	char *token = strtok(temp, ",");	// start to tokenize
+
+	token = strtok(NULL, ",");  // heading of track made good in true north - 20.11
+	device->public.vtg->track_tn = (float) atof(token);
+
+	token = strtok(NULL, ",");  // T
+
+//	token = strtok(NULL, ",");  // heading of track made good in magnetic north - empty
+	if(token)
+		device->public.vtg->track_mn = (float) atof(token);
+	else
+		device->public.vtg->track_mn = 0;
+
+	token = strtok(NULL, ",");  // M
+
+	token = strtok(NULL, ",");  // speed in knots - 2.5
+	device->public.vtg->knots = (float) atof(token);
+
+	token = strtok(NULL, ",");  // N
+
+	token = strtok(NULL, ",");  // speed in kilometres per hour - 4.63
+	device->public.vtg->kph = (float) atof(token);
+
+	token = strtok(NULL, ",");  // K
+
+	token = strtok(NULL, ",");  // FAA mode indicator
+	if(token)
+		device->public.vtg->mode = (faa_mode_t) *token;
 }
 
 // buffer NMEA sentences into DMA circular buffer
@@ -613,6 +657,7 @@ static void _Parse(uint16_t high_pos)
 					// at this point we have a good sentence and we can start parsing NMEA data
 					parse_gga(&__ORG1510MK4, (const char*) out);	// parse for GGA data
 					parse_zda(&__ORG1510MK4, (const char*) out);	// parse for ZDA data
+					parse_vtg(&__ORG1510MK4, (const char*) out);	// parse for VTG data
 
 					HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, out, (uint16_t) strlen((const char*) out));  // send GPS to VCP
 
@@ -639,7 +684,7 @@ static void _Write(const char *str)
 	_wait(50);	// always wait a while. stuff works better that way...
 }
 
-static __org1510mk4_t __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
+static __org1510mk4_t                __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
 	{  //
 	.public.Power = &_Power,	// GPS module power mode change control function
 	.public.Parse = &_Parse,	//
@@ -654,12 +699,14 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 //	__ORG1510MK4.public.NMEA = gps_dma_input_buffer;  // tie in NMEA sentence buffer
 	__ORG1510MK4.public.PowerMode = 0;  // TODO - read from FeRAM, for now set to off by default
 
-	__ORG1510MK4.public.gga = &_gga;	// tie in GNGGA-derived struct
+	__ORG1510MK4.public.gga = &_gga;	// tie in GGA message struct
 	__ORG1510MK4.public.gga->fix_date = _GGAfix_date;  // tie in container for GGA-derived fix date
 
-	__ORG1510MK4.public.zda = &_zda;	// tie in GNZDA-derived struct
+	__ORG1510MK4.public.zda = &_zda;	// tie in ZDA message struct
 	__ORG1510MK4.public.zda->time = _UTCtimestr;  // tie in container for ZDA-derived UTC time
 	__ORG1510MK4.public.zda->tz = 0;	// initialize to 0
+
+	__ORG1510MK4.public.vtg = &_vtg;	// tie in VTG message struct
 
 #if DEBUG_LWRB_FREE
 	__ORG1510MK4.char_written = 0;	// characters written out to system UART

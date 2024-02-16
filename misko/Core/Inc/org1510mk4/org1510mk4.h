@@ -17,7 +17,7 @@ typedef enum org1510mk4_power_t  // GPS module power states, DS. ch. 4.3.10, p. 
 	  reset = 7  // reset the module, DS. ch. 8.3.2
 } org1510mk4_power_t;
 
-typedef struct gnzda_t	// GNZDA sentence struct
+typedef struct gnzda_t	// ZDA message struct
 {
 	char *time;  //	hhmmss time in UTC
 	uint8_t day;	// day of the month
@@ -26,7 +26,7 @@ typedef struct gnzda_t	// GNZDA sentence struct
 	uint8_t tz;  // local time-zone offset from GMT
 } gnzda_t;
 
-typedef enum gga_fix_t	// GNGGA GPS fix type
+typedef enum gga_fix_t	// GGA message struct
 {
 	  none = 0,  // no fix
 	  GPS = 1,	// GPS fix
@@ -39,7 +39,7 @@ typedef enum gga_fix_t	// GNGGA GPS fix type
 	  simulation = 8,  // simulation
 } gga_fix_t;
 
-typedef struct gngga_t  // GNGGA sentence
+typedef struct gngga_t  // GGA message
 {
 	char *fix_date;  // age of GPS fix data
 	gga_fix_t fix;	// type of GPS fix
@@ -48,10 +48,30 @@ typedef struct gngga_t  // GNGGA sentence
 	float alt;  // altitude in meters above mean sea level
 } gngga_t;
 
+typedef enum faa_mode_t  // FAA mode indicator
+{  // ASCII character interpreted as integer
+	  auton = 65,  // A - autonomous mode
+	  diff = 68,  // D - differential mode
+	  est = 69,  // E - estimated (dead reckoning) mode
+	  man = 77,  // M - manual mode
+	  simu = 83,  // S - simulation mode
+	  invalid = 78,  // N - data not valid
+} faa_mode_t;
+
+typedef struct vtg_t	// VTG sentence struct
+{
+	float track_tn;  // heading of track made good in true north
+	float track_mn;  // heading of track made good in magnetic north
+	float knots;  // speed in knots
+	float kph;  // speed in kilometres per hour
+	faa_mode_t mode;	// FAA mode indicator
+} vtg_t;
+
 typedef struct org1510mk4_t  // struct describing the GPS module functionality
 {
 	gnzda_t *zda;  // ZDA-derived data
 	gngga_t *gga;  // GGA-derived data
+	vtg_t *vtg;  // VTG-derived data
 	uint8_t *NMEA;  //	last NMEA sentence
 	volatile org1510mk4_power_t PowerMode;  // current power mode of the GPS module
 	void (*Power)(const org1510mk4_power_t state);  // GPS module power mode change control function
