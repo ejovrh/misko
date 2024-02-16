@@ -22,7 +22,7 @@
 #include "stm32h5xx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "org1510mk4/org1510mk4.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,6 +45,7 @@
 extern volatile uint32_t __adc_dma_buffer[ADC_CHANNELS];  // store for ADC readout
 extern volatile uint32_t __adc_results[ADC_CHANNELS];  // store ADC average data
 extern double _VddaConversionConstant;	// constant values pre-computed in constructor
+extern org1510mk4_t *const ORG1510MK4;
 
 static volatile uint8_t i;  // iterator for average calculation
 static uint32_t tempvbat;  // temporary variable for average calculation
@@ -447,6 +448,16 @@ void TIM1_CC_IRQHandler(void)
 	HAL_TIM_IRQHandler(&htim1);
 	/* USER CODE BEGIN TIM1_CC_IRQn 1 */
 
+	if(ORG1510MK4->gga->fix == INS)  // check if we have an inertial navigation fix
+		{
+			HAL_GPIO_TogglePin(GPS_Green_LED_GPIO_Port, GPS_Green_LED_Pin);  // blink the LED
+			return;
+		}
+
+	if(ORG1510MK4->gga->fix > 0)	// check if we have a GPS fix
+		HAL_GPIO_WritePin(GPS_Green_LED_GPIO_Port, GPS_Green_LED_Pin, GPIO_PIN_RESET);	// light up green LED
+	else
+		HAL_GPIO_WritePin(GPS_Green_LED_GPIO_Port, GPS_Green_LED_Pin, GPIO_PIN_SET);	// light down green LED
 	/* USER CODE END TIM1_CC_IRQn 1 */
 }
 

@@ -480,25 +480,19 @@ static void parse_gga(const __org1510mk4_t* device, const char *str)
 		device->public.gga->alt = 0;
 }
 
-// loads incoming NMEA string from DMA into a buffer and parses it
-static void _Parse(uint16_t high_pos)
+// buffer NMEA sentences into DMA circular buffer
+static void load_into_1st_buffer(lwrb_t *rb, const uint16_t high_pos)
 {
-	// high_pos indicates the position in the circular DMA reception buffer until which data is available
-	// it is NOT the length of new data
-
 	static uint16_t low_pos;
 
 	// safeguard against an RX event interrupt where no new data has come in
 	if(high_pos == low_pos)  // no new data
 		return;
 
-	static lwrb_sz_t len = 0;
-	uint8_t out[82];  // output box for GPS UART's DMA
-
 	// 1st buffering - load into ringbuffer
 	if(high_pos > low_pos)  // linear region
 		// read in a linear fashion from DMA rcpt. buffer from beginning to end of new data
-		lwrb_write(&lwrb, &gps_dma_input_buffer[low_pos], high_pos - low_pos);  // (high_pos - low_pos) is length of new data
+		lwrb_write(rb, &gps_dma_input_buffer[low_pos], high_pos - low_pos);  // (high_pos - low_pos) is length of new data
 	else	// overflow region
 		{
 			// read new data from current position until end of DMA rcpt. buffer
@@ -507,7 +501,7 @@ static void _Parse(uint16_t high_pos)
 			// then, if there is more after the rollover
 			if(high_pos > 0)
 				// read from beginning of circular DMA buffer until the end position of new data
-				lwrb_write(&lwrb, &gps_dma_input_buffer[0], high_pos);
+				lwrb_write(rb, &gps_dma_input_buffer[0], high_pos);
 		}
 
 	low_pos = high_pos;  // save position until data has been read
@@ -518,59 +512,77 @@ static void _Parse(uint16_t high_pos)
 	if(__ORG1510MK4.lwrb_free == 0)  // LwRB memory used up: hang here
 		Error_Handler();
 #endif
+}
+
+// buffer into the 2nd buffer and write out to out[]
+static uint8_t load_into_2nd_buffer(lwrb_t *rb, uint8_t *temp)
+{
+	lwrb_sz_t retval = 0;
+
+	// 2nd buffering into LwRB & load NMEA sentence into out[] for parsing
+	static lwrb_sz_t nmea_start_pos;  // position store for NMEA sentence start - not needed at all
+	if(lwrb_find(rb, "$", 1, 0, &nmea_start_pos))  // starting from the current read pointer location, find the NMEA sentence start marker
+		{
+			static lwrb_sz_t nmea_terminator_pos;  // position store for NMEA terminator start position
+			if(lwrb_find(rb, "$", 1, nmea_start_pos + 1, &nmea_terminator_pos))  // starting from current read pointer location, find the terminator start
+				{
+					memset(temp, '\0', 82);  // zero out out-container
+
+					// assemble the complete NMEA sentence
+					if(nmea_terminator_pos > nmea_start_pos)  // linear region
+						{
+							retval = lwrb_read(rb, temp, nmea_terminator_pos - nmea_start_pos);  // the terminators are from the current read pointer len away
+							nmea_start_pos = nmea_terminator_pos;  // save position for next iteration
+
+#if DEBUG_LWRB_FREE
+							__ORG1510MK4.linearlen = retval;
+#endif
+						}
+					else  // overflow region
+						{
+							// the terminators are in overflow:
+							lwrb_sz_t rest = (lwrb_sz_t) (GPS_DMA_INPUT_BUFFER_LEN - nmea_start_pos);  // from the current read pointer to buffer end
+							lwrb_sz_t extra = (lwrb_sz_t) (nmea_terminator_pos - rest);  // then from buffer start some more
+
+							retval = lwrb_read(rb, temp, rest);  // read out len characters into out
+							retval += lwrb_read(rb, &temp[retval], extra);  // read out len characters into out
+//							temp[retval + 1] = '\0';
+#if DEBUG_LWRB_FREE
+							__ORG1510MK4.ovrflowlen = retval;
+#endif
+							nmea_start_pos = extra;  // save position for next iteration
+						}
+					parse_complete = 0;  // at this point we have the complete NMEA sentence in out[]
+				}
+		}
+
+	return (uint8_t) retval;
+}
+
+// loads incoming NMEA string from DMA into a buffer and parses it
+static void _Parse(uint16_t high_pos)
+{
+	// high_pos indicates the position in the circular DMA reception buffer until which data is available
+	// it is NOT the length of new data
+
+	static uint8_t out[82];  // output box for GPS UART's DMA
+
+	load_into_1st_buffer(&lwrb, high_pos);	// buffer incoming NMEA sentences into circular DMA buffer
 
 	if(parse_complete)
 		{
-			// 2nd buffering into LwRB & load NMEA sentence into out[] for parsing
-			static lwrb_sz_t nmea_start_pos;  // position store for NMEA sentence start - not needed at all
-			if(lwrb_find(&lwrb, "$", 1, 0, &nmea_start_pos))  // starting from the current read pointer location, find the NMEA sentence start marker
-				{
-					static lwrb_sz_t nmea_terminator_pos;  // position store for NMEA terminator start position
-					if(lwrb_find(&lwrb, "$", 1, nmea_start_pos + 1, &nmea_terminator_pos))  // starting from current read pointer location, find the terminator start
-						{
-							memset(&out, '\0', 82);  // zero out out-container
-
-							// assemble the complete NMEA sentence
-							if(nmea_terminator_pos > nmea_start_pos)  // linear region
-								{
-#if DEBUG_LWRB_FREE
-									__ORG1510MK4.linearlen = lwrb_read(&lwrb, &out, nmea_terminator_pos - nmea_start_pos);  // the terminators are from the current read pointer len away
-#else
-									lwrb_read(&lwrb, &out, nmea_terminator_pos - nmea_start_pos);  // the terminators are from the current read pointer len away
-#endif
-									nmea_start_pos = nmea_terminator_pos;  // save position for next iteration
-								}
-							else  // overflow region
-								{
-									// the terminators are in overflow:
-									lwrb_sz_t rest = (lwrb_sz_t) (GPS_DMA_INPUT_BUFFER_LEN - nmea_start_pos);  // from the current read pointer to buffer end
-									lwrb_sz_t extra = (lwrb_sz_t) (nmea_terminator_pos - rest);  // then from buffer start some more
-
-#if DEBUG_LWRB_FREE
-									__ORG1510MK4.ovrflowlen = lwrb_read(&lwrb, &out, rest);  // read out len characters into out
-									__ORG1510MK4.ovrflowlen += lwrb_read(&lwrb, &out[rest], extra);  // read out len characters into out
-#else
-									lwrb_read(&lwrb, &out, rest);  // read out len characters into out
-									lwrb_read(&lwrb, &out[rest], extra);  // read out len characters into out
-#endif
-									nmea_start_pos = extra;  // save position for next iteration
-								}
-							parse_complete = 0;  // at this point we have the complete NMEA sentence in out[]
-						}
-				}
+			load_into_2nd_buffer(&lwrb, out);  // buffer into the 2nd buffer and write out to out[]
 		}
 	else
 		{
 			// parse out for NMEA sentences / fields
-			len = (uint16_t) strlen((const char*) out);
-#if DEBUG_LWRB_FREE
-			__ORG1510MK4.char_written += len;
-#endif
+			uint8_t len = (uint8_t) strlen((const char*) out);
 
 			// check for valid length
 			if(len > 82 || len == 0)  // too long/too short - most likely not valid
 				{
 					parse_complete = 1;  // get out
+					memset(out, '\0', 82);	// zero the buffer
 					return;
 				}
 
@@ -578,6 +590,7 @@ static void _Parse(uint16_t high_pos)
 			if(out[len - 5] != '*')  // no checksum field
 				{
 					parse_complete = 1;  // get out
+					memset(out, '\0', 82);  // zero the buffer
 					return;
 				}
 
@@ -585,11 +598,15 @@ static void _Parse(uint16_t high_pos)
 			if(checksumMismatch((const char*) &out[1], (uint8_t) len - 6))  // advance start to the first checksum character and pass on
 				{
 					parse_complete = 1;  // if checksums dont match get out
+					memset(out, '\0', 82);  // zero the buffer
 					return;
 				}
 
-			// at this point we have a good sentence and we can start parsing
+#if DEBUG_LWRB_FREE
+			__ORG1510MK4.char_written += len;
+#endif
 
+			// at this point we have a good sentence and we can start parsing NMEA data
 			parse_gga(&__ORG1510MK4, (const char*) out);	// parse for GGA data
 			parse_zda(&__ORG1510MK4, (const char*) out);	// parse for ZDA data
 
