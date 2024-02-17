@@ -38,12 +38,13 @@ static lwrb_t lwrb;  // 2nd circular buffer for data processing
 static uint8_t lwrb_buffer[LWRB_BUFFER_LEN];	//
 static char _UTCtimestr[7];  // container for ZDA-derived UTC time
 static char _GGAfix_date[7];  // container for GGA-derived fix date
-static gnzda_t _zda;  // object for ZDA messages
-static gngga_t _gga;  // object for GGA messages
+static zda_t _zda;  // object for ZDA messages
+static gga_t _gga;  // object for GGA messages
 static coord_dd_t _gga_lat;  // object for GGA latitude
 static coord_dd_t _gga_lon;  // object for GGA longitude
 static vtg_t _vtg;	// object for VTG messages
 static gsa_t _gpgsa;	// object for GPS GSA messages
+static gsv_t _gpgsv;	// object for GPS GSV messages
 static uint8_t parse_complete;	// semaphore for parsing <-> ringbuffer load control
 static uint8_t gps_dma_input_buffer[GPS_DMA_INPUT_BUFFER_LEN];  // 1st circular buffer: incoming GPS UART DMA data
 static uint8_t out[82];  // output box for GPS UART's DMA
@@ -573,6 +574,73 @@ static void parse_gsa(const __org1510mk4_t* device, const char *str)
 	device->public.gsa->vdop = (float) atof(strtok_f(NULL, ','));  // 0.98
 }
 
+// parses NMEA str for GSV data - time & date	- only GPS at this time
+static void parse_gsv(const __org1510mk4_t* device, const char *str)
+{
+	char *msg = strstr(str, "GPGSV");  // first, check if we have the correct message type
+
+	if(msg == NULL)  // if not, get out
+		return;
+
+	char temp[82] = "\0";  // create a temporary buffer
+
+	strncpy(temp, str, strlen(str));	// copy str into temp
+
+	// $GPGSV,3,1,09,25,73,318,16,12,62,069,15,29,44,220,30,11,37,082,*76
+	// $GPGSV,3,2,09,28,31,311,,32,27,263,25,24,22,154,,06,22,044,*7E
+	// $GPGSV,3,3,09,31,06,316,*40
+	char *tok = strtok_f(temp, ',');	// start to tokenize
+
+	device->public.gsv->msg_count = (uint8_t) atoi(strtok_f(NULL, ','));  // 3
+	uint8_t num = (uint8_t) atoi(strtok_f(NULL, ','));  // 1,2,3.. only needed for internal computation
+	device->public.gsv->sv_visible = (uint8_t) atoi(strtok_f(NULL, ','));  //	09
+
+	static uint8_t n;  // sv array iterator
+
+	// shown are field values for message 1 only!
+	device->public.gsv->sv[n].prn = (uint8_t) atoi(strtok_f(NULL, ','));  // 25
+	device->public.gsv->sv[n].elev = (uint8_t) atoi(strtok_f(NULL, ','));  // 73
+	device->public.gsv->sv[n].azim = (uint16_t) atoi(strtok_f(NULL, ','));  // 318
+	device->public.gsv->sv[n].snr = (uint8_t) atoi(strtok_f(NULL, ','));  // 16
+	n++;	// move to the next field
+
+	if(n == device->public.gsv->sv_visible)
+		{
+			n = 0;
+			return;
+		}
+
+	device->public.gsv->sv[n].prn = (uint8_t) atoi(strtok_f(NULL, ','));  // 12
+	device->public.gsv->sv[n].elev = (uint8_t) atoi(strtok_f(NULL, ','));  // 62
+	device->public.gsv->sv[n].azim = (uint16_t) atoi(strtok_f(NULL, ','));  // 069
+	device->public.gsv->sv[n].snr = (uint8_t) atoi(strtok_f(NULL, ','));  // 12
+	n++;	// move to the next field
+
+	if(n == device->public.gsv->sv_visible)
+		{
+			n = 0;
+			return;
+		}
+
+	device->public.gsv->sv[n].prn = (uint8_t) atoi(strtok_f(NULL, ','));  // 29
+	device->public.gsv->sv[n].elev = (uint8_t) atoi(strtok_f(NULL, ','));  // 44
+	device->public.gsv->sv[n].azim = (uint16_t) atoi(strtok_f(NULL, ','));  // 220
+	device->public.gsv->sv[n].snr = (uint8_t) atoi(strtok_f(NULL, ','));  // 30
+	n++;	// move to the next field
+
+	if(n == device->public.gsv->sv_visible)
+		{
+			n = 0;
+			return;
+		}
+
+	device->public.gsv->sv[n].prn = (uint8_t) atoi(strtok_f(NULL, ','));  // 11
+	device->public.gsv->sv[n].elev = (uint8_t) atoi(strtok_f(NULL, ','));  // 37
+	device->public.gsv->sv[n].azim = (uint16_t) atoi(strtok_f(NULL, ','));  // 082
+	device->public.gsv->sv[n].snr = (uint8_t) atoi(strtok_f(NULL, ','));  // NULL
+	n++;	// move to the next field
+}
+
 // buffer NMEA sentences from DMA circular buffer (1st buffer) into ringbuffer (2nd buffer)
 static void load_into_ring_buffer(lwrb_t *rb, const uint16_t high_pos)
 {
@@ -705,6 +773,7 @@ static void _Parse(uint16_t high_pos)
 					parse_zda(&__ORG1510MK4, (const char*) out);	// parse for ZDA data
 					parse_vtg(&__ORG1510MK4, (const char*) out);	// parse for VTG data
 					parse_gsa(&__ORG1510MK4, (const char*) out);	// parse for GSA data
+					parse_gsv(&__ORG1510MK4, (const char*) out);	// parse for GSV data
 
 					HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, out, (uint16_t) strlen((const char*) out));  // send GPS to VCP
 
@@ -757,6 +826,8 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 
 	__ORG1510MK4.public.vtg = &_vtg;	// tie in VTG message struct
 	__ORG1510MK4.public.gsa = &_gpgsa;	// tie in GSA message struct
+
+	__ORG1510MK4.public.gsv = &_gpgsv;	// tie in GSA message struct
 
 #if DEBUG_LWRB_FREE
 	__ORG1510MK4.char_written = 0;	// characters written out to system UART

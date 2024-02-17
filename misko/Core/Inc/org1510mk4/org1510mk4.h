@@ -17,14 +17,14 @@ typedef enum org1510mk4_power_t  // GPS module power states, DS. ch. 4.3.10, p. 
 	  reset = 7  // reset the module, DS. ch. 8.3.2
 } org1510mk4_power_t;
 
-typedef struct gnzda_t	// ZDA message struct
+typedef struct zda_t	// ZDA message struct
 {
 	char *time;  //	hhmmss time in UTC
 	uint8_t day;	// day of the month
 	uint8_t month;  // month of the year
 	uint16_t year;	// year
 	uint8_t tz;  // local time-zone offset from GMT
-} gnzda_t;
+} zda_t;
 
 typedef enum gga_fix_t	// GGA message struct
 {
@@ -54,7 +54,7 @@ typedef struct coord_dd_t  // NMEA decimal degree
 	float s;  // seconds 015 54.9327
 } coord_dd_t;
 
-typedef struct gngga_t  // GGA message
+typedef struct gga_t  // GGA message
 {
 	char *fix_date;  // age of GPS fix data
 	coord_dd_t *lat;  // latitude
@@ -67,7 +67,7 @@ typedef struct gngga_t  // GGA message
 	float alt;  // orthometric height (MSL reference)
 	float geoid_sep;  // geoid separation in meters
 	float dgps_age;  // age of DGPS record
-} gngga_t;
+} gga_t;
 
 typedef enum faa_mode_t  // FAA mode indicator
 {  // ASCII character interpreted as integer
@@ -123,12 +123,28 @@ typedef struct gsa_t  // GSA sentence struct
 	float vdop;  // Vertical Dilution Of Position
 } gsa_t;
 
+typedef struct spacevehicle_t
+{
+	uint8_t prn;	// Pseudo-Random Number of space vehicle
+	uint8_t elev;  // elevation in degrees, 0-90
+	uint16_t azim;  // azimuth in degrees from true north, 0 - 359
+	uint8_t snr;  // Signal to Noise Ratio, 00 - 99, NULL when not tracking
+} spacevehicle_t;
+
+typedef struct gsv_t
+{
+	uint8_t msg_count;	// total number of GSA messages in this cycle
+	uint8_t sv_visible;  // total number of space vehicles visible
+	spacevehicle_t sv[12];  // container for 12 space vehicles
+} gsv_t;
+
 typedef struct org1510mk4_t  // struct describing the GPS module functionality
 {
-	gnzda_t *zda;  // ZDA-derived data
-	gngga_t *gga;  // GGA-derived data
+	zda_t *zda;  // ZDA-derived data
+	gga_t *gga;  // GGA-derived data
 	vtg_t *vtg;  // VTG-derived data
 	gsa_t *gsa;  // GSA-derived data
+	gsv_t *gsv;  //	 GSV-derived data
 	uint8_t *NMEA;  //	last NMEA sentence
 	volatile org1510mk4_power_t PowerMode;  // current power mode of the GPS module
 	void (*Power)(const org1510mk4_power_t state);  // GPS module power mode change control function
