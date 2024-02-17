@@ -88,11 +88,47 @@ typedef struct vtg_t	// VTG sentence struct
 	faa_mode_t mode;	// FAA mode indicator
 } vtg_t;
 
+typedef enum gsa_selectionmode_t  // GSA selection mode
+{  // ASCII character interpreted as integer
+	  A = 65,  // Automatic, 2D or 3D
+	  M = 77,  // Manual, forced to operate in 2D/3D
+} gsa_selectionmode_t;
+
+typedef enum gsa_fixmode_t  // GSA fix mode
+{
+	  no = 1,  //	no fix
+	  twoD = 2,  //	2D fix
+	  threeD = 3,  // 3D fix
+
+} gsa_fixmode_t;
+
+typedef struct gsa_t  // GSA sentence struct
+{
+	gsa_selectionmode_t sel_mode;  // GSA selection mode
+	gsa_fixmode_t fixmode;  // fix mode
+	uint8_t sv01;  //	space vehicle 01 ID
+	uint8_t sv02;  // ...
+	uint8_t sv03;  // 01 - 32 is GPS, 33 - 64 SBAS, 64+ GLONASS
+	uint8_t sv04;  //
+	uint8_t sv05;  //
+	uint8_t sv06;  //
+	uint8_t sv07;  //
+	uint8_t sv08;  //
+	uint8_t sv09;  //
+	uint8_t sv10;  //
+	uint8_t sv11;  //
+	uint8_t sv12;  //
+	float pdop;  // Position Dilution Of Position
+	float hdop;  // Horizontal Dilution Of Position
+	float vdop;  // Vertical Dilution Of Position
+} gsa_t;
+
 typedef struct org1510mk4_t  // struct describing the GPS module functionality
 {
 	gnzda_t *zda;  // ZDA-derived data
 	gngga_t *gga;  // GGA-derived data
 	vtg_t *vtg;  // VTG-derived data
+	gsa_t *gsa;  // GSA-derived data
 	uint8_t *NMEA;  //	last NMEA sentence
 	volatile org1510mk4_power_t PowerMode;  // current power mode of the GPS module
 	void (*Power)(const org1510mk4_power_t state);  // GPS module power mode change control function

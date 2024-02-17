@@ -43,6 +43,7 @@ static gngga_t _gga;  // object for GGA messages
 static coord_dd_t _gga_lat;  // object for GGA latitude
 static coord_dd_t _gga_lon;  // object for GGA longitude
 static vtg_t _vtg;	// object for VTG messages
+static gsa_t _gpgsa;	// object for GPS GSA messages
 static uint8_t parse_complete;	// semaphore for parsing <-> ringbuffer load control
 static uint8_t gps_dma_input_buffer[GPS_DMA_INPUT_BUFFER_LEN];  // 1st circular buffer: incoming GPS UART DMA data
 static uint8_t out[82];  // output box for GPS UART's DMA
@@ -448,7 +449,7 @@ static char* strtok_f(char *s, char delim)
 static void NMEA_DecimalDegree_to_coord_dd_t(char *str, coord_dd_t *coord)
 {
 	coord->deg = (uint8_t) (atoi(str) / 100);
-	coord->s = ((atof(str) / 100.0) - coord->deg) * 100;
+	coord->s = (float) ((atof(str) / 100.0) - coord->deg) * 100;
 }
 
 // parses NMEA str for ZDA data - time & date
@@ -533,6 +534,43 @@ static void parse_vtg(const __org1510mk4_t* device, const char *str)
 	strtok_f(NULL, ',');  // K
 	tok = strtok_f(NULL, ',');
 	device->public.vtg->mode = (faa_mode_t) *tok;  // FAA mode indicator
+}
+
+// parses NMEA str for GSA data - time & date	- only GPS at this time
+static void parse_gsa(const __org1510mk4_t* device, const char *str)
+{
+	char *msg = strstr(str, "GPGSA");  // first, check if we have the correct message type
+
+	if(msg == NULL)  // if not, get out
+		return;
+
+	char temp[82] = "\0";  // create a temporary buffer
+
+	strncpy(temp, str, strlen(str));	// copy str into temp
+
+	// $GPGSA,A,3,25,12,23,15,,,,,,,,,4.75,4.64,0.98*02
+	char *tok = strtok_f(temp, ',');	// start to tokenize
+
+	tok = strtok_f(NULL, ',');
+	device->public.gsa->sel_mode = (gsa_selectionmode_t) *tok;  // GSA selection mode - A
+
+	device->public.gsa->fixmode = (gsa_fixmode_t) atoi(strtok_f(NULL, ','));  // GSA fix mode - 3
+	device->public.gsa->sv01 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01 - 25
+	device->public.gsa->sv02 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01 - 12
+	device->public.gsa->sv03 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01 - 23
+	device->public.gsa->sv04 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01 - 15
+	device->public.gsa->sv05 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	device->public.gsa->sv06 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	device->public.gsa->sv07 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	device->public.gsa->sv08 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	device->public.gsa->sv09 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	device->public.gsa->sv10 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	device->public.gsa->sv11 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	device->public.gsa->sv12 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+
+	device->public.gsa->pdop = (float) atof(strtok_f(NULL, ','));  // 4.75
+	device->public.gsa->hdop = (float) atof(strtok_f(NULL, ','));  // 4.64
+	device->public.gsa->vdop = (float) atof(strtok_f(NULL, ','));  // 0.98
 }
 
 // buffer NMEA sentences from DMA circular buffer (1st buffer) into ringbuffer (2nd buffer)
@@ -666,6 +704,7 @@ static void _Parse(uint16_t high_pos)
 					parse_gga(&__ORG1510MK4, (const char*) out);	// parse for GGA data
 					parse_zda(&__ORG1510MK4, (const char*) out);	// parse for ZDA data
 					parse_vtg(&__ORG1510MK4, (const char*) out);	// parse for VTG data
+					parse_gsa(&__ORG1510MK4, (const char*) out);	// parse for GSA data
 
 					HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, out, (uint16_t) strlen((const char*) out));  // send GPS to VCP
 
@@ -717,6 +756,7 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 	__ORG1510MK4.public.zda->tz = 0;	// initialize to 0
 
 	__ORG1510MK4.public.vtg = &_vtg;	// tie in VTG message struct
+	__ORG1510MK4.public.gsa = &_gpgsa;	// tie in GSA message struct
 
 #if DEBUG_LWRB_FREE
 	__ORG1510MK4.char_written = 0;	// characters written out to system UART
