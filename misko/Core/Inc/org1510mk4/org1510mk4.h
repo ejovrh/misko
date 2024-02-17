@@ -41,7 +41,7 @@ typedef enum gga_fix_t	// GGA message struct
 
 typedef enum cardinal_dir_t  // directions on the hemisphere - NSEW
 {  // ASCII character interpreted as integer
-	  na = 0,  // no ifx
+	  na = 0,  // no fix
 	  N = 78,  // north
 	  S = 83,  // south
 	  E = 69,  // east
@@ -106,9 +106,9 @@ typedef struct gsa_t  // GSA sentence struct
 {
 	gsa_selectionmode_t sel_mode;  // GSA selection mode
 	gsa_fixmode_t fixmode;  // fix mode
-	uint8_t sv01;  //	space vehicle 01 ID
-	uint8_t sv02;  // ...
-	uint8_t sv03;  // 01 - 32 is GPS, 33 - 64 SBAS, 64+ GLONASS
+	uint8_t sv01;  //	space vehicle 01 PRN
+	uint8_t sv02;  // space vehicle 02 PRN
+	uint8_t sv03;  // ...
 	uint8_t sv04;  //
 	uint8_t sv05;  //
 	uint8_t sv06;  //
@@ -123,7 +123,7 @@ typedef struct gsa_t  // GSA sentence struct
 	float vdop;  // Vertical Dilution Of Position
 } gsa_t;
 
-typedef struct spacevehicle_t
+typedef struct spacevehicle_t  // space vehicle data
 {
 	uint8_t prn;	// Pseudo-Random Number of space vehicle
 	uint8_t elev;  // elevation in degrees, 0-90
@@ -131,7 +131,7 @@ typedef struct spacevehicle_t
 	uint8_t snr;  // Signal to Noise Ratio, 00 - 99, NULL when not tracking
 } spacevehicle_t;
 
-typedef struct gsv_t
+typedef struct gsv_t	// GSV sentence struct
 {
 	uint8_t msg_count;	// total number of GSA messages in this cycle
 	uint8_t sv_visible;  // total number of space vehicles visible

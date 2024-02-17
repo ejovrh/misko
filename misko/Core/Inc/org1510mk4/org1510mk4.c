@@ -453,7 +453,7 @@ static void NMEA_DecimalDegree_to_coord_dd_t(char *str, coord_dd_t *coord)
 	coord->s = (float) ((atof(str) / 100.0) - coord->deg) * 100;
 }
 
-// parses NMEA str for ZDA data - time & date
+// parses NMEA str for ZDA data
 static void parse_zda(const __org1510mk4_t* device, const char *str)
 {
 	char *msg = strstr(str, "ZDA");  // first, check if we have the correct message type
@@ -474,7 +474,7 @@ static void parse_zda(const __org1510mk4_t* device, const char *str)
 	device->public.zda->tz = (uint8_t) atoi(strtok_f(NULL, ','));  // local timezone offset
 }
 
-// parses str for GGA data - fix indicator, HDOP, satellites used, etc.
+// parses str for GGA data
 static void parse_gga(const __org1510mk4_t* device, const char *str)
 {
 	char *msg = strstr(str, "GGA");  // first, check if we have the correct message type
@@ -511,7 +511,7 @@ static void parse_gga(const __org1510mk4_t* device, const char *str)
 	device->public.gga->dgps_age = (float) atof(strtok_f(NULL, ','));  // DGPS age
 }
 
-// parses str for VTG data - course over ground, .
+// parses str for VTG data
 static void parse_vtg(const __org1510mk4_t* device, const char *str)
 {
 	char *msg = strstr(str, "VTG");  // first, check if we have the correct message type
@@ -537,7 +537,7 @@ static void parse_vtg(const __org1510mk4_t* device, const char *str)
 	device->public.vtg->mode = (faa_mode_t) *tok;  // FAA mode indicator
 }
 
-// parses NMEA str for GSA data - time & date	- only GPS at this time
+// parses NMEA str for GSA data - only GPS talker at this time
 static void parse_gsa(const __org1510mk4_t* device, const char *str)
 {
 	char *msg = strstr(str, "GPGSA");  // first, check if we have the correct message type
@@ -574,7 +574,7 @@ static void parse_gsa(const __org1510mk4_t* device, const char *str)
 	device->public.gsa->vdop = (float) atof(strtok_f(NULL, ','));  // 0.98
 }
 
-// parses NMEA str for GSV data - time & date	- only GPS at this time
+// parses NMEA str for GSV data - only GPS talker at this time
 static void parse_gsv(const __org1510mk4_t* device, const char *str)
 {
 	char *msg = strstr(str, "GPGSV");  // first, check if we have the correct message type
@@ -595,6 +595,9 @@ static void parse_gsv(const __org1510mk4_t* device, const char *str)
 	uint8_t num = (uint8_t) atoi(strtok_f(NULL, ','));  // 1,2,3.. only needed for internal computation
 	device->public.gsv->sv_visible = (uint8_t) atoi(strtok_f(NULL, ','));  //	09
 
+	if(device->public.gsv->sv_visible == 0)	// no space vehicles visible, no point to start tokenizing
+		return;
+
 	static uint8_t n;  // sv array iterator
 
 	// shown are field values for message 1 only!
@@ -604,7 +607,7 @@ static void parse_gsv(const __org1510mk4_t* device, const char *str)
 	device->public.gsv->sv[n].snr = (uint8_t) atoi(strtok_f(NULL, ','));  // 16
 	n++;	// move to the next field
 
-	if(n == device->public.gsv->sv_visible)
+	if(n == device->public.gsv->sv_visible)  // end of visible satellites
 		{
 			n = 0;
 			return;
@@ -616,7 +619,7 @@ static void parse_gsv(const __org1510mk4_t* device, const char *str)
 	device->public.gsv->sv[n].snr = (uint8_t) atoi(strtok_f(NULL, ','));  // 12
 	n++;	// move to the next field
 
-	if(n == device->public.gsv->sv_visible)
+	if(n == device->public.gsv->sv_visible)  // end of visible satellites
 		{
 			n = 0;
 			return;
@@ -628,7 +631,7 @@ static void parse_gsv(const __org1510mk4_t* device, const char *str)
 	device->public.gsv->sv[n].snr = (uint8_t) atoi(strtok_f(NULL, ','));  // 30
 	n++;	// move to the next field
 
-	if(n == device->public.gsv->sv_visible)
+	if(n == device->public.gsv->sv_visible)  // end of visible satellites
 		{
 			n = 0;
 			return;
