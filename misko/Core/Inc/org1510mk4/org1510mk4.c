@@ -40,8 +40,8 @@ static char _UTCtimestr[7];  // container for ZDA-derived UTC time
 static char _GGAfix_date[7];  // container for GGA-derived fix date
 static gnzda_t _zda;  // object for ZDA messages
 static gngga_t _gga;  // object for GGA messages
-static coord_t _gga_lat;	// object for GGA latitude
-static coord_t _gga_lon;	// object for GGA longitude
+static coord_dd_t _gga_lat;  // object for GGA latitude
+static coord_dd_t _gga_lon;  // object for GGA longitude
 static vtg_t _vtg;	// object for VTG messages
 static uint8_t parse_complete;	// semaphore for parsing <-> ringbuffer load control
 static uint8_t gps_dma_input_buffer[GPS_DMA_INPUT_BUFFER_LEN];  // 1st circular buffer: incoming GPS UART DMA data
@@ -407,7 +407,7 @@ static void rx_start(void)
 //		Error_Handler();
 }
 
-char* strtok_fr(char *s, char delim, char **save_ptr)
+static char* strtok_fr(char *s, char delim, char **save_ptr)
 {
 	char *tail;
 	char c;
@@ -437,11 +437,18 @@ char* strtok_fr(char *s, char delim, char **save_ptr)
 	return s;
 }
 
-char* strtok_f(char *s, char delim)
+static char* strtok_f(char *s, char delim)
 {
 	static char *save_ptr;
 
 	return strtok_fr(s, delim, &save_ptr);
+}
+
+// converts NMEA decimal degrees to coord_dd_t object
+static void NMEA_DecimalDegree_to_coord_dd_t(char *str, coord_dd_t *coord)
+{
+	coord->deg = (uint8_t) (atoi(str) / 100);
+	coord->s = ((atof(str) / 100.0) - coord->deg) * 100;
 }
 
 // parses NMEA str for ZDA data - time & date
@@ -480,12 +487,15 @@ static void parse_gga(const __org1510mk4_t* device, const char *str)
 	// $GNGGA,161439.000,4547.8623,N,01554.9327,E,1,5,2.05,104.7,M,42.5,M,,*4E
 	char *tok = strtok_f(temp, ',');	// start to tokenize
 	device->public.gga->fix_date = strncpy(device->public.gga->fix_date, strtok_f(NULL, ','), 6);  // UTC of this position report - 161439.000
-	device->public.gga->lat = strtok_f(NULL, ',');  // latitude - 4547.8623
+
+	tok = strtok_f(NULL, ',');
+	NMEA_DecimalDegree_to_coord_dd_t(tok, &_gga_lat);  // 4547.8623 to 45 and 47.8623 in coord_dd_t
 
 	tok = strtok_f(NULL, ',');
 	device->public.gga->lat_dir = (cardinal_dir_t) *tok;  // north - N
 
-	device->public.gga->lon = strtok_f(NULL, ',');  // longitude - 01554.9327
+	tok = strtok_f(NULL, ',');
+	NMEA_DecimalDegree_to_coord_dd_t(tok, &_gga_lon);  // 01554.9327 to 15 and 54.9327 in coord_dd_t
 
 	tok = strtok_f(NULL, ',');
 	device->public.gga->lon_dir = (cardinal_dir_t) *tok;  // east - E

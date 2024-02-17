@@ -48,19 +48,18 @@ typedef enum cardinal_dir_t  // directions on the hemisphere - NSEW
 	  W = 87,  // west
 } cardinal_dir_t;
 
-typedef struct coord_t
+typedef struct coord_dd_t  // NMEA decimal degree
 {
-	uint8_t h;  // hours
-	uint8_t m;  // minutes
-	uint8_t s;	// seconds
-} coord_t;
+	uint8_t deg;  // degrees	45 47.8623
+	float s;  // seconds 015 54.9327
+} coord_dd_t;
 
 typedef struct gngga_t  // GGA message
 {
 	char *fix_date;  // age of GPS fix data
-	coord_t *lat;  // latitude
+	coord_dd_t *lat;  // latitude
 	cardinal_dir_t lat_dir;  // direction of latitude
-	coord_t *lon;  // longitude
+	coord_dd_t *lon;  // longitude
 	cardinal_dir_t lon_dir;  // direction of longitude
 	gga_fix_t fix;	// type of GPS fix
 	uint8_t sat_used;  // satellites used for solution
