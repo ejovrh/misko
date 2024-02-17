@@ -45,6 +45,7 @@ static coord_dd_t _gga_lon;  // object for GGA longitude
 static vtg_t _vtg;	// object for VTG messages
 static gsa_t _gpgsa;	// object for GPS GSA messages
 static gsv_t _gpgsv;	// object for GPS GSV messages
+spacevehicle_t _sv[12];
 static uint8_t parse_complete;	// semaphore for parsing <-> ringbuffer load control
 static uint8_t gps_dma_input_buffer[GPS_DMA_INPUT_BUFFER_LEN];  // 1st circular buffer: incoming GPS UART DMA data
 static uint8_t out[82];  // output box for GPS UART's DMA
@@ -595,53 +596,54 @@ static void parse_gsv(const __org1510mk4_t* device, const char *str)
 	uint8_t num = (uint8_t) atoi(strtok_f(NULL, ','));  // 1,2,3.. only needed for internal computation
 	device->public.gsv->sv_visible = (uint8_t) atoi(strtok_f(NULL, ','));  //	09
 
-	if(device->public.gsv->sv_visible == 0)	// no space vehicles visible, no point to start tokenizing
+	?? FIXME - if gsa parsing is turned on, hardfaults somewhere, somehow...
+	return;
+
+	if(device->public.gsv->sv_visible == 0)  // no space vehicles visible, no point to start tokenizing
 		return;
 
 	static uint8_t n;  // sv array iterator
 
-	// shown are field values for message 1 only!
-	device->public.gsv->sv[n].prn = (uint8_t) atoi(strtok_f(NULL, ','));  // 25
-	device->public.gsv->sv[n].elev = (uint8_t) atoi(strtok_f(NULL, ','));  // 73
-	device->public.gsv->sv[n].azim = (uint16_t) atoi(strtok_f(NULL, ','));  // 318
-	device->public.gsv->sv[n].snr = (uint8_t) atoi(strtok_f(NULL, ','));  // 16
-	n++;	// move to the next field
+	do
+		{  // device->public.gsv->
+			device->public.gsv->sv[n].prn = (uint8_t) atoi(strtok_f(NULL, ','));
+			device->public.gsv->sv[n].elev = (uint8_t) atoi(strtok_f(NULL, ','));
+			device->public.gsv->sv[n].azim = (uint16_t) atoi(strtok_f(NULL, ','));
+			device->public.gsv->sv[n].snr = (uint8_t) atoi(strtok_f(NULL, ','));
+			n++;  // move to the next field
 
-	if(n == device->public.gsv->sv_visible)  // end of visible satellites
+			if(num == 1 && n == 4)
+				break;
+
+			if(num == 2 && n == 8)
+				break;
+
+			if(num == 3 && n == 12)
+				break;
+		}
+	while(n < device->public.gsv->sv_visible);
+
+	if(n < 12)
 		{
-			n = 0;
-			return;
+			do
+				{
+					device->public.gsv->sv[n].prn = 0;
+					device->public.gsv->sv[n].elev = 0;
+					device->public.gsv->sv[n].azim = 0;
+					device->public.gsv->sv[n].snr = 0;
+					n++;  // move to the next field
+				}
+			while(n < 12);
 		}
 
-	device->public.gsv->sv[n].prn = (uint8_t) atoi(strtok_f(NULL, ','));  // 12
-	device->public.gsv->sv[n].elev = (uint8_t) atoi(strtok_f(NULL, ','));  // 62
-	device->public.gsv->sv[n].azim = (uint16_t) atoi(strtok_f(NULL, ','));  // 069
-	device->public.gsv->sv[n].snr = (uint8_t) atoi(strtok_f(NULL, ','));  // 12
-	n++;	// move to the next field
+	return;
 
-	if(n == device->public.gsv->sv_visible)  // end of visible satellites
-		{
-			n = 0;
-			return;
-		}
+//	if(n == device->public.gsv->sv_visible)  // end of visible satellites
+//		{
+//			n = 0;
+//			return;
+//		}
 
-	device->public.gsv->sv[n].prn = (uint8_t) atoi(strtok_f(NULL, ','));  // 29
-	device->public.gsv->sv[n].elev = (uint8_t) atoi(strtok_f(NULL, ','));  // 44
-	device->public.gsv->sv[n].azim = (uint16_t) atoi(strtok_f(NULL, ','));  // 220
-	device->public.gsv->sv[n].snr = (uint8_t) atoi(strtok_f(NULL, ','));  // 30
-	n++;	// move to the next field
-
-	if(n == device->public.gsv->sv_visible)  // end of visible satellites
-		{
-			n = 0;
-			return;
-		}
-
-	device->public.gsv->sv[n].prn = (uint8_t) atoi(strtok_f(NULL, ','));  // 11
-	device->public.gsv->sv[n].elev = (uint8_t) atoi(strtok_f(NULL, ','));  // 37
-	device->public.gsv->sv[n].azim = (uint16_t) atoi(strtok_f(NULL, ','));  // 082
-	device->public.gsv->sv[n].snr = (uint8_t) atoi(strtok_f(NULL, ','));  // NULL
-	n++;	// move to the next field
 }
 
 // buffer NMEA sentences from DMA circular buffer (1st buffer) into ringbuffer (2nd buffer)
@@ -831,7 +833,7 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 	__ORG1510MK4.public.gsa = &_gpgsa;	// tie in GSA message struct
 
 	__ORG1510MK4.public.gsv = &_gpgsv;	// tie in GSA message struct
-
+//	__ORG1510MK4.public.gsv->sv = _sv;
 #if DEBUG_LWRB_FREE
 	__ORG1510MK4.char_written = 0;	// characters written out to system UART
 #endif
