@@ -118,6 +118,7 @@ static void _init(void)
 	__ORG1510MK4.public.Write("PMTK185,1");  // stop LOCUS logging
 	__ORG1510MK4.public.Write("PMTK355"); 	// enable SBAS
 	__ORG1510MK4.public.Write("PMTK301,2");  // set DGPS to SBAS
+	__ORG1510MK4.public.Write("PMTK869,1,1");  // enable EASY
 	__ORG1510MK4.public.Write("PMTK286,1");  // enable active interference cancellation
 	__ORG1510MK4.public.Write("PMTK356,0");  // disable HDOP theshold
 	__ORG1510MK4.public.Write("PMTK386,0");  // disable speed threshold for static navigation
@@ -156,6 +157,19 @@ static void _Power(const org1510mk4_power_t state)
 	 * 	periodic: 16mW - 4.85mA - 680.63 Ohm ESR
 	 * 	standby: 1.65mW - 0.5mA - 6.6 kOhm ESR
 	 * 	backup: 50uW - 15uA - 217.8 kOhm ESR
+	 *
+	 * 	pin states:
+	 * 		GPS_WKUP_Pin: stm32 gpio input
+	 * 			low: standby or backup mode; low while in periodic/alwayslocate sleep mode, high when in wake periods
+	 * 			high: module is in full power
+	 *
+	 * 		GPS_RESET_Pin: stm32 gpio output, active low
+	 * 			low: reset
+	 * 			high: normal operation
+	 *
+	 * 		GPS_PWR_CTRL_Pin: stm32 gpio output (aka. force on)
+	 * 			low: module can enter backup mode
+	 * 			high: module can not enter backup mode
 	 */
 
 	if(state == off)	// supply power off & module (possibly) in backup mode
@@ -214,7 +228,7 @@ static void _Power(const org1510mk4_power_t state)
 		}
 
 	if(state == backup)  // "backup mode", DS. ch. 4.3.15
-		{  // FIXME - module seems to reset when entering/exiting backup mode
+		{
 #if DIRTY_POWER_MODE_CHANGE
 			HAL_UART_Transmit_DMA(&huart1, (const uint8_t*) "$PMTK225,4*2F\r\n", 15);  // send backup mode command
 
@@ -228,7 +242,6 @@ static void _Power(const org1510mk4_power_t state)
 				{
 					__ORG1510MK4.public.Write("PMTK225,4");  // send backup mode command
 
-					// FIXME - sometimes this is blocking
 					while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin))
 						;  // wait until the wakeup pin goes low
 				}
@@ -239,7 +252,7 @@ static void _Power(const org1510mk4_power_t state)
 		}
 
 	if(state == wakeup)  // return to full power mode
-		{  // FIXME - module seems to be reset when transitioning into wakeup
+		{
 #if DIRTY_POWER_MODE_CHANGE
 			HAL_GPIO_WritePin(GPS_PWR_CTRL_GPIO_Port, GPS_PWR_CTRL_Pin, GPIO_PIN_SET);	// set high
 			_wait(1000);	 // wait 1s
@@ -264,18 +277,19 @@ static void _Power(const org1510mk4_power_t state)
 					_wait(1000);	 // wait 1s
 					HAL_GPIO_WritePin(GPS_PWR_CTRL_GPIO_Port, GPS_PWR_CTRL_Pin, GPIO_PIN_RESET);	// set low
 
-					// FIXME - sometimes this is blocking
 					while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin) == GPIO_PIN_RESET)
 						;  // wait until the wakeup pin goes high
 				}
 
-			if(__ORG1510MK4.public.PowerMode > wakeup)  // if the module is in a lighter sleep state
+			if(__ORG1510MK4.public.PowerMode == standby)  // if the module is in standby
+				__ORG1510MK4.public.Write("PMTK225,0");  // wakeup command - transit into full power mode
+
+			if(__ORG1510MK4.public.PowerMode > standby)  // if the module is in periodic/alwayslocate
 				{
-					// FIXME - blocks when transitioning from standby to wake
 					while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin) == GPIO_PIN_RESET)
 						;  // wait until the wakeup pin goes high
 
-					__ORG1510MK4.public.Write("PMTK225,0");  // wakeup command - transit into full power mode
+					__ORG1510MK4.public.Write("PMTK225,0");  // then send wakeup command - transit into full power mode
 				}
 
 			__ORG1510MK4.public.PowerMode = state;	// save the current power mode
@@ -284,7 +298,7 @@ static void _Power(const org1510mk4_power_t state)
 		}
 
 	if(state == standby)  // standby mode, DS. ch. 4.3.12
-		{  // FIXME - entering standby seems to reset the module
+		{
 #if DIRTY_POWER_MODE_CHANGE
 			HAL_UART_Transmit_DMA(&huart1, (const uint8_t*) "$PMTK161,0*28\r\n", 15);  // then go into standby
 
@@ -299,7 +313,6 @@ static void _Power(const org1510mk4_power_t state)
 
 			__ORG1510MK4.public.Write("PMTK161,0");  // send standby sleep command
 
-			// FIXME - sometimes this is blocking
 			while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin))
 				;  // wait until the wakeup pin goes low
 
@@ -322,7 +335,7 @@ static void _Power(const org1510mk4_power_t state)
 			if(__ORG1510MK4.public.PowerMode < wakeup)  // if the module is not awake
 				return;  // do nothing
 
-			// TODO - implement periodic mode
+			// periodic mode settings are left at default values
 
 			__ORG1510MK4.public.PowerMode = state;	// save the current power mode
 			return;
@@ -377,7 +390,6 @@ static void _Power(const org1510mk4_power_t state)
 			_wait(200);  // wait 200ms
 			HAL_GPIO_WritePin(GPS_RESET_GPIO_Port, GPS_RESET_Pin, GPIO_PIN_SET);  // take GPS module out of reset
 
-			// FIXME - sometimes this is blocking
 			while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin) == GPIO_PIN_RESET)
 				;						// wait until the wakeup pin goes high
 
@@ -596,8 +608,8 @@ static void parse_gsv(const __org1510mk4_t* device, const char *str)
 	uint8_t num = (uint8_t) atoi(strtok_f(NULL, ','));  // 1,2,3.. only needed for internal computation
 	device->public.gsv->sv_visible = (uint8_t) atoi(strtok_f(NULL, ','));  //	09
 
-	?? FIXME - if gsa parsing is turned on, hardfaults somewhere, somehow...
-	return;
+	// FIXME - if gsa parsing is turned on, hardfaults somewhere, somehow...
+//	return;
 
 	if(device->public.gsv->sv_visible == 0)  // no space vehicles visible, no point to start tokenizing
 		return;

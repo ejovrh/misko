@@ -916,8 +916,8 @@ void HAL_GPIO_EXTI_Falling_Callback(uint16_t GPIO_Pin)
 {
 	if(GPIO_Pin == SD_CD_Pin)  // if card is removed
 		{
-			;  // TODO - disable read/write operations
-			// TODO - also make sure that before any read/write, this GPIO state is checked
+			;  // TODO - SD card detect irq - implement disable read/write operations
+			// TODO - SD card detect irq - also make sure that before any read/write, this GPIO state is checked
 		}
 }
 

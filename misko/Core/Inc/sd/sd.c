@@ -95,7 +95,7 @@ static __sd_t __SD =  // instantiate sdc_t actual and set function pointers
 
 sd_t* sd_ctor(SPI_HandleTypeDef *in_hspi, GPIO_TypeDef *_SPI_CS_Port, const uint16_t _SPI_CS_Pin, GPIO_TypeDef *_SD_CD_Port, const uint16_t _SD_CD_Pin)  //
 {
-	// TODO - implement card detect logic
+	// TODO - SD card ctor - implement card detect logic
 	MX_FATFS_Init();
 
 	__SD.hspi = in_hspi;  // store SPI object
