@@ -12,7 +12,7 @@ typedef struct	// adxl345c_t actual
 	uint16_t _CS_Pin;  // SPI chip select GPIO pin
 } __adxl345_t;
 
-static __adxl345_t  __ADXL345  __attribute__ ((section (".data")));  // preallocate __ADXL345 object in .data
+static __adxl345_t __ADXL345 __attribute__ ((section (".data")));  // preallocate __ADXL345 object in .data
 
 #define SPI_TIMEOUT 10	// SPI timeout in SysTicks
 #define REG_CNT 30	// 64 registers
@@ -108,7 +108,7 @@ void _ISR(void)  // ISR for the ADXL345 accelerometer
 			_WriteByte(INT_ENABLE, 0x00);  // disable interrupts
 			_WriteByte(INT_ENABLE, INT_ENABLE_ACT_CFG);  // configure for activity detection
 
-			HAL_GPIO_WritePin(GPS_Red_LED_GPIO_Port, GPS_Red_LED_Pin, GPIO_PIN_SET);  // turn LED off
+			HAL_GPIO_WritePin(LED_Red_GPIO_Port, LED_Red_Pin, GPIO_PIN_SET);  // turn LED off
 		}
 
 	if(((__ADXL345._irq_src >> 4) & 0x01) == 0x01)  // if the activity bit is set
@@ -118,11 +118,11 @@ void _ISR(void)  // ISR for the ADXL345 accelerometer
 			_WriteByte(INT_ENABLE, INT_ENABLE_INACT_CFG);  // reconfigure for inact. detection
 			_ReadByte(INT_SOURCE);  // enable interrupts
 
-			HAL_GPIO_WritePin(GPS_Red_LED_GPIO_Port, GPS_Red_LED_Pin, GPIO_PIN_RESET);  // turn LED on
+			HAL_GPIO_WritePin(LED_Red_GPIO_Port, LED_Red_Pin, GPIO_PIN_RESET);  // turn LED on
 		}
 }
 
-static __adxl345_t  __ADXL345 =  // instantiate adxl345c_t actual and set function pointers
+static __adxl345_t __ADXL345 =  // instantiate adxl345c_t actual and set function pointers
 	{  //
 	.public.ISR = &_ISR,	// device ISR
 	.public.ReadByte = &_ReadByte,	// reads a byte from device

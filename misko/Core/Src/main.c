@@ -756,6 +756,9 @@ static void MX_GPIO_Init(void)
 	__HAL_RCC_GPIOD_CLK_ENABLE();
 
 	/*Configure GPIO pin Output Level */
+	HAL_GPIO_WritePin(GPIOC, LED_Yellow_Pin | LED_Green_Pin | LED_Red_Pin, GPIO_PIN_SET);
+
+	/*Configure GPIO pin Output Level */
 	HAL_GPIO_WritePin(GPIOA, SPI1_SD_CS_Pin | SPI1_FRAM_CS_Pin | SPI1_ADXL345_CS_Pin, GPIO_PIN_SET);
 
 	/*Configure GPIO pin Output Level */
@@ -763,9 +766,6 @@ static void MX_GPIO_Init(void)
 
 	/*Configure GPIO pin Output Level */
 	HAL_GPIO_WritePin(GPIOC, GPS_PWR_CTRL_Pin | Debug_Out_Pin | USB_FS_PWR_EN_Pin, GPIO_PIN_RESET);
-
-	/*Configure GPIO pin Output Level */
-	HAL_GPIO_WritePin(GPIOC, GPS_Green_LED_Pin | GPS_Red_LED_Pin, GPIO_PIN_SET);
 
 	/*Configure GPIO pin Output Level */
 	HAL_GPIO_WritePin(GPIOB, GPS_RESET_Pin | Anal_SW_CTRL_Pin, GPIO_PIN_SET);
@@ -779,9 +779,15 @@ static void MX_GPIO_Init(void)
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-	/*Configure GPIO pins : PC0 PC1 PC2 PC3
-	 PC5 */
-	GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_5;
+	/*Configure GPIO pins : LED_Yellow_Pin USB_FS_PWR_EN_Pin LED_Green_Pin LED_Red_Pin */
+	GPIO_InitStruct.Pin = LED_Yellow_Pin | USB_FS_PWR_EN_Pin | LED_Green_Pin | LED_Red_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
+
+	/*Configure GPIO pins : PC1 PC2 PC3 PC5 */
+	GPIO_InitStruct.Pin = GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3 | GPIO_PIN_5;
 	GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
@@ -845,13 +851,6 @@ static void MX_GPIO_Init(void)
 	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
 	HAL_GPIO_Init(GPS_WKUP_GPIO_Port, &GPIO_InitStruct);
 
-	/*Configure GPIO pins : USB_FS_PWR_EN_Pin GPS_Green_LED_Pin GPS_Red_LED_Pin */
-	GPIO_InitStruct.Pin = USB_FS_PWR_EN_Pin | GPS_Green_LED_Pin | GPS_Red_LED_Pin;
-	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-	HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
-
 	/*Configure GPIO pin : USB_FS_OVCR_Pin */
 	GPIO_InitStruct.Pin = USB_FS_OVCR_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
@@ -895,7 +894,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 	if(GPIO_Pin == Blue_User_Button_Pin)  // if button is pressed
 		{
 			HAL_GPIO_TogglePin(User_LED_GPIO_Port, User_LED_Pin);
-			HAL_GPIO_TogglePin(GPS_Green_LED_GPIO_Port, GPS_Green_LED_Pin);
+			HAL_GPIO_TogglePin(LED_Green_GPIO_Port, LED_Green_Pin);
 
 //			ORG1510MK4->Write("PMTK514,0,1,1,1,1,5,0,0,0,0,0,0,0,0,0,0,0,0,0");
 			ORG1510MK4->Read();

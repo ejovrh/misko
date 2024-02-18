@@ -61,6 +61,8 @@ void Error_Handler(void);
 #define Blue_User_Button_Pin GPIO_PIN_13
 #define Blue_User_Button_GPIO_Port GPIOC
 #define Blue_User_Button_EXTI_IRQn EXTI13_IRQn
+#define LED_Yellow_Pin GPIO_PIN_0
+#define LED_Yellow_GPIO_Port GPIOC
 #define ADC_VGPS_Pin GPIO_PIN_0
 #define ADC_VGPS_GPIO_Port GPIOA
 #define SPI1_SD_CS_Pin GPIO_PIN_1
@@ -108,10 +110,10 @@ void Error_Handler(void);
 #define JTDI_GPIO_Port GPIOA
 #define USB_FS_PWR_EN_Pin GPIO_PIN_10
 #define USB_FS_PWR_EN_GPIO_Port GPIOC
-#define GPS_Green_LED_Pin GPIO_PIN_11
-#define GPS_Green_LED_GPIO_Port GPIOC
-#define GPS_Red_LED_Pin GPIO_PIN_12
-#define GPS_Red_LED_GPIO_Port GPIOC
+#define LED_Green_Pin GPIO_PIN_11
+#define LED_Green_GPIO_Port GPIOC
+#define LED_Red_Pin GPIO_PIN_12
+#define LED_Red_GPIO_Port GPIOC
 #define USB_FS_OVCR_Pin GPIO_PIN_2
 #define USB_FS_OVCR_GPIO_Port GPIOD
 #define USB_FS_OVCR_EXTI_IRQn EXTI2_IRQn
