@@ -165,8 +165,10 @@ typedef struct org1510mk4_t  // struct describing the GPS module functionality
 	zda_t *zda;  // ZDA-derived data
 	gga_t *gga;  // GGA-derived data
 	vtg_t *vtg;  // VTG-derived data
-	gsa_t *gsa;  // GSA-derived data
-	gsv_t *gsv;  //	 GSV-derived data
+	gsa_t *gpgsa;  // GSA-derived data
+	gsa_t *glgsa;  // GSA-derived data
+	gsv_t *gpgsv;  //	 GSV-derived data
+	gsv_t *glgsv;  //	 GSV-derived data
 //	rmc_t *rmc;  // RMC-derived data
 	uint8_t *NMEA;  //	last NMEA sentence
 	volatile org1510mk4_power_t PowerMode;  // current power mode of the GPS module
