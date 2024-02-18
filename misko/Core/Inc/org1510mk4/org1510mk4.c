@@ -33,22 +33,26 @@ typedef struct	// org1510mk4c_t actual
 } __org1510mk4_t;
 
 static __org1510mk4_t __ORG1510MK4 __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
-
 static lwrb_t lwrb;  // 2nd circular buffer for data processing
 static uint8_t lwrb_buffer[LWRB_BUFFER_LEN];	//
-static char _UTCtimestr[7];  // container for ZDA-derived UTC time
-static char _GGAfix_date[7];  // container for GGA-derived fix date
-static zda_t _zda;  // object for ZDA messages
-static gga_t _gga;  // object for GGA messages
+static char _zdatime[7] = "\0";  // container for ZDA-derived UTC time
+static char _ggafix_date[7] = "\0";  // container for GGA-derived fix date
+static zda_t _zda;  // object for ZDA sentence
+static gga_t _gga;  // object for GGA sentence
 static coord_dd_t _gga_lat;  // object for GGA latitude
 static coord_dd_t _gga_lon;  // object for GGA longitude
-static vtg_t _vtg;	// object for VTG messages
-static gsa_t _gpgsa;	// object for GPS GSA messages
-static gsv_t _gpgsv;	// object for GPS GSV messages
-spacevehicle_t _sv[12];
-static uint8_t parse_complete;	// semaphore for parsing <-> ringbuffer load control
-static uint8_t gps_dma_input_buffer[GPS_DMA_INPUT_BUFFER_LEN];  // 1st circular buffer: incoming GPS UART DMA data
-static uint8_t out[82];  // output box for GPS UART's DMA
+static vtg_t _vtg;	// object for VTG sentence
+static gsa_t _gpgsa;	// object for GPS GSA sentence
+static gsv_t _gpgsv;	// object for GPS GSV sentence
+//static rmc_t _rmc;	// object for RMC sentence
+//static coord_dd_t _rmc_lat;  // object for GGA latitude
+//static coord_dd_t _rmc_lon;  // object for GGA longitude
+//static char _rmcfix_date[7] = "\0";  // container for GGA-derived fix date
+//static char _rmcfix_time[7] = "\0";  // container for GGA-derived fix date
+
+static uint8_t parse_complete = 1;	// semaphore for parsing <-> ringbuffer load control
+static uint8_t gps_dma_input_buffer[GPS_DMA_INPUT_BUFFER_LEN] = "\0";  // 1st circular buffer: incoming GPS UART DMA data
+static uint8_t out[82] = "\0";  // output box for GPS UART's DMA
 
 // all NMEA off: 	PMTK314,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 // NMEA RMC 5s: 	PMTK314,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -170,6 +174,17 @@ static void _Power(const org1510mk4_power_t state)
 	 * 		GPS_PWR_CTRL_Pin: stm32 gpio output (aka. force on)
 	 * 			low: module can enter backup mode
 	 * 			high: module can not enter backup mode
+	 *
+	 * 		timing:
+	 * 			after reset:
+	 * 				not ideal conditions:
+	 * 					- get correct date/time: about 3-6 minutes
+	 * 					- see first satellite: about 9 minutes
+	 * 					- get a fix:
+	 * 				ideal conditions:
+	 * 					- get correct date/time: TODO
+	 * 					- see first satellite: TODO
+	 * 					- get a fix: TODO
 	 */
 
 	if(state == off)	// supply power off & module (possibly) in backup mode
@@ -467,7 +482,7 @@ static void NMEA_DecimalDegree_to_coord_dd_t(char *str, coord_dd_t *coord)
 }
 
 // parses NMEA str for ZDA data
-static void parse_zda(const __org1510mk4_t* device, const char *str)
+static void parse_zda(zda_t *sentence, const char *str)
 {
 	char *msg = strstr(str, "ZDA");  // first, check if we have the correct message type
 
@@ -480,15 +495,15 @@ static void parse_zda(const __org1510mk4_t* device, const char *str)
 
 	// $GNZDA,163207.000,15,02,2024,,*4B
 	char *tok = strtok_f(temp, ',');	// start to tokenize
-	device->public.zda->time = strncpy(device->public.zda->time, strtok_f(NULL, ','), 6);  // UTC time - 163207.000
-	device->public.zda->day = (uint8_t) atoi(strtok_f(NULL, ','));  // day - 15
-	device->public.zda->month = (uint8_t) atoi(strtok_f(NULL, ','));  // month - 02
-	device->public.zda->year = (uint16_t) atoi(strtok_f(NULL, ','));  // year - 2024
-	device->public.zda->tz = (uint8_t) atoi(strtok_f(NULL, ','));  // local timezone offset
+	memcpy(sentence->time, strtok_f(NULL, ','), 6);  // UTC time - 163207.000
+	sentence->day = (uint8_t) atoi(strtok_f(NULL, ','));  // day - 15
+	sentence->month = (uint8_t) atoi(strtok_f(NULL, ','));  // month - 02
+	sentence->year = (uint16_t) atoi(strtok_f(NULL, ','));  // year - 2024
+	sentence->tz = (uint8_t) atoi(strtok_f(NULL, ','));  // local timezone offset
 }
 
 // parses str for GGA data
-static void parse_gga(const __org1510mk4_t* device, const char *str)
+static void parse_gga(gga_t *sentence, const char *str)
 {
 	char *msg = strstr(str, "GGA");  // first, check if we have the correct message type
 
@@ -501,31 +516,31 @@ static void parse_gga(const __org1510mk4_t* device, const char *str)
 
 	// $GNGGA,161439.000,4547.8623,N,01554.9327,E,1,5,2.05,104.7,M,42.5,M,,*4E
 	char *tok = strtok_f(temp, ',');	// start to tokenize
-	device->public.gga->fix_date = strncpy(device->public.gga->fix_date, strtok_f(NULL, ','), 6);  // UTC of this position report - 161439.000
+	memcpy(sentence->fix_date, strtok_f(NULL, ','), 6);  // UTC of this position report - 161439.000
 
 	tok = strtok_f(NULL, ',');
 	NMEA_DecimalDegree_to_coord_dd_t(tok, &_gga_lat);  // 4547.8623 to 45 and 47.8623 in coord_dd_t
 
 	tok = strtok_f(NULL, ',');
-	device->public.gga->lat_dir = (cardinal_dir_t) *tok;  // north - N
+	sentence->lat_dir = (cardinal_dir_t) *tok;  // north - N
 
 	tok = strtok_f(NULL, ',');
 	NMEA_DecimalDegree_to_coord_dd_t(tok, &_gga_lon);  // 01554.9327 to 15 and 54.9327 in coord_dd_t
 
 	tok = strtok_f(NULL, ',');
-	device->public.gga->lon_dir = (cardinal_dir_t) *tok;  // east - E
-	device->public.gga->fix = (gga_fix_t) atoi(strtok_f(NULL, ','));  // GPS fix indicator - 1
-	device->public.gga->sat_used = (uint8_t) atoi(strtok_f(NULL, ','));  // satellites used for solution - 5
-	device->public.gga->HDOP = (float) atof(strtok_f(NULL, ','));  // horizontal dilution of position - 2.05
-	device->public.gga->alt = (float) atof(strtok_f(NULL, ','));  // alt - 104.7
+	sentence->lon_dir = (cardinal_dir_t) *tok;  // east - E
+	sentence->fix = (gga_fix_t) atoi(strtok_f(NULL, ','));  // GPS fix indicator - 1
+	sentence->sat_used = (uint8_t) atoi(strtok_f(NULL, ','));  // satellites used for solution - 5
+	sentence->HDOP = (float) atof(strtok_f(NULL, ','));  // horizontal dilution of position - 2.05
+	sentence->alt = (float) atof(strtok_f(NULL, ','));  // alt - 104.7
 	strtok_f(NULL, ',');  // M
-	device->public.gga->geoid_sep = (float) atof(strtok_f(NULL, ','));  // geoid seperation - 42.5
+	sentence->geoid_sep = (float) atof(strtok_f(NULL, ','));  // geoid seperation - 42.5
 	strtok_f(NULL, ',');  // M
-	device->public.gga->dgps_age = (float) atof(strtok_f(NULL, ','));  // DGPS age
+	sentence->dgps_age = (float) atof(strtok_f(NULL, ','));  // DGPS age
 }
 
 // parses str for VTG data
-static void parse_vtg(const __org1510mk4_t* device, const char *str)
+static void parse_vtg(vtg_t *sentence, const char *str)
 {
 	char *msg = strstr(str, "VTG");  // first, check if we have the correct message type
 
@@ -538,20 +553,20 @@ static void parse_vtg(const __org1510mk4_t* device, const char *str)
 
 	// $GNVTG,20.11,T,,M,2.50,N,4.63,K,A*17
 	char *tok = strtok_f(temp, ',');	// start to tokenize
-	device->public.vtg->track_tn = (float) atof(strtok_f(NULL, ','));  // heading of track made good in true north - 20.11
+	sentence->track_tn = (float) atof(strtok_f(NULL, ','));  // heading of track made good in true north - 20.11
 	strtok_f(NULL, ',');  // T
-	device->public.vtg->track_mn = (float) atof(strtok_f(NULL, ','));  // heading of track made good in magnetic north
+	sentence->track_mn = (float) atof(strtok_f(NULL, ','));  // heading of track made good in magnetic north
 	strtok_f(NULL, ',');  // M
-	device->public.vtg->knots = (float) atof(strtok_f(NULL, ','));  // speed in knots - 2.5
+	sentence->knots = (float) atof(strtok_f(NULL, ','));  // speed in knots - 2.5
 	strtok_f(NULL, ',');  // N
-	device->public.vtg->kph = (float) atof(strtok_f(NULL, ','));  // speed in kilometres per hour - 4.63
+	sentence->kph = (float) atof(strtok_f(NULL, ','));  // speed in kilometres per hour - 4.63
 	strtok_f(NULL, ',');  // K
 	tok = strtok_f(NULL, ',');
-	device->public.vtg->mode = (faa_mode_t) *tok;  // FAA mode indicator
+	sentence->mode = (faa_mode_t) *tok;  // FAA mode indicator
 }
 
 // parses NMEA str for GSA data - only GPS talker at this time
-static void parse_gsa(const __org1510mk4_t* device, const char *str)
+static void parse_gsa(gsa_t *sentence, const char *str)
 {
 	char *msg = strstr(str, "GPGSA");  // first, check if we have the correct message type
 
@@ -566,29 +581,29 @@ static void parse_gsa(const __org1510mk4_t* device, const char *str)
 	char *tok = strtok_f(temp, ',');	// start to tokenize
 
 	tok = strtok_f(NULL, ',');
-	device->public.gsa->sel_mode = (gsa_selectionmode_t) *tok;  // GSA selection mode - A
+	sentence->sel_mode = (gsa_selectionmode_t) *tok;  // GSA selection mode - A
 
-	device->public.gsa->fixmode = (gsa_fixmode_t) atoi(strtok_f(NULL, ','));  // GSA fix mode - 3
-	device->public.gsa->sv01 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01 - 25
-	device->public.gsa->sv02 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01 - 12
-	device->public.gsa->sv03 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01 - 23
-	device->public.gsa->sv04 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01 - 15
-	device->public.gsa->sv05 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
-	device->public.gsa->sv06 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
-	device->public.gsa->sv07 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
-	device->public.gsa->sv08 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
-	device->public.gsa->sv09 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
-	device->public.gsa->sv10 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
-	device->public.gsa->sv11 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
-	device->public.gsa->sv12 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	sentence->fixmode = (gsa_fixmode_t) atoi(strtok_f(NULL, ','));  // GSA fix mode - 3
+	sentence->sv01 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01 - 25
+	sentence->sv02 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01 - 12
+	sentence->sv03 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01 - 23
+	sentence->sv04 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01 - 15
+	sentence->sv05 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	sentence->sv06 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	sentence->sv07 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	sentence->sv08 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	sentence->sv09 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	sentence->sv10 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	sentence->sv11 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	sentence->sv12 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
 
-	device->public.gsa->pdop = (float) atof(strtok_f(NULL, ','));  // 4.75
-	device->public.gsa->hdop = (float) atof(strtok_f(NULL, ','));  // 4.64
-	device->public.gsa->vdop = (float) atof(strtok_f(NULL, ','));  // 0.98
+	sentence->pdop = (float) atof(strtok_f(NULL, ','));  // 4.75
+	sentence->hdop = (float) atof(strtok_f(NULL, ','));  // 4.64
+	sentence->vdop = (float) atof(strtok_f(NULL, ','));  // 0.98
 }
 
 // parses NMEA str for GSV data - only GPS talker at this time
-static void parse_gsv(const __org1510mk4_t* device, const char *str)
+static void parse_gsv(gsv_t *sentence, const char *str)
 {
 	char *msg = strstr(str, "GPGSV");  // first, check if we have the correct message type
 
@@ -604,59 +619,110 @@ static void parse_gsv(const __org1510mk4_t* device, const char *str)
 	// $GPGSV,3,3,09,31,06,316,*40
 	char *tok = strtok_f(temp, ',');	// start to tokenize
 
-	device->public.gsv->msg_count = (uint8_t) atoi(strtok_f(NULL, ','));  // 3
+	sentence->msg_count = (uint8_t) atoi(strtok_f(NULL, ','));  // 3
 	uint8_t num = (uint8_t) atoi(strtok_f(NULL, ','));  // 1,2,3.. only needed for internal computation
-	device->public.gsv->sv_visible = (uint8_t) atoi(strtok_f(NULL, ','));  //	09
+	sentence->sv_visible = (uint8_t) atoi(strtok_f(NULL, ','));  //	09
 
 	// FIXME - if gsa parsing is turned on, hardfaults somewhere, somehow...
 //	return;
 
-	if(device->public.gsv->sv_visible == 0)  // no space vehicles visible, no point to start tokenizing
+	if(sentence->sv_visible == 0)  // no space vehicles visible, no point to start tokenizing
 		return;
 
 	static uint8_t n;  // sv array iterator
 
-	do
-		{  // device->public.gsv->
-			device->public.gsv->sv[n].prn = (uint8_t) atoi(strtok_f(NULL, ','));
-			device->public.gsv->sv[n].elev = (uint8_t) atoi(strtok_f(NULL, ','));
-			device->public.gsv->sv[n].azim = (uint16_t) atoi(strtok_f(NULL, ','));
-			device->public.gsv->sv[n].snr = (uint8_t) atoi(strtok_f(NULL, ','));
-			n++;  // move to the next field
+	if(num == 1)
+		n = 0;	// 0 to 3
+	if(num == 2)
+		n = 4;	// 4 to 7
+	if(num == 3)
+		n = 8;	// 8 to 11
 
-			if(num == 1 && n == 4)
-				break;
+	for(uint8_t i = n; i < (4 * num); i++)
+		{
+			tok = strtok_f(NULL, ',');
+			if(tok)
+				sentence->sv[i].prn = (uint8_t) atoi(tok);
+			else
+				sentence->sv[i].prn = 0;
 
-			if(num == 2 && n == 8)
-				break;
+			tok = strtok_f(NULL, ',');
+			if(tok)
+				sentence->sv[i].elev = (uint8_t) atoi(tok);
+			else
+				sentence->sv[i].elev = 0;
 
-			if(num == 3 && n == 12)
-				break;
+			tok = strtok_f(NULL, ',');
+			if(tok)
+				sentence->sv[i].azim = (uint16_t) atoi(tok);
+			else
+				sentence->sv[i].azim = 0;
+
+			tok = strtok_f(NULL, ',');
+			if(tok)
+				sentence->sv[i].snr = (uint8_t) atoi(tok);
+			else
+				sentence->sv[i].snr = 0;
+			n = i;
 		}
-	while(n < device->public.gsv->sv_visible);
 
 	if(n < 12)
 		{
 			do
 				{
-					device->public.gsv->sv[n].prn = 0;
-					device->public.gsv->sv[n].elev = 0;
-					device->public.gsv->sv[n].azim = 0;
-					device->public.gsv->sv[n].snr = 0;
+					sentence->sv[n].prn = 0;
+					sentence->sv[n].elev = 0;
+					sentence->sv[n].azim = 0;
+					sentence->sv[n].snr = 0;
 					n++;  // move to the next field
 				}
 			while(n < 12);
 		}
 
 	return;
-
-//	if(n == device->public.gsv->sv_visible)  // end of visible satellites
-//		{
-//			n = 0;
-//			return;
-//		}
-
 }
+
+//// parses NMEA str for RMC data
+//static void parse_rmc(rmc_t *sentence, const char *str)
+//{
+//	char *msg = strstr(str, "RMC");  // first, check if we have the correct message type
+//
+//	if(msg == NULL)  // if not, get out
+//		return;
+//
+//	char temp[82] = "\0";  // create a temporary buffer
+//
+//	strncpy(temp, str, strlen(str));	// copy str into temp
+//
+//	// $GNRMC,145342.000,A,4547.8104,N,01554.8789,E,0.55,352.46,180224,,,A*7A
+//	char *tok = strtok_f(temp, ',');	// start to tokenize
+//
+//	memcpy(_rmcfix_time, strtok_f(NULL, ','), 6);  // 145342.000
+//
+//	tok = strtok_f(NULL, ',');	// A
+//	sentence->status = (rmc_status_t) *tok;
+//
+//	tok = strtok_f(NULL, ',');  // 4547.8104
+//	NMEA_DecimalDegree_to_coord_dd_t(tok, &_rmc_lat);  // 4547.8104 to 45 and 47.8104 in coord_dd_t
+//
+//	tok = strtok_f(NULL, ',');
+//	sentence->lat_dir = (cardinal_dir_t) *tok;  // north - N
+//
+//	tok = strtok_f(NULL, ',');
+//	NMEA_DecimalDegree_to_coord_dd_t(tok, &_rmc_lon);  // 01554.8789 to 15 and 54.8789 in coord_dd_t
+//
+//	tok = strtok_f(NULL, ',');
+//	sentence->lat_dir = (cardinal_dir_t) *tok;  // north - E
+//
+//	sentence->knots = (float) atof(strtok_f(NULL, ','));  // 0.55
+//	sentence->azimut = (uint16_t) atoi(strtok_f(NULL, ','));  // 352.46
+//	memcpy(_rmcfix_date, strtok_f(NULL, ','), 6);  // 180224
+//
+//	sentence->mag_var = (uint16_t) atoi(strtok_f(NULL, ','));  // empty
+//
+//	tok = strtok_f(NULL, ',');
+//	sentence->var_dir = (cardinal_dir_t) *tok;    //
+//}
 
 // buffer NMEA sentences from DMA circular buffer (1st buffer) into ringbuffer (2nd buffer)
 static void load_into_ring_buffer(lwrb_t *rb, const uint16_t high_pos)
@@ -786,11 +852,12 @@ static void _Parse(uint16_t high_pos)
 			if(NMEA_sentence_valid(out, &parse_complete))  // check basic NMEA sentence validity
 				{
 					// at this point we have a good sentence and we can start parsing NMEA data
-					parse_gga(&__ORG1510MK4, (const char*) out);	// parse for GGA data
-					parse_zda(&__ORG1510MK4, (const char*) out);	// parse for ZDA data
-					parse_vtg(&__ORG1510MK4, (const char*) out);	// parse for VTG data
-					parse_gsa(&__ORG1510MK4, (const char*) out);	// parse for GSA data
-					parse_gsv(&__ORG1510MK4, (const char*) out);	// parse for GSV data
+					parse_gga(__ORG1510MK4.public.gga, (const char*) out);	// parse for GGA data
+					parse_zda(__ORG1510MK4.public.zda, (const char*) out);	// parse for ZDA data
+					parse_vtg(__ORG1510MK4.public.vtg, (const char*) out);	// parse for VTG data
+					parse_gsa(__ORG1510MK4.public.gsa, (const char*) out);	// parse for GSA data
+					parse_gsv(__ORG1510MK4.public.gsv, (const char*) out);	// parse for GSV data
+//					parse_rmc(__ORG1510MK4.public.rmc, (const char*) out);	// parse for RMC data
 
 					HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, out, (uint16_t) strlen((const char*) out));  // send GPS to VCP
 
@@ -832,20 +899,26 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 //	__ORG1510MK4.public.NMEA = gps_dma_input_buffer;  // tie in NMEA sentence buffer
 	__ORG1510MK4.public.PowerMode = 0;  // TODO - read from FeRAM, for now set to off by default
 
-	__ORG1510MK4.public.gga = &_gga;	// tie in GGA message struct
+	__ORG1510MK4.public.gga = &_gga;	// tie in GGA sentence struct
 	__ORG1510MK4.public.gga->lat = &_gga_lat;  // tie in latitude
 	__ORG1510MK4.public.gga->lon = &_gga_lon;  // tie in longitude
-	__ORG1510MK4.public.gga->fix_date = _GGAfix_date;  // tie in container for GGA-derived fix date
+	__ORG1510MK4.public.gga->fix_date = _ggafix_date;  // tie in container for GGA-derived fix date
 
-	__ORG1510MK4.public.zda = &_zda;	// tie in ZDA message struct
-	__ORG1510MK4.public.zda->time = _UTCtimestr;  // tie in container for ZDA-derived UTC time
+	__ORG1510MK4.public.zda = &_zda;	// tie in ZDA sentence struct
+	__ORG1510MK4.public.zda->time = _zdatime;  // tie in container for ZDA-derived UTC time
 	__ORG1510MK4.public.zda->tz = 0;	// initialize to 0
 
-	__ORG1510MK4.public.vtg = &_vtg;	// tie in VTG message struct
-	__ORG1510MK4.public.gsa = &_gpgsa;	// tie in GSA message struct
+	__ORG1510MK4.public.vtg = &_vtg;	// tie in VTG sentence struct
+	__ORG1510MK4.public.gsa = &_gpgsa;	// tie in GSA sentence struct
 
-	__ORG1510MK4.public.gsv = &_gpgsv;	// tie in GSA message struct
-//	__ORG1510MK4.public.gsv->sv = _sv;
+	__ORG1510MK4.public.gsv = &_gpgsv;	// tie in GSA sentence struct
+
+//	__ORG1510MK4.public.rmc = &_rmc;	// tie in GSA sentence struct
+//	__ORG1510MK4.public.rmc->lat = &_rmc_lat;  // tie in latitude
+//	__ORG1510MK4.public.rmc->lon = &_rmc_lon;  // tie in longitude
+//	__ORG1510MK4.public.rmc->date = _rmcfix_date;
+//	__ORG1510MK4.public.rmc->time = _rmcfix_time;
+
 #if DEBUG_LWRB_FREE
 	__ORG1510MK4.char_written = 0;	// characters written out to system UART
 #endif

@@ -26,7 +26,7 @@ typedef struct zda_t	// ZDA message struct
 	uint8_t tz;  // local time-zone offset from GMT
 } zda_t;
 
-typedef enum gga_fix_t	// GGA message struct
+typedef enum gga_fix_t	// GGA sentence struct
 {
 	  none = 0,  // no fix
 	  GPS = 1,	// GPS fix
@@ -54,7 +54,7 @@ typedef struct coord_dd_t  // NMEA decimal degree
 	float s;  // seconds 015 54.9327
 } coord_dd_t;
 
-typedef struct gga_t  // GGA message
+typedef struct gga_t  // GGA sentence struct
 {
 	char *fix_date;  // age of GPS fix data
 	coord_dd_t *lat;  // latitude
@@ -90,8 +90,8 @@ typedef struct vtg_t	// VTG sentence struct
 
 typedef enum gsa_selectionmode_t  // GSA selection mode
 {  // ASCII character interpreted as integer
-	  A = 65,  // Automatic, 2D or 3D
-	  M = 77,  // Manual, forced to operate in 2D/3D
+	  Auto = 65,  // Automatic, 2D or 3D
+	  Manu = 77,  // Manual, forced to operate in 2D/3D
 } gsa_selectionmode_t;
 
 typedef enum gsa_fixmode_t  // GSA fix mode
@@ -138,6 +138,28 @@ typedef struct gsv_t	// GSV sentence struct
 	spacevehicle_t sv[12];  // container for 12 space vehicles
 } gsv_t;
 
+//typedef enum rmc_status_t  // RMC fix status
+//{  // ASCII character interpreted as integer
+//	  Active = 65,  // Active
+//	  Void = 86,  // Void
+//} rmc_status_t;
+//
+//typedef struct rmc_t	// RMC sentence struct
+//{
+//	char *time;  //	p[osition fix time in hhmmss time in UTC
+//	rmc_status_t status;	// GPS status indicator
+//	coord_dd_t *lat;  // latitude
+//	cardinal_dir_t lat_dir;  // direction of latitude
+//	coord_dd_t *lon;  // longitude
+//	cardinal_dir_t lon_dir;  // direction of longitude
+//	float knots;	// speed in knots
+//	uint16_t azimut;	// track angle in degrees true north
+//	char *date;  // date in ddmmyy format
+//	uint16_t mag_var;  // magnetic variation in degrees
+//	cardinal_dir_t var_dir;  // magnetic variation cardinal direction
+//	faa_mode_t mode;	// FAA mode indicator
+//} rmc_t;
+
 typedef struct org1510mk4_t  // struct describing the GPS module functionality
 {
 	zda_t *zda;  // ZDA-derived data
@@ -145,6 +167,7 @@ typedef struct org1510mk4_t  // struct describing the GPS module functionality
 	vtg_t *vtg;  // VTG-derived data
 	gsa_t *gsa;  // GSA-derived data
 	gsv_t *gsv;  //	 GSV-derived data
+//	rmc_t *rmc;  // RMC-derived data
 	uint8_t *NMEA;  //	last NMEA sentence
 	volatile org1510mk4_power_t PowerMode;  // current power mode of the GPS module
 	void (*Power)(const org1510mk4_power_t state);  // GPS module power mode change control function
