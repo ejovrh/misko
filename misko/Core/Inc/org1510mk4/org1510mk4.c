@@ -32,7 +32,7 @@ typedef struct	// org1510mk4c_t actual
 	org1510mk4_t public;  // public struct
 } __org1510mk4_t;
 
-static __org1510mk4_t                                 __ORG1510MK4                                 __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
+static __org1510mk4_t __ORG1510MK4 __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
 static lwrb_t lwrb;  // 2nd circular buffer for data processing
 static uint8_t lwrb_buffer[LWRB_BUFFER_LEN];	//
 static char _zdatime[7] = "\0";  // container for ZDA-derived UTC time
@@ -43,9 +43,9 @@ static coord_dd_t _gga_lat;  // object for GGA latitude
 static coord_dd_t _gga_lon;  // object for GGA longitude
 static vtg_t _vtg;	// object for VTG sentence
 static gsa_t _gpgsa;	// object for GPS GSA sentence
-static gsa_t _glgsa;	// object for GPS GSA sentence
+static gsa_t _glgsa;	// object for GLANOSS GSA sentence
 static gsv_t _gpgsv;	// object for GPS GSV sentence
-static gsv_t _glgsv;	// object for GPS GSV sentence
+static gsv_t _glgsv;	// object for GLANOSS GSV sentence
 static gsa_t _gsa;	// object for GSA sentences
 //static rmc_t _rmc;	// object for RMC sentence
 //static coord_dd_t _rmc_lat;  // object for GGA latitude
@@ -665,7 +665,7 @@ static void parse_gngsv(gsv_t *sentence, const char *talker, const char *str)
 	if(num == 3)  // message number 3
 		n = 8;	// sv array index 8 to 11
 
-	for(uint8_t i = n; i <= (4 * num); i++)
+	for(uint8_t i = n; i <= (4 * num) - 1; i++)
 		{
 			tok = strtok_f(NULL, ',');
 			if(tok)
@@ -710,15 +710,15 @@ static void parse_gngsv(gsv_t *sentence, const char *talker, const char *str)
 // parses NMEA str for GSV data - only GPS talker at this time
 static void parse_gsv(const char *str)
 {
-	parse_gngsv(&_glgsv, "GLGSV", str);
 	parse_gngsv(&_gpgsv, "GPGSV", str);
+	parse_gngsv(&_glgsv, "GLGSV", str);
 }
 
 // parses NMEA str for GSA data
 static void parse_gsa(const char *str)
 {
-	parse_gngsa(&_glgsa, "GLGSA", str);
 	parse_gngsa(&_gpgsa, "GPGSA", str);
+	parse_gngsa(&_glgsa, "GLGSA", str);
 }
 
 //// parses NMEA str for RMC data
@@ -892,9 +892,9 @@ static void _Parse(uint16_t high_pos)
 				{
 					// at this point we have a good sentence and we can start parsing NMEA data
 					//					parse_rmc(__ORG1510MK4.public.rmc, (const char*) out);	// parse for RMC data
-					parse_gga(__ORG1510MK4.public.gga, (const char*) out);	// parse for GGA data
-					parse_zda(__ORG1510MK4.public.zda, (const char*) out);	// parse for ZDA data
-					parse_vtg(__ORG1510MK4.public.vtg, (const char*) out);	// parse for VTG data
+					parse_gga(__ORG1510MK4.public.gga, (const char*) out);  // parse for GGA data
+					parse_zda(__ORG1510MK4.public.zda, (const char*) out);  // parse for ZDA data
+					parse_vtg(__ORG1510MK4.public.vtg, (const char*) out);  // parse for VTG data
 					parse_gsa((const char*) out);  // parse for GSA data
 					parse_gsv((const char*) out);  // parse for GSV data
 
@@ -923,7 +923,7 @@ static void _Write(const char *str)
 	_wait(50);	// always wait a while. stuff works better that way...
 }
 
-static __org1510mk4_t                                 __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
+static __org1510mk4_t __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
 	{  //
 	.public.Power = &_Power,	// GPS module power mode change control function
 	.public.Parse = &_Parse,	//
