@@ -573,13 +573,9 @@ static void parse_vtg(vtg_t *sentence, const char *str)
  * 	65 - 88 - GLONASS
  * 	33 - 51 - SBAS
  * 	52 - 71 - SBAS
- *
- *
- *
- *
  */
 
-// searches for gsa_prn in priv_gsv and returns object address, if found
+// searches for gsa_prn in priv_gsv and returns object address, NULL otherwise
 static spacevehicle_t* linkSV(const uint8_t gsa_prn, gsv_t *priv_gsv)
 {
 	for(uint8_t i = 0; i < 12; i++)  // loop over all GSV's
@@ -603,14 +599,22 @@ static void parse_gngsa(const char *talker, const char *str, gsa_t *pub_gsa, gsv
 		{
 			for(uint8_t i = 0; i < 12; i++)  // zero-out previously linked SVs
 				pub_gsa->sv[i] = NULL;
+
+			pub_gsa->hdop = 0;	// zero fields
+			pub_gsa->vdop = 0;
+			pub_gsa->pdop = 0;
+
 			return;  // and get out
 		}
 
 	if(priv_view->sv_visible == 0)  // if no SVs are used for a solution
 		return;
 
+	static uint8_t iter;	// GSA loop (this function) iteration counter
+
 	char temp[82] = "\0";  // create a temporary buffer
 	uint8_t prn = 0;	// SV PRN
+	static uint8_t ins;  // successful insertions
 
 	strncpy(temp, str, strlen(str));	// copy str into temp
 
@@ -626,17 +630,41 @@ static void parse_gngsa(const char *talker, const char *str, gsa_t *pub_gsa, gsv
 	// now tokenize SVs and - if found - link it to GSA's SV list
 	for(uint8_t i = 0; i < 12; i++)
 		{
+			if(ins == 12)
+				{
+					ins = 0;
+					break;
+				}
+
 			prn = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of space vehicle
 
-			if(prn)  // if it is listed ( 0 is means "no SV used for fix")
-				pub_gsa->sv[i] = linkSV(prn, priv_view);  // find PRN in gsv_t and link it in
-		}
+			if(prn)  // if it is non-zero
+				{
+					spacevehicle_t *svptr = linkSV(prn, priv_view);  // find PRN in gsv_t and get pointer to it
+					pub_gsa->sv[ins] = svptr;  // link that pointer (it can be NULL!!)
 
+					if(svptr != NULL)  // match found
+						ins++;	// count the reference insertions - i.e. advance position by one
+				}
+		}
 	// continue with normal tokenizing
 	pub_gsa->pdop = (float) atof(strtok_f(NULL, ','));  // Positional Dilution of Position - 4.75
 	pub_gsa->hdop = (float) atof(strtok_f(NULL, ','));  // Horizontal Dilution of Position - 4.64
 	pub_gsa->vdop = (float) atof(strtok_f(NULL, ','));  // VErtical Dilution of Position - 0.98
 
+	iter++;  // advance index one position
+
+	if(iter == GSA_COUNT)  // we reached the number of possible GSA iterations
+		{
+			do
+				{
+					pub_gsa->sv[ins++] = NULL;	// zero out rest
+				}
+			while(ins < 12);
+
+			iter = 0;  // start over
+			ins = 0;
+		}
 }
 
 // parses NMEA str for GSV data - only GPS talker at this time

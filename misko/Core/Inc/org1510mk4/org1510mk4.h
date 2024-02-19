@@ -120,6 +120,7 @@ typedef struct gsa_t  // GSA sentence struct
 	float hdop;  // Horizontal Dilution Of Position
 	float vdop;  // Vertical Dilution Of Position
 } gsa_t;
+#define GSA_COUNT 2	// number of GSA talkers - GP, GL, ...
 
 typedef struct gsv_t	// GSV sentence struct
 {
