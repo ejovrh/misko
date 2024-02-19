@@ -167,6 +167,7 @@ typedef struct org1510mk4_t  // struct describing the GPS module functionality
 	vtg_t *vtg;  // VTG-derived data
 	gsa_t *gpgsa;  // GSA-derived data
 	gsa_t *glgsa;  // GSA-derived data
+	gsa_t *gsa;  // GSA-derived data
 	gsv_t *gpgsv;  //	 GSV-derived data
 	gsv_t *glgsv;  //	 GSV-derived data
 //	rmc_t *rmc;  // RMC-derived data
