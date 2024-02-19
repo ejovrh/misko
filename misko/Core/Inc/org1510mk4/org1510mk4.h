@@ -102,27 +102,6 @@ typedef enum gsa_fixmode_t  // GSA fix mode
 
 } gsa_fixmode_t;
 
-typedef struct gsa_t  // GSA sentence struct
-{
-	gsa_selectionmode_t sel_mode;  // GSA selection mode
-	gsa_fixmode_t fixmode;  // fix mode
-	uint8_t sv01;  //	space vehicle 01 PRN
-	uint8_t sv02;  // space vehicle 02 PRN
-	uint8_t sv03;  // ...
-	uint8_t sv04;  //
-	uint8_t sv05;  //
-	uint8_t sv06;  //
-	uint8_t sv07;  //
-	uint8_t sv08;  //
-	uint8_t sv09;  //
-	uint8_t sv10;  //
-	uint8_t sv11;  //
-	uint8_t sv12;  //
-	float pdop;  // Position Dilution Of Position
-	float hdop;  // Horizontal Dilution Of Position
-	float vdop;  // Vertical Dilution Of Position
-} gsa_t;
-
 typedef struct spacevehicle_t  // space vehicle data
 {
 	uint8_t prn;	// Pseudo-Random Number of space vehicle
@@ -130,6 +109,17 @@ typedef struct spacevehicle_t  // space vehicle data
 	uint16_t azim;  // azimuth in degrees from true north, 0 - 359
 	uint8_t snr;  // Signal to Noise Ratio, 00 - 99, NULL when not tracking
 } spacevehicle_t;
+
+typedef struct gsa_t  // GSA sentence struct
+{
+	gsa_selectionmode_t sel_mode;  // GSA selection mode
+	gsa_fixmode_t fixmode;  // fix mode
+	spacevehicle_t *sv[12];  // array of pointers to GSV objects
+
+	float pdop;  // Position Dilution Of Position
+	float hdop;  // Horizontal Dilution Of Position
+	float vdop;  // Vertical Dilution Of Position
+} gsa_t;
 
 typedef struct gsv_t	// GSV sentence struct
 {
@@ -165,11 +155,11 @@ typedef struct org1510mk4_t  // struct describing the GPS module functionality
 	zda_t *zda;  // ZDA-derived data
 	gga_t *gga;  // GGA-derived data
 	vtg_t *vtg;  // VTG-derived data
-	gsa_t *gpgsa;  // GSA-derived data
-	gsa_t *glgsa;  // GSA-derived data
+//	gsa_t *gpgsa;  // GSA-derived data
+//	gsa_t *glgsa;  // GSA-derived data
 	gsa_t *gsa;  // GSA-derived data
-	gsv_t *gpgsv;  //	 GSV-derived data
-	gsv_t *glgsv;  //	 GSV-derived data
+//	gsv_t *gpgsv;  //	 GSV-derived data
+//	gsv_t *glgsv;  //	 GSV-derived data
 //	rmc_t *rmc;  // RMC-derived data
 	uint8_t *NMEA;  //	last NMEA sentence
 	volatile org1510mk4_power_t PowerMode;  // current power mode of the GPS module

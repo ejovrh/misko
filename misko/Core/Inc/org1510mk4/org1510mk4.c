@@ -42,8 +42,8 @@ static gga_t _gga;  // object for GGA sentence
 static coord_dd_t _gga_lat;  // object for GGA latitude
 static coord_dd_t _gga_lon;  // object for GGA longitude
 static vtg_t _vtg;	// object for VTG sentence
-static gsa_t _gpgsa;	// object for GPS GSA sentence
-static gsa_t _glgsa;	// object for GLANOSS GSA sentence
+//static gsa_t _gpgsa;	// object for GPS GSA sentence
+//static gsa_t _glgsa;	// object for GLANOSS GSA sentence
 static gsv_t _gpgsv;	// object for GPS GSV sentence
 static gsv_t _glgsv;	// object for GLANOSS GSV sentence
 static gsa_t _gsa;	// object for GSA sentences
@@ -579,15 +579,38 @@ static void parse_vtg(vtg_t *sentence, const char *str)
  *
  */
 
-// parses NMEA str for GSA data - only GPS talker at this time
-static void parse_gngsa(gsa_t *sentence, const char *talker, const char *str)
+// searches for gsa_prn in priv_gsv and returns object address, if found
+static spacevehicle_t* linkSV(const uint8_t gsa_prn, gsv_t *priv_gsv)
+{
+	for(uint8_t i = 0; i < 12; i++)  // loop over all GSV's
+		{
+			if(priv_gsv->sv[i].prn == gsa_prn)	// and compare GSA PRN with GSV's PRN
+				return &priv_gsv->sv[i];	// if found return it
+		}
+
+	return NULL;	// otherwise return NULL
+}
+
+// parses NMEA str for GSA data and link "satellites used" with GSV SVs
+static void parse_gngsa(const char *talker, const char *str, gsa_t *pub_gsa, gsv_t *priv_view)
 {
 	char *msg = strstr(str, talker);  // first, check if we have the correct message type
 
 	if(msg == NULL)  // if not, get out
 		return;
 
+	if(__ORG1510MK4.public.gga->fix == 0)  // if no SVs are used for a solution
+		{
+			for(uint8_t i = 0; i < 12; i++)  // zero-out previously linked SVs
+				pub_gsa->sv[i] = NULL;
+			return;  // and get out
+		}
+
+	if(priv_view->sv_visible == 0)  // if no SVs are used for a solution
+		return;
+
 	char temp[82] = "\0";  // create a temporary buffer
+	uint8_t prn = 0;	// SV PRN
 
 	strncpy(temp, str, strlen(str));	// copy str into temp
 
@@ -596,25 +619,24 @@ static void parse_gngsa(gsa_t *sentence, const char *talker, const char *str)
 	char *tok = strtok_f(temp, ',');	// start to tokenize
 
 	tok = strtok_f(NULL, ',');
-	sentence->sel_mode = (gsa_selectionmode_t) *tok;  // GSA selection mode - A
+	pub_gsa->sel_mode = (gsa_selectionmode_t) *tok;  // GSA selection mode - A
 
-	sentence->fixmode = (gsa_fixmode_t) atoi(strtok_f(NULL, ','));  // GSA fix mode - 3
-	sentence->sv01 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
-	sentence->sv02 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
-	sentence->sv03 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
-	sentence->sv04 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
-	sentence->sv05 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
-	sentence->sv06 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
-	sentence->sv07 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
-	sentence->sv08 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
-	sentence->sv09 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
-	sentence->sv10 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
-	sentence->sv11 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
-	sentence->sv12 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	pub_gsa->fixmode = (gsa_fixmode_t) atoi(strtok_f(NULL, ','));  // GSA fix mode - 3
 
-	sentence->pdop = (float) atof(strtok_f(NULL, ','));  // 4.75
-	sentence->hdop = (float) atof(strtok_f(NULL, ','));  // 4.64
-	sentence->vdop = (float) atof(strtok_f(NULL, ','));  // 0.98
+	// now tokenize SVs and - if found - link it to GSA's SV list
+	for(uint8_t i = 0; i < 12; i++)
+		{
+			prn = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of space vehicle
+
+			if(prn)  // if it is listed ( 0 is means "no SV used for fix")
+				pub_gsa->sv[i] = linkSV(prn, priv_view);  // find PRN in gsv_t and link it in
+		}
+
+	// continue with normal tokenizing
+	pub_gsa->pdop = (float) atof(strtok_f(NULL, ','));  // Positional Dilution of Position - 4.75
+	pub_gsa->hdop = (float) atof(strtok_f(NULL, ','));  // Horizontal Dilution of Position - 4.64
+	pub_gsa->vdop = (float) atof(strtok_f(NULL, ','));  // VErtical Dilution of Position - 0.98
+
 }
 
 // parses NMEA str for GSV data - only GPS talker at this time
@@ -665,7 +687,7 @@ static void parse_gngsv(gsv_t *sentence, const char *talker, const char *str)
 	if(num == 3)  // message number 3
 		n = 8;	// sv array index 8 to 11
 
-	for(uint8_t i = n; i <= (4 * num) - 1; i++)
+	for(uint8_t i = n; i <= (4 * num); i++)
 		{
 			tok = strtok_f(NULL, ',');
 			if(tok)
@@ -691,6 +713,9 @@ static void parse_gngsv(gsv_t *sentence, const char *talker, const char *str)
 			else
 				sentence->sv[i].snr = 0;
 			n = i;
+
+			if(i == 11)
+				break;
 		}
 
 	if(n < 12)
@@ -707,18 +732,16 @@ static void parse_gngsv(gsv_t *sentence, const char *talker, const char *str)
 		}
 }
 
-// parses NMEA str for GSV data - only GPS talker at this time
-static void parse_gsv(const char *str)
+// parses NMEA str for GSV and GSA data
+static void parse_gsa(gsa_t *sentence, const char *str)
 {
-	parse_gngsv(&_gpgsv, "GPGSV", str);
-	parse_gngsv(&_glgsv, "GLGSV", str);
-}
+	// first, fill private GSV struct with SVs - essentially arrays of spacevehicle_t's
+	parse_gngsv(&_gpgsv, "GPGSV", str);  // parse GPGSV
+	parse_gngsv(&_glgsv, "GLGSV", str);  // parse GLGSV
 
-// parses NMEA str for GSA data
-static void parse_gsa(const char *str)
-{
-	parse_gngsa(&_gpgsa, "GPGSA", str);
-	parse_gngsa(&_glgsa, "GLGSA", str);
+	// then, parse GSA sentences and populate "satellites used" with pointers to GSV's SVs
+	parse_gngsa("GPGSA", str, sentence, &_gpgsv);  // GP
+	parse_gngsa("GLGSA", str, sentence, &_glgsv);  // GL
 }
 
 //// parses NMEA str for RMC data
@@ -895,8 +918,7 @@ static void _Parse(uint16_t high_pos)
 					parse_gga(__ORG1510MK4.public.gga, (const char*) out);  // parse for GGA data
 					parse_zda(__ORG1510MK4.public.zda, (const char*) out);  // parse for ZDA data
 					parse_vtg(__ORG1510MK4.public.vtg, (const char*) out);  // parse for VTG data
-					parse_gsa((const char*) out);  // parse for GSA data
-					parse_gsv((const char*) out);  // parse for GSV data
+					parse_gsa(__ORG1510MK4.public.gsa, (const char*) out);  // parse for GSA data
 
 					HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, out, (uint16_t) strlen((const char*) out));  // send GPS to VCP
 
@@ -948,11 +970,11 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 	__ORG1510MK4.public.zda->tz = 0;	// initialize to 0
 
 	__ORG1510MK4.public.vtg = &_vtg;	// tie in VTG sentence struct
-	__ORG1510MK4.public.gpgsa = &_gpgsa;	// tie in GSA sentence struct
-	__ORG1510MK4.public.glgsa = &_glgsa;	// tie in GSA sentence struct
+//	__ORG1510MK4.public.gpgsa = &_gpgsa;	// tie in GSA sentence struct
+//	__ORG1510MK4.public.glgsa = &_glgsa;	// tie in GSA sentence struct
 
-	__ORG1510MK4.public.gpgsv = &_gpgsv;	// tie in GSA sentence struct
-	__ORG1510MK4.public.glgsv = &_glgsv;	// tie in GSA sentence struct
+//	__ORG1510MK4.public.gpgsv = &_gpgsv;	// tie in GSA sentence struct
+//	__ORG1510MK4.public.glgsv = &_glgsv;	// tie in GSA sentence struct
 	__ORG1510MK4.public.gsa = &_gsa;	// tie in GSA sentence struct
 
 //	__ORG1510MK4.public.rmc = &_rmc;	// tie in GSA sentence struct
