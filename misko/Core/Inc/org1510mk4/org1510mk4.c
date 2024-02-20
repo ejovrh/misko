@@ -67,6 +67,10 @@ static coord_dd_t _rmc_lon;  // object for GGA longitude
 static char _rmcfix_date[7] = "\0";  // container for GGA-derived fix date
 static char _rmcfix_time[7] = "\0";  // container for GGA-derived fix date
 #endif
+#if PARSE_GLL
+static gll_t _gll;	// object for GLL sentences
+static char _gllfix_time[7] = "\0";  // container for GGA-derived fix date
+#endif
 
 static uint8_t parse_complete = 1;	// semaphore for parsing <-> ringbuffer load control
 static uint8_t gps_dma_input_buffer[GPS_DMA_INPUT_BUFFER_LEN] = "\0";  // 1st circular buffer: incoming GPS UART DMA data
@@ -873,6 +877,40 @@ static void parse_rmc(rmc_t *sentence, const char *str)
 }
 #endif
 
+#if PARSE_GLL
+// parses NMEA str for GLL data
+static void parse_gll(gll_t *sentence, const char *str)
+{
+	char *msg = strstr(str, "RMC");  // first, check if we have the correct message type
+
+	if(msg == NULL)  // if not, get out
+		return;
+
+	char temp[82] = "\0";  // create a temporary buffer
+
+	strncpy(temp, str, strlen(str));	// copy str into temp
+
+	// $GPGLL,3953.88008971,N,10506.75318910,W,034138.00,A,D*7A
+	char *tok = strtok_f(temp, ',');	// start to tokenize
+	tok = strtok_f(NULL, ',');
+	NMEA_DecimalDegree_to_coord_dd_t(tok, &_gga_lat);  // 3953.88008971 to 39 and 53.88008971 in coord_dd_t
+
+	tok = strtok_f(NULL, ',');
+	sentence->lat_dir = (cardinal_dir_t) *tok;  // north - N
+
+	tok = strtok_f(NULL, ',');
+	NMEA_DecimalDegree_to_coord_dd_t(tok, &_gga_lon);  // 10506.75318910 to 105 and 06.75318910 in coord_dd_t
+
+	tok = strtok_f(NULL, ',');
+	sentence->lon_dir = (cardinal_dir_t) *tok;  // east - W
+
+	memcpy(_gllfix_time, strtok_f(NULL, ','), 6);  // 034138
+
+	tok = strtok_f(NULL, ',');	// A
+	sentence->status = (rmc_status_t) *tok;
+}
+#endif
+
 // buffer NMEA sentences from DMA circular buffer (1st buffer) into ringbuffer (2nd buffer)
 static void load_into_ring_buffer(lwrb_t *rb, const uint16_t high_pos)
 {
@@ -1103,6 +1141,11 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 	__ORG1510MK4.public.rmc->date = _rmcfix_date;
 	__ORG1510MK4.public.rmc->time = _rmcfix_time;
 #endif
+#if PARSE_GLL
+	__ORG1510MK4.public.gll = &_gll;	// tie in GLL sentence struct
+	__ORG1510MK4.public.gll->time = _gllfix_time;
+#endif
+
 #if DEBUG_LWRB_FREE
 	__ORG1510MK4.char_written = 0;	// characters written out to system UART
 #endif

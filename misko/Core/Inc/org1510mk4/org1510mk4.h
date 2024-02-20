@@ -19,7 +19,7 @@
  * see init() and adapt accordingly
  */
 
-#define PARSE_GLL 0	// TODO - implement GLL parsing
+#define PARSE_GLL 0	// TODO - test GLL parsing
 #define PARSE_RMC 0 // parse RMC sentences
 #define PARSE_VTG 1 // parse VTG sentences
 #define PARSE_GGA 1	// parse GGA sentences
@@ -190,16 +190,18 @@ typedef struct gsv_t	// GSV sentence struct
 } gsv_t;
 #endif
 
-#if PARSE_RMC
+#if PARSE_RMC || PARSE_GLL
 typedef enum rmc_status_t  // RMC fix status
 {  // ASCII character interpreted as integer
 	  Active = 65,  // Active
 	  Void = 86,  // Void
 } rmc_status_t;
+#endif
 
+#if PARSE_RMC
 typedef struct rmc_t	// RMC sentence struct
 {
-	char *time;  //	p[osition fix time in hhmmss time in UTC
+	char *time;  //	position fix time in hhmmss time in UTC
 	rmc_status_t status;	// GPS status indicator
 	coord_dd_t *lat;  // latitude
 	cardinal_dir_t lat_dir;  // direction of latitude
@@ -212,6 +214,19 @@ typedef struct rmc_t	// RMC sentence struct
 	cardinal_dir_t var_dir;  // magnetic variation cardinal direction
 	faa_mode_t mode;	// FAA mode indicator
 } rmc_t;
+#endif
+
+#if PARSE_GLL
+typedef struct gll_t
+{
+	coord_dd_t *lat;  // latitude
+	cardinal_dir_t lat_dir;  // direction of latitude
+	coord_dd_t *lon;  // longitude
+	cardinal_dir_t lon_dir;  // direction of longitude
+	char *time;  //	position fix time in hhmmss time in UTC
+	rmc_status_t status;	// GPS status indicator
+
+} gll_t;
 #endif
 
 typedef struct org1510mk4_t  // struct describing the GPS module functionality
@@ -238,6 +253,9 @@ typedef struct org1510mk4_t  // struct describing the GPS module functionality
 #endif
 #if PARSE_RMC // expose rmc_t
 	rmc_t *rmc;  // RMC-derived data
+#endif
+#if PARSE_GLL
+	gll_t *gll;  //GLL-parsed data
 #endif
 
 	uint8_t *NMEA;  //	last NMEA sentence
