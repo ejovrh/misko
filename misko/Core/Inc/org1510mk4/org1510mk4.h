@@ -25,7 +25,7 @@
 #define PARSE_GGA 1	// parse GGA sentences
 #define GSA_COUNT 2	// number of GSA talkers - GP, GL, ...
 #define PARSE_GSV 1 // parse GSV sentences
-#define EXPOSE_GSV 1	// expose normally hidden GSV data struct
+#define EXPOSE_GSV 0	// expose normally hidden GSV data struct
 #define PARSE_GSA 1 // parse GSA sentences
 #define PARSE_ZDA 1	// parse ZDA sentences
 
