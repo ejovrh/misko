@@ -448,6 +448,7 @@ void TIM1_CC_IRQHandler(void)
 	HAL_TIM_IRQHandler(&htim1);
 	/* USER CODE BEGIN TIM1_CC_IRQn 1 */
 
+#if PARSE_GGA
 	if(ORG1510MK4->gga->fix == INS)  // check if we have an inertial navigation fix
 		{
 			HAL_GPIO_TogglePin(LED_Green_GPIO_Port, LED_Green_Pin);  // blink the LED
@@ -458,6 +459,7 @@ void TIM1_CC_IRQHandler(void)
 		HAL_GPIO_WritePin(LED_Green_GPIO_Port, LED_Green_Pin, GPIO_PIN_RESET);	// light up green LED
 	else
 		HAL_GPIO_WritePin(LED_Green_GPIO_Port, LED_Green_Pin, GPIO_PIN_SET);	// light down green LED
+#endif
 	/* USER CODE END TIM1_CC_IRQn 1 */
 }
 

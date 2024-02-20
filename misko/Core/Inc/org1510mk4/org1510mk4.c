@@ -35,23 +35,38 @@ typedef struct	// org1510mk4c_t actual
 static __org1510mk4_t __ORG1510MK4 __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
 static lwrb_t lwrb;  // 2nd circular buffer for data processing
 static uint8_t lwrb_buffer[LWRB_BUFFER_LEN];	//
-static char _zdatime[7] = "\0";  // container for ZDA-derived UTC time
-static char _ggafix_date[7] = "\0";  // container for GGA-derived fix date
+
+#if PARSE_ZDA
 static zda_t _zda;  // object for ZDA sentence
+static char _zdatime[7] = "\0";  // container for ZDA-derived UTC time
+#endif
+#if PARSE_GGA
 static gga_t _gga;  // object for GGA sentence
 static coord_dd_t _gga_lat;  // object for GGA latitude
 static coord_dd_t _gga_lon;  // object for GGA longitude
+static char _ggafix_date[7] = "\0";  // container for GGA-derived fix date
+#endif
+#if PARSE_VTG
 static vtg_t _vtg;	// object for VTG sentence
-//static gsa_t _gpgsa;	// object for GPS GSA sentence
-//static gsa_t _glgsa;	// object for GLANOSS GSA sentence
+#endif
+#if PARSE_GSA && !PARSE_GSV
+static gsa_t _gpgsa;	// object for GPS GSA sentence
+static gsa_t _glgsa;	// object for GLANOSS GSA sentence
+#endif
+#if PARSE_GSV
 static gsv_t _gpgsv;	// object for GPS GSV sentence
 static gsv_t _glgsv;	// object for GLANOSS GSV sentence
+#endif
+#if PARSE_GSA
 static gsa_t _gsa;	// object for GSA sentences
-//static rmc_t _rmc;	// object for RMC sentence
-//static coord_dd_t _rmc_lat;  // object for GGA latitude
-//static coord_dd_t _rmc_lon;  // object for GGA longitude
-//static char _rmcfix_date[7] = "\0";  // container for GGA-derived fix date
-//static char _rmcfix_time[7] = "\0";  // container for GGA-derived fix date
+#endif
+# if PARSE_RMC
+static rmc_t _rmc;	// object for RMC sentence
+static coord_dd_t _rmc_lat;  // object for GGA latitude
+static coord_dd_t _rmc_lon;  // object for GGA longitude
+static char _rmcfix_date[7] = "\0";  // container for GGA-derived fix date
+static char _rmcfix_time[7] = "\0";  // container for GGA-derived fix date
+#endif
 
 static uint8_t parse_complete = 1;	// semaphore for parsing <-> ringbuffer load control
 static uint8_t gps_dma_input_buffer[GPS_DMA_INPUT_BUFFER_LEN] = "\0";  // 1st circular buffer: incoming GPS UART DMA data
@@ -137,17 +152,6 @@ static void _init(void)
 	__ORG1510MK4.public.Write("PMTK353,1,1,0,0,1");  // use gps, glonass, not galileo, not galileo_full, beidou (action failed - test)
 	__ORG1510MK4.public.Write("PMTK353,1,1,1,0,1");  // use gps, glonass, galileo, not galileo_full, beidou (action failed - test)
 
-	/* NMEA sentences:
-	 * 0 GLL - Geographical Position-Latitude/Longitude
-	 * 0 RMC - Recommended Minimum Specific GNSS Data
-	 * 1 VTG - Course over Ground and Ground Speed
-	 * 1 GGA - Global Positioning System Fix Data
-	 * 10 GSA - GNSS DOP and Active Satellites
-	 * 10 GSV - GNSS Satellites in View
-	 * ...
-	 * 1 ZDA - UTC Date/Time and Local Time Zone Offset
-	 * 0 MCHN - ???
-	 */
 	// instruct module to spit out NMEA sentences as above
 	__ORG1510MK4.public.Write("PMTK314,0,0,1,1,10,10,0,0,0,0,0,0,0,0,0,0,0,1,0");
 
@@ -477,13 +481,16 @@ static char* strtok_f(char *s, char delim)
 	return strtok_fr(s, delim, &save_ptr);
 }
 
+#if PARSE_GGA || PARSE_RMC
 // converts NMEA decimal degrees to coord_dd_t object
 static void NMEA_DecimalDegree_to_coord_dd_t(char *str, coord_dd_t *coord)
 {
 	coord->deg = (uint8_t) (atoi(str) / 100);
 	coord->s = (float) ((atof(str) / 100.0) - coord->deg) * 100;
 }
+#endif
 
+#if PARSE_ZDA
 // parses NMEA str for ZDA data
 static void parse_zda(zda_t *sentence, const char *str)
 {
@@ -504,7 +511,9 @@ static void parse_zda(zda_t *sentence, const char *str)
 	sentence->year = (uint16_t) atoi(strtok_f(NULL, ','));  // year - 2024
 	sentence->tz = (uint8_t) atoi(strtok_f(NULL, ','));  // local timezone offset
 }
+#endif
 
+#if PARSE_GGA
 // parses str for GGA data
 static void parse_gga(gga_t *sentence, const char *str)
 {
@@ -541,7 +550,9 @@ static void parse_gga(gga_t *sentence, const char *str)
 	strtok_f(NULL, ',');  // M
 	sentence->dgps_age = (float) atof(strtok_f(NULL, ','));  // DGPS age
 }
+#endif
 
+#if PARSE_VTG
 // parses str for VTG data
 static void parse_vtg(vtg_t *sentence, const char *str)
 {
@@ -567,6 +578,7 @@ static void parse_vtg(vtg_t *sentence, const char *str)
 	tok = strtok_f(NULL, ',');
 	sentence->mode = (faa_mode_t) *tok;  // FAA mode indicator
 }
+#endif
 
 /* GPS satellite NMEA PRN assignment
  * 	01 - 32 - GPS
@@ -575,26 +587,34 @@ static void parse_vtg(vtg_t *sentence, const char *str)
  * 	52 - 71 - SBAS
  */
 
-// searches for gsa_prn in priv_gsv and returns object address, NULL otherwise
+#if PARSE_GSA && PARSE_GSV
+// searches for GSA PRN in priv_gsv and returns object address, NULL otherwise
 static spacevehicle_t* linkSV(const uint8_t gsa_prn, gsv_t *priv_gsv)
 {
 	for(uint8_t i = 0; i < 12; i++)  // loop over all GSV's
 		{
-			if(priv_gsv->sv[i].prn == gsa_prn)	// and compare GSA PRN with GSV's PRN
+			if(priv_gsv->sv[i].prn == gsa_prn)	// and compare GSV PRN with GSA PRN
 				return &priv_gsv->sv[i];	// if found return it
 		}
 
 	return NULL;	// otherwise return NULL
 }
+#endif
 
+#if PARSE_GSA
 // parses NMEA str for GSA data and link "satellites used" with GSV SVs
+#if PARSE_GSV
 static void parse_gngsa(const char *talker, const char *str, gsa_t *pub_gsa, gsv_t *priv_view)
+#else
+static void parse_gngsa(const char *talker, const char *str, gsa_t *pub_gsa)
+#endif
 {
 	char *msg = strstr(str, talker);  // first, check if we have the correct message type
 
 	if(msg == NULL)  // if not, get out
 		return;
 
+#if PARSE_GGA
 	if(__ORG1510MK4.public.gga->fix == 0)  // if no SVs are used for a solution
 		{
 			for(uint8_t i = 0; i < 12; i++)  // zero-out previously linked SVs
@@ -606,14 +626,19 @@ static void parse_gngsa(const char *talker, const char *str, gsa_t *pub_gsa, gsv
 
 			return;  // and get out
 		}
+#endif
 
+#if PARSE_GSV
 	if(priv_view->sv_visible == 0)  // if no SVs are used for a solution
 		return;
+#endif
 
 	static uint8_t iter;	// GSA loop (this function) iteration counter
 
 	char temp[82] = "\0";  // create a temporary buffer
+#if PARSE_GSV
 	uint8_t prn = 0;	// SV PRN
+#endif
 	static uint8_t ins;  // successful insertions
 
 	strncpy(temp, str, strlen(str));	// copy str into temp
@@ -627,6 +652,7 @@ static void parse_gngsa(const char *talker, const char *str, gsa_t *pub_gsa, gsv
 
 	pub_gsa->fixmode = (gsa_fixmode_t) atoi(strtok_f(NULL, ','));  // GSA fix mode - 3
 
+#if PARSE_GSV
 	// now tokenize SVs and - if found - link it to GSA's SV list
 	for(uint8_t i = 0; i < 12; i++)
 		{
@@ -647,6 +673,21 @@ static void parse_gngsa(const char *talker, const char *str, gsa_t *pub_gsa, gsv
 						ins++;	// count the reference insertions - i.e. advance position by one
 				}
 		}
+#else
+	pub_gsa->sv01 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	pub_gsa->sv02 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	pub_gsa->sv03 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	pub_gsa->sv04 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	pub_gsa->sv05 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	pub_gsa->sv06 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	pub_gsa->sv07 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	pub_gsa->sv08 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	pub_gsa->sv09 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	pub_gsa->sv10 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	pub_gsa->sv11 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+	pub_gsa->sv12 = (uint8_t) atoi(strtok_f(NULL, ','));  // PRN of SV01
+#endif
+
 	// continue with normal tokenizing
 	pub_gsa->pdop = (float) atof(strtok_f(NULL, ','));  // Positional Dilution of Position - 4.75
 	pub_gsa->hdop = (float) atof(strtok_f(NULL, ','));  // Horizontal Dilution of Position - 4.64
@@ -656,18 +697,21 @@ static void parse_gngsa(const char *talker, const char *str, gsa_t *pub_gsa, gsv
 
 	if(iter == GSA_COUNT)  // we reached the number of possible GSA iterations
 		{
+#if PARSE_GSV
 			do
 				{
 					pub_gsa->sv[ins++] = NULL;	// zero out rest
 				}
 			while(ins < 12);
-
+#endif
 			iter = 0;  // start over
 			ins = 0;
 		}
 }
+#endif
 
-// parses NMEA str for GSV data - only GPS talker at this time
+#if PARSE_GSV
+// parses NMEA str for GSV data - all talkers
 static void parse_gngsv(gsv_t *sentence, const char *talker, const char *str)
 {
 	char *msg = strstr(str, talker);  // first, check if we have the correct message type
@@ -704,7 +748,7 @@ static void parse_gngsv(gsv_t *sentence, const char *talker, const char *str)
 		}
 
 	if(sentence->sv_visible > 12)  // the tokenizer tokenized crap
-		return;
+		sentence->sv_visible = 12;
 
 	static uint8_t n;  // sv array iterator
 
@@ -717,6 +761,9 @@ static void parse_gngsv(gsv_t *sentence, const char *talker, const char *str)
 
 	for(uint8_t i = n; i <= (4 * num); i++)
 		{
+			if(i == 12)
+				break;
+
 			tok = strtok_f(NULL, ',');
 			if(tok)
 				sentence->sv[i].prn = (uint8_t) atoi(tok);
@@ -743,7 +790,7 @@ static void parse_gngsv(gsv_t *sentence, const char *talker, const char *str)
 			n = i;
 
 			if(i == 11)
-				break;
+				return;
 		}
 
 	if(n < 12)
@@ -759,60 +806,72 @@ static void parse_gngsv(gsv_t *sentence, const char *talker, const char *str)
 			while(n < 12);
 		}
 }
+#endif
 
+#if PARSE_GSA
 // parses NMEA str for GSV and GSA data
 static void parse_gsa(gsa_t *sentence, const char *str)
 {
+#if PARSE_GSV
 	// first, fill private GSV struct with SVs - essentially arrays of spacevehicle_t's
 	parse_gngsv(&_gpgsv, "GPGSV", str);  // parse GPGSV
 	parse_gngsv(&_glgsv, "GLGSV", str);  // parse GLGSV
+#endif
 
 	// then, parse GSA sentences and populate "satellites used" with pointers to GSV's SVs
+#if PARSE_GSV
 	parse_gngsa("GPGSA", str, sentence, &_gpgsv);  // GP
 	parse_gngsa("GLGSA", str, sentence, &_glgsv);  // GL
+#else
+	parse_gngsa("GPGSA", str, sentence);  // GP
+	parse_gngsa("GLGSA", str, sentence);  // GL
+#endif
 }
+#endif
 
-//// parses NMEA str for RMC data
-//static void parse_rmc(rmc_t *sentence, const char *str)
-//{
-//	char *msg = strstr(str, "RMC");  // first, check if we have the correct message type
-//
-//	if(msg == NULL)  // if not, get out
-//		return;
-//
-//	char temp[82] = "\0";  // create a temporary buffer
-//
-//	strncpy(temp, str, strlen(str));	// copy str into temp
-//
-//	// $GNRMC,145342.000,A,4547.8104,N,01554.8789,E,0.55,352.46,180224,,,A*7A
-//	char *tok = strtok_f(temp, ',');	// start to tokenize
-//
-//	memcpy(_rmcfix_time, strtok_f(NULL, ','), 6);  // 145342.000
-//
-//	tok = strtok_f(NULL, ',');	// A
-//	sentence->status = (rmc_status_t) *tok;
-//
-//	tok = strtok_f(NULL, ',');  // 4547.8104
-//	NMEA_DecimalDegree_to_coord_dd_t(tok, &_rmc_lat);  // 4547.8104 to 45 and 47.8104 in coord_dd_t
-//
-//	tok = strtok_f(NULL, ',');
-//	sentence->lat_dir = (cardinal_dir_t) *tok;  // north - N
-//
-//	tok = strtok_f(NULL, ',');
-//	NMEA_DecimalDegree_to_coord_dd_t(tok, &_rmc_lon);  // 01554.8789 to 15 and 54.8789 in coord_dd_t
-//
-//	tok = strtok_f(NULL, ',');
-//	sentence->lat_dir = (cardinal_dir_t) *tok;  // north - E
-//
-//	sentence->knots = (float) atof(strtok_f(NULL, ','));  // 0.55
-//	sentence->azimut = (uint16_t) atoi(strtok_f(NULL, ','));  // 352.46
-//	memcpy(_rmcfix_date, strtok_f(NULL, ','), 6);  // 180224
-//
-//	sentence->mag_var = (uint16_t) atoi(strtok_f(NULL, ','));  // empty
-//
-//	tok = strtok_f(NULL, ',');
-//	sentence->var_dir = (cardinal_dir_t) *tok;    //
-//}
+#if PARSE_RMC
+// parses NMEA str for RMC data
+static void parse_rmc(rmc_t *sentence, const char *str)
+{
+	char *msg = strstr(str, "RMC");  // first, check if we have the correct message type
+
+	if(msg == NULL)  // if not, get out
+		return;
+
+	char temp[82] = "\0";  // create a temporary buffer
+
+	strncpy(temp, str, strlen(str));	// copy str into temp
+
+	// $GNRMC,145342.000,A,4547.8104,N,01554.8789,E,0.55,352.46,180224,,,A*7A
+	char *tok = strtok_f(temp, ',');	// start to tokenize
+
+	memcpy(_rmcfix_time, strtok_f(NULL, ','), 6);  // 145342.000
+
+	tok = strtok_f(NULL, ',');	// A
+	sentence->status = (rmc_status_t) *tok;
+
+	tok = strtok_f(NULL, ',');  // 4547.8104
+	NMEA_DecimalDegree_to_coord_dd_t(tok, &_rmc_lat);  // 4547.8104 to 45 and 47.8104 in coord_dd_t
+
+	tok = strtok_f(NULL, ',');
+	sentence->lat_dir = (cardinal_dir_t) *tok;  // north - N
+
+	tok = strtok_f(NULL, ',');
+	NMEA_DecimalDegree_to_coord_dd_t(tok, &_rmc_lon);  // 01554.8789 to 15 and 54.8789 in coord_dd_t
+
+	tok = strtok_f(NULL, ',');
+	sentence->lat_dir = (cardinal_dir_t) *tok;  // north - E
+
+	sentence->knots = (float) atof(strtok_f(NULL, ','));  // 0.55
+	sentence->azimut = (uint16_t) atoi(strtok_f(NULL, ','));  // 352.46
+	memcpy(_rmcfix_date, strtok_f(NULL, ','), 6);  // 180224
+
+	sentence->mag_var = (uint16_t) atoi(strtok_f(NULL, ','));  // empty
+
+	tok = strtok_f(NULL, ',');
+	sentence->var_dir = (cardinal_dir_t) *tok;    //
+}
+#endif
 
 // buffer NMEA sentences from DMA circular buffer (1st buffer) into ringbuffer (2nd buffer)
 static void load_into_ring_buffer(lwrb_t *rb, const uint16_t high_pos)
@@ -942,11 +1001,33 @@ static void _Parse(uint16_t high_pos)
 			if(NMEA_sentence_valid(out, &parse_complete))  // check basic NMEA sentence validity
 				{
 					// at this point we have a good sentence and we can start parsing NMEA data
-					//					parse_rmc(__ORG1510MK4.public.rmc, (const char*) out);	// parse for RMC data
-					parse_gga(__ORG1510MK4.public.gga, (const char*) out);  // parse for GGA data
-					parse_zda(__ORG1510MK4.public.zda, (const char*) out);  // parse for ZDA data
+#if PARSE_RMC
+					parse_rmc(__ORG1510MK4.public.rmc, (const char*) out);  // parse for RMC data
+#endif
+#if PARSE_GLL
+					parse_gll(__ORG1510MK4.public.gll, (const char*) out);  // parse for GLL data
+#endif
+#if PARSE_VTG
 					parse_vtg(__ORG1510MK4.public.vtg, (const char*) out);  // parse for VTG data
+#endif
+#if PARSE_GGA
+					parse_gga(__ORG1510MK4.public.gga, (const char*) out);  // parse for GGA data
+#endif
+#if PARSE_ZDA
+					parse_zda(__ORG1510MK4.public.zda, (const char*) out);  // parse for ZDA data
+#endif
+#if PARSE_GSV && !PARSE_GSA
+#if EXPOSE_GSV
+					parse_gngsv(__ORG1510MK4.public.gpgsv, "GPGSV", out);  // parse GPGSV
+					parse_gngsv(__ORG1510MK4.public.glgsv, "GLGSV", out);  // parse GLGSV
+#else
+					parse_gngsv(&_gpgsv, "GPGSV", (const char*) out);  // parse GPGSV
+					parse_gngsv(&_glgsv, "GLGSV", (const char*) out);  // parse GLGSV
+#endif
+#endif
+#if PARSE_GSA
 					parse_gsa(__ORG1510MK4.public.gsa, (const char*) out);  // parse for GSA data
+#endif
 
 					HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, out, (uint16_t) strlen((const char*) out));  // send GPS to VCP
 
@@ -988,29 +1069,40 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 //	__ORG1510MK4.public.NMEA = gps_dma_input_buffer;  // tie in NMEA sentence buffer
 	__ORG1510MK4.public.PowerMode = 0;  // TODO - read from FeRAM, for now set to off by default
 
+#if PARSE_GGA
 	__ORG1510MK4.public.gga = &_gga;	// tie in GGA sentence struct
 	__ORG1510MK4.public.gga->lat = &_gga_lat;  // tie in latitude
 	__ORG1510MK4.public.gga->lon = &_gga_lon;  // tie in longitude
 	__ORG1510MK4.public.gga->fix_date = _ggafix_date;  // tie in container for GGA-derived fix date
-
+#endif
+#if PARSE_ZDA
 	__ORG1510MK4.public.zda = &_zda;	// tie in ZDA sentence struct
 	__ORG1510MK4.public.zda->time = _zdatime;  // tie in container for ZDA-derived UTC time
 	__ORG1510MK4.public.zda->tz = 0;	// initialize to 0
-
+#endif
+#if PARSE_VTG
 	__ORG1510MK4.public.vtg = &_vtg;	// tie in VTG sentence struct
-//	__ORG1510MK4.public.gpgsa = &_gpgsa;	// tie in GSA sentence struct
-//	__ORG1510MK4.public.glgsa = &_glgsa;	// tie in GSA sentence struct
+#endif
 
-//	__ORG1510MK4.public.gpgsv = &_gpgsv;	// tie in GSA sentence struct
-//	__ORG1510MK4.public.glgsv = &_glgsv;	// tie in GSA sentence struct
+#if PARSE_GSA && !PARSE_GSV
+	__ORG1510MK4.public.gpgsa = &_gpgsa;	// tie in GSA sentence struct
+	__ORG1510MK4.public.glgsa = &_glgsa;	// tie in GSA sentence struct
+#endif
+
+#if PARSE_GSV && EXPOSE_GSV
+	__ORG1510MK4.public.gpgsv = &_gpgsv;	// tie in GSA sentence struct
+	__ORG1510MK4.public.glgsv = &_glgsv;	// tie in GSA sentence struct
+#endif
+#if PARSE_GSA
 	__ORG1510MK4.public.gsa = &_gsa;	// tie in GSA sentence struct
-
-//	__ORG1510MK4.public.rmc = &_rmc;	// tie in GSA sentence struct
-//	__ORG1510MK4.public.rmc->lat = &_rmc_lat;  // tie in latitude
-//	__ORG1510MK4.public.rmc->lon = &_rmc_lon;  // tie in longitude
-//	__ORG1510MK4.public.rmc->date = _rmcfix_date;
-//	__ORG1510MK4.public.rmc->time = _rmcfix_time;
-
+#endif
+#if PARSE_RMC
+	__ORG1510MK4.public.rmc = &_rmc;	// tie in GSA sentence struct
+	__ORG1510MK4.public.rmc->lat = &_rmc_lat;  // tie in latitude
+	__ORG1510MK4.public.rmc->lon = &_rmc_lon;  // tie in longitude
+	__ORG1510MK4.public.rmc->date = _rmcfix_date;
+	__ORG1510MK4.public.rmc->time = _rmcfix_time;
+#endif
 #if DEBUG_LWRB_FREE
 	__ORG1510MK4.char_written = 0;	// characters written out to system UART
 #endif
