@@ -10,8 +10,8 @@
 #define DIRTY_POWER_MODE_CHANGE 0	// circumvents power mode change safeguards to e.g. deliberately drain the capacitor
 #define DEBUG_LWRB_FREE 0 // data member indicating LwRB free space
 
-#define GPS_DMA_INPUT_BUFFER_LEN 32	// officially, a NMEA sentence (from $ to \n) is 80 characters long. 2 more to account for \r\n
-#define LWRB_BUFFER_LEN 256	// LwRB buffer size
+#define UART1_GPS_RX_DMA_BUFFER_LEN 32	// circular DMA RX buffer length for incoming GPS UART DMA data
+#define UART1_GPS_RX_RINGBUFFER_LEN 256	// ringbuffer size
 
 extern ADC_HandleTypeDef hadc1;  // TODO - move out of here
 extern volatile uint32_t __adc_dma_buffer[ADC_CHANNELS];  // TODO - move out of here - store for ADC readout
@@ -33,8 +33,8 @@ typedef struct	// org1510mk4c_t actual
 } __org1510mk4_t;
 
 static __org1510mk4_t __ORG1510MK4 __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
-static lwrb_t lwrb;  // 2nd circular buffer for data processing
-static uint8_t lwrb_buffer[LWRB_BUFFER_LEN];	//
+static lwrb_t uart1_rx_rb;  // 2nd circular buffer for data processing
+static uint8_t uart1_rx_rb_buffer[UART1_GPS_RX_RINGBUFFER_LEN];  //
 
 #if PARSE_ZDA
 static zda_t _zda;  // object for ZDA sentence
@@ -73,7 +73,7 @@ static char _gllfix_time[7] = "\0";  // container for GGA-derived fix date
 #endif
 
 static uint8_t parse_complete = 1;	// semaphore for parsing <-> ringbuffer load control
-static uint8_t gps_dma_input_buffer[GPS_DMA_INPUT_BUFFER_LEN] = "\0";  // 1st circular buffer: incoming GPS UART DMA data
+static uint8_t gps_dma_input_buffer[UART1_GPS_RX_DMA_BUFFER_LEN] = "\0";  // 1st circular buffer: incoming GPS UART DMA data
 static uint8_t out[82] = "\0";  // output box for GPS UART's DMA
 
 // all NMEA off: 	PMTK314,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -442,10 +442,8 @@ static void _Read(void)
 //
 static void rx_start(void)
 {
-	HAL_UARTEx_ReceiveToIdle_DMA(__ORG1510MK4.uart_gps, gps_dma_input_buffer, GPS_DMA_INPUT_BUFFER_LEN);
-
-//	if(HAL_OK != HAL_UARTEx_ReceiveToIdle_DMA(__ORG1510MK4.uart_gps, gps_dma_input_buffer, GPS_DMA_INPUT_BUFFER_LEN))  // start reception)
-//		Error_Handler();
+	if(HAL_OK != HAL_UARTEx_ReceiveToIdle_DMA(__ORG1510MK4.uart_gps, gps_dma_input_buffer, UART1_GPS_RX_DMA_BUFFER_LEN))  // start reception)
+		Error_Handler();
 }
 
 static char* strtok_fr(char *s, char delim, char **save_ptr)
@@ -927,7 +925,7 @@ static void load_into_ring_buffer(lwrb_t *rb, const uint16_t high_pos)
 	else	// overflow region
 		{
 			// read new data from current position until end of DMA rcpt. buffer
-			lwrb_write(&lwrb, &gps_dma_input_buffer[low_pos], GPS_DMA_INPUT_BUFFER_LEN - low_pos);
+			lwrb_write(&uart1_rx_rb, &gps_dma_input_buffer[low_pos], UART1_GPS_RX_DMA_BUFFER_LEN - low_pos);
 
 			// then, if there is more after the rollover
 			if(high_pos > 0)
@@ -938,7 +936,7 @@ static void load_into_ring_buffer(lwrb_t *rb, const uint16_t high_pos)
 	low_pos = high_pos;  // save position until data has been read
 
 #if DEBUG_LWRB_FREE
-	__ORG1510MK4.lwrb_free = (uint16_t) lwrb_get_free(&lwrb);  // have free memory value visible
+	__ORG1510MK4.lwrb_free = (uint16_t) lwrb_get_free(&uart1_rx_rb);  // have free memory value visible
 
 	if(__ORG1510MK4.lwrb_free == 0)  // LwRB memory used up: hang here
 		Error_Handler();
@@ -972,7 +970,7 @@ static uint8_t load_one_NMEA_into_out(lwrb_t *rb, uint8_t *temp, uint8_t *parse_
 					else  // overflow region
 						{
 							// the terminators are in overflow:
-							lwrb_sz_t rest = (lwrb_sz_t) (GPS_DMA_INPUT_BUFFER_LEN - nmea_start_pos);  // from the current read pointer to buffer end
+							lwrb_sz_t rest = (lwrb_sz_t) (UART1_GPS_RX_DMA_BUFFER_LEN - nmea_start_pos);  // from the current read pointer to buffer end
 							lwrb_sz_t extra = (lwrb_sz_t) (nmea_terminator_pos - rest);  // then from buffer start some more
 
 							retval += lwrb_read(rb, temp, rest);  // read out len characters into out
@@ -1028,11 +1026,11 @@ static void _Parse(uint16_t high_pos)
 	// high_pos indicates the position in the circular DMA reception buffer until which data is available
 	// it is NOT the length of new data
 
-	load_into_ring_buffer(&lwrb, high_pos);  // buffer incoming NMEA sentences into circular DMA buffer
+	load_into_ring_buffer(&uart1_rx_rb, high_pos);  // buffer incoming NMEA sentences into circular DMA buffer
 
 	if(parse_complete)
 		{
-			load_one_NMEA_into_out(&lwrb, out, &parse_complete);  // buffer into the 2nd buffer and write out to out[]
+			load_one_NMEA_into_out(&uart1_rx_rb, out, &parse_complete);  // buffer into the 2nd buffer and write out to out[]
 		}
 	else
 		{
@@ -1150,7 +1148,7 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 	__ORG1510MK4.char_written = 0;	// characters written out to system UART
 #endif
 	parse_complete = 1;
-	lwrb_init(&lwrb, lwrb_buffer, sizeof(lwrb_buffer));
+	lwrb_init(&uart1_rx_rb, uart1_rx_rb_buffer, sizeof(uart1_rx_rb_buffer));
 
 	// TODO - move rx_start() into _Power()
 	rx_start();  // start DMA reception
