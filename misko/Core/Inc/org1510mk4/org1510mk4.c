@@ -8,7 +8,7 @@
 #include "lwrb\lwrb.h"	// Lightweight RingBuffer - https://docs.majerle.eu/projects/lwrb/en/latest/index.html
 
 #define DIRTY_POWER_MODE_CHANGE 0	// circumvents power mode change safeguards to e.g. deliberately drain the capacitor
-#define DEBUG_LWRB_FREE 0 // data member indicating LwRB free space
+#define DEBUG_GPS_RX_RB_FREE 0 // data member indicating LwRB free space
 
 #define UART1_GPS_RX_DMA_BUFFER_LEN 32	// circular DMA RX buffer length for incoming GPS UART DMA data
 #define UART1_GPS_RX_RINGBUFFER_LEN 256	// ringbuffer size
@@ -33,8 +33,8 @@ typedef struct	// org1510mk4c_t actual
 } __org1510mk4_t;
 
 static __org1510mk4_t __ORG1510MK4 __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
-static lwrb_t uart1_rx_rb;  // 2nd circular buffer for data processing
-static uint8_t uart1_rx_rb_buffer[UART1_GPS_RX_RINGBUFFER_LEN];  //
+static lwrb_t uart1_gps_rx_rb;  // 2nd circular buffer for data processing
+static uint8_t uart1_gps_rx_rb_buffer[UART1_GPS_RX_RINGBUFFER_LEN];  //
 
 #if PARSE_ZDA
 static zda_t _zda;  // object for ZDA sentence
@@ -73,8 +73,8 @@ static char _gllfix_time[7] = "\0";  // container for GGA-derived fix date
 #endif
 
 static uint8_t parse_complete = 1;	// semaphore for parsing <-> ringbuffer load control
-static uint8_t gps_dma_input_buffer[UART1_GPS_RX_DMA_BUFFER_LEN] = "\0";  // 1st circular buffer: incoming GPS UART DMA data
-static uint8_t out[82] = "\0";  // output box for GPS UART's DMA
+static uint8_t uart1_gps_rx_dma_buffer[UART1_GPS_RX_DMA_BUFFER_LEN] = "\0";  // 1st circular buffer: incoming GPS UART DMA data
+static uint8_t GPS_out[82] = "\0";  // output box for GPS UART's DMA
 
 // all NMEA off: 	PMTK314,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 // NMEA RMC 5s: 	PMTK314,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
@@ -442,7 +442,7 @@ static void _Read(void)
 //
 static void rx_start(void)
 {
-	if(HAL_OK != HAL_UARTEx_ReceiveToIdle_DMA(__ORG1510MK4.uart_gps, gps_dma_input_buffer, UART1_GPS_RX_DMA_BUFFER_LEN))  // start reception)
+	if(HAL_OK != HAL_UARTEx_ReceiveToIdle_DMA(__ORG1510MK4.uart_gps, uart1_gps_rx_dma_buffer, UART1_GPS_RX_DMA_BUFFER_LEN))  // start reception)
 		Error_Handler();
 }
 
@@ -921,22 +921,22 @@ static void load_into_ring_buffer(lwrb_t *rb, const uint16_t high_pos)
 	// 1st buffering - load into ringbuffer
 	if(high_pos > low_pos)  // linear region
 		// read in a linear fashion from DMA rcpt. buffer from beginning to end of new data
-		lwrb_write(rb, &gps_dma_input_buffer[low_pos], high_pos - low_pos);  // (high_pos - low_pos) is length of new data
+		lwrb_write(rb, &uart1_gps_rx_dma_buffer[low_pos], high_pos - low_pos);  // (high_pos - low_pos) is length of new data
 	else	// overflow region
 		{
 			// read new data from current position until end of DMA rcpt. buffer
-			lwrb_write(&uart1_rx_rb, &gps_dma_input_buffer[low_pos], UART1_GPS_RX_DMA_BUFFER_LEN - low_pos);
+			lwrb_write(&uart1_gps_rx_rb, &uart1_gps_rx_dma_buffer[low_pos], UART1_GPS_RX_DMA_BUFFER_LEN - low_pos);
 
 			// then, if there is more after the rollover
 			if(high_pos > 0)
 				// read from beginning of circular DMA buffer until the end position of new data
-				lwrb_write(rb, &gps_dma_input_buffer[0], high_pos);
+				lwrb_write(rb, &uart1_gps_rx_dma_buffer[0], high_pos);
 		}
 
 	low_pos = high_pos;  // save position until data has been read
 
 #if DEBUG_LWRB_FREE
-	__ORG1510MK4.lwrb_free = (uint16_t) lwrb_get_free(&uart1_rx_rb);  // have free memory value visible
+	__ORG1510MK4.lwrb_free = (uint16_t) lwrb_get_free(&uart1_gps_rx_rb);  // have free memory value visible
 
 	if(__ORG1510MK4.lwrb_free == 0)  // LwRB memory used up: hang here
 		Error_Handler();
@@ -1020,52 +1020,52 @@ static uint8_t NMEA_sentence_valid(uint8_t *out, uint8_t *prase_flag)
 		}
 }
 
-// loads incoming NMEA string from DMA into a buffer and parses it
+// UART RX ISR driven - loads incoming data from DMA into a ringbuffer and parses for NMEA sentences
 static void _Parse(uint16_t high_pos)
 {
 	// high_pos indicates the position in the circular DMA reception buffer until which data is available
 	// it is NOT the length of new data
 
-	load_into_ring_buffer(&uart1_rx_rb, high_pos);  // buffer incoming NMEA sentences into circular DMA buffer
+	load_into_ring_buffer(&uart1_gps_rx_rb, high_pos);  // buffer incoming data into ringbuffer
 
-	if(parse_complete)
+	if(parse_complete)	// either load into ringbuffer or parse, both at the same time doesnt work
 		{
-			load_one_NMEA_into_out(&uart1_rx_rb, out, &parse_complete);  // buffer into the 2nd buffer and write out to out[]
+			load_one_NMEA_into_out(&uart1_gps_rx_rb, GPS_out, &parse_complete);  // go from $ until next $ and load than into GPS_out[]
 		}
 	else
 		{
-			if(NMEA_sentence_valid(out, &parse_complete))  // check basic NMEA sentence validity
+			if(NMEA_sentence_valid(GPS_out, &parse_complete))  // check GPS_out[] for basic NMEA sentence validity
 				{
 					// at this point we have a good sentence and we can start parsing NMEA data
 #if PARSE_RMC
-					parse_rmc(__ORG1510MK4.public.rmc, (const char*) out);  // parse for RMC data
+					parse_rmc(__ORG1510MK4.public.rmc, (const char*) GPS_out);  // parse for RMC data
 #endif
 #if PARSE_GLL
-					parse_gll(__ORG1510MK4.public.gll, (const char*) out);  // parse for GLL data
+					parse_gll(__ORG1510MK4.public.gll, (const char*) GPS_out);  // parse for GLL data
 #endif
 #if PARSE_VTG
-					parse_vtg(__ORG1510MK4.public.vtg, (const char*) out);  // parse for VTG data
+					parse_vtg(__ORG1510MK4.public.vtg, (const char*) GPS_out);  // parse for VTG data
 #endif
 #if PARSE_GGA
-					parse_gga(__ORG1510MK4.public.gga, (const char*) out);  // parse for GGA data
+					parse_gga(__ORG1510MK4.public.gga, (const char*) GPS_out);  // parse for GGA data
 #endif
 #if PARSE_ZDA
-					parse_zda(__ORG1510MK4.public.zda, (const char*) out);  // parse for ZDA data
+					parse_zda(__ORG1510MK4.public.zda, (const char*) GPS_out);  // parse for ZDA data
 #endif
 #if PARSE_GSV && !PARSE_GSA
 #if EXPOSE_GSV
-					parse_gngsv(__ORG1510MK4.public.gpgsv, "GPGSV", out);  // parse GPGSV
-					parse_gngsv(__ORG1510MK4.public.glgsv, "GLGSV", out);  // parse GLGSV
+					parse_gngsv(__ORG1510MK4.public.gpgsv, "GPGSV", GPS_out);  // parse GPGSV
+					parse_gngsv(__ORG1510MK4.public.glgsv, "GLGSV", GPS_out);  // parse GLGSV
 #else
-					parse_gngsv(&_gpgsv, "GPGSV", (const char*) out);  // parse GPGSV
-					parse_gngsv(&_glgsv, "GLGSV", (const char*) out);  // parse GLGSV
+					parse_gngsv(&_gpgsv, "GPGSV", (const char*) GPS_out);  // parse GPGSV
+					parse_gngsv(&_glgsv, "GLGSV", (const char*) GPS_out);  // parse GLGSV
 #endif
 #endif
 #if PARSE_GSA
-					parse_gsa(__ORG1510MK4.public.gsa, (const char*) out);  // parse for GSA data
+					parse_gsa(__ORG1510MK4.public.gsa, (const char*) GPS_out);  // parse for GSA data
 #endif
 
-					HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, out, (uint16_t) strlen((const char*) out));  // send GPS to VCP
+					HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, GPS_out, (uint16_t) strlen((const char*) GPS_out));  // send GPS to VCP
 
 					parse_complete = 1;
 				}
@@ -1148,7 +1148,7 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 	__ORG1510MK4.char_written = 0;	// characters written out to system UART
 #endif
 	parse_complete = 1;
-	lwrb_init(&uart1_rx_rb, uart1_rx_rb_buffer, sizeof(uart1_rx_rb_buffer));
+	lwrb_init(&uart1_gps_rx_rb, uart1_gps_rx_rb_buffer, sizeof(uart1_gps_rx_rb_buffer));
 
 	// TODO - move rx_start() into _Power()
 	rx_start();  // start DMA reception
