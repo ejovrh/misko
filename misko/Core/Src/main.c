@@ -21,6 +21,8 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "lwrb/lwrb.h"	// LightWeight Ringbuffer
+
 #if USE_ADXL345
 #include "adxl345/adxl345.h"
 #endif
@@ -42,7 +44,10 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
+#define DEBUG_SYS_RX_RB_FREE 1 // data member indicating LwRB free space
 
+#define UART3_SYS_RX_DMA_BUFFER_LEN 32	// circular DMA RX buffer length for incoming GPS UART DMA data
+#define UART3_SYS_RX_RINGBUFFER_LEN 256	// ringbuffer size
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
@@ -70,21 +75,34 @@ UART_HandleTypeDef huart3;
 DMA_NodeTypeDef Node_GPDMA1_Channel3;
 DMA_QListTypeDef List_GPDMA1_Channel3;
 DMA_HandleTypeDef handle_GPDMA1_Channel3;
+DMA_NodeTypeDef Node_GPDMA1_Channel1;
+DMA_QListTypeDef List_GPDMA1_Channel1;
 DMA_HandleTypeDef handle_GPDMA1_Channel1;
 DMA_HandleTypeDef handle_GPDMA1_Channel0;
 
 PCD_HandleTypeDef hpcd_USB_DRD_FS;
 
 /* USER CODE BEGIN PV */
-uint8_t VCPTxBuffer[82] = "\rnucleo-h503rb start\r\n";
-uint8_t VCPRxBuffer[82] = "\0";
-uint8_t VCPRxChar;
+static lwrb_t uart3_sys_rx_rb;  // 2nd circular buffer for data processing
+static uint8_t uart3_sys_rx_rb_buffer[UART3_SYS_RX_RINGBUFFER_LEN];  //
+static uint8_t uart3_sys_rx_dma_buffer[UART3_SYS_RX_DMA_BUFFER_LEN];  //
+
+static uint8_t VCPTxBuffer[82] = "\rnucleo-h503rb start\r\n";
+
 volatile uint32_t __adc_dma_buffer[ADC_CHANNELS] =  // store for ADC readout
 	{0};
 volatile uint32_t __adc_results[ADC_CHANNELS] =  // store ADC average data
 	{0};
 double _VddaConversionConstant;  // constant values pre-computed in main()
-static uint8_t len = 0;
+
+static uint8_t SYS_out[82] = "\0";  // output box for GPS UART's DMA
+
+#if DEBUG_LWRB_FREE
+uint16_t uart3_lwrb_free;  // ringbuffer free memory
+uint32_t uart3_char_written;	// characters written
+lwrb_sz_t uart3_ovrflowlen;  // amount of data written in overflow mode
+lwrb_sz_t uart3_linearlen;  // amount of data written in linear mode
+#endif
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -107,8 +125,38 @@ static void MX_ADC1_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+static void load_into_ring_buffer(lwrb_t *rb, const uint16_t high_pos)
+{
+	static uint16_t low_pos;
 
-/* USER CODE END 0 */
+	// safeguard against an RX event interrupt where no new data has come in
+	if(high_pos == low_pos)  // no new data
+		return;
+
+	// 1st buffering - load into ringbuffer
+	if(high_pos > low_pos)  // linear region
+		// read in a linear fashion from DMA rcpt. buffer from beginning to end of new data
+		lwrb_write(rb, &uart3_sys_rx_dma_buffer[low_pos], high_pos - low_pos);  // (high_pos - low_pos) is length of new data
+	else	// overflow region
+		{
+			// read new data from current position until end of DMA rcpt. buffer
+			lwrb_write(&uart3_sys_rx_rb, &uart3_sys_rx_dma_buffer[low_pos], UART3_SYS_RX_DMA_BUFFER_LEN - low_pos);
+
+			// then, if there is more after the rollover
+			if(high_pos > 0)
+				// read from beginning of circular DMA buffer until the end position of new data
+				lwrb_write(rb, &uart3_sys_rx_dma_buffer[0], high_pos);
+		}
+
+	low_pos = high_pos;  // save position until data has been read
+
+#if DEBUG_SYS_RB_FREE
+	uart3_lwrb_free = (uint16_t) lwrb_get_free(&uart3_sys_rx_rb);  // have free memory value visible
+
+	if(uart3_lwrb_free == 0)  // LwRB memory used up: hang here
+		Error_Handler();
+#endif
+}
 
 /**
  * @brief  The application entry point.
@@ -154,6 +202,7 @@ int main(void)
 	MX_FDCAN1_Init();
 	MX_ADC1_Init();
 	/* USER CODE BEGIN 2 */
+
 	// 125ms time base
 	if(HAL_TIM_OC_Start_IT(&htim1, TIM_CHANNEL_1) != HAL_OK)
 		Error_Handler();
@@ -174,8 +223,11 @@ int main(void)
 	if(HAL_UART_Transmit_DMA(&huart3, (uint8_t*) VCPTxBuffer, (uint16_t) strlen((const char*) VCPTxBuffer)) != HAL_OK)
 		Error_Handler();
 
-	// receive whatever from VCP
-	if(HAL_UART_Receive_IT(&huart3, &VCPRxChar, 1) != HAL_OK)
+	// initialize the ringbuffer and ...
+	lwrb_init(&uart3_sys_rx_rb, uart3_sys_rx_rb_buffer, sizeof(uart3_sys_rx_rb_buffer));
+
+	// ... start to receive whatever from VCP
+	if(HAL_OK != HAL_UARTEx_ReceiveToIdle_DMA(&huart3, uart3_sys_rx_dma_buffer, UART3_SYS_RX_DMA_BUFFER_LEN))  // start reception)
 		Error_Handler();
 
 	// start peripheral devices
@@ -931,48 +983,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 
 	if(huart == &huart3)
 		{
-			VCPRxBuffer[len++] = VCPRxChar;
-
-//			if(VCPRxChar == '\r')
-//				{
-//					VCPRxBuffer[len++] = '\n';
-//
-//					if(HAL_UART_Transmit_IT(&huart1, VCPRxBuffer, len) != HAL_OK)  // send VCP input to GPS
-//						Error_Handler();
-//
-//					VCPRxBuffer[0] = '\0';
-//					len = 0;
-//				}
-
-			if(VCPRxChar == '0')
-				ORG1510MK4->Power(off);
-
-			if(VCPRxChar == '1')
-				ORG1510MK4->Power(on);
-
-			if(VCPRxChar == '2')
-				ORG1510MK4->Power(backup);
-
-			if(VCPRxChar == '3')
-				ORG1510MK4->Power(wakeup);
-
-			if(VCPRxChar == '4')
-				ORG1510MK4->Power(standby);
-
-			if(VCPRxChar == '5')
-				ORG1510MK4->Power(periodic);
-
-			if(VCPRxChar == '6')
-				ORG1510MK4->Power(alwayslocate);
-
-			if(VCPRxChar == '7')
-				ORG1510MK4->Power(reset);
-
-			if(HAL_UART_Receive_IT(&huart3, &VCPRxChar, 1) != HAL_OK)  // receive whatever from VCP
-				Error_Handler();
+			;
 		}
 }
 
+// UART RX events - RX Half-Complete/Complete & idle line interrupts
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 {
 	if(huart == &huart1)
@@ -980,6 +995,29 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 			ORG1510MK4->Parse(Size);
 		}
 
+	if(huart == &huart3)
+		{
+			load_into_ring_buffer(&uart3_sys_rx_rb, Size);  // buffer incoming UART stream into ring buffer
+
+			lwrb_sz_t bytes_in_rb = lwrb_get_full(&uart3_sys_rx_rb);
+
+			if(bytes_in_rb)
+				{
+					char c = 0;
+					lwrb_peek(&uart3_sys_rx_rb, bytes_in_rb - 1, &c, 1);
+
+					if(c == '\r')
+						{
+							lwrb_read(&uart3_sys_rx_rb, SYS_out, bytes_in_rb);
+							uint8_t len = (uint8_t) strlen((const char*) SYS_out);
+							SYS_out[len - 1] = '\0';
+
+							ORG1510MK4->Write((const char*) SYS_out);
+							memset(SYS_out, '\0', 82);  // zero out out-container
+							return;
+						}
+				}
+		}
 }
 /* USER CODE END 4 */
 
