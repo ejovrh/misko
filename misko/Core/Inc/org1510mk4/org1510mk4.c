@@ -74,7 +74,7 @@ static char _gllfix_time[7] = "\0";  // container for GGA-derived fix date
 
 static uint8_t parse_complete = 1;	// semaphore for parsing <-> ringbuffer load control
 static uint8_t uart1_gps_rx_dma_buffer[UART1_GPS_RX_DMA_BUFFER_LEN] = "\0";  // 1st circular buffer: incoming GPS UART DMA data
-static uint8_t GPS_out[82] = "\0";  // output box for GPS UART's DMA
+static uint8_t GPS_out[82] = "\0";  // output box for NMEA sentences fished out of the ringbuffer
 
 // wait time in ms
 static inline void _wait(const uint16_t ms)
@@ -954,6 +954,10 @@ static uint8_t load_one_NMEA_into_out(lwrb_t *rb, uint8_t *temp)
 						{
 							nmea_terminator_pos++;  // advance by one to get the \r
 							nmea_terminator_pos++;  // advance by one to get the \n
+
+							if(nmea_terminator_pos - nmea_start_pos > 82)  // safeguard against temp[] buffer overflow
+								return 0;
+
 							lwrb_read(rb, temp, nmea_terminator_pos - nmea_start_pos);  // the terminators are from the current read pointer len away
 
 							if(nmea_terminator_pos > UART1_GPS_RX_DMA_BUFFER_LEN)  // if the advance went into overflow
@@ -972,6 +976,9 @@ static uint8_t load_one_NMEA_into_out(lwrb_t *rb, uint8_t *temp)
 							lwrb_sz_t extra = (lwrb_sz_t) (nmea_terminator_pos - rest);  // then from buffer start some more
 							extra++;	// advance to get the \r
 							extra++;	// advance to get the \n
+
+							if(rest + extra > 82)	// safeguard against temp[] buffer overflow
+								return 0;
 
 							lwrb_read(rb, temp, rest);  // read out len characters into out
 							lwrb_read(rb, &temp[retval], extra);  // read out len characters into out
