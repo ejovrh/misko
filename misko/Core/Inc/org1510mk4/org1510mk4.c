@@ -486,7 +486,7 @@ static void NMEA_DecimalDegree_to_coord_dd_t(char *str, coord_dd_t *coord)
 
 #if PARSE_ZDA
 // parses NMEA str for ZDA data
-static void parse_zda(zda_t *sentence, const char *str)
+static void ParseZDA(zda_t *sentence, const char *str)
 {
 	char *msg = strstr(str, "ZDA");  // first, check if we have the correct message type
 
@@ -509,7 +509,7 @@ static void parse_zda(zda_t *sentence, const char *str)
 
 #if PARSE_GGA
 // parses str for GGA data
-static void parse_gga(gga_t *sentence, const char *str)
+static void ParseGGA(gga_t *sentence, const char *str)
 {
 	char *msg = strstr(str, "GGA");  // first, check if we have the correct message type
 
@@ -548,7 +548,7 @@ static void parse_gga(gga_t *sentence, const char *str)
 
 #if PARSE_VTG
 // parses str for VTG data
-static void parse_vtg(vtg_t *sentence, const char *str)
+static void ParseVTG(vtg_t *sentence, const char *str)
 {
 	char *msg = strstr(str, "VTG");  // first, check if we have the correct message type
 
@@ -598,9 +598,9 @@ static spacevehicle_t* linkSV(const uint8_t gsa_prn, gsv_t *priv_gsv)
 #if PARSE_GSA
 // parses NMEA str for GSA data and link "satellites used" with GSV SVs
 #if PARSE_GSV
-static void parse_gngsa(const char *talker, const char *str, gsa_t *pub_gsa, gsv_t *priv_view)
+static void ParseGNGSA(const char *talker, const char *str, gsa_t *pub_gsa, gsv_t *priv_view)
 #else
-static void parse_gngsa(const char *talker, const char *str, gsa_t *pub_gsa)
+static void ParseGNGSA(const char *talker, const char *str, gsa_t *pub_gsa)
 #endif
 {
 	char *msg = strstr(str, talker);  // first, check if we have the correct message type
@@ -706,7 +706,7 @@ static void parse_gngsa(const char *talker, const char *str, gsa_t *pub_gsa)
 
 #if PARSE_GSV
 // parses NMEA str for GSV data - all talkers
-static void parse_gngsv(gsv_t *sentence, const char *talker, const char *str)
+static void ParseGNGSV(gsv_t *sentence, const char *talker, const char *str)
 {
 	char *msg = strstr(str, talker);  // first, check if we have the correct message type
 
@@ -804,28 +804,28 @@ static void parse_gngsv(gsv_t *sentence, const char *talker, const char *str)
 
 #if PARSE_GSA
 // parses NMEA str for GSV and GSA data
-static void parse_gsa(gsa_t *sentence, const char *str)
+static void ParseGSA(gsa_t *sentence, const char *str)
 {
 #if PARSE_GSV
 	// first, fill private GSV struct with SVs - essentially arrays of spacevehicle_t's
-	parse_gngsv(&_gpgsv, "GPGSV", str);  // parse GPGSV
-	parse_gngsv(&_glgsv, "GLGSV", str);  // parse GLGSV
+	ParseGNGSV(&_gpgsv, "GPGSV", str);  // parse GPGSV
+	ParseGNGSV(&_glgsv, "GLGSV", str);  // parse GLGSV
 #endif
 
 	// then, parse GSA sentences and populate "satellites used" with pointers to GSV's SVs
 #if PARSE_GSV
-	parse_gngsa("GPGSA", str, sentence, &_gpgsv);  // GP
-	parse_gngsa("GLGSA", str, sentence, &_glgsv);  // GL
+	ParseGNGSA("GPGSA", str, sentence, &_gpgsv);  // GP
+	ParseGNGSA("GLGSA", str, sentence, &_glgsv);  // GL
 #else
-	parse_gngsa("GPGSA", str, sentence);  // GP
-	parse_gngsa("GLGSA", str, sentence);  // GL
+	ParseGNGSA("GPGSA", str, sentence);  // GP
+	ParseGNGSA("GLGSA", str, sentence);  // GL
 #endif
 }
 #endif
 
 #if PARSE_RMC
 // parses NMEA str for RMC data
-static void parse_rmc(rmc_t *sentence, const char *str)
+static void ParseRMC(rmc_t *sentence, const char *str)
 {
 	char *msg = strstr(str, "RMC");  // first, check if we have the correct message type
 
@@ -869,7 +869,7 @@ static void parse_rmc(rmc_t *sentence, const char *str)
 
 #if PARSE_GLL
 // parses NMEA str for GLL data
-static void parse_gll(gll_t *sentence, const char *str)
+static void ParseGLL(gll_t *sentence, const char *str)
 {
 	char *msg = strstr(str, "RMC");  // first, check if we have the correct message type
 
@@ -902,7 +902,7 @@ static void parse_gll(gll_t *sentence, const char *str)
 #endif
 
 // buffer NMEA sentences from DMA circular buffer (1st buffer) into ringbuffer (2nd buffer)
-static void load_into_ring_buffer(lwrb_t *rb, const uint16_t high_pos)
+static void LoadRingBuffer(lwrb_t *rb, const uint16_t high_pos)
 {
 	static uint16_t low_pos;
 
@@ -936,7 +936,7 @@ static void load_into_ring_buffer(lwrb_t *rb, const uint16_t high_pos)
 }
 
 // load from 2nd buffer into temp[], returns 1 if a complete NMEA sentence was loaded, 0 otherwise
-static uint8_t load_one_NMEA_into_out(lwrb_t *rb, uint8_t *temp)
+static uint8_t LoadNMEA(lwrb_t *rb, uint8_t *temp)
 {
 	uint8_t retval = 0;
 
@@ -977,7 +977,7 @@ static uint8_t load_one_NMEA_into_out(lwrb_t *rb, uint8_t *temp)
 							extra++;	// advance to get the \r
 							extra++;	// advance to get the \n
 
-							if(rest + extra > 82)	// safeguard against temp[] buffer overflow
+							if(rest + extra > 82)  // safeguard against temp[] buffer overflow
 								return 0;
 
 							lwrb_read(rb, temp, rest);  // read out len characters into out
@@ -996,7 +996,7 @@ static uint8_t load_one_NMEA_into_out(lwrb_t *rb, uint8_t *temp)
 }
 
 // check basic NMEA sentence validity and return 1 if true, 0 otherwise
-static uint8_t NMEA_sentence_valid(uint8_t *out, uint8_t *prase_flag)
+static uint8_t ValidateNMEA(uint8_t *out, uint8_t *prase_flag)
 {
 	uint8_t len = (uint8_t) strlen((const char*) out);  // first figure out the length
 	uint8_t fail = 0;  // failure flag for basic checks below
@@ -1034,39 +1034,39 @@ static void _Parse(uint16_t high_pos)
 	// high_pos indicates the position in the circular DMA reception buffer until which data is available
 	// it is NOT the length of new data
 
-	load_into_ring_buffer(&uart1_gps_rx_rb, high_pos);  // buffer incoming DMA data into ringbuffer
+	LoadRingBuffer(&uart1_gps_rx_rb, high_pos);  // buffer incoming DMA data into ringbuffer
 
-	if(load_one_NMEA_into_out(&uart1_gps_rx_rb, GPS_out))  // if GPS_out has a complete NMEA sentence
+	if(LoadNMEA(&uart1_gps_rx_rb, GPS_out))  // if GPS_out has a complete NMEA sentence
 		{
-			if(NMEA_sentence_valid(GPS_out, &parse_complete))  // check for basic NMEA sentence validity
+			if(ValidateNMEA(GPS_out, &parse_complete))  // check for basic NMEA sentence validity
 				{
 					// at this point we have a good sentence and we can start parsing NMEA data
 #if PARSE_RMC
-					parse_rmc(__ORG1510MK4.public.rmc, (const char*) GPS_out);  // parse for RMC data
+					ParseRMC(__ORG1510MK4.public.rmc, (const char*) GPS_out);  // parse for RMC data
 #endif
 #if PARSE_GLL
-					parse_gll(__ORG1510MK4.public.gll, (const char*) GPS_out);  // parse for GLL data
+					ParseGLL(__ORG1510MK4.public.gll, (const char*) GPS_out);  // parse for GLL data
 #endif
 #if PARSE_VTG
-					parse_vtg(__ORG1510MK4.public.vtg, (const char*) GPS_out);  // parse for VTG data
+					ParseVTG(__ORG1510MK4.public.vtg, (const char*) GPS_out);  // parse for VTG data
 #endif
 #if PARSE_GGA
-					parse_gga(__ORG1510MK4.public.gga, (const char*) GPS_out);  // parse for GGA data
+					ParseGGA(__ORG1510MK4.public.gga, (const char*) GPS_out);  // parse for GGA data
 #endif
 #if PARSE_ZDA
-					parse_zda(__ORG1510MK4.public.zda, (const char*) GPS_out);  // parse for ZDA data
+					ParseZDA(__ORG1510MK4.public.zda, (const char*) GPS_out);  // parse for ZDA data
 #endif
 #if PARSE_GSV && !PARSE_GSA
 #if EXPOSE_GSV
-					parse_gngsv(__ORG1510MK4.public.gpgsv, "GPGSV", GPS_out);  // parse GPGSV
-					parse_gngsv(__ORG1510MK4.public.glgsv, "GLGSV", GPS_out);  // parse GLGSV
+					ParseGNGSV(__ORG1510MK4.public.gpgsv, "GPGSV", GPS_out);  // parse GPGSV
+					ParseGNGSV(__ORG1510MK4.public.glgsv, "GLGSV", GPS_out);  // parse GLGSV
 #else
-					parse_gngsv(&_gpgsv, "GPGSV", (const char*) GPS_out);  // parse GPGSV
-					parse_gngsv(&_glgsv, "GLGSV", (const char*) GPS_out);  // parse GLGSV
+					ParseGNGSV(&_gpgsv, "GPGSV", (const char*) GPS_out);  // parse GPGSV
+					ParseGNGSV(&_glgsv, "GLGSV", (const char*) GPS_out);  // parse GLGSV
 #endif
 #endif
 #if PARSE_GSA
-					parse_gsa(__ORG1510MK4.public.gsa, (const char*) GPS_out);  // parse for GSA data
+					ParseGSA(__ORG1510MK4.public.gsa, (const char*) GPS_out);  // parse for GSA data
 #endif
 
 					HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, GPS_out, (uint16_t) strlen((const char*) GPS_out));  // send GPS to VCP
