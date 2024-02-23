@@ -1016,6 +1016,50 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 							memset(SYS_out, '\0', 82);  // zero out out-container
 							return;
 						}
+
+					lwrb_peek(&uart3_sys_rx_rb, bytes_in_rb - 2, &c, 1);
+					if(c == '\e')
+						{
+							lwrb_peek(&uart3_sys_rx_rb, bytes_in_rb - 1, &c, 1);
+
+							switch(c)
+								{
+								case '0':
+									ORG1510MK4->Power(off);
+									break;
+
+								case '1':
+									ORG1510MK4->Power(on);
+									break;
+
+								case '2':
+									ORG1510MK4->Power(backup);
+									break;
+
+								case '3':
+									ORG1510MK4->Power(wakeup);
+									break;
+
+								case '4':
+									ORG1510MK4->Power(standby);
+									break;
+
+								case '5':
+									ORG1510MK4->Power(periodic);
+									break;
+
+								case '6':
+									ORG1510MK4->Power(alwayslocate);
+									break;
+
+								case '7':
+									ORG1510MK4->Power(reset);
+									break;
+
+								default:
+									return;
+								}
+						}
 				}
 		}
 }
