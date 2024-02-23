@@ -76,14 +76,6 @@ static uint8_t parse_complete = 1;	// semaphore for parsing <-> ringbuffer load 
 static uint8_t uart1_gps_rx_dma_buffer[UART1_GPS_RX_DMA_BUFFER_LEN] = "\0";  // 1st circular buffer: incoming GPS UART DMA data
 static uint8_t GPS_out[82] = "\0";  // output box for GPS UART's DMA
 
-// all NMEA off: 	PMTK314,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-// NMEA RMC 5s: 	PMTK314,0,5,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
-// normal NMEA: PMTK314,1,1,1,1,1,5,0,0,0,0,0,0,0,0,0,0,0,0,0
-// firmware info: PMTK605*31
-//	output: $PMTK705,AXN_3.8_3333_16042118,0000,V3.8.1 GP+GL,*6F
-
-// $PMTK414*33 !!! will give $PMTK514,0,0,1,1,5,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0*36\r\n (which was set in _init()
-
 // wait time in ms
 static inline void _wait(const uint16_t ms)
 {
@@ -943,25 +935,31 @@ static void load_into_ring_buffer(lwrb_t *rb, const uint16_t high_pos)
 #endif
 }
 
-// load from 2nd buffer into out[82]
-static uint8_t load_one_NMEA_into_out(lwrb_t *rb, uint8_t *temp, uint8_t *parse_flag)
+// load from 2nd buffer into temp[], returns 1 if a complete NMEA sentence was loaded, 0 otherwise
+static uint8_t load_one_NMEA_into_out(lwrb_t *rb, uint8_t *temp)
 {
-	lwrb_sz_t retval = 0;
+	uint8_t retval = 0;
 
 	// 2nd buffering into LwRB & load NMEA sentence into out[] for parsing
 	static lwrb_sz_t nmea_start_pos;  // position store for NMEA sentence start - not needed at all
 	if(lwrb_find(rb, "$", 1, 0, &nmea_start_pos))  // starting from the current read pointer location, find the NMEA sentence start marker
 		{
 			static lwrb_sz_t nmea_terminator_pos;  // position store for NMEA terminator start position
-			if(lwrb_find(rb, "$", 1, nmea_start_pos + 1, &nmea_terminator_pos))  // starting from current read pointer location, find the terminator start
+			if(lwrb_find(rb, "\r\n", 2, nmea_start_pos, &nmea_terminator_pos))  // starting from current read pointer location, find the terminator start
 				{
 					memset(temp, '\0', 82);  // zero out out-container
 
 					// assemble the complete NMEA sentence
 					if(nmea_terminator_pos > nmea_start_pos)  // linear region
 						{
-							retval = lwrb_read(rb, temp, nmea_terminator_pos - nmea_start_pos);  // the terminators are from the current read pointer len away
-							nmea_start_pos = nmea_terminator_pos;  // save position for next iteration
+							nmea_terminator_pos++;  // advance by one to get the \r
+							nmea_terminator_pos++;  // advance by one to get the \n
+							lwrb_read(rb, temp, nmea_terminator_pos - nmea_start_pos);  // the terminators are from the current read pointer len away
+
+							if(nmea_terminator_pos > UART1_GPS_RX_DMA_BUFFER_LEN)  // if the advance went into overflow
+								nmea_start_pos = 0;  // reset to the beginning
+							else
+								nmea_start_pos = nmea_terminator_pos;  // save position for next iteration
 
 #if DEBUG_LWRB_FREE
 							__ORG1510MK4.linearlen = retval;
@@ -972,19 +970,22 @@ static uint8_t load_one_NMEA_into_out(lwrb_t *rb, uint8_t *temp, uint8_t *parse_
 							// the terminators are in overflow:
 							lwrb_sz_t rest = (lwrb_sz_t) (UART1_GPS_RX_DMA_BUFFER_LEN - nmea_start_pos);  // from the current read pointer to buffer end
 							lwrb_sz_t extra = (lwrb_sz_t) (nmea_terminator_pos - rest);  // then from buffer start some more
+							extra++;	// advance to get the \r
+							extra++;	// advance to get the \n
 
-							retval += lwrb_read(rb, temp, rest);  // read out len characters into out
-							retval += lwrb_read(rb, &temp[retval], extra);  // read out len characters into out
+							lwrb_read(rb, temp, rest);  // read out len characters into out
+							lwrb_read(rb, &temp[retval], extra);  // read out len characters into out
+
 #if DEBUG_LWRB_FREE
 							__ORG1510MK4.ovrflowlen = retval;
 #endif
 							nmea_start_pos = extra;  // save position for next iteration
 						}
-					*parse_flag = 0;  // at this point we have the complete NMEA sentence in out[]
+					retval = 1;  // at this point we have the complete NMEA sentence in out[]
 				}
 		}
 
-	return (uint8_t) retval;
+	return retval;
 }
 
 // check basic NMEA sentence validity and return 1 if true, 0 otherwise
@@ -1026,15 +1027,11 @@ static void _Parse(uint16_t high_pos)
 	// high_pos indicates the position in the circular DMA reception buffer until which data is available
 	// it is NOT the length of new data
 
-	load_into_ring_buffer(&uart1_gps_rx_rb, high_pos);  // buffer incoming data into ringbuffer
+	load_into_ring_buffer(&uart1_gps_rx_rb, high_pos);  // buffer incoming DMA data into ringbuffer
 
-	if(parse_complete)	// either load into ringbuffer or parse, both at the same time doesnt work
+	if(load_one_NMEA_into_out(&uart1_gps_rx_rb, GPS_out))  // if GPS_out has a complete NMEA sentence
 		{
-			load_one_NMEA_into_out(&uart1_gps_rx_rb, GPS_out, &parse_complete);  // go from $ until next $ and load than into GPS_out[]
-		}
-	else
-		{
-			if(NMEA_sentence_valid(GPS_out, &parse_complete))  // check GPS_out[] for basic NMEA sentence validity
+			if(NMEA_sentence_valid(GPS_out, &parse_complete))  // check for basic NMEA sentence validity
 				{
 					// at this point we have a good sentence and we can start parsing NMEA data
 #if PARSE_RMC
