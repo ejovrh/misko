@@ -63,6 +63,8 @@ void Error_Handler(void);
 #define Blue_User_Button_EXTI_IRQn EXTI13_IRQn
 #define LED_Yellow_Pin GPIO_PIN_0
 #define LED_Yellow_GPIO_Port GPIOC
+#define SC_DISCHARGE_Pin GPIO_PIN_1
+#define SC_DISCHARGE_GPIO_Port GPIOC
 #define ADC_VGPS_Pin GPIO_PIN_0
 #define ADC_VGPS_GPIO_Port GPIOA
 #define SPI1_SD_CS_Pin GPIO_PIN_1

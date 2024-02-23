@@ -35285,6 +35285,7 @@ DS. p. 11</text>
 <port name="3V3" side="left" coord="0" direction="pwr"/>
 <port name="VOUT" side="right" coord="0" direction="pwr"/>
 <port name="!EN!" side="left" coord="-5.08" direction="in"/>
+<port name="SC_DIS" side="bottom" coord="-7.62" direction="in"/>
 </ports>
 <variantdefs>
 </variantdefs>
@@ -35306,6 +35307,9 @@ DS. p. 11</text>
 <part name="SUPPLY21" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY1" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 <part name="SUPPLY2" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="3V3-CIRCLE" device="" value="3V3"/>
+<part name="R1" library="resistor" library_urn="urn:adsk.eagle:library:348" deviceset="R-EU_" device="R1206" package3d_urn="urn:adsk.eagle:package:26062/1" value="33R"/>
+<part name="Q4" library="transistor-small-signal" library_urn="urn:adsk.eagle:library:401" deviceset="BSS123" device="" package3d_urn="urn:adsk.eagle:package:28738/2" value="SQ2310ES-T1_BE3"/>
+<part name="SUPPLY3" library="Power_Symbols" library_urn="urn:adsk.eagle:library:16502351" deviceset="GND-BAR" device="" value="GND"/>
 </parts>
 <sheets>
 <sheet>
@@ -35373,6 +35377,17 @@ DS. p. 11</text>
 <instance part="SUPPLY2" gate="G$1" x="66.04" y="22.86" smashed="yes">
 <attribute name="VALUE" x="66.04" y="27.94" size="1.778" layer="96" align="center-left"/>
 </instance>
+<instance part="R1" gate="G$1" x="165.1" y="88.9" smashed="yes" rot="R90">
+<attribute name="NAME" x="167.64" y="88.9" size="1.778" layer="95"/>
+<attribute name="VALUE" x="167.64" y="86.36" size="1.778" layer="96"/>
+</instance>
+<instance part="Q4" gate="G$1" x="165.1" y="53.34" smashed="yes">
+<attribute name="NAME" x="167.64" y="53.34" size="1.778" layer="95"/>
+<attribute name="VALUE" x="162.56" y="48.26" size="1.778" layer="96" rot="R180"/>
+</instance>
+<instance part="SUPPLY3" gate="G$1" x="165.1" y="43.18" smashed="yes">
+<attribute name="VALUE" x="165.1" y="40.64" size="1.778" layer="96" align="center-left"/>
+</instance>
 </instances>
 <busses>
 </busses>
@@ -35408,6 +35423,11 @@ DS. p. 11</text>
 <wire x1="76.2" y1="12.7" x2="76.2" y2="22.86" width="0.1524" layer="91"/>
 <label x="76.2" y="22.86" size="1.778" layer="95" xref="yes"/>
 </segment>
+<segment>
+<pinref part="Q4" gate="G$1" pin="S"/>
+<pinref part="SUPPLY3" gate="G$1" pin="GND"/>
+<wire x1="165.1" y1="45.72" x2="165.1" y2="48.26" width="0.1524" layer="91"/>
+</segment>
 </net>
 <net name="!EN!" class="2">
 <segment>
@@ -35419,8 +35439,9 @@ DS. p. 11</text>
 <net name="VOUT" class="1">
 <segment>
 <pinref part="C24" gate="G$1" pin="+"/>
-<wire x1="149.86" y1="93.98" x2="160.02" y2="93.98" width="0.1524" layer="91"/>
-<label x="160.02" y="93.98" size="1.778" layer="95"/>
+<wire x1="149.86" y1="93.98" x2="165.1" y2="93.98" width="0.1524" layer="91"/>
+<label x="172.72" y="93.98" size="1.778" layer="95"/>
+<wire x1="165.1" y1="93.98" x2="172.72" y2="93.98" width="0.1524" layer="91"/>
 <wire x1="149.86" y1="93.98" x2="124.46" y2="93.98" width="0.1524" layer="91"/>
 <junction x="149.86" y="93.98"/>
 <pinref part="IC2" gate="G$1" pin="VOUT"/>
@@ -35428,6 +35449,8 @@ DS. p. 11</text>
 <wire x1="124.46" y1="93.98" x2="101.6" y2="93.98" width="0.1524" layer="91"/>
 <junction x="124.46" y="93.98"/>
 <label x="106.68" y="93.98" size="1.778" layer="95"/>
+<pinref part="R1" gate="G$1" pin="2"/>
+<junction x="165.1" y="93.98"/>
 </segment>
 </net>
 <net name="VMID" class="2">
@@ -35495,6 +35518,20 @@ DS. p. 11</text>
 <label x="106.68" y="81.28" size="1.778" layer="95"/>
 </segment>
 </net>
+<net name="N$1" class="2">
+<segment>
+<pinref part="Q4" gate="G$1" pin="D"/>
+<pinref part="R1" gate="G$1" pin="1"/>
+<wire x1="165.1" y1="58.42" x2="165.1" y2="83.82" width="0.1524" layer="91"/>
+</segment>
+</net>
+<net name="SC_DIS" class="0">
+<segment>
+<pinref part="Q4" gate="G$1" pin="G"/>
+<wire x1="160.02" y1="50.8" x2="137.16" y2="50.8" width="0.1524" layer="91"/>
+<label x="137.16" y="50.8" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
+</net>
 </nets>
 </sheet>
 </sheets>
@@ -35509,6 +35546,7 @@ DS. p. 11</text>
 <port name="GPS_PWR_CTRL" side="left" coord="-5.08" direction="in"/>
 <port name="!RESET!" side="left" coord="-7.62" direction="in"/>
 <port name="SC_!EN!" side="left" coord="-12.7" direction="in"/>
+<port name="SC_DIS" side="left" coord="-10.16" direction="in"/>
 </ports>
 <variantdefs>
 </variantdefs>
@@ -35673,6 +35711,15 @@ DS. p. 11</text>
 <wire x1="81.28" y1="58.42" x2="50.8" y2="58.42" width="0.1524" layer="91"/>
 <wire x1="50.8" y1="58.42" x2="50.8" y2="144.78" width="0.1524" layer="91"/>
 <label x="50.8" y="144.78" size="1.778" layer="95" rot="R90" xref="yes"/>
+</segment>
+</net>
+<net name="SC_DIS" class="0">
+<segment>
+<portref moduleinst="SUPERCAP+CHARGER" port="SC_DIS"/>
+<wire x1="96.52" y1="48.26" x2="96.52" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="96.52" y1="40.64" x2="40.64" y2="40.64" width="0.1524" layer="91"/>
+<wire x1="40.64" y1="40.64" x2="40.64" y2="144.78" width="0.1524" layer="91"/>
+<label x="40.64" y="144.78" size="1.778" layer="95" rot="R90" xref="yes"/>
 </segment>
 </net>
 </nets>
@@ -38075,13 +38122,6 @@ ejovrh rev.3</text>
 <label x="33.02" y="177.8" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
-<net name="PC1" class="2">
-<segment>
-<wire x1="43.18" y1="180.34" x2="33.02" y2="180.34" width="0.1524" layer="91"/>
-<pinref part="BRD1" gate="CN7" pin="PC1"/>
-<label x="33.02" y="180.34" size="1.778" layer="95" rot="R180"/>
-</segment>
-</net>
 <net name="LED_YELLOW" class="2">
 <segment>
 <wire x1="43.18" y1="182.88" x2="33.02" y2="182.88" width="0.1524" layer="91"/>
@@ -38401,6 +38441,18 @@ ejovrh rev.3</text>
 <label x="33.02" y="205.74" size="1.778" layer="95" rot="R180"/>
 </segment>
 </net>
+<net name="SUPERCAP_DISCHARGE" class="0">
+<segment>
+<portref moduleinst="GPS" port="SC_DIS"/>
+<wire x1="325.12" y1="195.58" x2="314.96" y2="195.58" width="0.1524" layer="91"/>
+<label x="314.96" y="195.58" size="1.778" layer="95" rot="R180"/>
+</segment>
+<segment>
+<wire x1="43.18" y1="180.34" x2="33.02" y2="180.34" width="0.1524" layer="91"/>
+<pinref part="BRD1" gate="CN7" pin="PC1"/>
+<label x="33.02" y="180.34" size="1.778" layer="95" rot="R180"/>
+</segment>
+</net>
 </nets>
 </sheet>
 </sheets>
@@ -38411,6 +38463,10 @@ ejovrh rev.3</text>
 <approved hash="104,1@FERAM,99.06,81.28,IC1,VCC,3V3,,,"/>
 <approved hash="104,1@SD_CARD,88.9,71.12,IC1,VDD,3V3,,,"/>
 <approved hash="104,1@SD_CARD,88.9,66.04,IC1,VSS,GND,,,"/>
+<approved hash="104,1@ORG1510,76.2,76.2,IC1,VCC,VGPS,,,"/>
+<approved hash="104,1@SUPERCAP+CHARGER,149.86,93.98,C24,+,VOUT,,,"/>
+<approved hash="104,1@SUPERCAP+CHARGER,149.86,83.82,C24,-,GND,,,"/>
+<approved hash="104,1@SUPERCAP+CHARGER,66.04,93.98,IC2,VIN,3V3,,,"/>
 </errors>
 </schematic>
 </drawing>
