@@ -32,7 +32,7 @@ typedef struct	// org1510mk4c_t actual
 	org1510mk4_t public;  // public struct
 } __org1510mk4_t;
 
-static __org1510mk4_t __ORG1510MK4 __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
+static __org1510mk4_t                                  __ORG1510MK4                                  __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
 static lwrb_t uart1_gps_rx_rb;  // 2nd circular buffer for data processing
 static uint8_t uart1_gps_rx_rb_buffer[UART1_GPS_RX_RINGBUFFER_LEN];  //
 
@@ -69,6 +69,8 @@ static char _rmcfix_time[7] = "\0";  // container for GGA-derived fix date
 #endif
 #if PARSE_GLL
 static gll_t _gll;	// object for GLL sentences
+static coord_dd_t _gll_lat;  // object for GLL latitude
+static coord_dd_t _gll_lon;  // object for GLL longitude
 static char _gllfix_time[7] = "\0";  // container for GGA-derived fix date
 #endif
 
@@ -129,26 +131,39 @@ static uint8_t checksumMismatch(const char *sentence, const uint8_t len)
 // init function for GPS module
 static void _init(void)
 {
+	/*
+	 * module default settings:
+	 * firmware AXN_3.8_3333_16042118,0000,V3.8.1 GP+GL
+	 *
+	 * 	WGS84 datum (330/430/530)
+	 *	SBAS enabled (313/413/
+	 *	DGPS source is WAAS (301/401/501)
+	 *	search for GPS & GLANOSS only (353/355)
+	 *	EASY enabled (869)
+	 *	LOCUS enabled (183: $PMTKLOG,0,0,b,31,15,0,0,1,0,0*13)
+	 *	HDOP threshold disabled (356/357)
+	 *	dead reckoning tunnel scenario: report 0 fixes (308/408/508)
+	 *	satellite elevation mask: 5 deg. (311/411/511)
+	 *	solution priority: precision (257)
+	 *	static nav. speed threshold: disabled (386)
+	 *
+	 *
+	 * unknown:
+	 *	AIC (286)
+	 *
+	 */
 //	__ORG1510MK4.public.Power(wakeup);	// power up & bring into normal mode
 	__ORG1510MK4.public.Write("PMTK314,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");  // shut the damn thing off first
 
-	__ORG1510MK4.public.Write("PMTK330,0");  // set WGS84 datum
 	__ORG1510MK4.public.Write("PMTK185,1");  // stop LOCUS logging
-	__ORG1510MK4.public.Write("PMTK355"); 	// enable SBAS
-	__ORG1510MK4.public.Write("PMTK301,2");  // set DGPS to SBAS
-	__ORG1510MK4.public.Write("PMTK869,1,1");  // enable EASY
 	__ORG1510MK4.public.Write("PMTK286,1");  // enable active interference cancellation
-	__ORG1510MK4.public.Write("PMTK356,0");  // disable HDOP theshold
-	__ORG1510MK4.public.Write("PMTK386,0");  // disable speed threshold for static navigation
-	__ORG1510MK4.public.Write("PMTK255,0"); 	// disable 1PPS
-	__ORG1510MK4.public.Write("PMTK285,0,0"); 	// 	also disable 1PPS
-
+	__ORG1510MK4.public.Write("PMTK285,0,0"); 	// disable 1PPS
+	//__ORG1510MK4.public.Write("PMTK257,0");  // enable fast TtFF when exiting tunnel/garage
+	// TODO - periodically switch modes depending on speed
 	__ORG1510MK4.public.Write("PMTK886,1");  // pedestrian mode  (slower than 5m/s)
 //	__ORG1510MK4.public.Write("PMTK886,0"); // vehicle mode (faster than 5m/s)
-	__ORG1510MK4.public.Write("PMTK353,1,1,0,0,1");  // use gps, glonass, not galileo, not galileo_full, beidou (action failed - test)
-	__ORG1510MK4.public.Write("PMTK353,1,1,1,0,1");  // use gps, glonass, galileo, not galileo_full, beidou (action failed - test)
 
-	// instruct module to spit out NMEA sentences as above
+	// instruct module to spit out NMEA sentences as shown in .h
 	__ORG1510MK4.public.Write("PMTK314,0,0,1,1,10,10,0,0,0,0,0,0,0,0,0,0,0,1,0");
 
 //	__ORG1510MK4.public.Power(off);  // power off
@@ -234,7 +249,7 @@ static void _Power(const org1510mk4_power_t state)
 
 							while(__adc_results[Vgps] < 3000)  // wait until the supply voltage is high enough (or the module is awake)
 								{
-									break;  // FIXME - blocks ADC somehow
+									//break;  // FIXME - blocks ADC somehow
 									;
 								}
 
@@ -421,6 +436,12 @@ static void _Power(const org1510mk4_power_t state)
 
 			return;
 #endif
+		}
+
+	if(state == discharge)	// discharge the supercap
+		{
+			if(__ORG1510MK4.public.PowerMode == off)	// we wouldnt want a short to the ground ;)
+				HAL_GPIO_TogglePin(SC_DISCHARGE_GPIO_Port, SC_DISCHARGE_Pin);
 		}
 }
 
@@ -871,7 +892,7 @@ static void ParseRMC(rmc_t *sentence, const char *str)
 // parses NMEA str for GLL data
 static void ParseGLL(gll_t *sentence, const char *str)
 {
-	char *msg = strstr(str, "RMC");  // first, check if we have the correct message type
+	char *msg = strstr(str, "GLL");  // first, check if we have the correct message type
 
 	if(msg == NULL)  // if not, get out
 		return;
@@ -880,24 +901,28 @@ static void ParseGLL(gll_t *sentence, const char *str)
 
 	strncpy(temp, str, strlen(str));	// copy str into temp
 
-	// $GPGLL,3953.88008971,N,10506.75318910,W,034138.00,A,D*7A
+	// $GNGLL,4547.8136,N,01554.8884,E,080019.000,A,A*40
 	char *tok = strtok_f(temp, ',');	// start to tokenize
+
 	tok = strtok_f(NULL, ',');
-	NMEA_DecimalDegree_to_coord_dd_t(tok, &_gga_lat);  // 3953.88008971 to 39 and 53.88008971 in coord_dd_t
+	NMEA_DecimalDegree_to_coord_dd_t(tok, &_gga_lat);  // 4547.8136 to 45 and 47.8136 in coord_dd_t
 
 	tok = strtok_f(NULL, ',');
 	sentence->lat_dir = (cardinal_dir_t) *tok;  // north - N
 
 	tok = strtok_f(NULL, ',');
-	NMEA_DecimalDegree_to_coord_dd_t(tok, &_gga_lon);  // 10506.75318910 to 105 and 06.75318910 in coord_dd_t
+	NMEA_DecimalDegree_to_coord_dd_t(tok, &_gga_lon);  // 080019.000 to 80 and 19.000 in coord_dd_t
 
 	tok = strtok_f(NULL, ',');
-	sentence->lon_dir = (cardinal_dir_t) *tok;  // east - W
+	sentence->lon_dir = (cardinal_dir_t) *tok;  // east - E
 
-	memcpy(_gllfix_time, strtok_f(NULL, ','), 6);  // 034138
+	memcpy(_gllfix_time, strtok_f(NULL, ','), 6);  // 080019.000
 
 	tok = strtok_f(NULL, ',');	// A
 	sentence->status = (rmc_status_t) *tok;
+
+	tok = strtok_f(NULL, ',');	// A
+	sentence->mode = (faa_mode_t) *tok;  // FAA mode indicator
 }
 #endif
 
@@ -1094,7 +1119,7 @@ static void _Write(const char *str)
 	_wait(50);	// always wait a while. stuff works better that way...
 }
 
-static __org1510mk4_t __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
+static __org1510mk4_t                                  __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
 	{  //
 	.public.Power = &_Power,	// GPS module power mode change control function
 	.public.Parse = &_Parse,	//
@@ -1145,6 +1170,8 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 #endif
 #if PARSE_GLL
 	__ORG1510MK4.public.gll = &_gll;	// tie in GLL sentence struct
+	__ORG1510MK4.public.gll->lat = &_gll_lat;
+	__ORG1510MK4.public.gll->lon = &_gll_lon;
 	__ORG1510MK4.public.gll->time = _gllfix_time;
 #endif
 
@@ -1157,8 +1184,8 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 	// TODO - move rx_start() into _Power()
 	rx_start();  // start DMA reception
 
-	//	_init();  // initialize the module
-	__ORG1510MK4.public.Power(wakeup);  // wake the module
+//	_init();  // initialize the module
+//	__ORG1510MK4.public.Power(wakeup);  // wake the module
 
 	return &__ORG1510MK4.public;  // set pointer to ORG1510MK4 public part
 }

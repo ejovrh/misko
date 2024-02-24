@@ -12,14 +12,17 @@
  * 1 GGA - Global Positioning System Fix Data
  * 10 GSA - GNSS DOP and Active Satellites
  * 10 GSV - GNSS Satellites in View
+ * 0 GRS - GNSS Range Residuals
+ * 0 GST - GNSS Range Statistics
  * ...
  * 1 ZDA - UTC Date/Time and Local Time Zone Offset
- * 0 MCHN - ???
+ * 0 MCHN - GNSS channel status
+ * DTM - Datum reference
  *
  * see init() and adapt accordingly
  */
 
-#define PARSE_GLL 0	// TODO - test GLL parsing
+#define PARSE_GLL 0	// parse GLL sentences
 #define PARSE_RMC 0 // parse RMC sentences
 #define PARSE_VTG 1 // parse VTG sentences
 #define PARSE_GGA 1	// parse GGA sentences
@@ -40,7 +43,8 @@ typedef enum org1510mk4_power_t  // GPS module power states, DS. ch. 4.3.10, p. 
 	  standby = 4,  // standby mode, DS. ch. 4.3.12
 	  periodic = 5,  // periodic mode, DS. ch. 4.3.13
 	  alwayslocate = 6,  // alwaysLocate mode, DS. ch. 4.3.14
-	  reset = 7  // reset the module, DS. ch. 8.3.2
+	  reset = 7,  // reset the module, DS. ch. 8.3.2
+	  discharge = 8,  // supercap discharge FET control
 } org1510mk4_power_t;
 
 typedef struct org1510mk4_t  // struct describing the GPS module functionality

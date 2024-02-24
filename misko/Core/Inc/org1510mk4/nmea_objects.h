@@ -185,6 +185,7 @@ typedef struct gll_t
 	cardinal_dir_t lon_dir;  // direction of longitude
 	char *time;  //	position fix time in hhmmss time in UTC
 	rmc_status_t status;	// GPS status indicator
+	faa_mode_t mode;	// FAA mode indicator
 
 } gll_t;
 #endif

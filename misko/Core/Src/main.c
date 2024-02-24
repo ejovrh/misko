@@ -1060,6 +1060,10 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 									ORG1510MK4->Power(discharge);
 									break;
 
+								case 'r':
+									NVIC_SystemReset();
+									break;
+
 								default:
 									return;
 								}
