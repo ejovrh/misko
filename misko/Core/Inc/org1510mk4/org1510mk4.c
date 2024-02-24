@@ -163,7 +163,21 @@ static void _init(void)
 	__ORG1510MK4.public.Write("PMTK886,1");  // pedestrian mode  (slower than 5m/s)
 //	__ORG1510MK4.public.Write("PMTK886,0"); // vehicle mode (faster than 5m/s)
 
-	// instruct module to spit out NMEA sentences as shown in .h
+	/* NMEA sentences:
+	 * 0 GLL - Geographical Position-Latitude/Longitude
+	 * 0 RMC - Recommended Minimum Specific GNSS Data
+	 * 1 VTG - Course over Ground and Ground Speed
+	 * 1 GGA - Global Positioning System Fix Data
+	 * 10 GSA - GNSS DOP and Active Satellites
+	 * 10 GSV - GNSS Satellites in View
+	 * 0 GRS - GNSS Range Residuals
+	 * 0 GST - GNSS Range Statistics
+	 * ...
+	 * 1 ZDA - UTC Date/Time and Local Time Zone Offset
+	 * 0 MCHN - GNSS channel status
+	 * DTM - Datum reference
+	 *
+	 */
 	__ORG1510MK4.public.Write("PMTK314,0,0,1,1,10,10,0,0,0,0,0,0,0,0,0,0,0,1,0");
 
 //	__ORG1510MK4.public.Power(off);  // power off
@@ -247,11 +261,9 @@ static void _Power(const org1510mk4_power_t state)
 						{
 							HAL_GPIO_WritePin(SUPERCAP_EN_GPIO_Port, SUPERCAP_EN_Pin, GPIO_PIN_SET);	// power on the supercap charger
 
-							while(__adc_results[Vgps] < 3000)  // wait until the supply voltage is high enough (or the module is awake)
-								{
-									//break;  // FIXME - blocks ADC somehow
-									;
-								}
+							while(__adc_results[Vgps] < 3000)
+								// wait until the supply voltage is high enough (or the module is awake)
+								;//break;  // FIXME - blocks ADC somehow
 
 							__ORG1510MK4.public.PowerMode = state;	// save the current power mode
 							return;
@@ -440,8 +452,19 @@ static void _Power(const org1510mk4_power_t state)
 
 	if(state == discharge)	// discharge the supercap
 		{
-			if(__ORG1510MK4.public.PowerMode == off)	// we wouldnt want a short to the ground ;)
-				HAL_GPIO_TogglePin(SC_DISCHARGE_GPIO_Port, SC_DISCHARGE_Pin);
+			__ORG1510MK4.public.PowerMode = discharge;
+			HAL_GPIO_WritePin(SUPERCAP_EN_GPIO_Port, SUPERCAP_EN_Pin, GPIO_PIN_RESET);	// turn off supercap charger
+
+			HAL_GPIO_WritePin(SC_DISCHARGE_GPIO_Port, SC_DISCHARGE_Pin, GPIO_PIN_SET);	// start to discharge
+
+			while(__adc_results[Vgps] > 50)
+				// wait until the supply voltage drops below 50mV
+				;
+
+			_wait(5000);	// wait 5 seconds
+
+			HAL_GPIO_WritePin(SC_DISCHARGE_GPIO_Port, SC_DISCHARGE_Pin, GPIO_PIN_RESET);	// stop the discharge
+			__ORG1510MK4.public.PowerMode = off;
 		}
 }
 

@@ -5,23 +5,7 @@
 
 #if defined(USE_ORG1510MK4)	// if this particular device is active
 
-/* NMEA sentences:
- * 0 GLL - Geographical Position-Latitude/Longitude
- * 0 RMC - Recommended Minimum Specific GNSS Data
- * 1 VTG - Course over Ground and Ground Speed
- * 1 GGA - Global Positioning System Fix Data
- * 10 GSA - GNSS DOP and Active Satellites
- * 10 GSV - GNSS Satellites in View
- * 0 GRS - GNSS Range Residuals
- * 0 GST - GNSS Range Statistics
- * ...
- * 1 ZDA - UTC Date/Time and Local Time Zone Offset
- * 0 MCHN - GNSS channel status
- * DTM - Datum reference
- *
- * see init() and adapt accordingly
- */
-
+#define PARSE_PMTK 1	// parse MTK NMEA module command messages
 #define PARSE_GLL 0	// parse GLL sentences
 #define PARSE_RMC 0 // parse RMC sentences
 #define PARSE_VTG 1 // parse VTG sentences
