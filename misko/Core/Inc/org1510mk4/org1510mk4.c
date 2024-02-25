@@ -659,9 +659,9 @@ static void ParseGNGSA(const char *talker, const char *str, gsa_t *pub_gsa)
 			for(uint8_t i = 0; i < 12; i++)  // zero-out previously linked SVs
 				pub_gsa->sv[i] = NULL;
 
-			pub_gsa->hdop = 0;	// zero fields
-			pub_gsa->vdop = 0;
-			pub_gsa->pdop = 0;
+			pub_gsa->HDOP = 0;	// zero fields
+			pub_gsa->VDOP = 0;
+			pub_gsa->PDOP = 0;
 
 			return;  // and get out
 		}
@@ -728,9 +728,9 @@ static void ParseGNGSA(const char *talker, const char *str, gsa_t *pub_gsa)
 #endif
 
 	// continue with normal tokenizing
-	pub_gsa->pdop = (float) atof(strtok_f(NULL, ','));  // Positional Dilution of Position - 4.75
-	pub_gsa->hdop = (float) atof(strtok_f(NULL, ','));  // Horizontal Dilution of Position - 4.64
-	pub_gsa->vdop = (float) atof(strtok_f(NULL, ','));  // VErtical Dilution of Position - 0.98
+	pub_gsa->PDOP = (float) atof(strtok_f(NULL, ','));  // Positional Dilution of Position - 4.75
+	pub_gsa->HDOP = (float) atof(strtok_f(NULL, ','));  // Horizontal Dilution of Position - 4.64
+	pub_gsa->VDOP = (float) atof(strtok_f(NULL, ','));  // VErtical Dilution of Position - 0.98
 
 	iter++;  // advance index one position
 
