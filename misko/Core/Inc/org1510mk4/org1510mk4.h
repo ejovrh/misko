@@ -6,8 +6,8 @@
 #if defined(USE_ORG1510MK4)	// if this particular device is active
 
 #define PARSE_PMTK 1	// parse MTK NMEA module command messages
-#define PARSE_GLL 0	// parse GLL sentences
-#define PARSE_RMC 0 // parse RMC sentences
+#define PARSE_GLL 1	// parse GLL sentences
+#define PARSE_RMC 1 // parse RMC sentences
 #define PARSE_VTG 1 // parse VTG sentences
 #define PARSE_GGA 1	// parse GGA sentences
 #define GSA_COUNT 2	// number of GSA talkers - GP, GL, ...

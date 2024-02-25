@@ -49,11 +49,11 @@ typedef struct coord_dd_t  // NMEA decimal degree
 #if PARSE_GGA
 typedef struct gga_t  // GGA sentence struct
 {
-	char *fix_date;  // age of GPS fix data
+	char *time;  // age of GPS fix data
 	coord_dd_t *lat;  // latitude
-	cardinal_dir_t lat_dir;  // direction of latitude
+	cardinal_dir_t *lat_dir;  // cardinal direction of latitude
 	coord_dd_t *lon;  // longitude
-	cardinal_dir_t lon_dir;  // direction of longitude
+	cardinal_dir_t *lon_dir;  // cardinal direction of longitude
 	gga_fix_t fix;	// type of GPS fix
 	uint8_t sat_used;  // satellites used for solution
 	float HDOP;  // Horizontal Dilution Of Precision
@@ -135,9 +135,9 @@ typedef struct gsa_t  // GSA sentence struct
 	uint8_t sv11;  //
 	uint8_t sv12;  //
 #endif
-	float pdop;  // Position Dilution Of Position
-	float hdop;  // Horizontal Dilution Of Position
-	float vdop;  // Vertical Dilution Of Position
+	float PDOP;  // Position Dilution Of Position
+	float HDOP;  // Horizontal Dilution Of Position
+	float VDOP;  // Vertical Dilution Of Position
 } gsa_t;
 #endif
 
@@ -164,14 +164,14 @@ typedef struct rmc_t	// RMC sentence struct
 	char *time;  //	position fix time in hhmmss time in UTC
 	rmc_status_t status;	// GPS status indicator
 	coord_dd_t *lat;  // latitude
-	cardinal_dir_t lat_dir;  // direction of latitude
+	cardinal_dir_t *lat_dir;  // direction of latitude
 	coord_dd_t *lon;  // longitude
-	cardinal_dir_t lon_dir;  // direction of longitude
+	cardinal_dir_t *lon_dir;  // direction of longitude
 	float knots;	// speed in knots
 	uint16_t azimut;	// track angle in degrees true north
 	char *date;  // date in ddmmyy format
 	uint16_t mag_var;  // magnetic variation in degrees
-	cardinal_dir_t var_dir;  // magnetic variation cardinal direction
+	cardinal_dir_t *var_dir;  // magnetic variation cardinal direction
 	faa_mode_t mode;	// FAA mode indicator
 } rmc_t;
 #endif
@@ -180,9 +180,9 @@ typedef struct rmc_t	// RMC sentence struct
 typedef struct gll_t	// GLL sentence struct
 {
 	coord_dd_t *lat;  // latitude
-	cardinal_dir_t lat_dir;  // direction of latitude
+	cardinal_dir_t *lat_dir;  // direction of latitude
 	coord_dd_t *lon;  // longitude
-	cardinal_dir_t lon_dir;  // direction of longitude
+	cardinal_dir_t *lon_dir;  // direction of longitude
 	char *time;  //	position fix time in hhmmss time in UTC
 	rmc_status_t status;	// GPS status indicator
 	faa_mode_t mode;	// FAA mode indicator

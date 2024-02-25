@@ -38,15 +38,16 @@ static __org1510mk4_t __ORG1510MK4 __attribute__ ((section (".data")));  // prea
 static lwrb_t uart1_gps_rx_rb;  // 2nd circular buffer for data processing
 static uint8_t uart1_gps_rx_rb_buffer[UART1_GPS_RX_RINGBUFFER_LEN];  //
 
+static char _GPStime[7] = "\0";  // container for ZDA-derived UTC time
+static coord_dd_t _lat;  // object for GGA latitude
+static coord_dd_t _lon;  // object for GGA longitude
+static cardinal_dir_t _cd;	// cardinal direction - NSEW
+
 #if PARSE_ZDA
 static zda_t _zda;  // object for ZDA sentence
-static char _zdatime[7] = "\0";  // container for ZDA-derived UTC time
 #endif
 #if PARSE_GGA
 static gga_t _gga;  // object for GGA sentence
-static coord_dd_t _gga_lat;  // object for GGA latitude
-static coord_dd_t _gga_lon;  // object for GGA longitude
-static char _ggafix_date[7] = "\0";  // container for GGA-derived fix date
 #endif
 #if PARSE_VTG
 static vtg_t _vtg;	// object for VTG sentence
@@ -64,25 +65,18 @@ static gsa_t _gsa;	// object for GSA sentences
 #endif
 # if PARSE_RMC
 static rmc_t _rmc;	// object for RMC sentence
-static coord_dd_t _rmc_lat;  // object for GGA latitude
-static coord_dd_t _rmc_lon;  // object for GGA longitude
-static char _rmcfix_date[7] = "\0";  // container for GGA-derived fix date
-static char _rmcfix_time[7] = "\0";  // container for GGA-derived fix date
+static char _rmc_date[7] = "\0";  // container for GGA-derived fix date
 #endif
 #if PARSE_GLL
 static gll_t _gll;	// object for GLL sentences
-static coord_dd_t _gll_lat;  // object for GLL latitude
-static coord_dd_t _gll_lon;  // object for GLL longitude
-static char _gllfix_time[7] = "\0";  // container for GGA-derived fix date
 #endif
 #if PARSE_PMTK
 static pmtk_t _pmtk;  // container for PMTK messages
 static char _pmtk_buff[255];	// packet buffer
 #endif
 
-static uint8_t parse_complete = 1;	// semaphore for parsing <-> ringbuffer load control
 static uint8_t uart1_gps_rx_dma_buffer[UART1_GPS_RX_DMA_BUFFER_LEN] = "\0";  // 1st circular buffer: incoming GPS UART DMA data
-static uint8_t GPS_out[82] = "\0";  // output box for NMEA sentences fished out of the ringbuffer
+static uint8_t _GPS_out[82] = "\0";  // output box for NMEA sentences fished out of the ringbuffer
 
 // wait time in ms
 static inline void _wait(const uint16_t ms)
@@ -216,9 +210,9 @@ static void _Power(const org1510mk4_power_t state)
 	 * 		timing:
 	 * 			after reset:
 	 * 				not ideal conditions:
-	 * 					- get correct date/time: about 3-6 minutes
-	 * 					- see first satellite: about 9 minutes
-	 * 					- get a fix:
+	 * 					- get correct date/time: TODO
+	 * 					- see first satellite: TODO
+	 * 					- get a fix: TODO
 	 * 				ideal conditions:
 	 * 					- get correct date/time: TODO
 	 * 					- see first satellite: TODO
@@ -573,19 +567,19 @@ static void ParseGGA(gga_t *sentence, const char *str)
 
 	// $GNGGA,161439.000,4547.8623,N,01554.9327,E,1,5,2.05,104.7,M,42.5,M,,*4E
 	char *tok = strtok_f(temp, ',');	// start to tokenize
-	memcpy(sentence->fix_date, strtok_f(NULL, ','), 6);  // UTC of this position report - 161439.000
+	memcpy(sentence->time, strtok_f(NULL, ','), 6);  // UTC of this position report - 161439.000
 
 	tok = strtok_f(NULL, ',');
-	NMEA_DecimalDegree_to_coord_dd_t(tok, &_gga_lat);  // 4547.8623 to 45 and 47.8623 in coord_dd_t
+	NMEA_DecimalDegree_to_coord_dd_t(tok, &_lat);  // 4547.8623 to 45 and 47.8623 in coord_dd_t
 
 	tok = strtok_f(NULL, ',');
-	sentence->lat_dir = (cardinal_dir_t) *tok;  // north - N
+	sentence->lat_dir = (cardinal_dir_t*) tok;  // north - N
 
 	tok = strtok_f(NULL, ',');
-	NMEA_DecimalDegree_to_coord_dd_t(tok, &_gga_lon);  // 01554.9327 to 15 and 54.9327 in coord_dd_t
+	NMEA_DecimalDegree_to_coord_dd_t(tok, &_lon);  // 01554.9327 to 15 and 54.9327 in coord_dd_t
 
 	tok = strtok_f(NULL, ',');
-	sentence->lon_dir = (cardinal_dir_t) *tok;  // east - E
+	sentence->lon_dir = (cardinal_dir_t*) tok;  // east - E
 	sentence->fix = (gga_fix_t) atoi(strtok_f(NULL, ','));  // GPS fix indicator - 1
 	sentence->sat_used = (uint8_t) atoi(strtok_f(NULL, ','));  // satellites used for solution - 5
 	sentence->HDOP = (float) atof(strtok_f(NULL, ','));  // horizontal dilution of position - 2.05
@@ -890,31 +884,31 @@ static void ParseRMC(rmc_t *sentence, const char *str)
 	// $GNRMC,145342.000,A,4547.8104,N,01554.8789,E,0.55,352.46,180224,,,A*7A
 	char *tok = strtok_f(temp, ',');	// start to tokenize
 
-	memcpy(_rmcfix_time, strtok_f(NULL, ','), 6);  // 145342.000
+	memcpy(_GPStime, strtok_f(NULL, ','), 6);  // 145342.000
 
 	tok = strtok_f(NULL, ',');	// A
 	sentence->status = (rmc_status_t) *tok;
 
 	tok = strtok_f(NULL, ',');  // 4547.8104
-	NMEA_DecimalDegree_to_coord_dd_t(tok, &_rmc_lat);  // 4547.8104 to 45 and 47.8104 in coord_dd_t
+	NMEA_DecimalDegree_to_coord_dd_t(tok, &_lat);  // 4547.8104 to 45 and 47.8104 in coord_dd_t
 
 	tok = strtok_f(NULL, ',');
-	sentence->lat_dir = (cardinal_dir_t) *tok;  // north - N
+	sentence->lat_dir = (cardinal_dir_t*) tok;  // north - N
 
 	tok = strtok_f(NULL, ',');
-	NMEA_DecimalDegree_to_coord_dd_t(tok, &_rmc_lon);  // 01554.8789 to 15 and 54.8789 in coord_dd_t
+	NMEA_DecimalDegree_to_coord_dd_t(tok, &_lon);  // 01554.8789 to 15 and 54.8789 in coord_dd_t
 
 	tok = strtok_f(NULL, ',');
-	sentence->lat_dir = (cardinal_dir_t) *tok;  // north - E
+	sentence->lat_dir = (cardinal_dir_t*) tok;  // north - E
 
 	sentence->knots = (float) atof(strtok_f(NULL, ','));  // 0.55
 	sentence->azimut = (uint16_t) atoi(strtok_f(NULL, ','));  // 352.46
-	memcpy(_rmcfix_date, strtok_f(NULL, ','), 6);  // 180224
+	memcpy(_rmc_date, strtok_f(NULL, ','), 6);  // 180224
 
 	sentence->mag_var = (uint16_t) atoi(strtok_f(NULL, ','));  // empty
 
 	tok = strtok_f(NULL, ',');
-	sentence->var_dir = (cardinal_dir_t) *tok;    //
+	sentence->var_dir = (cardinal_dir_t*) tok;    //
 }
 #endif
 
@@ -935,18 +929,18 @@ static void ParseGLL(gll_t *sentence, const char *str)
 	char *tok = strtok_f(temp, ',');	// start to tokenize
 
 	tok = strtok_f(NULL, ',');
-	NMEA_DecimalDegree_to_coord_dd_t(tok, &_gga_lat);  // 4547.8136 to 45 and 47.8136 in coord_dd_t
+	NMEA_DecimalDegree_to_coord_dd_t(tok, &_lat);  // 4547.8136 to 45 and 47.8136 in coord_dd_t
 
 	tok = strtok_f(NULL, ',');
-	sentence->lat_dir = (cardinal_dir_t) *tok;  // north - N
+	sentence->lat_dir = (cardinal_dir_t*) tok;  // north - N
 
 	tok = strtok_f(NULL, ',');
-	NMEA_DecimalDegree_to_coord_dd_t(tok, &_gga_lon);  // 080019.000 to 80 and 19.000 in coord_dd_t
+	NMEA_DecimalDegree_to_coord_dd_t(tok, &_lon);  // 080019.000 to 80 and 19.000 in coord_dd_t
 
 	tok = strtok_f(NULL, ',');
-	sentence->lon_dir = (cardinal_dir_t) *tok;  // east - E
+	sentence->lon_dir = (cardinal_dir_t*) tok;  // east - E
 
-	memcpy(_gllfix_time, strtok_f(NULL, ','), 6);  // 080019.000
+	memcpy(_GPStime, strtok_f(NULL, ','), 6);  // 080019.000
 
 	tok = strtok_f(NULL, ',');	// A
 	sentence->status = (rmc_status_t) *tok;
@@ -1153,43 +1147,43 @@ static void _Parse(uint16_t high_pos)
 
 	LoadRingBuffer(&uart1_gps_rx_rb, high_pos);  // buffer incoming DMA data into ringbuffer
 
-	if(LoadNMEA(&uart1_gps_rx_rb, GPS_out))  // if GPS_out has a complete NMEA sentence
+	if(LoadNMEA(&uart1_gps_rx_rb, _GPS_out))  // if GPS_out has a complete NMEA sentence
 		{
-			if(ValidateNMEA(GPS_out))  // check for basic NMEA sentence validity
+			if(ValidateNMEA(_GPS_out))  // check for basic NMEA sentence validity
 				{
 					// at this point we have a good sentence and we can start parsing NMEA data
 #if PARSE_PMTK
-					ParsePMTK(__ORG1510MK4.pmtk, (const char*) GPS_out);  // parse for PMTK messages
+					ParsePMTK(__ORG1510MK4.pmtk, (const char*) _GPS_out);  // parse for PMTK messages
 #endif
 #if PARSE_RMC
-					ParseRMC(__ORG1510MK4.public.rmc, (const char*) GPS_out);  // parse for RMC data
+					ParseRMC(__ORG1510MK4.public.rmc, (const char*) _GPS_out);  // parse for RMC data
 #endif
 #if PARSE_GLL
-					ParseGLL(__ORG1510MK4.public.gll, (const char*) GPS_out);  // parse for GLL data
+					ParseGLL(__ORG1510MK4.public.gll, (const char*) _GPS_out);  // parse for GLL data
 #endif
 #if PARSE_VTG
-					ParseVTG(__ORG1510MK4.public.vtg, (const char*) GPS_out);  // parse for VTG data
+					ParseVTG(__ORG1510MK4.public.vtg, (const char*) _GPS_out);  // parse for VTG data
 #endif
 #if PARSE_GGA
-					ParseGGA(__ORG1510MK4.public.gga, (const char*) GPS_out);  // parse for GGA data
+					ParseGGA(__ORG1510MK4.public.gga, (const char*) _GPS_out);  // parse for GGA data
 #endif
 #if PARSE_ZDA
-					ParseZDA(__ORG1510MK4.public.zda, (const char*) GPS_out);  // parse for ZDA data
+					ParseZDA(__ORG1510MK4.public.zda, (const char*) _GPS_out);  // parse for ZDA data
 #endif
 #if PARSE_GSV && !PARSE_GSA
 #if EXPOSE_GSV
-					ParseGNGSV(__ORG1510MK4.public.gpgsv, "GPGSV", GPS_out);  // parse GPGSV
-					ParseGNGSV(__ORG1510MK4.public.glgsv, "GLGSV", GPS_out);  // parse GLGSV
+					ParseGNGSV(__ORG1510MK4.public.gpgsv, "GPGSV", _GPS_out);  // parse GPGSV
+					ParseGNGSV(__ORG1510MK4.public.glgsv, "GLGSV", _GPS_out);  // parse GLGSV
 #else
-					ParseGNGSV(&_gpgsv, "GPGSV", (const char*) GPS_out);  // parse GPGSV
-					ParseGNGSV(&_glgsv, "GLGSV", (const char*) GPS_out);  // parse GLGSV
+					ParseGNGSV(&_gpgsv, "GPGSV", (const char*) _GPS_out);  // parse GPGSV
+					ParseGNGSV(&_glgsv, "GLGSV", (const char*) _GPS_out);  // parse GLGSV
 #endif
 #endif
 #if PARSE_GSA
-					ParseGSA(__ORG1510MK4.public.gsa, (const char*) GPS_out);  // parse for GSA data
+					ParseGSA(__ORG1510MK4.public.gsa, (const char*) _GPS_out);  // parse for GSA data
 #endif
 
-					HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, GPS_out, (uint16_t) strlen((const char*) GPS_out));  // send GPS to VCP
+					HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, _GPS_out, (uint16_t) strlen((const char*) _GPS_out));  // send GPS to VCP
 				}
 		}
 }
@@ -1224,18 +1218,20 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 {
 	__ORG1510MK4.uart_gps = gps;  // store GPS module UART object
 	__ORG1510MK4.uart_sys = sys;  // store system UART object
-	__ORG1510MK4.public.NMEA = GPS_out;  // tie in NMEA sentence buffer
+	__ORG1510MK4.public.NMEA = _GPS_out;  // tie in NMEA sentence buffer
 	__ORG1510MK4.public.PowerMode = 0;  // TODO - read from FeRAM, for now set to off by default
 
 #if PARSE_GGA
 	__ORG1510MK4.public.gga = &_gga;	// tie in GGA sentence struct
-	__ORG1510MK4.public.gga->lat = &_gga_lat;  // tie in latitude
-	__ORG1510MK4.public.gga->lon = &_gga_lon;  // tie in longitude
-	__ORG1510MK4.public.gga->fix_date = _ggafix_date;  // tie in container for GGA-derived fix date
+	__ORG1510MK4.public.gga->lat = &_lat;  // tie in latitude
+	__ORG1510MK4.public.gga->lat_dir = &_cd;  // cardinal direction of latitude
+	__ORG1510MK4.public.gga->lon = &_lon;  // tie in longitude
+	__ORG1510MK4.public.gga->lon_dir = &_cd;  // cardinal direction of longitude
+	__ORG1510MK4.public.gga->time = _GPStime;  // tie in container for GGA-derived fix date
 #endif
 #if PARSE_ZDA
 	__ORG1510MK4.public.zda = &_zda;	// tie in ZDA sentence struct
-	__ORG1510MK4.public.zda->time = _zdatime;  // tie in container for ZDA-derived UTC time
+	__ORG1510MK4.public.zda->time = _GPStime;  // tie in container for ZDA-derived UTC time
 	__ORG1510MK4.public.zda->tz = 0;	// initialize to 0
 #endif
 #if PARSE_VTG
@@ -1256,16 +1252,20 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 #endif
 #if PARSE_RMC
 	__ORG1510MK4.public.rmc = &_rmc;	// tie in GSA sentence struct
-	__ORG1510MK4.public.rmc->lat = &_rmc_lat;  // tie in latitude
-	__ORG1510MK4.public.rmc->lon = &_rmc_lon;  // tie in longitude
-	__ORG1510MK4.public.rmc->date = _rmcfix_date;
-	__ORG1510MK4.public.rmc->time = _rmcfix_time;
+	__ORG1510MK4.public.rmc->lat = &_lat;  // tie in latitude
+	__ORG1510MK4.public.rmc->lat_dir = &_cd;  // cardinal direction of latitude
+	__ORG1510MK4.public.rmc->lon = &_lon;  // tie in longitude
+	__ORG1510MK4.public.rmc->lon_dir = &_cd;  // cardinal direction of longitude
+	__ORG1510MK4.public.rmc->date = _rmc_date;
+	__ORG1510MK4.public.rmc->time = _GPStime;
 #endif
 #if PARSE_GLL
 	__ORG1510MK4.public.gll = &_gll;	// tie in GLL sentence struct
-	__ORG1510MK4.public.gll->lat = &_gll_lat;
-	__ORG1510MK4.public.gll->lon = &_gll_lon;
-	__ORG1510MK4.public.gll->time = _gllfix_time;
+	__ORG1510MK4.public.gll->lat = &_lat;
+	__ORG1510MK4.public.gll->lat_dir = &_cd;  // cardinal direction of latitude
+	__ORG1510MK4.public.gll->lon = &_lon;
+	__ORG1510MK4.public.gll->lon_dir = &_cd;  // cardinal direction of longitude
+	__ORG1510MK4.public.gll->time = _GPStime;
 #endif
 #if PARSE_PMTK
 	__ORG1510MK4.pmtk = &_pmtk;  // tie in PMTKL message struct
@@ -1275,7 +1275,7 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 #if DEBUG_LWRB_FREE
 	__ORG1510MK4.char_written = 0;	// characters written out to system UART
 #endif
-	parse_complete = 1;
+
 	lwrb_init(&uart1_gps_rx_rb, uart1_gps_rx_rb_buffer, sizeof(uart1_gps_rx_rb_buffer));
 
 	// TODO - move rx_start() into _Power()
