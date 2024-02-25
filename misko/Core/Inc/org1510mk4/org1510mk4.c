@@ -34,14 +34,19 @@ typedef struct	// org1510mk4c_t actual
 	org1510mk4_t public;  // public struct
 } __org1510mk4_t;
 
-static __org1510mk4_t __ORG1510MK4 __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
+static __org1510mk4_t   __ORG1510MK4   __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
 static lwrb_t uart1_gps_rx_rb;  // 2nd circular buffer for data processing
 static uint8_t uart1_gps_rx_rb_buffer[UART1_GPS_RX_RINGBUFFER_LEN];  //
 
+#if PARSE_GGA || PARSE_ZDA || PARSE_RMC || PARSE_GLL
 static char _GPStime[7] = "\0";  // container for ZDA-derived UTC time
+#endif
+
+#if PARSE_GGA || PARSE_RMC || PARSE_GLL
 static coord_dd_t _lat;  // object for GGA latitude
 static coord_dd_t _lon;  // object for GGA longitude
 static cardinal_dir_t _cd;	// cardinal direction - NSEW
+#endif
 
 #if PARSE_ZDA
 static zda_t _zda;  // object for ZDA sentence
@@ -1206,7 +1211,7 @@ static void _Write(const char *str)
 	_wait(50);	// always wait a while. stuff works better that way...
 }
 
-static __org1510mk4_t __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
+static __org1510mk4_t   __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
 	{  //
 	.public.Power = &_Power,	// GPS module power mode change control function
 	.public.Parse = &_Parse,	//
