@@ -28,7 +28,9 @@ typedef struct	// org1510mk4c_t actual
 	lwrb_sz_t ovrflowlen;  // amount of data written in overflow mode
 	lwrb_sz_t linearlen;  // amount of data written in linear mode
 #endif
-
+#if PARSE_PMTK
+	pmtk_t *pmtk;  // container for PMTK messages
+#endif
 	org1510mk4_t public;  // public struct
 } __org1510mk4_t;
 
@@ -72,6 +74,10 @@ static gll_t _gll;	// object for GLL sentences
 static coord_dd_t _gll_lat;  // object for GLL latitude
 static coord_dd_t _gll_lon;  // object for GLL longitude
 static char _gllfix_time[7] = "\0";  // container for GGA-derived fix date
+#endif
+#if PARSE_PMTK
+static pmtk_t _pmtk;  // container for PMTK messages
+static char _pmtk_buff[255];	// packet buffer
 #endif
 
 static uint8_t parse_complete = 1;	// semaphore for parsing <-> ringbuffer load control
@@ -146,18 +152,18 @@ static void _init(void)
 	 *	satellite elevation mask: 5 deg. (311/411/511)
 	 *	solution priority: precision (257)
 	 *	static nav. speed threshold: disabled (386)
+	 *	AIC (jamming rejection): enabled (286)
 	 *
-	 *
-	 * unknown:
-	 *	AIC (286)
 	 *
 	 */
 //	__ORG1510MK4.public.Power(wakeup);	// power up & bring into normal mode
 	__ORG1510MK4.public.Write("PMTK314,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0");  // shut the damn thing off first
 
 	__ORG1510MK4.public.Write("PMTK185,1");  // stop LOCUS logging
+	__ORG1510MK4.public.Write("PMTK256, 0");  // disable 1PPS
 	__ORG1510MK4.public.Write("PMTK286,1");  // enable active interference cancellation
 	__ORG1510MK4.public.Write("PMTK285,0,0"); 	// disable 1PPS
+	__ORG1510MK4.public.Write("PMTK869,1,1");  // enable EASY
 	//__ORG1510MK4.public.Write("PMTK257,0");  // enable fast TtFF when exiting tunnel/garage
 	// TODO - periodically switch modes depending on speed
 	__ORG1510MK4.public.Write("PMTK886,1");  // pedestrian mode  (slower than 5m/s)
@@ -275,7 +281,7 @@ static void _Power(const org1510mk4_power_t state)
 	if(state == backup)  // "backup mode", DS. ch. 4.3.15
 		{
 #if DIRTY_POWER_MODE_CHANGE
-			HAL_UART_Transmit_DMA(&huart1, (const uint8_t*) "$PMTK225,4*2F\r\n", 15);  // send backup mode command
+			__ORG1510MK4.public.Write("PMTK225,4");  // send backup mode command
 
 			__ORG1510MK4.public.PowerMode = state;	// save the current power mode
 			return;
@@ -285,6 +291,7 @@ static void _Power(const org1510mk4_power_t state)
 
 			if(__ORG1510MK4.public.PowerMode > backup)  // if the module is in some operating mode
 				{
+					HAL_GPIO_WritePin(GPS_PWR_CTRL_GPIO_Port, GPS_PWR_CTRL_Pin, GPIO_PIN_RESET);	// bring Force-On down
 					__ORG1510MK4.public.Write("PMTK225,4");  // send backup mode command
 
 					while(HAL_GPIO_ReadPin(GPS_WKUP_GPIO_Port, GPS_WKUP_Pin))
@@ -345,7 +352,7 @@ static void _Power(const org1510mk4_power_t state)
 	if(state == standby)  // standby mode, DS. ch. 4.3.12
 		{
 #if DIRTY_POWER_MODE_CHANGE
-			HAL_UART_Transmit_DMA(&huart1, (const uint8_t*) "$PMTK161,0*28\r\n", 15);  // then go into standby
+			__ORG1510MK4.public.Write("PMTK161,0");  // then go into standby
 
 			__ORG1510MK4.public.PowerMode = state;	// save the current power mode
 			return;
@@ -390,7 +397,7 @@ static void _Power(const org1510mk4_power_t state)
 	if(state == alwayslocate)  // alwaysLocate mode, DS. ch. 4.3.14
 		{
 #if DIRTY_POWER_MODE_CHANGE
-			HAL_UART_Transmit_DMA(&huart1, (const uint8_t*) "$PMTK225,9*22\r\n", 15);  // DS. ch. 4.3.14
+			__ORG1510MK4.public.Write("PMTK225,9");  // DS. ch. 4.3.14
 
 			__ORG1510MK4.public.PowerMode = state;	// save the current power mode
 			return;
@@ -949,6 +956,69 @@ static void ParseGLL(gll_t *sentence, const char *str)
 }
 #endif
 
+#if PARSE_PMTK
+// parses NMEA str for PMTK messages
+static void ParsePMTK(pmtk_t *message, const char *str)
+{
+	char *msg = strstr(str, "PMTK");  // first, check if we have the correct message type
+
+	if(msg == NULL)  // if not, get out
+		return;
+
+	char temp[82] = "\0";  // create a temporary buffer
+	uint8_t len = (uint8_t) strlen(str);
+
+	strncpy(temp, str, len);	// copy str into temp
+
+	msg = strstr(temp, "PMTK001");	// acknowledgement for PMTK command
+	if(msg)
+		{
+			// $PMTK001,161,3*36
+			volatile char *tok = strtok_f(temp, ',');  // start to tokenize
+
+			message->cmd = (uint16_t) atoi(strtok_f(NULL, ','));  //	161
+
+			tok = strtok_f(NULL, ',');
+			message->flag = (pmtk_ack_t) *tok;  // 3
+
+			// $PMTK001,449,3,0*25
+			tok = strtok_f(NULL, ',');	// tokenize some more
+			if(tok)  // if there is stuff after the comma
+				{
+					memset(_pmtk_buff, '\0', 255);
+					memcpy(_pmtk_buff, &str[1], strlen(str) - 6);  // put it all into the out buffer and remove $ and checksum
+				}
+
+			return;
+		}
+
+	msg = strstr(temp, "PMTK010");	// system startup message
+	if(msg)
+		{
+			// $PMTK010,002*2D
+			char *tok = strtok_f(temp, ',');	// start to tokenize
+
+			tok = strtok_f(NULL, ',');
+			message->status = (pmtk_sys_msg_t) tok[2];  // 2
+
+			return;
+		}
+
+	msg = strstr(temp, "PMTK011");	// system startup message
+	if(msg)
+		{
+			// $PMTK011,MTKGPS*08
+			memset(_pmtk_buff, '\0', 255);
+			memcpy(_pmtk_buff, &str[1], strlen(str) - 6);  // put it all into the out buffer and remove $ and checksum
+
+			return;
+		}
+
+	memset(_pmtk_buff, '\0', 255);
+	memcpy(_pmtk_buff, &str[1], strlen(str) - 6);  // put it all into the out buffer and remove $ and checksum
+}
+#endif
+
 // buffer NMEA sentences from DMA circular buffer (1st buffer) into ringbuffer (2nd buffer)
 static void LoadRingBuffer(lwrb_t *rb, const uint16_t high_pos)
 {
@@ -1044,7 +1114,7 @@ static uint8_t LoadNMEA(lwrb_t *rb, uint8_t *temp)
 }
 
 // check basic NMEA sentence validity and return 1 if true, 0 otherwise
-static uint8_t ValidateNMEA(uint8_t *out, uint8_t *prase_flag)
+static uint8_t ValidateNMEA(uint8_t *out)
 {
 	uint8_t len = (uint8_t) strlen((const char*) out);  // first figure out the length
 	uint8_t fail = 0;  // failure flag for basic checks below
@@ -1063,7 +1133,6 @@ static uint8_t ValidateNMEA(uint8_t *out, uint8_t *prase_flag)
 
 	if(fail)
 		{
-			*prase_flag = 1;  // get out
 			memset(out, '\0', 82);	// zero the buffer
 			return 0;
 		}
@@ -1086,9 +1155,12 @@ static void _Parse(uint16_t high_pos)
 
 	if(LoadNMEA(&uart1_gps_rx_rb, GPS_out))  // if GPS_out has a complete NMEA sentence
 		{
-			if(ValidateNMEA(GPS_out, &parse_complete))  // check for basic NMEA sentence validity
+			if(ValidateNMEA(GPS_out))  // check for basic NMEA sentence validity
 				{
 					// at this point we have a good sentence and we can start parsing NMEA data
+#if PARSE_PMTK
+					ParsePMTK(__ORG1510MK4.pmtk, (const char*) GPS_out);  // parse for PMTK messages
+#endif
 #if PARSE_RMC
 					ParseRMC(__ORG1510MK4.public.rmc, (const char*) GPS_out);  // parse for RMC data
 #endif
@@ -1118,8 +1190,6 @@ static void _Parse(uint16_t high_pos)
 #endif
 
 					HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, GPS_out, (uint16_t) strlen((const char*) GPS_out));  // send GPS to VCP
-
-					parse_complete = 1;
 				}
 		}
 }
@@ -1154,7 +1224,7 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 {
 	__ORG1510MK4.uart_gps = gps;  // store GPS module UART object
 	__ORG1510MK4.uart_sys = sys;  // store system UART object
-//	__ORG1510MK4.public.NMEA = gps_dma_input_buffer;  // tie in NMEA sentence buffer
+	__ORG1510MK4.public.NMEA = GPS_out;  // tie in NMEA sentence buffer
 	__ORG1510MK4.public.PowerMode = 0;  // TODO - read from FeRAM, for now set to off by default
 
 #if PARSE_GGA
@@ -1197,7 +1267,11 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 	__ORG1510MK4.public.gll->lon = &_gll_lon;
 	__ORG1510MK4.public.gll->time = _gllfix_time;
 #endif
+#if PARSE_PMTK
+	__ORG1510MK4.pmtk = &_pmtk;  // tie in PMTKL message struct
+	__ORG1510MK4.pmtk->buff = _pmtk_buff;  // tie in PMTK packet buffer container
 
+#endif
 #if DEBUG_LWRB_FREE
 	__ORG1510MK4.char_written = 0;	// characters written out to system UART
 #endif

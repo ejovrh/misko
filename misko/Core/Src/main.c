@@ -1012,6 +1012,12 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 							uint8_t len = (uint8_t) strlen((const char*) SYS_out);
 							SYS_out[len - 1] = '\0';
 
+							if(!(SYS_out[0] >= 'A' && SYS_out[0] <= 'Z'))	// crude filter against non-printable characeters in input
+								{
+									memset(SYS_out, '\0', 82);  // zero out out-container
+									return;
+								}
+
 							ORG1510MK4->Write((const char*) SYS_out);
 							memset(SYS_out, '\0', 82);  // zero out out-container
 							return;
@@ -1061,6 +1067,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 									break;
 
 								case 'r':
+									ORG1510MK4->Power(off);
 									NVIC_SystemReset();
 									break;
 

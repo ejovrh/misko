@@ -177,7 +177,7 @@ typedef struct rmc_t	// RMC sentence struct
 #endif
 
 #if PARSE_GLL
-typedef struct gll_t
+typedef struct gll_t	// GLL sentence struct
 {
 	coord_dd_t *lat;  // latitude
 	cardinal_dir_t lat_dir;  // direction of latitude
@@ -188,6 +188,33 @@ typedef struct gll_t
 	faa_mode_t mode;	// FAA mode indicator
 
 } gll_t;
+#endif
+
+#if PARSE_PMTK
+
+typedef enum pmtk_sys_msg_t
+{	// ASCII character interpreted as integer
+	unknown = 48,	// unknown state
+	startup = 49,	// system startup
+	noteEPO = 50, //	notification for host aiding EPO
+	normal_mode = 51,	// transition to normal mode is successful
+} pmtk_sys_msg_t;
+
+typedef enum pmtk_ack_t
+{	// ASCII character interpreted as integer
+	invald = 48,	// invalid command
+	unsupported = 49,	// unsupported command
+	failed = 50,	// valid command but action failed
+	success = 51,	// valid command and action succeeded
+} pmtk_ack_t;
+
+typedef struct pmtk_t	// PMTK message struct
+{
+		pmtk_sys_msg_t status;	//
+		uint16_t cmd;	// reply to command
+		pmtk_ack_t flag;	// flag for reply command
+		char *buff;	// output buffer for longer stuff
+} pmtk_t ;
 #endif
 
 #endif /* INC_ORG1510MK4_NMEA_OBJECTS_H_ */
