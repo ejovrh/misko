@@ -12,6 +12,7 @@
 
 #define UART1_GPS_RX_DMA_BUFFER_LEN 32	// circular DMA RX buffer length for incoming GPS UART DMA data
 #define UART1_GPS_RX_RINGBUFFER_LEN 256	// ringbuffer size
+#define GPS_OUT_BUFFER_LEN 256	// _GPS_out buffer length
 
 extern ADC_HandleTypeDef hadc1;  // TODO - move out of here
 extern volatile uint32_t __adc_dma_buffer[ADC_CHANNELS];  // TODO - move out of here - store for ADC readout
@@ -34,7 +35,7 @@ typedef struct	// org1510mk4c_t actual
 	org1510mk4_t public;  // public struct
 } __org1510mk4_t;
 
-static __org1510mk4_t   __ORG1510MK4   __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
+static __org1510mk4_t __ORG1510MK4 __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
 static lwrb_t uart1_gps_rx_rb;  // 2nd circular buffer for data processing
 static uint8_t uart1_gps_rx_rb_buffer[UART1_GPS_RX_RINGBUFFER_LEN];  //
 
@@ -81,7 +82,7 @@ static char _pmtk_buff[255];	// packet buffer
 #endif
 
 static uint8_t uart1_gps_rx_dma_buffer[UART1_GPS_RX_DMA_BUFFER_LEN] = "\0";  // 1st circular buffer: incoming GPS UART DMA data
-static uint8_t _GPS_out[82] = "\0";  // output box for NMEA sentences fished out of the ringbuffer
+static uint8_t _GPS_out[GPS_OUT_BUFFER_LEN] = "\0";  // output box for NMEA sentences fished out of the ringbuffer
 
 // wait time in ms
 static inline void _wait(const uint16_t ms)
@@ -543,7 +544,7 @@ static void ParseZDA(zda_t *sentence, const char *str)
 	if(msg == NULL)  // if not, get out
 		return;
 
-	char temp[82] = "\0";  // create a temporary buffer
+	char temp[GPS_OUT_BUFFER_LEN] = "\0";  // create a temporary buffer
 
 	strncpy(temp, str, strlen(str));	// copy str into temp
 
@@ -566,7 +567,7 @@ static void ParseGGA(gga_t *sentence, const char *str)
 	if(msg == NULL)  // if not, get out
 		return;
 
-	char temp[82] = "\0";  // create a temporary buffer
+	char temp[GPS_OUT_BUFFER_LEN] = "\0";  // create a temporary buffer
 
 	strncpy(temp, str, strlen(str));  // copy str into temp
 
@@ -575,13 +576,13 @@ static void ParseGGA(gga_t *sentence, const char *str)
 	memcpy(sentence->time, strtok_f(NULL, ','), 6);  // UTC of this position report - 161439.000
 
 	tok = strtok_f(NULL, ',');
-	NMEA_DecimalDegree_to_coord_dd_t(tok, &_lat);  // 4547.8623 to 45 and 47.8623 in coord_dd_t
+	NMEA_DecimalDegree_to_coord_dd_t(tok, sentence->lat);  // 4547.8623 to 45 and 47.8623 in coord_dd_t
 
 	tok = strtok_f(NULL, ',');
 	sentence->lat_dir = (cardinal_dir_t*) tok;  // north - N
 
 	tok = strtok_f(NULL, ',');
-	NMEA_DecimalDegree_to_coord_dd_t(tok, &_lon);  // 01554.9327 to 15 and 54.9327 in coord_dd_t
+	NMEA_DecimalDegree_to_coord_dd_t(tok, sentence->lon);  // 01554.9327 to 15 and 54.9327 in coord_dd_t
 
 	tok = strtok_f(NULL, ',');
 	sentence->lon_dir = (cardinal_dir_t*) tok;  // east - E
@@ -605,7 +606,7 @@ static void ParseVTG(vtg_t *sentence, const char *str)
 	if(msg == NULL)  // if not, get out
 		return;
 
-	char temp[82] = "\0";  // create a temporary buffer
+	char temp[GPS_OUT_BUFFER_LEN] = "\0";  // create a temporary buffer
 
 	strncpy(temp, str, strlen(str));  // copy str into temp
 
@@ -620,7 +621,7 @@ static void ParseVTG(vtg_t *sentence, const char *str)
 	sentence->kph = (float) atof(strtok_f(NULL, ','));  // speed in kilometres per hour - 4.63
 	strtok_f(NULL, ',');  // K
 	tok = strtok_f(NULL, ',');
-	sentence->mode = (faa_mode_t) *tok;  // FAA mode indicator
+	sentence->mode = (faa_mode_t) * tok;  // FAA mode indicator
 }
 #endif
 
@@ -679,7 +680,7 @@ static void ParseGNGSA(const char *talker, const char *str, gsa_t *pub_gsa)
 
 	static uint8_t iter;	// GSA loop (this function) iteration counter
 
-	char temp[82] = "\0";  // create a temporary buffer
+	char temp[GPS_OUT_BUFFER_LEN] = "\0";  // create a temporary buffer
 #if PARSE_GSV
 	uint8_t prn = 0;	// SV PRN
 #endif
@@ -692,7 +693,7 @@ static void ParseGNGSA(const char *talker, const char *str, gsa_t *pub_gsa)
 	char *tok = strtok_f(temp, ',');	// start to tokenize
 
 	tok = strtok_f(NULL, ',');
-	pub_gsa->sel_mode = (gsa_selectionmode_t) *tok;  // GSA selection mode - A
+	pub_gsa->sel_mode = (gsa_selectionmode_t) * tok;  // GSA selection mode - A
 
 	pub_gsa->fixmode = (gsa_fixmode_t) atoi(strtok_f(NULL, ','));  // GSA fix mode - 3
 
@@ -763,7 +764,7 @@ static void ParseGNGSV(gsv_t *sentence, const char *talker, const char *str)
 	if(msg == NULL)  // if not, get out
 		return;
 
-	char temp[82] = "\0";  // create a temporary buffer
+	char temp[GPS_OUT_BUFFER_LEN] = "\0";  // create a temporary buffer
 
 	strncpy(temp, str, strlen(str));	// copy str into temp
 
@@ -882,33 +883,33 @@ static void ParseRMC(rmc_t *sentence, const char *str)
 	if(msg == NULL)  // if not, get out
 		return;
 
-	char temp[82] = "\0";  // create a temporary buffer
+	char temp[GPS_OUT_BUFFER_LEN] = "\0";  // create a temporary buffer
 
 	strncpy(temp, str, strlen(str));	// copy str into temp
 
 	// $GNRMC,145342.000,A,4547.8104,N,01554.8789,E,0.55,352.46,180224,,,A*7A
 	char *tok = strtok_f(temp, ',');	// start to tokenize
 
-	memcpy(_GPStime, strtok_f(NULL, ','), 6);  // 145342.000
+	memcpy(sentence->time, strtok_f(NULL, ','), 6);  // 145342.000
 
 	tok = strtok_f(NULL, ',');	// A
 	sentence->status = (rmc_status_t) *tok;
 
 	tok = strtok_f(NULL, ',');  // 4547.8104
-	NMEA_DecimalDegree_to_coord_dd_t(tok, &_lat);  // 4547.8104 to 45 and 47.8104 in coord_dd_t
+	NMEA_DecimalDegree_to_coord_dd_t(tok, sentence->lat);  // 4547.8104 to 45 and 47.8104 in coord_dd_t
 
 	tok = strtok_f(NULL, ',');
 	sentence->lat_dir = (cardinal_dir_t*) tok;  // north - N
 
 	tok = strtok_f(NULL, ',');
-	NMEA_DecimalDegree_to_coord_dd_t(tok, &_lon);  // 01554.8789 to 15 and 54.8789 in coord_dd_t
+	NMEA_DecimalDegree_to_coord_dd_t(tok, sentence->lon);  // 01554.8789 to 15 and 54.8789 in coord_dd_t
 
 	tok = strtok_f(NULL, ',');
 	sentence->lat_dir = (cardinal_dir_t*) tok;  // north - E
 
 	sentence->knots = (float) atof(strtok_f(NULL, ','));  // 0.55
 	sentence->azimut = (uint16_t) atoi(strtok_f(NULL, ','));  // 352.46
-	memcpy(_rmc_date, strtok_f(NULL, ','), 6);  // 180224
+	memcpy(sentence->date, strtok_f(NULL, ','), 6);  // 180224
 
 	sentence->mag_var = (uint16_t) atoi(strtok_f(NULL, ','));  // empty
 
@@ -926,7 +927,7 @@ static void ParseGLL(gll_t *sentence, const char *str)
 	if(msg == NULL)  // if not, get out
 		return;
 
-	char temp[82] = "\0";  // create a temporary buffer
+	char temp[GPS_OUT_BUFFER_LEN] = "\0";  // create a temporary buffer
 
 	strncpy(temp, str, strlen(str));	// copy str into temp
 
@@ -934,18 +935,18 @@ static void ParseGLL(gll_t *sentence, const char *str)
 	char *tok = strtok_f(temp, ',');	// start to tokenize
 
 	tok = strtok_f(NULL, ',');
-	NMEA_DecimalDegree_to_coord_dd_t(tok, &_lat);  // 4547.8136 to 45 and 47.8136 in coord_dd_t
+	NMEA_DecimalDegree_to_coord_dd_t(tok, sentence->lat);  // 4547.8136 to 45 and 47.8136 in coord_dd_t
 
 	tok = strtok_f(NULL, ',');
 	sentence->lat_dir = (cardinal_dir_t*) tok;  // north - N
 
 	tok = strtok_f(NULL, ',');
-	NMEA_DecimalDegree_to_coord_dd_t(tok, &_lon);  // 080019.000 to 80 and 19.000 in coord_dd_t
+	NMEA_DecimalDegree_to_coord_dd_t(tok, sentence->lon);  // 080019.000 to 80 and 19.000 in coord_dd_t
 
 	tok = strtok_f(NULL, ',');
 	sentence->lon_dir = (cardinal_dir_t*) tok;  // east - E
 
-	memcpy(_GPStime, strtok_f(NULL, ','), 6);  // 080019.000
+	memcpy(sentence->time, strtok_f(NULL, ','), 6);  // 080019.000
 
 	tok = strtok_f(NULL, ',');	// A
 	sentence->status = (rmc_status_t) *tok;
@@ -964,7 +965,7 @@ static void ParsePMTK(pmtk_t *message, const char *str)
 	if(msg == NULL)  // if not, get out
 		return;
 
-	char temp[82] = "\0";  // create a temporary buffer
+	char temp[GPS_OUT_BUFFER_LEN] = "\0";  // create a temporary buffer
 	uint8_t len = (uint8_t) strlen(str);
 
 	strncpy(temp, str, len);	// copy str into temp
@@ -978,14 +979,14 @@ static void ParsePMTK(pmtk_t *message, const char *str)
 			message->cmd = (uint16_t) atoi(strtok_f(NULL, ','));  //	161
 
 			tok = strtok_f(NULL, ',');
-			message->flag = (pmtk_ack_t) *tok;  // 3
+			message->flag = (pmtk_ack_t) * tok;  // 3
 
 			// $PMTK001,449,3,0*25
 			tok = strtok_f(NULL, ',');	// tokenize some more
 			if(tok)  // if there is stuff after the comma
 				{
-					memset(_pmtk_buff, '\0', 255);
-					memcpy(_pmtk_buff, &str[1], strlen(str) - 6);  // put it all into the out buffer and remove $ and checksum
+					memset(message->buff, '\0', 255);
+					memcpy(message->buff, &str[1], strlen(str) - 6);  // put it all into the out buffer and remove $ and checksum
 				}
 
 			return;
@@ -1007,14 +1008,26 @@ static void ParsePMTK(pmtk_t *message, const char *str)
 	if(msg)
 		{
 			// $PMTK011,MTKGPS*08
-			memset(_pmtk_buff, '\0', 255);
-			memcpy(_pmtk_buff, &str[1], strlen(str) - 6);  // put it all into the out buffer and remove $ and checksum
+			memset(message->buff, '\0', 255);
+			memcpy(message->buff, &str[1], strlen(str) - 6);  // put it all into the out buffer and remove $ and checksum
 
 			return;
 		}
 
-	memset(_pmtk_buff, '\0', 255);
-	memcpy(_pmtk_buff, &str[1], strlen(str) - 6);  // put it all into the out buffer and remove $ and checksum
+	// PMTK668,13,1279,0,-1065,94,7200,0,31,1350746,94,-2773,12090,1391150111,-2463,67169759,4497,2702002706,7200,-77,-271626982,-75,663984149,7168,639404337,-22198,-24,0
+	msg = strstr(temp, "PMTK668");	// system startup message
+
+	if(msg)
+		{
+			// $PMTK011,MTKGPS*08
+			memset(message->buff, '\0', 255);
+			memcpy(message->buff, &str[1], strlen(str) - 6);  // put it all into the out buffer and remove $ and checksum
+
+			return;
+		}
+
+	memset(message->buff, '\0', 255);
+	memcpy(message->buff, &str[1], strlen(str) - 6);  // put it all into the out buffer and remove $ and checksum
 }
 #endif
 
@@ -1064,16 +1077,13 @@ static uint8_t LoadNMEA(lwrb_t *rb, uint8_t *temp)
 			static lwrb_sz_t nmea_terminator_pos;  // position store for NMEA terminator start position
 			if(lwrb_find(rb, "\r\n", 2, nmea_start_pos, &nmea_terminator_pos))  // starting from current read pointer location, find the terminator start
 				{
-					memset(temp, '\0', 82);  // zero out out-container
+					memset(temp, '\0', GPS_OUT_BUFFER_LEN);  // zero out out-container
 
 					// assemble the complete NMEA sentence
 					if(nmea_terminator_pos > nmea_start_pos)  // linear region
 						{
 							nmea_terminator_pos++;  // advance by one to get the \r
 							nmea_terminator_pos++;  // advance by one to get the \n
-
-							if(nmea_terminator_pos - nmea_start_pos > 82)  // safeguard against temp[] buffer overflow
-								return 0;
 
 							lwrb_read(rb, temp, nmea_terminator_pos - nmea_start_pos);  // the terminators are from the current read pointer len away
 
@@ -1094,7 +1104,7 @@ static uint8_t LoadNMEA(lwrb_t *rb, uint8_t *temp)
 							extra++;	// advance to get the \r
 							extra++;	// advance to get the \n
 
-							if(rest + extra > 82)  // safeguard against temp[] buffer overflow
+							if(rest + extra > GPS_OUT_BUFFER_LEN)  // safeguard against temp[] buffer overflow
 								return 0;
 
 							lwrb_read(rb, temp, rest);  // read out len characters into out
@@ -1115,11 +1125,11 @@ static uint8_t LoadNMEA(lwrb_t *rb, uint8_t *temp)
 // check basic NMEA sentence validity and return 1 if true, 0 otherwise
 static uint8_t ValidateNMEA(uint8_t *out)
 {
-	uint8_t len = (uint8_t) strlen((const char*) out);  // first figure out the length
+	uint16_t len = (uint8_t) strlen((const char*) out);  // first figure out the length
 	uint8_t fail = 0;  // failure flag for basic checks below
 
 	// check for valid length
-	if(len > 82 || len == 0)  // too long/too short - most likely not valid
+	if(len > GPS_OUT_BUFFER_LEN || len == 0)  // too long/too short - most likely not valid
 		fail = 1;
 
 	// check for existing checksum
@@ -1132,7 +1142,7 @@ static uint8_t ValidateNMEA(uint8_t *out)
 
 	if(fail)
 		{
-			memset(out, '\0', 82);	// zero the buffer
+			memset(out, '\0', GPS_OUT_BUFFER_LEN);	// zero the buffer
 			return 0;
 		}
 	else
@@ -1197,10 +1207,10 @@ static void _Parse(uint16_t high_pos)
 // 	format is "PMTK313,1" - i.e. no $, checksum and no "\r\n"
 static void _Write(const char *str)
 {
-	char outstr[82] = "\0";  // buffer for assembling the output string
+	char outstr[GPS_OUT_BUFFER_LEN] = "\0";  // buffer for assembling the output string
 	uint8_t len = (uint8_t) strlen(str);	// length of incoming string
 
-	if(len > 77)	// invalid length: 82 - 2 (delimiters) - 3 (checksum) = 77
+	if(len > GPS_OUT_BUFFER_LEN - 5)	// invalid length: 82 - 2 (delimiters) - 3 (checksum) = 77
 		return;  // invalid length, get out
 
 	sprintf(outstr, "$%s*%02X\r\n", str, calculate_checksum(str, len));  // assemble the raw NEMA command w. prefix, checksum and delimiters
@@ -1211,7 +1221,7 @@ static void _Write(const char *str)
 	_wait(50);	// always wait a while. stuff works better that way...
 }
 
-static __org1510mk4_t   __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
+static __org1510mk4_t __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
 	{  //
 	.public.Power = &_Power,	// GPS module power mode change control function
 	.public.Parse = &_Parse,	//
