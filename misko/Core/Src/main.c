@@ -66,9 +66,14 @@ FDCAN_HandleTypeDef hfdcan1;
 DMA_HandleTypeDef handle_GPDMA1_Channel7;
 DMA_HandleTypeDef handle_GPDMA1_Channel6;
 
+I2C_HandleTypeDef hi2c2;
+DMA_HandleTypeDef handle_GPDMA2_Channel1;
+DMA_HandleTypeDef handle_GPDMA2_Channel0;
+
 SPI_HandleTypeDef hspi1;
 
 TIM_HandleTypeDef htim1;
+TIM_HandleTypeDef htim2;
 
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart3;
@@ -111,7 +116,7 @@ void PeriphCommonClock_Config(void);
 static void MPU_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_GPDMA1_Init(void);
-static void MX_USART1_UART_Init(void);
+static void MX_GPDMA2_Init(void);
 static void MX_ICACHE_Init(void);
 static void MX_USB_PCD_Init(void);
 static void MX_USART3_UART_Init(void);
@@ -119,6 +124,9 @@ static void MX_TIM1_Init(void);
 static void MX_SPI1_Init(void);
 static void MX_FDCAN1_Init(void);
 static void MX_ADC1_Init(void);
+static void MX_USART1_UART_Init(void);
+static void MX_I2C2_Init(void);
+static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -157,6 +165,7 @@ static void load_into_ring_buffer(lwrb_t *rb, const uint16_t high_pos)
 		Error_Handler();
 #endif
 }
+/* USER CODE END 0 */
 
 /**
  * @brief  The application entry point.
@@ -193,7 +202,7 @@ int main(void)
 	/* Initialize all configured peripherals */
 	MX_GPIO_Init();
 	MX_GPDMA1_Init();
-	MX_USART1_UART_Init();
+	MX_GPDMA2_Init();
 	MX_ICACHE_Init();
 	MX_USB_PCD_Init();
 	MX_USART3_UART_Init();
@@ -201,6 +210,9 @@ int main(void)
 	MX_SPI1_Init();
 	MX_FDCAN1_Init();
 	MX_ADC1_Init();
+	MX_USART1_UART_Init();
+	MX_I2C2_Init();
+	MX_TIM2_Init();
 	/* USER CODE BEGIN 2 */
 
 	// 125ms time base
@@ -532,6 +544,84 @@ static void MX_GPDMA1_Init(void)
 }
 
 /**
+ * @brief GPDMA2 Initialization Function
+ * @param None
+ * @retval None
+ */
+static void MX_GPDMA2_Init(void)
+{
+
+	/* USER CODE BEGIN GPDMA2_Init 0 */
+
+	/* USER CODE END GPDMA2_Init 0 */
+
+	/* Peripheral clock enable */
+	__HAL_RCC_GPDMA2_CLK_ENABLE();
+
+	/* GPDMA2 interrupt Init */
+	HAL_NVIC_SetPriority(GPDMA2_Channel0_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(GPDMA2_Channel0_IRQn);
+	HAL_NVIC_SetPriority(GPDMA2_Channel1_IRQn, 0, 0);
+	HAL_NVIC_EnableIRQ(GPDMA2_Channel1_IRQn);
+
+	/* USER CODE BEGIN GPDMA2_Init 1 */
+
+	/* USER CODE END GPDMA2_Init 1 */
+	/* USER CODE BEGIN GPDMA2_Init 2 */
+
+	/* USER CODE END GPDMA2_Init 2 */
+
+}
+
+/**
+ * @brief I2C2 Initialization Function
+ * @param None
+ * @retval None
+ */
+static void MX_I2C2_Init(void)
+{
+
+	/* USER CODE BEGIN I2C2_Init 0 */
+
+	/* USER CODE END I2C2_Init 0 */
+
+	/* USER CODE BEGIN I2C2_Init 1 */
+
+	/* USER CODE END I2C2_Init 1 */
+	hi2c2.Instance = I2C2;
+	hi2c2.Init.Timing = 0x10707DBC;
+	hi2c2.Init.OwnAddress1 = 0;
+	hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+	hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+	hi2c2.Init.OwnAddress2 = 0;
+	hi2c2.Init.OwnAddress2Masks = I2C_OA2_NOMASK;
+	hi2c2.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+	hi2c2.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+	if(HAL_I2C_Init(&hi2c2) != HAL_OK)
+		{
+			Error_Handler();
+		}
+
+	/** Configure Analogue filter
+	 */
+	if(HAL_I2CEx_ConfigAnalogFilter(&hi2c2, I2C_ANALOGFILTER_ENABLE) != HAL_OK)
+		{
+			Error_Handler();
+		}
+
+	/** Configure Digital filter
+	 */
+	if(HAL_I2CEx_ConfigDigitalFilter(&hi2c2, 0) != HAL_OK)
+		{
+			Error_Handler();
+		}
+	/* USER CODE BEGIN I2C2_Init 2 */
+
+	/* USER CODE END I2C2_Init 2 */
+
+}
+
+/**
  * @brief ICACHE Initialization Function
  * @param None
  * @retval None
@@ -653,6 +743,57 @@ static void MX_TIM1_Init(void)
 	/* USER CODE BEGIN TIM1_Init 2 */
 
 	/* USER CODE END TIM1_Init 2 */
+
+}
+
+/**
+ * @brief TIM2 Initialization Function
+ * @param None
+ * @retval None
+ */
+static void MX_TIM2_Init(void)
+{
+
+	/* USER CODE BEGIN TIM2_Init 0 */
+
+	/* USER CODE END TIM2_Init 0 */
+
+	TIM_Encoder_InitTypeDef sConfig =
+		{0};
+	TIM_MasterConfigTypeDef sMasterConfig =
+		{0};
+
+	/* USER CODE BEGIN TIM2_Init 1 */
+
+	/* USER CODE END TIM2_Init 1 */
+	htim2.Instance = TIM2;
+	htim2.Init.Prescaler = 0;
+	htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+	htim2.Init.Period = 4.294967295E9;
+	htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+	htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+	sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
+	sConfig.IC1Polarity = TIM_ICPOLARITY_RISING;
+	sConfig.IC1Selection = TIM_ICSELECTION_DIRECTTI;
+	sConfig.IC1Prescaler = TIM_ICPSC_DIV1;
+	sConfig.IC1Filter = 0;
+	sConfig.IC2Polarity = TIM_ICPOLARITY_RISING;
+	sConfig.IC2Selection = TIM_ICSELECTION_DIRECTTI;
+	sConfig.IC2Prescaler = TIM_ICPSC_DIV1;
+	sConfig.IC2Filter = 0;
+	if(HAL_TIM_Encoder_Init(&htim2, &sConfig) != HAL_OK)
+		{
+			Error_Handler();
+		}
+	sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+	sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+	if(HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+		{
+			Error_Handler();
+		}
+	/* USER CODE BEGIN TIM2_Init 2 */
+
+	/* USER CODE END TIM2_Init 2 */
 
 }
 
@@ -814,10 +955,10 @@ static void MX_GPIO_Init(void)
 	HAL_GPIO_WritePin(GPIOC, SC_DISCHARGE_Pin | GPS_PWR_CTRL_Pin | Debug_Out_Pin | USB_FS_PWR_EN_Pin, GPIO_PIN_RESET);
 
 	/*Configure GPIO pin Output Level */
-	HAL_GPIO_WritePin(GPIOA, SPI1_SD_CS_Pin | SPI1_FRAM_CS_Pin | SPI1_ADXL345_CS_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOA, SPI1_SD_CS_Pin | User_LED_Pin, GPIO_PIN_RESET);
 
 	/*Configure GPIO pin Output Level */
-	HAL_GPIO_WritePin(User_LED_GPIO_Port, User_LED_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOA, SPI1_FRAM_CS_Pin | SPI1_ADXL345_CS_Pin, GPIO_PIN_SET);
 
 	/*Configure GPIO pin Output Level */
 	HAL_GPIO_WritePin(GPIOB, GPS_RESET_Pin | Anal_SW_CTRL_Pin, GPIO_PIN_SET);
@@ -858,12 +999,6 @@ static void MX_GPIO_Init(void)
 	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
 	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-	/*Configure GPIO pin : PA2 */
-	GPIO_InitStruct.Pin = GPIO_PIN_2;
-	GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
-	GPIO_InitStruct.Pull = GPIO_NOPULL;
-	HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
 	/*Configure GPIO pin : User_LED_Pin */
 	GPIO_InitStruct.Pin = User_LED_Pin;
 	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
@@ -877,9 +1012,8 @@ static void MX_GPIO_Init(void)
 	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
 	HAL_GPIO_Init(SD_CD_GPIO_Port, &GPIO_InitStruct);
 
-	/*Configure GPIO pins : PB1 PB2 PB10 PB12
-	 PB13 */
-	GPIO_InitStruct.Pin = GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_10 | GPIO_PIN_12 | GPIO_PIN_13;
+	/*Configure GPIO pins : PB1 PB12 */
+	GPIO_InitStruct.Pin = GPIO_PIN_1 | GPIO_PIN_12;
 	GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
@@ -1012,7 +1146,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 							uint8_t len = (uint8_t) strlen((const char*) SYS_out);
 							SYS_out[len - 1] = '\0';
 
-							if(!(SYS_out[0] >= 'A' && SYS_out[0] <= 'Z'))	// crude filter against non-printable characeters in input
+							if(!(SYS_out[0] >= 'A' && SYS_out[0] <= 'Z'))  // crude filter against non-printable characeters in input
 								{
 									memset(SYS_out, '\0', 82);  // zero out out-container
 									return;

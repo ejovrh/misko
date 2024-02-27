@@ -68,9 +68,12 @@ void ADC1_IRQHandler(void);
 void FDCAN1_IT0_IRQHandler(void);
 void FDCAN1_IT1_IRQHandler(void);
 void TIM1_CC_IRQHandler(void);
+void TIM2_IRQHandler(void);
 void SPI1_IRQHandler(void);
 void USART1_IRQHandler(void);
 void USART3_IRQHandler(void);
+void GPDMA2_Channel0_IRQHandler(void);
+void GPDMA2_Channel1_IRQHandler(void);
 /* USER CODE BEGIN EFP */
 
 /* USER CODE END EFP */

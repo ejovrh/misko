@@ -67,7 +67,9 @@ void Error_Handler(void);
 #define SC_DISCHARGE_GPIO_Port GPIOC
 #define ADC_VGPS_Pin GPIO_PIN_0
 #define ADC_VGPS_GPIO_Port GPIOA
-#define SPI1_SD_CS_Pin GPIO_PIN_1
+#define ROTARY_CH2_Pin GPIO_PIN_1
+#define ROTARY_CH2_GPIO_Port GPIOA
+#define SPI1_SD_CS_Pin GPIO_PIN_2
 #define SPI1_SD_CS_GPIO_Port GPIOA
 #define UART3_VCP_RX_Pin GPIO_PIN_3
 #define UART3_VCP_RX_GPIO_Port GPIOA
@@ -83,6 +85,12 @@ void Error_Handler(void);
 #define GPS_PWR_CTRL_GPIO_Port GPIOC
 #define SD_CD_Pin GPIO_PIN_0
 #define SD_CD_GPIO_Port GPIOB
+#define ROTARY_CH1_Pin GPIO_PIN_2
+#define ROTARY_CH1_GPIO_Port GPIOB
+#define I2C2_SCL_Pin GPIO_PIN_10
+#define I2C2_SCL_GPIO_Port GPIOB
+#define I2C2_SDA_Pin GPIO_PIN_13
+#define I2C2_SDA_GPIO_Port GPIOB
 #define UART1_TX_Pin GPIO_PIN_14
 #define UART1_TX_GPIO_Port GPIOB
 #define UART1_RX_Pin GPIO_PIN_15
@@ -96,6 +104,8 @@ void Error_Handler(void);
 #define ADXL345_INT1_Pin GPIO_PIN_9
 #define ADXL345_INT1_GPIO_Port GPIOC
 #define ADXL345_INT1_EXTI_IRQn EXTI9_IRQn
+#define SPI1_SCK_Pin GPIO_PIN_8
+#define SPI1_SCK_GPIO_Port GPIOA
 #define USB_FS_VBUS_Pin GPIO_PIN_9
 #define USB_FS_VBUS_GPIO_Port GPIOA
 #define GPS_WKUP_Pin GPIO_PIN_10
@@ -121,6 +131,10 @@ void Error_Handler(void);
 #define USB_FS_OVCR_EXTI_IRQn EXTI2_IRQn
 #define SWO_Pin GPIO_PIN_3
 #define SWO_GPIO_Port GPIOB
+#define SPI1_MISO_Pin GPIO_PIN_4
+#define SPI1_MISO_GPIO_Port GPIOB
+#define SPI1_MOSI_Pin GPIO_PIN_5
+#define SPI1_MOSI_GPIO_Port GPIOB
 #define GPS_RESET_Pin GPIO_PIN_6
 #define GPS_RESET_GPIO_Port GPIOB
 #define SUPERCAP_EN_Pin GPIO_PIN_7
