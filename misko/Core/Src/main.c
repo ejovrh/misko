@@ -261,6 +261,7 @@ int main(void)
 	/* USER CODE BEGIN WHILE */
 	while(1)
 		{
+			ORG1510MK4->AlmEphQuery();	// asynchronous flag_alm_eph_query for SV almanac & ephemeris
 			/* USER CODE END WHILE */
 
 			/* USER CODE BEGIN 3 */
@@ -1081,10 +1082,6 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 		{
 			HAL_GPIO_TogglePin(User_LED_GPIO_Port, User_LED_Pin);
 			HAL_GPIO_TogglePin(LED_Green_GPIO_Port, LED_Green_Pin);
-
-//			ORG1510MK4->Write("PMTK514,0,1,1,1,1,5,0,0,0,0,0,0,0,0,0,0,0,0,0");
-			ORG1510MK4->Read();
-
 			return;
 		}
 

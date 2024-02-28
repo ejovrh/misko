@@ -105,8 +105,17 @@ typedef enum gsa_fixmode_t  // GSA fix mode
 #endif
 
 #if PARSE_GSA  || PARSE_GSV
+
+typedef enum bool_t
+{
+	false = 0,
+	true = 1,
+} bool_t;
+
 typedef struct spacevehicle_t  // space vehicle data
 {
+	bool_t alm;	// is an almanac for a SV available?
+	bool_t eph;	// is an ephemeris for a SV available?
 	uint8_t prn;	// Pseudo-Random Number of space vehicle
 	uint8_t elev;  // elevation in degrees, 0-90
 	uint16_t azim;  // azimuth in degrees from true north, 0 - 359

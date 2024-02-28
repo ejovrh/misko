@@ -478,8 +478,7 @@ static void _Power(const org1510mk4_power_t state)
 //
 static void _Read(void)
 {
-	__ORG1510MK4.public.Write("PMTK414");
-
+	;
 }
 
 //
@@ -784,6 +783,8 @@ static void ParseGNGSV(gsv_t *sentence, const char *talker, const char *str)
 		{
 			for(uint8_t i = 0; i < 12; i++)  // in case there are values, zero them out
 				{
+					sentence->sv[i].alm = 0;
+					sentence->sv[i].eph = 0;
 					sentence->sv[i].prn = 0;
 					sentence->sv[i].elev = 0;
 					sentence->sv[i].azim = 0;
@@ -808,6 +809,8 @@ static void ParseGNGSV(gsv_t *sentence, const char *talker, const char *str)
 		{
 			if(i == 12)
 				break;
+
+			__ORG1510MK4.public.flag_alm_eph_query = 1;
 
 			tok = strtok_f(NULL, ',');
 			if(tok)
@@ -842,6 +845,8 @@ static void ParseGNGSV(gsv_t *sentence, const char *talker, const char *str)
 		{
 			do
 				{
+					sentence->sv[n].alm = 0;
+					sentence->sv[n].eph = 0;
 					sentence->sv[n].prn = 0;
 					sentence->sv[n].elev = 0;
 					sentence->sv[n].azim = 0;
@@ -1008,22 +1013,52 @@ static void ParsePMTK(pmtk_t *message, const char *str)
 	if(msg)
 		{
 			// $PMTK011,MTKGPS*08
-			memset(message->buff, '\0', 255);
-			memcpy(message->buff, &str[1], strlen(str) - 6);  // put it all into the out buffer and remove $ and checksum
-
-			return;
+			// TODO
 		}
 
-	// PMTK668,13,1279,0,-1065,94,7200,0,31,1350746,94,-2773,12090,1391150111,-2463,67169759,4497,2702002706,7200,-77,-271626982,-75,663984149,7168,639404337,-22198,-24,0
-	msg = strstr(temp, "PMTK668");	// system startup message
+	msg = strstr(temp, "PMTK710");	// reply to PMTK473 - query ephemeris of a GPS PRN SV
+	if(msg)
+		{
+			// $PMTK001,474,2*36 -- fail
+			// $PMTK710,19,3FD000,2F7BE7,F7F547,04E7EA,BE5C0C,1B49D4,00000A,4036BE,1B0909,366822,C0DA88,080406,0F5F58,0CEDA1,0CDBA0,49D47D,FFA73E,ADB69D,002A26,BB4E1B,200A2B,F1C06B,FFA286,1B0500*6F -- success
+			// TODO
+			char *tok = strtok_f(temp, ',');  // start to tokenize
+
+			tok = strtok_f(NULL, ',');	// 02
+			uint8_t prn = (uint8_t) strtol(tok, NULL, 16);
+
+			for(uint8_t i = 0; i < 12; i++)  // gp over all visible SVs
+				{
+					if(_gpgsv.sv[i].prn == prn)  // compare their PRN with the 711 reply and see if they match
+						_gpgsv.sv[i].eph = true;
+				}
+		}
+
+	msg = strstr(temp, "PMTK711");	// reply to PMTK474 - query almanac of a GPS PRN SV
+	if(msg)
+		{
+			// 	command: PMTK474,1	-- fail
+			// 		$PMTK001,474,2*36	-- didnt get here because of earlier return
+			// 	command: PMTK474,2	-- success
+			// 		$PMTK711,02,08FF,428454,4E1083,FD5D00,A10D59,9146C9,CDDBF7,29655B,C1004B*4F
+			char *tok = strtok_f(temp, ',');  // start to tokenize
+
+			tok = strtok_f(NULL, ',');	// 02
+			uint8_t foo = (uint8_t) strtol(tok, NULL, 16);
+
+			for(uint8_t i = 0; i < 12; i++)  // gp over all visible SVs
+				{
+					if(_gpgsv.sv[i].prn == foo)  // compare their PRN with the 711 reply and see if they match
+						_gpgsv.sv[i].alm = true;
+				}
+		}
+
+	//
+	msg = strstr(temp, "PMTK668");	// ephemeris parameter of GPS
 
 	if(msg)
 		{
-			// $PMTK011,MTKGPS*08
-			memset(message->buff, '\0', 255);
-			memcpy(message->buff, &str[1], strlen(str) - 6);  // put it all into the out buffer and remove $ and checksum
-
-			return;
+			// TODO
 		}
 
 	memset(message->buff, '\0', 255);
@@ -1042,7 +1077,7 @@ static void LoadRingBuffer(lwrb_t *rb, const uint16_t high_pos)
 
 	// 1st buffering - load into ringbuffer
 	if(high_pos > low_pos)  // linear region
-		// read in a linear fashion from DMA rcpt. buffer from beginning to end of new data
+// read in a linear fashion from DMA rcpt. buffer from beginning to end of new data
 		lwrb_write(rb, &uart1_gps_rx_dma_buffer[low_pos], high_pos - low_pos);  // (high_pos - low_pos) is length of new data
 	else	// overflow region
 		{
@@ -1051,7 +1086,7 @@ static void LoadRingBuffer(lwrb_t *rb, const uint16_t high_pos)
 
 			// then, if there is more after the rollover
 			if(high_pos > 0)
-				// read from beginning of circular DMA buffer until the end position of new data
+// read from beginning of circular DMA buffer until the end position of new data
 				lwrb_write(rb, &uart1_gps_rx_dma_buffer[0], high_pos);
 		}
 
@@ -1213,6 +1248,9 @@ static void _Write(const char *str)
 	if(len > GPS_OUT_BUFFER_LEN - 5)	// invalid length: 82 - 2 (delimiters) - 3 (checksum) = 77
 		return;  // invalid length, get out
 
+	if(len < 6)  // (almost) no string: $*00\r\n
+		return;  // get out
+
 	sprintf(outstr, "$%s*%02X\r\n", str, calculate_checksum(str, len));  // assemble the raw NEMA command w. prefix, checksum and delimiters
 
 	while(HAL_UART_Transmit_IT(__ORG1510MK4.uart_gps, (const uint8_t*) outstr, (uint16_t) strlen(outstr)) != HAL_OK)
@@ -1221,16 +1259,51 @@ static void _Write(const char *str)
 	_wait(50);	// always wait a while. stuff works better that way...
 }
 
+// asynchronous flag_alm_eph_query for SV almanac & ephemeris
+void _Alm_Eph_query(void)
+{
+	if(__ORG1510MK4.public.flag_alm_eph_query)
+		{
+			char cmnd[13] = "\0";
+
+			for(uint8_t i = 0; i < 12; i++)
+				{
+					if(_gpgsv.sv[i].prn == 0)
+						break;
+
+					sprintf(cmnd, "PMTK474,%u", _gpgsv.sv[i].prn);  // flag_alm_eph_query GPS almanac for PRN
+					__ORG1510MK4.public.Write(cmnd);
+					sprintf(cmnd, "PMTK473,%u", _gpgsv.sv[i].prn);  // flag_alm_eph_query GPS ephemeris for PRN
+					__ORG1510MK4.public.Write(cmnd);
+				}
+
+			for(uint8_t i = 0; i < 12; i++)
+				{
+					if(_gpgsv.sv[i].prn == 0)
+						break;
+
+					sprintf(cmnd, "PMTK478,%u", _glgsv.sv[i].prn);  // flag_alm_eph_query GLONASS almanac for PRN
+					__ORG1510MK4.public.Write(cmnd);
+					sprintf(cmnd, "PMTK477,%u", _glgsv.sv[i].prn);  // flag_alm_eph_query GLONASS ephemeris for PRN
+					__ORG1510MK4.public.Write(cmnd);
+				}
+
+			__ORG1510MK4.public.flag_alm_eph_query = 0;
+		}
+}
+
 static __org1510mk4_t __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
 	{  //
 	.public.Power = &_Power,	// GPS module power mode change control function
 	.public.Parse = &_Parse,	//
 	.public.Read = &_Read,	//
-	.public.Write = &_Write  // writes a NEMA sentence to the GPS module
+	.public.Write = &_Write,  // writes a NEMA sentence to the GPS module
+	.public.AlmEphQuery = &_Alm_Eph_query,  // asynchronous flag_alm_eph_query for SV almanac & ephemeris
 	};
 
 org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys)  //
 {
+	__ORG1510MK4.public.flag_alm_eph_query = 0;  // flag for running AlmEphQuery()
 	__ORG1510MK4.uart_gps = gps;  // store GPS module UART object
 	__ORG1510MK4.uart_sys = sys;  // store system UART object
 	__ORG1510MK4.public.NMEA = _GPS_out;  // tie in NMEA sentence buffer

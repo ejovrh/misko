@@ -59,13 +59,14 @@ typedef struct org1510mk4_t  // struct describing the GPS module functionality
 #if PARSE_GLL
 	gll_t *gll;  //GLL-parsed data
 #endif
-
+	uint8_t flag_alm_eph_query :1;  // flag for running AlmEphQuery()
 	uint8_t *NMEA;  //	last NMEA sentence
 	volatile org1510mk4_power_t PowerMode;  // current power mode of the GPS module
 	void (*Power)(const org1510mk4_power_t state);  // GPS module power mode change control function
 	void (*Parse)(const uint16_t Size);  // loads incoming NMEA string from DMA into a buffer and parses it
 	void (*Read)(void);  //
 	void (*Write)(const char *str);  // writes a NEMA sentence to the GPS module
+	void (*AlmEphQuery)(void);  // asynchronous flag_alm_eph_query for SV almanac & ephemeris
 } org1510mk4_t;
 
 org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys);  // the ORG1510MK4 constructor
