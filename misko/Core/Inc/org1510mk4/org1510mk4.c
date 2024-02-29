@@ -35,7 +35,7 @@ typedef struct	// org1510mk4c_t actual
 	org1510mk4_t public;  // public struct
 } __org1510mk4_t;
 
-static __org1510mk4_t __ORG1510MK4 __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
+static __org1510mk4_t  __ORG1510MK4  __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
 static lwrb_t uart1_gps_rx_rb;  // 2nd circular buffer for data processing
 static uint8_t uart1_gps_rx_rb_buffer[UART1_GPS_RX_RINGBUFFER_LEN];  //
 
@@ -620,7 +620,7 @@ static void ParseVTG(vtg_t *sentence, const char *str)
 	sentence->kph = (float) atof(strtok_f(NULL, ','));  // speed in kilometres per hour - 4.63
 	strtok_f(NULL, ',');  // K
 	tok = strtok_f(NULL, ',');
-	sentence->mode = (faa_mode_t) * tok;  // FAA mode indicator
+	sentence->mode = (faa_mode_t) *tok;  // FAA mode indicator
 }
 #endif
 
@@ -692,7 +692,7 @@ static void ParseGNGSA(const char *talker, const char *str, gsa_t *pub_gsa)
 	char *tok = strtok_f(temp, ',');	// start to tokenize
 
 	tok = strtok_f(NULL, ',');
-	pub_gsa->sel_mode = (gsa_selectionmode_t) * tok;  // GSA selection mode - A
+	pub_gsa->sel_mode = (gsa_selectionmode_t) *tok;  // GSA selection mode - A
 
 	pub_gsa->fixmode = (gsa_fixmode_t) atoi(strtok_f(NULL, ','));  // GSA fix mode - 3
 
@@ -796,27 +796,43 @@ static void ParseGNGSV(gsv_t *sentence, const char *talker, const char *str)
 	if(sentence->sv_visible > 12)  // the tokenizer tokenized crap
 		sentence->sv_visible = 12;
 
-	static uint8_t n;  // sv array iterator
+	static uint8_t n;  // SV array index depending on message count (1-3)
+	static uint8_t lastn;  // previous SV array iterator
 
+	// iterator setup depending on the message count (1-3)
 	if(num == 1)	// message number 1
-		n = 0;	// sv array index 0 to 3
+		n = 0;	// SV array index 0 to 3
 	if(num == 2)  // message number 2
-		n = 4;	// sv array index 4 to 7
+		n = 4;	// SV array index 4 to 7
 	if(num == 3)  // message number 3
-		n = 8;	// sv array index 8 to 11
+		n = 8;	// SV array index 8 to 11
 
-	for(uint8_t i = n; i <= (4 * num); i++)
+	if(lastn > sentence->sv_visible)	// if the last GSV had more SVs than the current
 		{
-			if(i == 12)
+			lastn = sentence->sv_visible;  // start from the previous index
+			do	// and zero out the rest ...
+				{
+					sentence->sv[lastn].alm = 0;
+					sentence->sv[lastn].eph = 0;
+					sentence->sv[lastn].prn = 0;
+					sentence->sv[lastn].elev = 0;
+					sentence->sv[lastn].azim = 0;
+					sentence->sv[lastn].snr = 0;
+					lastn++;  // move to the next field
+				}
+			while(lastn < 12);	// ...until the end
+		}
+
+	for(uint8_t i = n; i <= (4 * num); i++)  // loop over the up to 4 SVs per message
+		{
+			if(i == 12)  // safeguard against crap
 				break;
 
-			__ORG1510MK4.public.flag_alm_eph_query = 1;
-
-			tok = strtok_f(NULL, ',');
-			if(tok)
-				sentence->sv[i].prn = (uint8_t) atoi(tok);
+			tok = strtok_f(NULL, ',');	// tokenize PRN
+			if(tok)  // if there is one
+				sentence->sv[i].prn = (uint8_t) atoi(tok);	// set the PRN decimal number
 			else
-				sentence->sv[i].prn = 0;
+				sentence->sv[i].prn = 0;	// else set 0
 
 			tok = strtok_f(NULL, ',');
 			if(tok)
@@ -835,25 +851,12 @@ static void ParseGNGSV(gsv_t *sentence, const char *talker, const char *str)
 				sentence->sv[i].snr = (uint8_t) atoi(tok);
 			else
 				sentence->sv[i].snr = 0;
-			n = i;
 
-			if(i == 11)
+			n = i;	// store current loop iterator for next message
+			lastn = n;	// store last iterator of last message for next parser call
+
+			if(i == 11)  // end of the line...
 				return;
-		}
-
-	if(n < 12)
-		{
-			do
-				{
-					sentence->sv[n].alm = 0;
-					sentence->sv[n].eph = 0;
-					sentence->sv[n].prn = 0;
-					sentence->sv[n].elev = 0;
-					sentence->sv[n].azim = 0;
-					sentence->sv[n].snr = 0;
-					n++;  // move to the next field
-				}
-			while(n < 12);
 		}
 }
 #endif
@@ -984,7 +987,7 @@ static void ParsePMTK(pmtk_t *message, const char *str)
 			message->cmd = (uint16_t) atoi(strtok_f(NULL, ','));  //	161
 
 			tok = strtok_f(NULL, ',');
-			message->flag = (pmtk_ack_t) * tok;  // 3
+			message->flag = (pmtk_ack_t) *tok;  // 3
 
 			// $PMTK001,449,3,0*25
 			tok = strtok_f(NULL, ',');	// tokenize some more
@@ -1024,13 +1027,18 @@ static void ParsePMTK(pmtk_t *message, const char *str)
 			// TODO
 			char *tok = strtok_f(temp, ',');  // start to tokenize
 
-			tok = strtok_f(NULL, ',');	// 02
-			uint8_t prn = (uint8_t) strtol(tok, NULL, 16);
+			tok = strtok_f(NULL, ',');	// tokenize PRN - 02
+			uint8_t prn = (uint8_t) strtol(tok, NULL, 16);	// covert NMEA message hex PRN number into decimal integer
 
-			for(uint8_t i = 0; i < 12; i++)  // gp over all visible SVs
+			for(uint8_t i = 0; i < 12; i++)  // loop over all visible SVs
 				{
-					if(_gpgsv.sv[i].prn == prn)  // compare their PRN with the 711 reply and see if they match
-						_gpgsv.sv[i].eph = true;
+					if(_gpgsv.sv[i].prn)	// if we had a non-zero PRN in the NMEA sentence
+						{
+							if(_gpgsv.sv[i].prn == prn)  // compare the SV PRN with the 711 reply and see if they match
+								_gpgsv.sv[i].eph = true;	// set to true
+						}
+					else
+						_gpgsv.sv[i].eph = false;  // PRN is/became/was zero -> set to false
 				}
 		}
 
@@ -1043,13 +1051,18 @@ static void ParsePMTK(pmtk_t *message, const char *str)
 			// 		$PMTK711,02,08FF,428454,4E1083,FD5D00,A10D59,9146C9,CDDBF7,29655B,C1004B*4F
 			char *tok = strtok_f(temp, ',');  // start to tokenize
 
-			tok = strtok_f(NULL, ',');	// 02
-			uint8_t foo = (uint8_t) strtol(tok, NULL, 16);
+			tok = strtok_f(NULL, ',');	// see comments above for command PMTK710
+			uint8_t prn = (uint8_t) strtol(tok, NULL, 16);
 
-			for(uint8_t i = 0; i < 12; i++)  // gp over all visible SVs
+			for(uint8_t i = 0; i < 12; i++)  //
 				{
-					if(_gpgsv.sv[i].prn == foo)  // compare their PRN with the 711 reply and see if they match
-						_gpgsv.sv[i].alm = true;
+					if(_gpgsv.sv[i].prn)
+						{
+							if(_gpgsv.sv[i].prn == prn)
+								_gpgsv.sv[i].alm = true;
+						}
+					else
+						_gpgsv.sv[i].alm = false;
 				}
 		}
 
@@ -1061,6 +1074,7 @@ static void ParsePMTK(pmtk_t *message, const char *str)
 			// TODO
 		}
 
+	// fallthrough printing of module response messages
 	memset(message->buff, '\0', 255);
 	memcpy(message->buff, &str[1], strlen(str) - 6);  // put it all into the out buffer and remove $ and checksum
 }
@@ -1220,7 +1234,7 @@ static void _Parse(uint16_t high_pos)
 #if PARSE_ZDA
 					ParseZDA(__ORG1510MK4.public.zda, (const char*) _GPS_out);  // parse for ZDA data
 #endif
-#if PARSE_GSV && !PARSE_GSA
+#if PARSE_GSV && PARSE_GSA
 #if EXPOSE_GSV
 					ParseGNGSV(__ORG1510MK4.public.gpgsv, "GPGSV", _GPS_out);  // parse GPGSV
 					ParseGNGSV(__ORG1510MK4.public.glgsv, "GLGSV", _GPS_out);  // parse GLGSV
@@ -1292,7 +1306,7 @@ void _Alm_Eph_query(void)
 		}
 }
 
-static __org1510mk4_t __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
+static __org1510mk4_t  __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
 	{  //
 	.public.Power = &_Power,	// GPS module power mode change control function
 	.public.Parse = &_Parse,	//
