@@ -453,6 +453,9 @@ void TIM1_CC_IRQHandler(void)
 	HAL_TIM_IRQHandler(&htim1);
 	/* USER CODE BEGIN TIM1_CC_IRQn 1 */
 
+	if(ORG1510MK4->zda->time[5] == '0')  // once per 10s
+		ORG1510MK4->flag_alm_eph_query = 1;  // TODO - add time check for 1 per minute
+
 #if PARSE_GGA
 	if(ORG1510MK4->gga->fix == INS)  // check if we have an inertial navigation fix
 		{
