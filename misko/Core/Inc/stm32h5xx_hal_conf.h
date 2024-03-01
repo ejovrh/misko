@@ -70,7 +70,7 @@
 /*#define HAL_OTFDEC_MODULE_ENABLED */
 /*#define HAL_PKA_MODULE_ENABLED */
 /*#define HAL_RNG_MODULE_ENABLED */
-/*#define HAL_RTC_MODULE_ENABLED */
+#define HAL_RTC_MODULE_ENABLED
 /*#define HAL_SAI_MODULE_ENABLED */
 /*#define HAL_SD_MODULE_ENABLED */
 /*#define HAL_SDRAM_MODULE_ENABLED */
@@ -378,7 +378,7 @@
 #endif /* HAL_RNG_MODULE_ENABLED */
 
 #ifdef HAL_RTC_MODULE_ENABLED
- #include "stm32h5xx_hal_rtc.h"
+#include "stm32h5xx_hal_rtc.h"
 #endif /* HAL_RTC_MODULE_ENABLED */
 
 #ifdef HAL_SAI_MODULE_ENABLED
