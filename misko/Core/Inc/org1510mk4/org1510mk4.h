@@ -23,6 +23,8 @@
 #define PARSE_GSA 1 // parse GSA sentences
 #define PARSE_ZDA 1	// parse ZDA sentences
 
+#define USE_TIMEHELPER 1 // use the TimeHelper to set either GPS or RTC time based on whoever has a valid time
+
 #include "nmea_objects.h"	// NMEA-related structs and enums
 
 typedef struct print_nmea_t  // NMEA sentence printout flags
@@ -85,6 +87,7 @@ typedef struct org1510mk4_t  // struct describing the GPS module functionality
 	gll_t *gll;  //GLL-parsed data
 #endif
 	uint8_t flag_alm_eph_query :1;  // flag for running AlmEphQuery()
+	uint8_t flag_time_accurate :1;  // flag that indicates a correct GPS time (as received from a SV)
 	print_nmea_t *print;	// flags struct for dynamic NMEA & PMTK printout control
 	uint8_t *NMEA;  //	last NMEA sentence
 	volatile org1510mk4_power_t PowerMode;  // current power mode of the GPS module

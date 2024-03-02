@@ -556,6 +556,11 @@ static void ParseZDA(zda_t *sentence, const char *str)
 	sentence->year = (uint16_t) atoi(strtok_f(NULL, ','));  // year - 2024
 	sentence->tz = (uint8_t) atoi(strtok_f(NULL, ','));  // local timezone offset
 
+	if(sentence->year > 1980)
+		__ORG1510MK4.public.flag_time_accurate = 1;
+	else
+		__ORG1510MK4.public.flag_time_accurate = 0;
+
 	if(__ORG1510MK4.public.print->zda)
 		HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, (const uint8_t*) str, (uint16_t) strlen((const char*) str));  // send GPS to VCP
 }
@@ -1373,6 +1378,7 @@ static print_nmea_t _print =	// instantiate & initialize print_nmea_t struct
 org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys)  //
 {
 	__ORG1510MK4.public.flag_alm_eph_query = 0;  // flag for running AlmEphQuery()
+	__ORG1510MK4.public.flag_time_accurate = 0;  // on startup, flag time as inaccurate
 	__ORG1510MK4.public.print = &_print;	// tie in printout flag struct
 	__ORG1510MK4.uart_gps = gps;  // store GPS module UART object
 	__ORG1510MK4.uart_sys = sys;  // store system UART object

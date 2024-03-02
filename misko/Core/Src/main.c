@@ -35,6 +35,9 @@
 #if USE_ORG1510MK4
 #include "org1510mk4/org1510mk4.h"
 #endif
+#if USE_TIMEHELPER
+#include "timehelper/timehelper.h"
+#endif
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -259,6 +262,9 @@ int main(void)
 #if USE_ORG1510MK4
 	org1510mk4_ctor(&huart1, &huart3);  // initialise the GPS module object
 #endif
+#if USE_TIMEHELPER
+	timehelper_ctor(ORG1510MK4, &hrtc);  // initialize TimeHelper object
+#endif
 	/* USER CODE END 2 */
 
 	/* Infinite loop */
@@ -266,6 +272,7 @@ int main(void)
 	while(1)
 		{
 			ORG1510MK4->AlmEphQuery();	// asynchronous flag_alm_eph_query for SV almanac & ephemeris
+			TimeHelper->TimeHelper(ORG1510MK4->flag_time_accurate);  // deal with time...
 			/* USER CODE END WHILE */
 
 			/* USER CODE BEGIN 3 */
