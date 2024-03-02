@@ -36,6 +36,7 @@ typedef struct	// org1510mk4c_t actual
 } __org1510mk4_t;
 
 static __org1510mk4_t __ORG1510MK4 __attribute__ ((section (".data")));  // preallocate __ORG1510MK4 object in .data
+
 static lwrb_t uart1_gps_rx_rb;  // 2nd circular buffer for data processing
 static uint8_t uart1_gps_rx_rb_buffer[UART1_GPS_RX_RINGBUFFER_LEN];  //
 
@@ -554,6 +555,9 @@ static void ParseZDA(zda_t *sentence, const char *str)
 	sentence->month = (uint8_t) atoi(strtok_f(NULL, ','));  // month - 02
 	sentence->year = (uint16_t) atoi(strtok_f(NULL, ','));  // year - 2024
 	sentence->tz = (uint8_t) atoi(strtok_f(NULL, ','));  // local timezone offset
+
+	if(__ORG1510MK4.public.print->zda)
+		HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, (const uint8_t*) str, (uint16_t) strlen((const char*) str));  // send GPS to VCP
 }
 #endif
 
@@ -593,6 +597,9 @@ static void ParseGGA(gga_t *sentence, const char *str)
 	sentence->geoid_sep = (float) atof(strtok_f(NULL, ','));  // geoid seperation - 42.5
 	strtok_f(NULL, ',');  // M
 	sentence->dgps_age = (float) atof(strtok_f(NULL, ','));  // DGPS age
+
+	if(__ORG1510MK4.public.print->gga)
+		HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, (const uint8_t*) str, (uint16_t) strlen((const char*) str));  // send GPS to VCP
 }
 #endif
 
@@ -621,6 +628,9 @@ static void ParseVTG(vtg_t *sentence, const char *str)
 	strtok_f(NULL, ',');  // K
 	tok = strtok_f(NULL, ',');
 	sentence->mode = (faa_mode_t) *tok;  // FAA mode indicator
+
+	if(__ORG1510MK4.public.print->vtg)
+		HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, (const uint8_t*) str, (uint16_t) strlen((const char*) str));  // send GPS to VCP
 }
 #endif
 
@@ -667,6 +677,9 @@ static void ParseGNGSA(const char *talker, const char *str, gsa_t *pub_gsa)
 			pub_gsa->HDOP = 0;	// zero fields
 			pub_gsa->VDOP = 0;
 			pub_gsa->PDOP = 0;
+
+			if(__ORG1510MK4.public.print->gsa)
+				HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, (const uint8_t*) str, (uint16_t) strlen((const char*) str));  // send GPS to VCP
 
 			return;  // and get out
 		}
@@ -751,6 +764,9 @@ static void ParseGNGSA(const char *talker, const char *str, gsa_t *pub_gsa)
 			iter = 0;  // start over
 			ins = 0;
 		}
+
+	if(__ORG1510MK4.public.print->gsa)
+		HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, (const uint8_t*) str, (uint16_t) strlen((const char*) str));  // send GPS to VCP
 }
 #endif
 
@@ -855,9 +871,12 @@ static void ParseGNGSV(gsv_t *sentence, const char *talker, const char *str)
 			n = i;	// store current loop iterator for next message
 			lastn = n;	// store last iterator of last message for next parser call
 
-			if(i == 11)  // end of the line...
-				return;
+//			if(i == 11)  // end of the line...
+//				return;
 		}
+
+	if(__ORG1510MK4.public.print->gsv)
+		HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, (const uint8_t*) str, (uint16_t) strlen((const char*) str));  // send GPS to VCP
 }
 #endif
 
@@ -923,6 +942,9 @@ static void ParseRMC(rmc_t *sentence, const char *str)
 
 	tok = strtok_f(NULL, ',');
 	sentence->var_dir = (cardinal_dir_t*) tok;    //
+
+	if (__ORG1510MK4.public.print->rmc)
+		HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, (const uint8_t*) str, (uint16_t) strlen((const char*) str));  // send GPS to VCP
 }
 #endif
 
@@ -961,6 +983,9 @@ static void ParseGLL(gll_t *sentence, const char *str)
 
 	tok = strtok_f(NULL, ',');	// A
 	sentence->mode = (faa_mode_t) *tok;  // FAA mode indicator
+
+	if (__ORG1510MK4.public.print->gll)
+		HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, (const uint8_t*) str, (uint16_t) strlen((const char*) str));  // send GPS to VCP
 }
 #endif
 
@@ -997,6 +1022,9 @@ static void ParsePMTK(pmtk_t *message, const char *str)
 					memcpy(message->buff, &str[1], strlen(str) - 6);  // put it all into the out buffer and remove $ and checksum
 				}
 
+			if(__ORG1510MK4.public.print->pmtk_001)
+				HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, (const uint8_t*) str, (uint16_t) strlen((const char*) str));  // send GPS to VCP
+
 			return;
 		}
 
@@ -1009,6 +1037,9 @@ static void ParsePMTK(pmtk_t *message, const char *str)
 			tok = strtok_f(NULL, ',');
 			message->status = (pmtk_sys_msg_t) tok[2];  // 2
 
+			if(__ORG1510MK4.public.print->pmtk_010)
+				HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, (const uint8_t*) str, (uint16_t) strlen((const char*) str));  // send GPS to VCP
+
 			return;
 		}
 
@@ -1017,6 +1048,9 @@ static void ParsePMTK(pmtk_t *message, const char *str)
 		{
 			// $PMTK011,MTKGPS*08
 			// TODO
+
+			if(__ORG1510MK4.public.print->pmtk_011)
+				HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, (const uint8_t*) str, (uint16_t) strlen((const char*) str));  // send GPS to VCP
 		}
 
 	msg = strstr(temp, "PMTK710");	// reply to PMTK473 - query ephemeris of a GPS PRN SV
@@ -1040,6 +1074,9 @@ static void ParsePMTK(pmtk_t *message, const char *str)
 					else
 						_gpgsv.sv[i].eph = false;  // PRN is/became/was zero -> set to false
 				}
+
+			if(__ORG1510MK4.public.print->pmtk_710)
+				HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, (const uint8_t*) str, (uint16_t) strlen((const char*) str));  // send GPS to VCP
 		}
 
 	msg = strstr(temp, "PMTK711");	// reply to PMTK474 - query almanac of a GPS PRN SV
@@ -1064,6 +1101,9 @@ static void ParsePMTK(pmtk_t *message, const char *str)
 					else
 						_gpgsv.sv[i].alm = false;
 				}
+
+			if(__ORG1510MK4.public.print->pmtk_711)
+				HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, (const uint8_t*) str, (uint16_t) strlen((const char*) str));  // send GPS to VCP
 		}
 
 	//
@@ -1072,11 +1112,10 @@ static void ParsePMTK(pmtk_t *message, const char *str)
 	if(msg)
 		{
 			// TODO
-		}
 
-	// fallthrough printing of module response messages
-	memset(message->buff, '\0', 255);
-	memcpy(message->buff, &str[1], strlen(str) - 6);  // put it all into the out buffer and remove $ and checksum
+			if(__ORG1510MK4.public.print->pmtk_668)
+				HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, (const uint8_t*) str, (uint16_t) strlen((const char*) str));  // send GPS to VCP
+		}
 }
 #endif
 
@@ -1246,8 +1285,6 @@ static void _Parse(uint16_t high_pos)
 #if PARSE_GSA
 					ParseGSA(__ORG1510MK4.public.gsa, (const char*) _GPS_out);  // parse for GSA data
 #endif
-
-					HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, _GPS_out, (uint16_t) strlen((const char*) _GPS_out));  // send GPS to VCP
 				}
 		}
 }
@@ -1315,9 +1352,28 @@ static __org1510mk4_t __ORG1510MK4 =  // instantiate org1510mk4_t actual and set
 	.public.AlmEphQuery = &_Alm_Eph_query,  // asynchronous flag_alm_eph_query for SV almanac & ephemeris
 	};
 
+static print_nmea_t _print =	// instantiate & initialize print_nmea_t struct
+	{  //
+	.pmtk = PARSE_PMTK,  // see #define's in .h
+	.pmtk_001 = PRINT_PMTK_001,  //
+	.pmtk_010 = PRINT_PMTK_010,  //
+	.pmtk_011 = PRINT_PMTK_011,  //
+	.pmtk_710 = PRINT_PMTK_710,  //
+	.pmtk_711 = PRINT_PMTK_711,  //
+	.pmtk_668 = PRINT_PMTK_668,  //
+	.gga = PARSE_GGA,  //
+	.gll = PARSE_GLL,  //
+	.gsa = PARSE_GSA,  //
+	.gsv = PARSE_GSV,  //
+	.rmc = PARSE_RMC,  //
+	.vtg = PARSE_VTG,  //
+	.zda = PARSE_ZDA,  //
+	};
+
 org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys)  //
 {
 	__ORG1510MK4.public.flag_alm_eph_query = 0;  // flag for running AlmEphQuery()
+	__ORG1510MK4.public.print = &_print;	// tie in printout flag struct
 	__ORG1510MK4.uart_gps = gps;  // store GPS module UART object
 	__ORG1510MK4.uart_sys = sys;  // store system UART object
 	__ORG1510MK4.public.NMEA = _GPS_out;  // tie in NMEA sentence buffer

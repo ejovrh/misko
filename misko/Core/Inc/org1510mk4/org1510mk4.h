@@ -6,6 +6,13 @@
 #if defined(USE_ORG1510MK4)	// if this particular device is active
 
 #define PARSE_PMTK 1	// parse MTK NMEA module command messages
+#define PRINT_PMTK_001 0	// print PMTK message reply 001
+#define PRINT_PMTK_010 1	// ditto
+#define PRINT_PMTK_011 1	//
+#define PRINT_PMTK_710 0	//
+#define PRINT_PMTK_711 0	//
+#define PRINT_PMTK_668 0	//
+
 #define PARSE_GLL 0	// parse GLL sentences
 #define PARSE_RMC 0 // parse RMC sentences
 #define PARSE_VTG 1 // parse VTG sentences
@@ -17,6 +24,24 @@
 #define PARSE_ZDA 1	// parse ZDA sentences
 
 #include "nmea_objects.h"	// NMEA-related structs and enums
+
+typedef struct print_nmea_t  // NMEA sentence printout flags
+{
+	uint8_t pmtk :1;  // print PMTK messages
+	uint8_t pmtk_001 :1;  // print PMTK 001 reply messages
+	uint8_t pmtk_010 :1;  //
+	uint8_t pmtk_011 :1;  //
+	uint8_t pmtk_710 :1;  //
+	uint8_t pmtk_711 :1;  //
+	uint8_t pmtk_668 :1;  //
+	uint8_t gll :1;  // print GLL sentences
+	uint8_t rmc :1;  // print RMC sentences
+	uint8_t vtg :1;  // ditto
+	uint8_t gga :1;  //
+	uint8_t gsv :1;  //
+	uint8_t gsa :1;  //
+	uint8_t zda :1;  //
+} print_nmea_t;
 
 typedef enum org1510mk4_power_t  // GPS module power states, DS. ch. 4.3.10, p. 24
 {
@@ -60,6 +85,7 @@ typedef struct org1510mk4_t  // struct describing the GPS module functionality
 	gll_t *gll;  //GLL-parsed data
 #endif
 	uint8_t flag_alm_eph_query :1;  // flag for running AlmEphQuery()
+	print_nmea_t *print;	// flags struct for dynamic NMEA & PMTK printout control
 	uint8_t *NMEA;  //	last NMEA sentence
 	volatile org1510mk4_power_t PowerMode;  // current power mode of the GPS module
 	void (*Power)(const org1510mk4_power_t state);  // GPS module power mode change control function
