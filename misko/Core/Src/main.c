@@ -709,8 +709,8 @@ static void MX_RTC_Init(void)
 
 	/** Initialize RTC and set the Time and Date
 	 */
-	sTime.Hours = 0;
-	sTime.Minutes = 0;
+	sTime.Hours = 23;
+	sTime.Minutes = 59;
 	sTime.Seconds = 0;
 	sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
 	sTime.StoreOperation = RTC_STOREOPERATION_RESET;
@@ -718,10 +718,10 @@ static void MX_RTC_Init(void)
 		{
 			Error_Handler();
 		}
-	sDate.WeekDay = RTC_WEEKDAY_MONDAY;
+	sDate.WeekDay = RTC_WEEKDAY_SATURDAY;
 	sDate.Month = RTC_MONTH_JANUARY;
-	sDate.Date = 1;
-	sDate.Year = 0;
+	sDate.Date = 5;
+	sDate.Year = 80;
 
 	if(HAL_RTC_SetDate(&hrtc, &sDate, RTC_FORMAT_BIN) != HAL_OK)
 		{
