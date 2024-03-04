@@ -14,9 +14,9 @@
 #define UART1_GPS_RX_RINGBUFFER_LEN 256	// ringbuffer size
 #define GPS_OUT_BUFFER_LEN 256	// _GPS_out buffer length
 
-extern ADC_HandleTypeDef hadc1;  // TODO - move out of here
-extern volatile uint32_t __adc_dma_buffer[ADC_CHANNELS];  // TODO - move out of here - store for ADC readout
-extern volatile uint32_t __adc_results[ADC_CHANNELS];  // TODO - move out of here - store ADC average data
+extern ADC_HandleTypeDef hadc1;  // TODO - hadc1 - move out of here
+extern volatile uint32_t __adc_dma_buffer[ADC_CHANNELS];  // TODO - __adc_dma_buffer[] - move out of here - store for ADC readout
+extern volatile uint32_t __adc_results[ADC_CHANNELS];  // TODO - __adc_results[] - move out of here - store ADC average data
 
 typedef struct	// org1510mk4c_t actual
 {
@@ -43,13 +43,11 @@ static uint8_t uart1_gps_rx_rb_buffer[UART1_GPS_RX_RINGBUFFER_LEN];  //
 #if PARSE_GGA || PARSE_ZDA || PARSE_RMC || PARSE_GLL
 static char _GPStime[7] = "\0";  // container for ZDA-derived UTC time
 #endif
-
 #if PARSE_GGA || PARSE_RMC || PARSE_GLL
 static coord_dd_t _lat;  // object for GGA latitude
 static coord_dd_t _lon;  // object for GGA longitude
 static cardinal_dir_t _cd;	// cardinal direction - NSEW
 #endif
-
 #if PARSE_ZDA
 static zda_t _zda;  // object for ZDA sentence
 #endif
@@ -64,6 +62,7 @@ static gsa_t _gpgsa;	// object for GPS GSA sentence
 static gsa_t _glgsa;	// object for GLANOSS GSA sentence
 #endif
 #if PARSE_GSV
+uint32_t _pmtk661;	 // SV PRN flags with valid alamanac (PRN 1 is leftmost)
 static gsv_t _gpgsv;	// object for GPS GSV sentence
 static gsv_t _glgsv;	// object for GLANOSS GSV sentence
 #endif
@@ -217,13 +216,13 @@ static void _Power(const org1510mk4_power_t state)
 	 * 		timing:
 	 * 			after reset:
 	 * 				not ideal conditions:
-	 * 					- get correct date/time: TODO
-	 * 					- see first satellite: TODO
-	 * 					- get a fix: TODO
+	 * 					- get correct date/time: TODO - measure acquisition time
+	 * 					- see first satellite: TODO - measure acquisition time
+	 * 					- get a fix: TODO - measure acquisition time
 	 * 				ideal conditions:
-	 * 					- get correct date/time: TODO
-	 * 					- see first satellite: TODO
-	 * 					- get a fix: TODO
+	 * 					- get correct date/time: TODO - measure acquisition time
+	 * 					- see first satellite: TODO - measure acquisition time
+	 * 					- get a fix: TODO - measure acquisition time
 	 */
 
 	if(state == off)	// supply power off & module (possibly) in backup mode
@@ -377,7 +376,7 @@ static void _Power(const org1510mk4_power_t state)
 	if(state == periodic)  // periodic mode, DS. ch. 4.3.13
 		{
 #if DIRTY_POWER_MODE_CHANGE
-			// TODO - implement periodic mode
+			// TODO - implement periodic power mode
 
 			__ORG1510MK4.public.PowerMode = state;	// save the current power mode
 			return;
@@ -811,6 +810,9 @@ static void ParseGNGSV(gsv_t *sentence, const char *talker, const char *str)
 					sentence->sv[i].azim = 0;
 					sentence->sv[i].snr = 0;
 				}
+
+			_pmtk661 = 0;  // CHECKME - zero-put flags, maybe move elsewhere
+
 			return;
 		}
 
@@ -874,10 +876,11 @@ static void ParseGNGSV(gsv_t *sentence, const char *talker, const char *str)
 				sentence->sv[i].snr = 0;
 
 			n = i;	// store current loop iterator for next message
-			lastn = n;	// store last iterator of last message for next parser call
 
-//			if(i == 11)  // end of the line...
-//				return;
+			if(n > lastn)  // on the last GSV message, flag for ephemeris & almanac query
+				__ORG1510MK4.public.flag_alm_eph_query = 1;  // CHECKME - flag_alm_eph_query - move to RTC ISR
+
+			lastn = n;	// store last iterator of last message for next parser call
 		}
 
 	if(__ORG1510MK4.public.print->gsv)
@@ -1012,7 +1015,7 @@ static void ParsePMTK(pmtk_t *message, const char *str)
 	if(msg)
 		{
 			// $PMTK001,161,3*36
-			volatile char *tok = strtok_f(temp, ',');  // start to tokenize
+			char *tok = strtok_f(temp, ',');  // start to tokenize
 
 			message->cmd = (uint16_t) atoi(strtok_f(NULL, ','));  //	161
 
@@ -1020,11 +1023,23 @@ static void ParsePMTK(pmtk_t *message, const char *str)
 			message->flag = (pmtk_ack_t) *tok;  // 3
 
 			// $PMTK001,449,3,0*25
+			// $PMTK001,660,3,6008200*20
 			tok = strtok_f(NULL, ',');	// tokenize some more
 			if(tok)  // if there is stuff after the comma
 				{
 					memset(message->buff, '\0', 255);
 					memcpy(message->buff, &str[1], strlen(str) - 6);  // put it all into the out buffer and remove $ and checksum
+
+#if PARSE_GSV
+					if(message->cmd == 661)  // reply to PMTK661,1 - query ephemeris of a GPS PRN SV
+						{
+							// war message: $PMTK001,661,3,0*2D -- no data or $PMTK001,661,3,f87ffff0*44 -- success
+							// tokenizer position is this: f87ffff0*44
+							char temp1[8] = "\0";
+							strncpy(temp1, tok, 8);  // copy str into temp
+							_pmtk661 = (uint32_t) strtol(temp1, NULL, 16);  // convert hex to integer and store
+						}
+#endif
 				}
 
 			if(__ORG1510MK4.public.print->pmtk_001)
@@ -1052,10 +1067,10 @@ static void ParsePMTK(pmtk_t *message, const char *str)
 	if(msg)
 		{
 			// $PMTK011,MTKGPS*08
-			// TODO
-
 			if(__ORG1510MK4.public.print->pmtk_011)
 				HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, (const uint8_t*) str, (uint16_t) strlen((const char*) str));  // send GPS to VCP
+
+			return;
 		}
 
 	msg = strstr(temp, "PMTK710");	// reply to PMTK473 - query ephemeris of a GPS PRN SV
@@ -1063,7 +1078,6 @@ static void ParsePMTK(pmtk_t *message, const char *str)
 		{
 			// $PMTK001,474,2*36 -- fail
 			// $PMTK710,19,3FD000,2F7BE7,F7F547,04E7EA,BE5C0C,1B49D4,00000A,4036BE,1B0909,366822,C0DA88,080406,0F5F58,0CEDA1,0CDBA0,49D47D,FFA73E,ADB69D,002A26,BB4E1B,200A2B,F1C06B,FFA286,1B0500*6F -- success
-			// TODO
 			char *tok = strtok_f(temp, ',');  // start to tokenize
 
 			tok = strtok_f(NULL, ',');	// tokenize PRN - 02
@@ -1109,17 +1123,19 @@ static void ParsePMTK(pmtk_t *message, const char *str)
 
 			if(__ORG1510MK4.public.print->pmtk_711)
 				HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, (const uint8_t*) str, (uint16_t) strlen((const char*) str));  // send GPS to VCP
+
+			return;
 		}
 
-	//
 	msg = strstr(temp, "PMTK668");	// ephemeris parameter of GPS
-
 	if(msg)
 		{
-			// TODO
+			// TODO - implement PMTK668
 
 			if(__ORG1510MK4.public.print->pmtk_668)
 				HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, (const uint8_t*) str, (uint16_t) strlen((const char*) str));  // send GPS to VCP
+
+			return;
 		}
 }
 #endif
@@ -1344,6 +1360,8 @@ void _Alm_Eph_query(void)
 					__ORG1510MK4.public.Write(cmnd);
 				}
 
+			__ORG1510MK4.public.Write("PMTK661,1");  // query which SVs will have a valid almanac in 1s
+
 			__ORG1510MK4.public.flag_alm_eph_query = 0;
 		}
 }
@@ -1377,8 +1395,13 @@ static print_nmea_t _print =	// instantiate & initialize print_nmea_t struct
 
 org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys)  //
 {
+#if PARSE_GSV
+	__ORG1510MK4.public.AlmanacFlags = &_pmtk661;  // SV PRN flags with valid alamanac (PRN 1 is leftmost)
+#endif
+
 	__ORG1510MK4.public.flag_alm_eph_query = 0;  // flag for running AlmEphQuery()
 	__ORG1510MK4.public.flag_time_accurate = 0;  // on startup, flag time as inaccurate
+	__ORG1510MK4.public.flag_location_seeded = 0;  // flag indicating that PMTK741 was sent
 	__ORG1510MK4.public.print = &_print;	// tie in printout flag struct
 	__ORG1510MK4.uart_gps = gps;  // store GPS module UART object
 	__ORG1510MK4.uart_sys = sys;  // store system UART object
@@ -1401,12 +1424,10 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 #if PARSE_VTG
 	__ORG1510MK4.public.vtg = &_vtg;	// tie in VTG sentence struct
 #endif
-
 #if PARSE_GSA && !PARSE_GSV
 	__ORG1510MK4.public.gpgsa = &_gpgsa;	// tie in GSA sentence struct
 	__ORG1510MK4.public.glgsa = &_glgsa;	// tie in GSA sentence struct
 #endif
-
 #if PARSE_GSV && EXPOSE_GSV
 	__ORG1510MK4.public.gpgsv = &_gpgsv;	// tie in GSA sentence struct
 	__ORG1510MK4.public.glgsv = &_glgsv;	// tie in GSA sentence struct
@@ -1434,7 +1455,6 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 #if PARSE_PMTK
 	__ORG1510MK4.pmtk = &_pmtk;  // tie in PMTKL message struct
 	__ORG1510MK4.pmtk->buff = _pmtk_buff;  // tie in PMTK packet buffer container
-
 #endif
 #if DEBUG_LWRB_FREE
 	__ORG1510MK4.char_written = 0;	// characters written out to system UART

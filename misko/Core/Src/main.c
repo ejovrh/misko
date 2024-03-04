@@ -273,6 +273,7 @@ int main(void)
 		{
 			ORG1510MK4->AlmEphQuery();	// asynchronous flag_alm_eph_query for SV almanac & ephemeris
 			TimeHelper->TimeHelper(ORG1510MK4->flag_time_accurate);  // deal with time...
+			TimeHelper->LocationHelper(0);  // seed the last known location
 			/* USER CODE END WHILE */
 
 			/* USER CODE BEGIN 3 */
@@ -1290,6 +1291,10 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 								case 'r':
 									ORG1510MK4->Power(off);
 									NVIC_SystemReset();
+									break;
+
+								case 'q':
+									TimeHelper->LocationHelper(1);	// force location seed
 									break;
 
 								default:

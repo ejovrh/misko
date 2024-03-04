@@ -11,6 +11,7 @@ typedef struct timehelper_t  // struct describing the GPS module functionality
 	uint8_t flagGPScorrect :1;  // flag indicate that the GPS module has the correct time
 
 	void (*TimeHelper)(const uint8_t GPS_flag);  // the one actor
+	void (*LocationHelper)(const uint8_t force);  // POC code - seeds the current location
 } timehelper_t;
 
 timehelper_t* timehelper_ctor(org1510mk4_t *gps, RTC_HandleTypeDef *rtc);  // the timehelper constructor

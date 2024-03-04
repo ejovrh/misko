@@ -101,12 +101,40 @@ void _TimeHelper(const uint8_t GPS_flag)
 		}
 }
 
+// TODO - POC code - seeds the current location
+void _LocationHelper(const uint8_t force)
+{
+	if(HAL_RTC_GetTime(__TimeHelper.rtc, &sTime, RTC_FORMAT_BIN) != HAL_OK)
+		{
+			Error_Handler();
+		}
+	if(HAL_RTC_GetDate(__TimeHelper.rtc, &sDate, RTC_FORMAT_BIN) != HAL_OK)
+		{
+			Error_Handler();
+		}
+
+	// TODO - POC code
+	if((!__TimeHelper.gps->flag_location_seeded && *__TimeHelper.gps->AlmanacFlags) || force)  // if location needs to be seeded
+		{
+			char outstr[60] = "\0";  // buffer for command string
+			// assemble PMTK741 command - set location and date
+			// e.g. PMTK741,4547.8113,01554.8408,134.1,2024,02,25,20,44,00
+			// $PMTK741,4547.8113,01554.8408,134.1,2024,03,03,06,06,27*0C\r\n
+			sprintf(outstr, "PMTK741,45.797515,15.914649,134.1,%u,%02u,%02u,%02u,%02u,%02u", sDate.Year + 2000, sDate.Month, sDate.Date, sTime.Hours, sTime.Minutes, sTime.Seconds);
+
+			__TimeHelper.gps->Write(outstr);  // send the command out
+
+			__TimeHelper.gps->flag_location_seeded = 1;  // mark location as seeded
+		}
+}
+
 //
 timehelper_t* timehelper_ctor(org1510mk4_t *gps, RTC_HandleTypeDef *rtc)
 {
 	__TimeHelper.gps = gps;  // store GPS module object
 	__TimeHelper.rtc = rtc;  // store RTC object
 	__TimeHelper.public.TimeHelper = &_TimeHelper;	// the one actor
+	__TimeHelper.public.LocationHelper = &_LocationHelper;  // the one actor
 
 	__TimeHelper.public.flagGPScorrect = gps->flag_time_accurate;  // set GPS time state
 	__TimeHelper.public.flagRTCcorrect = 0;  // set RTC time state
