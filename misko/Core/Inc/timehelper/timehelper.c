@@ -65,28 +65,28 @@ static void _SetGPSfromRTC(void)
 // the one actor
 void _TimeHelper(const uint8_t GPS_flag)
 {
-	__TimeHelper.public.flagGPScorrect = GPS_flag;
+	__TimeHelper.public.FlagGPShasCorrectTime = GPS_flag;
 
-	if(!__TimeHelper.public.flagGPScorrect && !__TimeHelper.public.flagRTCcorrect)  // no time is correct
+	if(!__TimeHelper.public.FlagGPShasCorrectTime && !__TimeHelper.public.FlagRTChasCorrectTime)  // no time is correct
 		return;  // get out
 
-	if(__TimeHelper.public.flagGPScorrect && !__TimeHelper.public.flagRTCcorrect)  // GPS has correct time -> set RTC
+	if(__TimeHelper.public.FlagGPShasCorrectTime && !__TimeHelper.public.FlagRTChasCorrectTime)  // GPS has correct time -> set RTC
 		{
 			_SetRTCfromGPS();  // set RTC based off GPS' time
-			__TimeHelper.public.flagRTCcorrect = 1;  // mark
+			__TimeHelper.public.FlagRTChasCorrectTime = 1;  // mark
 			return;
 		}
 
-	if(!__TimeHelper.public.flagGPScorrect && __TimeHelper.public.flagRTCcorrect)  // RTC has correct time -> set GPS
+	if(!__TimeHelper.public.FlagGPShasCorrectTime && __TimeHelper.public.FlagRTChasCorrectTime)  // RTC has correct time -> set GPS
 		{
 			_SetGPSfromRTC();  // set GPS based off RTC's time
-			__TimeHelper.public.flagGPScorrect = 1;  // mark
+			__TimeHelper.public.FlagGPShasCorrectTime = 1;  // mark
 			return;
 		}
 
-	if(__TimeHelper.public.flagGPScorrect && __TimeHelper.public.flagRTCcorrect)  // periodically update RTC from GPS
+	if(__TimeHelper.public.FlagGPShasCorrectTime && __TimeHelper.public.FlagRTChasCorrectTime)  // periodically update RTC from GPS
 		{
-			__TimeHelper.public.flagRTCcorrect = 0;  // un-mark so that it will be set on the next iteration
+			__TimeHelper.public.FlagRTChasCorrectTime = 0;  // un-mark so that it will be set on the next iteration
 			return;
 		}
 }
@@ -104,7 +104,7 @@ void _LocationHelper(const uint8_t force)
 		}
 
 	// TODO - POC code
-	if((!__TimeHelper.gps->flag_location_seeded && *__TimeHelper.gps->AlmanacFlags) || force)  // if location needs to be seeded
+	if((!__TimeHelper.gps->FlagLocationSeeded && *__TimeHelper.gps->AlmanacFlags) || force)  // if location needs to be seeded
 		{
 			char outstr[60] = "\0";  // buffer for command string
 			// assemble PMTK741 command - set location and date
@@ -114,7 +114,7 @@ void _LocationHelper(const uint8_t force)
 
 			__TimeHelper.gps->Write(outstr);  // send the command out
 
-			__TimeHelper.gps->flag_location_seeded = 1;  // mark location as seeded
+			__TimeHelper.gps->FlagLocationSeeded = 1;  // mark location as seeded
 		}
 }
 
@@ -126,8 +126,8 @@ timehelper_t* timehelper_ctor(org1510mk4_t *gps, RTC_HandleTypeDef *rtc)
 	__TimeHelper.public.TimeHelper = &_TimeHelper;	// the one actor
 	__TimeHelper.public.LocationHelper = &_LocationHelper;  // the one actor
 
-	__TimeHelper.public.flagGPScorrect = gps->flag_time_accurate;  // set GPS time state
-	__TimeHelper.public.flagRTCcorrect = 0;  // set RTC time state
+	__TimeHelper.public.FlagGPShasCorrectTime = gps->FlagTimeAccurate;  // set GPS time state
+	__TimeHelper.public.FlagRTChasCorrectTime = 0;  // set RTC time state
 
 	return &__TimeHelper.public;
 }

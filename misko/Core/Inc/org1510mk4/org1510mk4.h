@@ -6,8 +6,8 @@
 #if defined(USE_ORG1510MK4)	// if this particular device is active
 
 #define PARSE_PMTK 1	// parse MTK NMEA module command messages
-#define PRINT_PMTK_001 1	// print PMTK message reply 001
-#define PRINT_PMTK_010 1	// ditto
+#define PRINT_PMTK_001 0	// print PMTK message reply 001
+#define PRINT_PMTK_010 0	// ditto
 #define PRINT_PMTK_011 1	//
 #define PRINT_PMTK_710 0	//
 #define PRINT_PMTK_711 0	//
@@ -89,10 +89,10 @@ typedef struct org1510mk4_t  // struct describing the GPS module functionality
 	gll_t *gll;  //GLL-parsed data
 #endif
 #if PARSE_GSV
-	uint8_t flag_alm_eph_query :1;  // flag for running AlmEphQuery()
+	uint8_t FlagQueryAlmandEph :1;  // flag for running AlmEphQuery()
 #endif
-	uint8_t flag_location_seeded :1;	// flag indicating that PMTK741 was sent
-	uint8_t flag_time_accurate :1;  // flag that indicates a correct GPS time (as received from a SV)
+	uint8_t FlagLocationSeeded :1;	// flag indicating that PMTK741 was sent
+	uint8_t FlagTimeAccurate :1;  // flag that indicates a correct GPS time (as received from a SV)
 	uint32_t *AlmanacFlags;  // SV flag with valid alamanac
 	print_nmea_t *print;	// flags struct for dynamic NMEA & PMTK printout control
 	uint8_t *NMEA;  //	last NMEA sentence
@@ -103,7 +103,6 @@ typedef struct org1510mk4_t  // struct describing the GPS module functionality
 
 	void (*Power)(const org1510mk4_power_t state);  // GPS module power mode change control function
 	void (*Parse)(const uint16_t Size);  // loads incoming NMEA string from DMA into a buffer and parses it
-	void (*Read)(void);  //
 	void (*Write)(const char *str);  // writes a NEMA sentence to the GPS module
 #if PARSE_GSV
 	void (*AlmEphQuery)(void);  // asynchronous flag_alm_eph_query for SV almanac & ephemeris

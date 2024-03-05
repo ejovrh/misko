@@ -476,12 +476,6 @@ static void _Power(const org1510mk4_power_t state)
 }
 
 //
-static void _Read(void)
-{
-	;
-}
-
-//
 static void rx_start(void)
 {
 	if(HAL_OK != HAL_UARTEx_ReceiveToIdle_DMA(__ORG1510MK4.uart_gps, uart1_gps_rx_dma_buffer, UART1_GPS_RX_DMA_BUFFER_LEN))  // start reception)
@@ -534,6 +528,20 @@ static void NMEA_DecimalDegree_to_coord_dd_t(char *str, coord_dd_t *coord)
 }
 #endif
 
+#if PARSE_ZDA || PARSE_RMC
+// converts time format "163207" into time_t object
+void _ParseTime(char *timestr, time_t *timeobj)
+{
+	char temptemp[2];
+	memcpy(temptemp, &timestr[0], 2);  // hours
+	timeobj->hh = (uint8_t) atoi(temptemp);
+	memcpy(temptemp, &timestr[2], 2);  // minutes
+	timeobj->mm = (uint8_t) atoi(temptemp);
+	memcpy(temptemp, &timestr[4], 2);  // seconds
+	timeobj->ss = (uint8_t) atoi(temptemp);
+}
+#endif
+
 #if PARSE_ZDA
 // parses NMEA str for ZDA data
 static void ParseZDA(zda_t *sentence, const char *str)
@@ -550,16 +558,10 @@ static void ParseZDA(zda_t *sentence, const char *str)
 	// $GNZDA,163207.000,15,02,2024,,*4B
 	strtok_f(temp, ',');	// start to tokenize
 
-	char tempdt[7] = "\0";
+	char tempdt[6];
 	memcpy(tempdt, strtok_f(NULL, ','), 6);  // UTC time - 163207.000
 
-	char temptemp[3] = "\0";
-	memcpy(temptemp, &tempdt[0], 2);	// hours
-	sentence->time->hh = (uint8_t) atoi(temptemp);
-	memcpy(temptemp, &tempdt[2], 2);	// minutes
-	sentence->time->mm = (uint8_t) atoi(temptemp);
-	memcpy(temptemp, &tempdt[4], 2);	// seconds
-	sentence->time->ss = (uint8_t) atoi(temptemp);
+	_ParseTime(tempdt, sentence->time);  // convert UTC time 163207 to time_t
 
 	sentence->date->dd = (uint8_t) atoi(strtok_f(NULL, ','));  // day - 15
 	sentence->date->mm = (uint8_t) atoi(strtok_f(NULL, ','));  // month - 02
@@ -567,9 +569,9 @@ static void ParseZDA(zda_t *sentence, const char *str)
 	sentence->tz = (uint8_t) atoi(strtok_f(NULL, ','));  // local timezone offset
 
 	if(sentence->date->yyyy > 1980)
-		__ORG1510MK4.public.flag_time_accurate = 1;
+		__ORG1510MK4.public.FlagTimeAccurate = 1;
 	else
-		__ORG1510MK4.public.flag_time_accurate = 0;
+		__ORG1510MK4.public.FlagTimeAccurate = 0;
 
 	if(__ORG1510MK4.public.print->zda)
 		HAL_UART_Transmit_DMA(__ORG1510MK4.uart_sys, (const uint8_t*) str, (uint16_t) strlen((const char*) str));  // send GPS to VCP
@@ -592,16 +594,10 @@ static void ParseGGA(gga_t *sentence, const char *str)
 	// $GNGGA,161439.000,4547.8623,N,01554.9327,E,1,5,2.05,104.7,M,42.5,M,,*4E
 	char *tok = strtok_f(temp, ',');	// start to tokenize
 
-	char tempdt[7] = "\0";
+	char tempdt[6];
 	memcpy(tempdt, strtok_f(NULL, ','), 6);  // UTC of this position report - 161439.000
 
-//	char temptemp[3] = "\0";
-//	memcpy(temptemp, &tempdt[0], 2);	// hours
-//	sentence->time->hh = (uint8_t) atoi(temptemp);
-//	memcpy(temptemp, &tempdt[2], 2);	// minutes
-//	sentence->time->mm = (uint8_t) atoi(temptemp);
-//	memcpy(temptemp, &tempdt[4], 2);	// seconds
-//	sentence->time->ss = (uint8_t) atoi(temptemp);
+//	_ParseTime(tempdt, sentence->time);
 
 	tok = strtok_f(NULL, ',');
 	NMEA_DecimalDegree_to_coord_dd_t(tok, sentence->lat);  // 4547.8623 to 45 and 47.8623 in coord_dd_t
@@ -899,7 +895,7 @@ static void ParseGNGSV(gsv_t *sentence, const char *talker, const char *str)
 			n = i;	// store current loop iterator for next message
 
 			if(n > lastn)  // on the last GSV message, flag for ephemeris & almanac query
-				__ORG1510MK4.public.flag_alm_eph_query = 1;  // CHECKME - flag_alm_eph_query - move to RTC ISR
+				__ORG1510MK4.public.FlagQueryAlmandEph = 1;  // CHECKME - flag_alm_eph_query - move to RTC ISR
 
 			lastn = n;	// store last iterator of last message for next parser call
 		}
@@ -946,16 +942,10 @@ static void ParseRMC(rmc_t *sentence, const char *str)
 	// $GNRMC,145342.000,A,4547.8104,N,01554.8789,E,0.55,352.46,180224,,,A*7A
 	char *tok = strtok_f(temp, ',');	// start to tokenize
 
-	char tempdt[7] = "\0";
+	char tempdt[6];
 	memcpy(tempdt, strtok_f(NULL, ','), 6);  // 145342.000
 
-	char temptemp[3] = "\0";
-	memcpy(temptemp, &tempdt[0], 2);	// hours
-	sentence->time->hh = (uint8_t) atoi(temptemp);
-	memcpy(temptemp, &tempdt[2], 2);	// minutes
-	sentence->time->mm = (uint8_t) atoi(temptemp);
-	memcpy(temptemp, &tempdt[4], 2);	// seconds
-	sentence->time->ss = (uint8_t) atoi(temptemp);
+	_ParseTime(tempdt, sentence->time);  // convert UTC time 145342 to time_t
 
 	tok = strtok_f(NULL, ',');	// A
 	sentence->status = (rmc_status_t) *tok;
@@ -985,9 +975,9 @@ static void ParseRMC(rmc_t *sentence, const char *str)
 	sentence->date->yyyy = (uint16_t) atoi(temptemp) + 2000;
 
 	if(sentence->date->yyyy > 1980)
-		__ORG1510MK4.public.flag_time_accurate = 1;
+		__ORG1510MK4.public.FlagTimeAccurate = 1;
 	else
-		__ORG1510MK4.public.flag_time_accurate = 0;
+		__ORG1510MK4.public.FlagTimeAccurate = 0;
 
 	sentence->mag_var = (uint16_t) atoi(strtok_f(NULL, ','));  // empty
 
@@ -1382,7 +1372,7 @@ static void _Write(const char *str)
 // asynchronous flag_alm_eph_query for SV almanac & ephemeris
 void _Alm_Eph_query(void)
 {
-	if(__ORG1510MK4.public.flag_alm_eph_query)
+	if(__ORG1510MK4.public.FlagQueryAlmandEph)
 		{
 			char cmnd[13] = "\0";
 
@@ -1410,7 +1400,7 @@ void _Alm_Eph_query(void)
 
 			__ORG1510MK4.public.Write("PMTK661,1");  // query which SVs will have a valid almanac in 1s
 
-			__ORG1510MK4.public.flag_alm_eph_query = 0;
+			__ORG1510MK4.public.FlagQueryAlmandEph = 0;
 		}
 }
 #endif
@@ -1418,13 +1408,12 @@ void _Alm_Eph_query(void)
 static __org1510mk4_t __ORG1510MK4 =  // instantiate org1510mk4_t actual and set function pointers
 	{  //
 	.public.Power = &_Power,	// GPS module power mode change control function
-	.public.Parse = &_Parse,	//
-	.public.Read = &_Read,	//
+	.public.Parse = &_Parse,	// parses incoming NMEA sentences
 	.public.Write = &_Write,  // writes a NEMA sentence to the GPS module
 #if PARSE_GSV
 	.public.AlmEphQuery = &_Alm_Eph_query,  // asynchronous flag_alm_eph_query for SV almanac & ephemeris
 #endif
-	  };
+	};
 
 static print_nmea_t _print =	// instantiate & initialize print_nmea_t struct
 	{  //
@@ -1437,14 +1426,14 @@ static print_nmea_t _print =	// instantiate & initialize print_nmea_t struct
 	.pmtk_711 = PRINT_PMTK_711,  //
 	.pmtk_668 = PRINT_PMTK_668,  //
 #endif
-	  .gga = PARSE_GGA,  //
-	  .gll = PARSE_GLL,  //
-	  .gsa = PARSE_GSA,  //
-	  .gsv = PARSE_GSV,  //
-	  .rmc = PARSE_RMC,  //
-	  .vtg = PARSE_VTG,  //
-	  .zda = PARSE_ZDA,  //
-	  };
+	.gga = PARSE_GGA,  //
+	.gll = PARSE_GLL,  //
+	.gsa = PARSE_GSA,  //
+	.gsv = PARSE_GSV,  //
+	.rmc = PARSE_RMC,  //
+	.vtg = PARSE_VTG,  //
+	.zda = PARSE_ZDA,  //
+	};
 
 org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys)  //
 {
@@ -1452,10 +1441,10 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 	__ORG1510MK4.public.AlmanacFlags = &_pmtk661;  // SV PRN flags with valid alamanac (PRN 1 is leftmost)
 #endif
 #if PARSE_GSV
-	__ORG1510MK4.public.flag_alm_eph_query = 0;  // flag for running AlmEphQuery()
-	__ORG1510MK4.public.flag_location_seeded = 0;  // flag indicating that PMTK741 was sent
+	__ORG1510MK4.public.FlagQueryAlmandEph = 0;  // flag for running AlmEphQuery()
+	__ORG1510MK4.public.FlagLocationSeeded = 0;  // flag indicating that PMTK741 was sent
 #endif
-	__ORG1510MK4.public.flag_time_accurate = 0;  // on startup, flag time as inaccurate
+	__ORG1510MK4.public.FlagTimeAccurate = 0;  // on startup, flag time as inaccurate
 	__ORG1510MK4.public.print = &_print;	// tie in printout flag struct
 	__ORG1510MK4.uart_gps = gps;  // store GPS module UART object
 	__ORG1510MK4.uart_sys = sys;  // store system UART object
@@ -1472,8 +1461,7 @@ org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys) 
 	__ORG1510MK4.public.gga->lat_dir = &_cd;  // cardinal direction of latitude
 	__ORG1510MK4.public.gga->lon = &_lon;  // tie in longitude
 	__ORG1510MK4.public.gga->lon_dir = &_cd;  // cardinal direction of longitude
-	__ORG1510MK4.public.gga->time = &_time;
-	;  // tie in container for GGA-derived fix date
+	__ORG1510MK4.public.gga->time = &_time;  // tie in container for GGA-derived fix date
 #endif
 #if PARSE_ZDA
 	__ORG1510MK4.public.zda = &_zda;	// tie in ZDA sentence struct
