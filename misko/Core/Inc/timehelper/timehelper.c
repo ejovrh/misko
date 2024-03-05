@@ -22,44 +22,35 @@ static RTC_DateTypeDef sDate =
 	{0};
 
 // sets RTC time based on GPS module time
-static void _SetRTCfromGPS(org1510mk4_t *gps, RTC_HandleTypeDef *rtc)
+static void _SetRTCfromGPS(void)
 {
-	sDate.Year = (uint8_t) (gps->zda->year - 2000);  // the year is only the 2 last digits!
-	sDate.Month = gps->zda->month;
-	sDate.Date = gps->zda->day;
+	sDate.Year = (uint8_t) (__TimeHelper.gps->date->yyyy - 2000);  // the year is only the 2 last digits!
+	sDate.Month = __TimeHelper.gps->date->mm;
+	sDate.Date = __TimeHelper.gps->date->dd;
 
-	if(HAL_RTC_SetDate(rtc, &sDate, RTC_FORMAT_BIN) != HAL_OK)
+	if(HAL_RTC_SetDate(__TimeHelper.rtc, &sDate, RTC_FORMAT_BIN) != HAL_OK)
 		{
 			Error_Handler();
 		}
 
-	char temp[3] = "\0";  // will contain e.g. 154726
-	char zda_time[7] = "\0";	// will contain a copy of ZDA's time
-	memcpy(&zda_time, gps->zda->time, 7);  // copy...
+	sTime.Hours = __TimeHelper.gps->time->hh;  // set the hours
+	sTime.Minutes = __TimeHelper.gps->time->mm;  // set the minutes
+	sTime.Seconds = __TimeHelper.gps->time->ss;  // set the seconds
 
-	strncpy(temp, &zda_time[0], 2);  // copy the hour'stwo digits
-	sTime.Hours = (uint8_t) atoi(temp);  // convert to integer
-
-	strncpy(temp, &zda_time[2], 2);  // copy the minute's two digits
-	sTime.Minutes = (uint8_t) atoi(temp);
-
-	strncpy(temp, &zda_time[4], 2);  // copy the second's two digits
-	sTime.Seconds = (uint8_t) atoi(temp);
-
-	if(HAL_RTC_SetTime(rtc, &sTime, RTC_FORMAT_BIN) != HAL_OK)
+	if(HAL_RTC_SetTime(__TimeHelper.rtc, &sTime, RTC_FORMAT_BIN) != HAL_OK)
 		{
 			Error_Handler();
 		}
 }
 
 // sets GPS time based on RTC time
-static void _SetGPSfromRTC(org1510mk4_t *gps, RTC_HandleTypeDef *rtc)
+static void _SetGPSfromRTC(void)
 {
-	if(HAL_RTC_GetTime(rtc, &sTime, RTC_FORMAT_BIN) != HAL_OK)
+	if(HAL_RTC_GetTime(__TimeHelper.rtc, &sTime, RTC_FORMAT_BIN) != HAL_OK)
 		{
 			Error_Handler();
 		}
-	if(HAL_RTC_GetDate(rtc, &sDate, RTC_FORMAT_BIN) != HAL_OK)
+	if(HAL_RTC_GetDate(__TimeHelper.rtc, &sDate, RTC_FORMAT_BIN) != HAL_OK)
 		{
 			Error_Handler();
 		}
@@ -68,7 +59,7 @@ static void _SetGPSfromRTC(org1510mk4_t *gps, RTC_HandleTypeDef *rtc)
 	// assemble PMTK740 - set UTC date/time command
 	// e.g. $PMTK740,2024,02,24,08,27,00*3C
 	sprintf(outstr, "PMTK740,%u,%u,%u,%u,%u,%u", sDate.Year + 2000, sDate.Month, sDate.Date, sTime.Hours, sTime.Minutes, sTime.Seconds);
-	gps->Write(outstr);  // send the command out
+	__TimeHelper.gps->Write(outstr);  // send the command out
 }
 
 // the one actor
@@ -81,22 +72,21 @@ void _TimeHelper(const uint8_t GPS_flag)
 
 	if(__TimeHelper.public.flagGPScorrect && !__TimeHelper.public.flagRTCcorrect)  // GPS has correct time -> set RTC
 		{
-			_SetRTCfromGPS(__TimeHelper.gps, __TimeHelper.rtc);  // set RTC based off GPS' time
+			_SetRTCfromGPS();  // set RTC based off GPS' time
 			__TimeHelper.public.flagRTCcorrect = 1;  // mark
 			return;
 		}
 
 	if(!__TimeHelper.public.flagGPScorrect && __TimeHelper.public.flagRTCcorrect)  // RTC has correct time -> set GPS
 		{
-			_SetGPSfromRTC(__TimeHelper.gps, __TimeHelper.rtc);  // set GPS based off RTC's time
+			_SetGPSfromRTC();  // set GPS based off RTC's time
 			__TimeHelper.public.flagGPScorrect = 1;  // mark
 			return;
 		}
 
 	if(__TimeHelper.public.flagGPScorrect && __TimeHelper.public.flagRTCcorrect)  // periodically update RTC from GPS
 		{
-			if(__TimeHelper.gps->zda->time[5] == '0')
-				__TimeHelper.public.flagRTCcorrect = 0;  // un-mark so that it will be set on the next iteration
+			__TimeHelper.public.flagRTCcorrect = 0;  // un-mark so that it will be set on the next iteration
 			return;
 		}
 }

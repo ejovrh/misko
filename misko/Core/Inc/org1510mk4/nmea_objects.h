@@ -1,13 +1,29 @@
 #ifndef INC_ORG1510MK4_NMEA_OBJECTS_H_
 #define INC_ORG1510MK4_NMEA_OBJECTS_H_
 
+#if PARSE_ZDA || PARSE_RMC || PARSE_GGA || PARSE_GLL
+typedef struct time_t	// struct for time in hh mm ss
+{	//
+		uint8_t hh;	// hours
+		uint8_t mm;	// minutes
+		uint8_t ss;	// seconds
+
+} time_t;
+
+typedef struct date_t	// struct for time in yyyy mm dd
+{	//
+		uint16_t yyyy;	// year
+		uint8_t mm;	// month
+		uint8_t dd;	// day
+
+} date_t;
+#endif
+
 #if PARSE_ZDA
 typedef struct zda_t	// ZDA message struct
 {
-	char *time;  //	hhmmss time in UTC
-	uint8_t day;	// day of the month
-	uint8_t month;  // month of the year
-	uint16_t year;	// year
+	time_t *time;  //	UTC time hh mm ss
+	date_t *date;	// date yyyy mm dd
 	uint8_t tz;  // local time-zone offset from GMT
 } zda_t;
 #endif
@@ -27,7 +43,7 @@ typedef enum gga_fix_t	// GGA sentence struct
 } gga_fix_t;
 #endif
 
-#if PARSE_RMC || PARSE_GGA
+#if PARSE_RMC || PARSE_GGA || PARSE_GLL
 typedef enum cardinal_dir_t  // directions on the hemisphere - NSEW
 {  // ASCII character interpreted as integer
 	  na = 0,  // no fix
@@ -38,7 +54,7 @@ typedef enum cardinal_dir_t  // directions on the hemisphere - NSEW
 } cardinal_dir_t;
 #endif
 
-#if PARSE_RMC || PARSE_GGA
+#if PARSE_RMC || PARSE_GGA || PARSE_GLL
 typedef struct coord_dd_t  // NMEA decimal degree
 {
 	uint8_t deg;  // degrees	45 47.8623
@@ -49,7 +65,7 @@ typedef struct coord_dd_t  // NMEA decimal degree
 #if PARSE_GGA
 typedef struct gga_t  // GGA sentence struct
 {
-	char *time;  // age of GPS fix data
+	time_t *time;  //	UTC time hh mm ss
 	coord_dd_t *lat;  // latitude
 	cardinal_dir_t *lat_dir;  // cardinal direction of latitude
 	coord_dd_t *lon;  // longitude
@@ -63,7 +79,7 @@ typedef struct gga_t  // GGA sentence struct
 } gga_t;
 #endif
 
-#if PARSE_VTG || PARSE_RMC
+#if PARSE_VTG || PARSE_RMC || PARSE_GLL
 typedef enum faa_mode_t  // FAA mode indicator
 {  // ASCII character interpreted as integer
 	  auton = 65,  // A - autonomous mode
@@ -170,7 +186,7 @@ typedef enum rmc_status_t  // RMC fix status
 #if PARSE_RMC
 typedef struct rmc_t	// RMC sentence struct
 {
-	char *time;  //	position fix time in hhmmss time in UTC
+	time_t *time;  //	UTC time hh mm ss
 	rmc_status_t status;	// GPS status indicator
 	coord_dd_t *lat;  // latitude
 	cardinal_dir_t *lat_dir;  // direction of latitude
@@ -178,7 +194,7 @@ typedef struct rmc_t	// RMC sentence struct
 	cardinal_dir_t *lon_dir;  // direction of longitude
 	float knots;	// speed in knots
 	uint16_t azimut;	// track angle in degrees true north
-	char *date;  // date in ddmmyy format
+	date_t *date;	// date yyyy mm dd
 	uint16_t mag_var;  // magnetic variation in degrees
 	cardinal_dir_t *var_dir;  // magnetic variation cardinal direction
 	faa_mode_t mode;	// FAA mode indicator
@@ -192,7 +208,7 @@ typedef struct gll_t	// GLL sentence struct
 	cardinal_dir_t *lat_dir;  // direction of latitude
 	coord_dd_t *lon;  // longitude
 	cardinal_dir_t *lon_dir;  // direction of longitude
-	char *time;  //	position fix time in hhmmss time in UTC
+	time_t *time;  //	UTC time hh mm ss
 	rmc_status_t status;	// GPS status indicator
 	faa_mode_t mode;	// FAA mode indicator
 

@@ -271,9 +271,13 @@ int main(void)
 	/* USER CODE BEGIN WHILE */
 	while(1)
 		{
+#if PARSE_GSV
 			ORG1510MK4->AlmEphQuery();	// asynchronous flag_alm_eph_query for SV almanac & ephemeris
+#endif
 			TimeHelper->TimeHelper(ORG1510MK4->flag_time_accurate);  // deal with time...
+#if PARSE_PMTK
 			TimeHelper->LocationHelper(0);  // seed the last known location
+#endif
 			/* USER CODE END WHILE */
 
 			/* USER CODE BEGIN 3 */

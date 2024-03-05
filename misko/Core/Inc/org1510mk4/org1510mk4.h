@@ -29,6 +29,7 @@
 
 typedef struct print_nmea_t  // NMEA sentence printout flags
 {
+#if PARSE_PMTK
 	uint8_t pmtk :1;  // print PMTK messages
 	uint8_t pmtk_001 :1;  // print PMTK 001 reply messages
 	uint8_t pmtk_010 :1;  //
@@ -36,6 +37,7 @@ typedef struct print_nmea_t  // NMEA sentence printout flags
 	uint8_t pmtk_710 :1;  //
 	uint8_t pmtk_711 :1;  //
 	uint8_t pmtk_668 :1;  //
+#endif
 	uint8_t gll :1;  // print GLL sentences
 	uint8_t rmc :1;  // print RMC sentences
 	uint8_t vtg :1;  // ditto
@@ -86,19 +88,26 @@ typedef struct org1510mk4_t  // struct describing the GPS module functionality
 #if PARSE_GLL
 	gll_t *gll;  //GLL-parsed data
 #endif
+#if PARSE_GSV
 	uint8_t flag_alm_eph_query :1;  // flag for running AlmEphQuery()
-	uint8_t flag_time_accurate :1;  // flag that indicates a correct GPS time (as received from a SV)
+#endif
 	uint8_t flag_location_seeded :1;	// flag indicating that PMTK741 was sent
+	uint8_t flag_time_accurate :1;  // flag that indicates a correct GPS time (as received from a SV)
 	uint32_t *AlmanacFlags;  // SV flag with valid alamanac
 	print_nmea_t *print;	// flags struct for dynamic NMEA & PMTK printout control
 	uint8_t *NMEA;  //	last NMEA sentence
 	volatile org1510mk4_power_t PowerMode;  // current power mode of the GPS module
 
+	time_t *time;  // GPS time
+	date_t *date;  // GPS date
+
 	void (*Power)(const org1510mk4_power_t state);  // GPS module power mode change control function
 	void (*Parse)(const uint16_t Size);  // loads incoming NMEA string from DMA into a buffer and parses it
 	void (*Read)(void);  //
 	void (*Write)(const char *str);  // writes a NEMA sentence to the GPS module
+#if PARSE_GSV
 	void (*AlmEphQuery)(void);  // asynchronous flag_alm_eph_query for SV almanac & ephemeris
+#endif
 } org1510mk4_t;
 
 org1510mk4_t* org1510mk4_ctor(UART_HandleTypeDef *gps, UART_HandleTypeDef *sys);  // the ORG1510MK4 constructor
