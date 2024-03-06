@@ -148,6 +148,7 @@ void Error_Handler(void);
 #define USE_FM25W256 1	// use the memory
 #define USE_SD 1	// use the SD card
 #define USE_ORG1510MK4 1 // use the GPS module
+#define USE_LOGGER 1	// use the logger
 
 #define OFF 0	// global device states
 #define ON 1

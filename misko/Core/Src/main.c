@@ -38,6 +38,9 @@
 #if USE_TIMEHELPER
 #include "timehelper/timehelper.h"
 #endif
+#if USE_LOGGER
+#include "logger/logger.h"
+#endif
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -113,6 +116,8 @@ uint32_t uart3_char_written;	// characters written
 lwrb_sz_t uart3_ovrflowlen;  // amount of data written in overflow mode
 lwrb_sz_t uart3_linearlen;  // amount of data written in linear mode
 #endif
+logger_t *mj8x8_log;	// logger object for mj8x8 data
+logger_t *gps_log;	// logger object for GPS data
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -264,6 +269,10 @@ int main(void)
 #endif
 #if USE_TIMEHELPER
 	timehelper_ctor(ORG1510MK4, &hrtc);  // initialize TimeHelper object
+#endif
+#if USE_LOGGER
+	mj8x8_log = logger_ctor();
+	gps_log = logger_ctor();
 #endif
 	/* USER CODE END 2 */
 
