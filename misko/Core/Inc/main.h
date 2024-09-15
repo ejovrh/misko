@@ -89,6 +89,8 @@ void Error_Handler(void);
 #define ROTARY_CH1_GPIO_Port GPIOB
 #define I2C2_SCL_Pin GPIO_PIN_10
 #define I2C2_SCL_GPIO_Port GPIOB
+#define CAN_STBY_Pin GPIO_PIN_12
+#define CAN_STBY_GPIO_Port GPIOB
 #define I2C2_SDA_Pin GPIO_PIN_13
 #define I2C2_SDA_GPIO_Port GPIOB
 #define UART1_TX_Pin GPIO_PIN_14

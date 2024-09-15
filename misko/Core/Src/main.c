@@ -1071,10 +1071,10 @@ static void MX_GPIO_Init(void)
 	HAL_GPIO_WritePin(GPIOA, SPI1_FRAM_CS_Pin | SPI1_ADXL345_CS_Pin, GPIO_PIN_SET);
 
 	/*Configure GPIO pin Output Level */
-	HAL_GPIO_WritePin(GPIOB, GPS_RESET_Pin | Anal_SW_CTRL_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOB, CAN_STBY_Pin | SUPERCAP_EN_Pin, GPIO_PIN_RESET);
 
 	/*Configure GPIO pin Output Level */
-	HAL_GPIO_WritePin(SUPERCAP_EN_GPIO_Port, SUPERCAP_EN_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPIOB, GPS_RESET_Pin | Anal_SW_CTRL_Pin, GPIO_PIN_SET);
 
 	/*Configure GPIO pins : Blue_User_Button_Pin ADXL345_INT1_Pin */
 	GPIO_InitStruct.Pin = Blue_User_Button_Pin | ADXL345_INT1_Pin;
@@ -1122,11 +1122,18 @@ static void MX_GPIO_Init(void)
 	GPIO_InitStruct.Pull = GPIO_PULLDOWN;
 	HAL_GPIO_Init(SD_CD_GPIO_Port, &GPIO_InitStruct);
 
-	/*Configure GPIO pins : PB1 PB12 */
-	GPIO_InitStruct.Pin = GPIO_PIN_1 | GPIO_PIN_12;
+	/*Configure GPIO pin : PB1 */
+	GPIO_InitStruct.Pin = GPIO_PIN_1;
 	GPIO_InitStruct.Mode = GPIO_MODE_ANALOG;
 	GPIO_InitStruct.Pull = GPIO_NOPULL;
 	HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+	/*Configure GPIO pin : CAN_STBY_Pin */
+	GPIO_InitStruct.Pin = CAN_STBY_Pin;
+	GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+	GPIO_InitStruct.Pull = GPIO_NOPULL;
+	GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+	HAL_GPIO_Init(CAN_STBY_GPIO_Port, &GPIO_InitStruct);
 
 	/*Configure GPIO pin : Debug_Out_Pin */
 	GPIO_InitStruct.Pin = Debug_Out_Pin;
