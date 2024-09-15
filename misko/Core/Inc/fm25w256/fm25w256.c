@@ -11,7 +11,7 @@ typedef struct	// fm25w256c_t actual
 	uint16_t _CS_Pin;  // SPI chip select GPIO pin
 } __fm25w256_t;
 
-static __fm25w256_t  __FM25W256  __attribute__ ((section (".data")));  // preallocate __FM25W256 object in .data
+static __fm25w256_t __FM25W256 __attribute__ ((section (".data")));  // preallocate __FM25W256 object in .data
 
 #define CMD_WRSR	0x01	// Write Status Register; sets write protection features (p. 7)
 #define CMD_WRITE	0x02	// Write Memory Data; writes one byte to a 2 byte address (p. 8)
@@ -99,7 +99,7 @@ static void _WriteBytes(const uint16_t in_addr, uint8_t *in_data, const uint8_t 
 	HAL_GPIO_WritePin(__FM25W256._CS_Port, __FM25W256._CS_Pin, GPIO_PIN_SET);  // drive device CS high
 }
 
-static __fm25w256_t  __FM25W256 =  // instantiate fm25w256c_t actual and set function pointers
+static __fm25w256_t __FM25W256 =  // instantiate fm25w256c_t actual and set function pointers
 	{  //
 	.public.ReadBytes = &_ReadBytes,	// reads n bytes from device
 	.public.WriteBytes = &_WriteBytes  // writes n bytes to device

@@ -184,17 +184,18 @@ static void load_into_ring_buffer(lwrb_t *rb, const uint16_t high_pos)
  */
 int main(void)
 {
+
 	/* USER CODE BEGIN 1 */
 
 	/* USER CODE END 1 */
 
 	/* MCU Configuration--------------------------------------------------------*/
 
-	/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
-	HAL_Init();
-
 	/* MPU Configuration--------------------------------------------------------*/
 	MPU_Config();
+
+	/* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+	HAL_Init();
 
 	/* USER CODE BEGIN Init */
 
@@ -341,6 +342,10 @@ void SystemClock_Config(void)
 		{
 			Error_Handler();
 		}
+
+	/** Configure the programming delay
+	 */
+	__HAL_FLASH_SET_PROGRAM_DELAY(FLASH_PROGRAMMING_DELAY_1);
 }
 
 /**
@@ -485,8 +490,8 @@ static void MX_FDCAN1_Init(void)
 	hfdcan1.Init.ProtocolException = DISABLE;
 	hfdcan1.Init.NominalPrescaler = 16;
 	hfdcan1.Init.NominalSyncJumpWidth = 1;
-	hfdcan1.Init.NominalTimeSeg1 = 2;
-	hfdcan1.Init.NominalTimeSeg2 = 2;
+	hfdcan1.Init.NominalTimeSeg1 = 1;
+	hfdcan1.Init.NominalTimeSeg2 = 1;
 	hfdcan1.Init.DataPrescaler = 1;
 	hfdcan1.Init.DataSyncJumpWidth = 1;
 	hfdcan1.Init.DataTimeSeg1 = 1;
@@ -874,7 +879,7 @@ static void MX_TIM2_Init(void)
 	htim2.Instance = TIM2;
 	htim2.Init.Prescaler = 0;
 	htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-	htim2.Init.Period = 4.294967295E9;
+	htim2.Init.Period = 4294967295;
 	htim2.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
 	htim2.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
 	sConfig.EncoderMode = TIM_ENCODERMODE_TI1;
