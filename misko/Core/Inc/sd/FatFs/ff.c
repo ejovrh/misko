@@ -2009,7 +2009,7 @@ BYTE *dir /* Pointer to the LFN entry */
 				}
 		}
 
-	if(dir[LDIR_Ord] & LLEF && wc != 0)
+	if((dir[LDIR_Ord] & LLEF) && wc != 0)
 		{ /* Put terminator if it is the last LFN part and not terminated */
 			if(i >= FF_MAX_LFN + 1)
 				return 0; /* Buffer overflow? */

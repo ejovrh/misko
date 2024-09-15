@@ -98,7 +98,7 @@ typedef struct org1510mk4_t  // struct describing the GPS module functionality
 	uint8_t *NMEA;  //	last NMEA sentence
 	volatile org1510mk4_power_t PowerMode;  // current power mode of the GPS module
 
-	time_t *time;  // GPS time
+	nmea_time_t *time;  // GPS time
 	date_t *date;  // GPS date
 
 	void (*Power)(const org1510mk4_power_t state);  // GPS module power mode change control function

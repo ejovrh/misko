@@ -65,7 +65,7 @@ static void _SetGPSfromRTC(void)
 // the one actor
 void _TimeHelper(const uint8_t GPS_flag)
 {
-	__TimeHelper.public.FlagGPShasCorrectTime = GPS_flag;
+	__TimeHelper.public.FlagGPShasCorrectTime = (char) (GPS_flag & 0x01);  // cast and explicitly tell the compiler that we want only the last bit
 
 	if(!__TimeHelper.public.FlagGPShasCorrectTime && !__TimeHelper.public.FlagRTChasCorrectTime)  // no time is correct
 		return;  // get out

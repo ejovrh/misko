@@ -42,7 +42,7 @@ static uint8_t uart1_gps_rx_rb_buffer[UART1_GPS_RX_RINGBUFFER_LEN];  //
 
 #if PARSE_GGA || PARSE_ZDA || PARSE_RMC || PARSE_GLL
 static date_t _date;
-static time_t _time;
+static nmea_time_t _time;
 #endif
 #if PARSE_GGA || PARSE_RMC || PARSE_GLL
 static coord_dd_t _lat;  // object for GGA latitude
@@ -128,7 +128,7 @@ static uint8_t checksumMismatch(const char *sentence, const uint8_t len)
 					checksumInSentence = (uint8_t) (checksumInSentence * 16 + (*ptr - 'a' + 10));
 				}
 
-			*ptr++;  // @suppress("Statement has no effect")
+			*ptr++;
 		}
 
 	return (checksum == checksumInSentence) ? 0 : 1;	// compare the two sums
@@ -530,7 +530,7 @@ static void NMEA_DecimalDegree_to_coord_dd_t(char *str, coord_dd_t *coord)
 
 #if PARSE_ZDA || PARSE_RMC
 // converts time format "163207" into time_t object
-void _ParseTime(char *timestr, time_t *timeobj)
+void _ParseTime(char *timestr, nmea_time_t *timeobj)
 {
 	char temptemp[2];
 	memcpy(temptemp, &timestr[0], 2);  // hours

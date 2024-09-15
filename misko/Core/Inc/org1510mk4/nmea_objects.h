@@ -8,7 +8,7 @@ typedef struct time_t	// struct for time in hh mm ss
 		uint8_t mm;	// minutes
 		uint8_t ss;	// seconds
 
-} time_t;
+} nmea_time_t;
 
 typedef struct date_t	// struct for time in yyyy mm dd
 {	//
@@ -22,7 +22,7 @@ typedef struct date_t	// struct for time in yyyy mm dd
 #if PARSE_ZDA
 typedef struct zda_t	// ZDA message struct
 {
-	time_t *time;  //	UTC time hh mm ss
+	nmea_time_t *time;  //	UTC time hh mm ss
 	date_t *date;	// date yyyy mm dd
 	uint8_t tz;  // local time-zone offset from GMT
 } zda_t;
@@ -65,7 +65,7 @@ typedef struct coord_dd_t  // NMEA decimal degree
 #if PARSE_GGA
 typedef struct gga_t  // GGA sentence struct
 {
-	time_t *time;  //	UTC time hh mm ss
+	nmea_time_t *time;  //	UTC time hh mm ss
 	coord_dd_t *lat;  // latitude
 	cardinal_dir_t *lat_dir;  // cardinal direction of latitude
 	coord_dd_t *lon;  // longitude
@@ -186,7 +186,7 @@ typedef enum rmc_status_t  // RMC fix status
 #if PARSE_RMC
 typedef struct rmc_t	// RMC sentence struct
 {
-	time_t *time;  //	UTC time hh mm ss
+	nmea_time_t *time;  //	UTC time hh mm ss
 	rmc_status_t status;	// GPS status indicator
 	coord_dd_t *lat;  // latitude
 	cardinal_dir_t *lat_dir;  // direction of latitude
@@ -208,7 +208,7 @@ typedef struct gll_t	// GLL sentence struct
 	cardinal_dir_t *lat_dir;  // direction of latitude
 	coord_dd_t *lon;  // longitude
 	cardinal_dir_t *lon_dir;  // direction of longitude
-	time_t *time;  //	UTC time hh mm ss
+	nmea_time_t *time;  //	UTC time hh mm ss
 	rmc_status_t status;	// GPS status indicator
 	faa_mode_t mode;	// FAA mode indicator
 
