@@ -65,6 +65,8 @@ static uint32_t tempvgps;  // ditto
 /* USER CODE END 0 */
 
 /* External variables --------------------------------------------------------*/
+extern DMA_NodeTypeDef Node_GPDMA1_Channel5;
+extern DMA_QListTypeDef List_GPDMA1_Channel5;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel5;
 extern ADC_HandleTypeDef hadc1;
 extern FDCAN_HandleTypeDef hfdcan1;
@@ -75,7 +77,11 @@ extern DMA_HandleTypeDef handle_GPDMA2_Channel0;
 extern SPI_HandleTypeDef hspi1;
 extern TIM_HandleTypeDef htim1;
 extern TIM_HandleTypeDef htim2;
+extern DMA_NodeTypeDef Node_GPDMA1_Channel3;
+extern DMA_QListTypeDef List_GPDMA1_Channel3;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel3;
+extern DMA_NodeTypeDef Node_GPDMA1_Channel1;
+extern DMA_QListTypeDef List_GPDMA1_Channel1;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel1;
 extern DMA_HandleTypeDef handle_GPDMA1_Channel0;
 extern UART_HandleTypeDef huart1;
