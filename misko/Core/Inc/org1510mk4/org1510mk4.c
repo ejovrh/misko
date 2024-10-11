@@ -462,7 +462,7 @@ static void _Power(const org1510mk4_power_t state)
 			__ORG1510MK4.public.PowerMode = discharge;
 			HAL_GPIO_WritePin(SUPERCAP_EN_GPIO_Port, SUPERCAP_EN_Pin, GPIO_PIN_RESET);	// turn off supercap charger
 
-			HAL_GPIO_WritePin(SC_DISCHARGE_GPIO_Port, SC_DISCHARGE_Pin, GPIO_PIN_SET);	// start to discharge
+			HAL_GPIO_WritePin(SUPERCAP_DISCHARGE_GPIO_Port, SUPERCAP_DISCHARGE_Pin, GPIO_PIN_SET);	// start to discharge
 
 			while(__adc_results[Vgps] > 50)
 				// wait until the supply voltage drops below 50mV
@@ -470,7 +470,7 @@ static void _Power(const org1510mk4_power_t state)
 
 			_wait(5000);	// wait 5 seconds
 
-			HAL_GPIO_WritePin(SC_DISCHARGE_GPIO_Port, SC_DISCHARGE_Pin, GPIO_PIN_RESET);	// stop the discharge
+			HAL_GPIO_WritePin(SUPERCAP_DISCHARGE_GPIO_Port, SUPERCAP_DISCHARGE_Pin, GPIO_PIN_RESET);	// stop the discharge
 			__ORG1510MK4.public.PowerMode = off;
 		}
 }

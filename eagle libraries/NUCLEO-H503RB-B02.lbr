@@ -7,7 +7,7 @@
 <setting keepoldvectorfont="yes"/>
 <setting verticaltext="up"/>
 </settings>
-<grid distance="50" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
+<grid distance="12.5" unitdist="mil" unit="mil" style="lines" multiple="1" display="yes" altdistance="5" altunitdist="mil" altunit="mil"/>
 <layers>
 <layer number="1" name="Top" color="4" fill="1" visible="yes" active="yes"/>
 <layer number="16" name="Bottom" color="1" fill="1" visible="no" active="yes"/>
@@ -172,9 +172,9 @@
 <hole x="8.89" y="-38.75" drill="3"/>
 <hole x="24.13" y="12.05" drill="3"/>
 <hole x="-24.13" y="13.32" drill="3"/>
-<text x="-8" y="-40" size="1" layer="21" font="vector" align="center">NUCLEO-H503RB-B02</text>
-<text x="-30.48" y="12.7" size="1.27" layer="21" font="vector" align="center">CN7</text>
-<text x="30.48" y="12.7" size="1.27" layer="21" font="vector" align="center">CN10</text>
+<text x="-7.62" y="-40.64" size="1" layer="21" font="vector" align="center">NUCLEO-H503RB-B02</text>
+<text x="-30.48" y="12.065" size="1.27" layer="21" font="vector" align="center">CN7</text>
+<text x="30.48" y="12.065" size="1.27" layer="21" font="vector" align="center">CN10</text>
 <circle x="-27.305" y="10.16" radius="0.1016" width="0.2032" layer="21"/>
 <circle x="27.305" y="9.525" radius="0.1016" width="0.2032" layer="21"/>
 <dimension x1="-35" y1="-42" x2="35" y2="-42" x3="0" y3="-50.25" textsize="1.27" layer="47"/>
@@ -220,6 +220,9 @@
 <pin name="PC3" x="-20.32" y="-5.08" visible="pin" length="middle"/>
 <pin name="PC0" x="-20.32" y="2.54" visible="pin" length="middle"/>
 <text x="-10.16" y="38.1" size="1.778" layer="95" font="vector" align="center">CN7</text>
+<text x="13.97" y="-10.16" size="0.6096" layer="95" rot="R90" align="center">RESET</text>
+<text x="-13.97" y="-15.24" size="0.6096" layer="95" rot="R90" align="center">blue
+button</text>
 </symbol>
 <symbol name="NUCLEO-H503RB-B02_CN10">
 <wire x1="-12.7" y1="38.1" x2="-12.7" y2="-40.64" width="0.254" layer="94"/>
@@ -353,4 +356,10 @@
 </devicesets>
 </library>
 </drawing>
+<compatibility>
+<note version="6.3" minversion="6.2.2" severity="warning">
+Since Version 6.2.2 text objects can contain more than one line,
+which will not be processed correctly with this version.
+</note>
+</compatibility>
 </eagle>

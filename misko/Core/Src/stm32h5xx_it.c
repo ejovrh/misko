@@ -456,14 +456,14 @@ void TIM1_CC_IRQHandler(void)
 #if PARSE_GGA
 	if(ORG1510MK4->gga->fix == INS)  // check if we have an inertial navigation fix
 		{
-			HAL_GPIO_TogglePin(LED_Green_GPIO_Port, LED_Green_Pin);  // blink the LED
+			HAL_GPIO_TogglePin(LED_Yellow_GPIO_Port, LED_Yellow_Pin);  // blink the LED
 			return;
 		}
 
 	if(ORG1510MK4->gga->fix > 0)	// check if we have a GPS fix
-		HAL_GPIO_WritePin(LED_Green_GPIO_Port, LED_Green_Pin, GPIO_PIN_RESET);	// light up green LED
+		HAL_GPIO_WritePin(LED_Yellow_GPIO_Port, LED_Yellow_Pin, GPIO_PIN_RESET);	// light up green LED
 	else
-		HAL_GPIO_WritePin(LED_Green_GPIO_Port, LED_Green_Pin, GPIO_PIN_SET);	// light down green LED
+		HAL_GPIO_WritePin(LED_Yellow_GPIO_Port, LED_Yellow_Pin, GPIO_PIN_SET);	// light down green LED
 #endif
 	/* USER CODE END TIM1_CC_IRQn 1 */
 }
