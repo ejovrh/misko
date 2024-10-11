@@ -16,6 +16,12 @@
  *
  ******************************************************************************
  */
+
+/* target board: misko POC rev.3
+ *	as indicated in sch & brd files
+ *
+ */
+
 /* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
