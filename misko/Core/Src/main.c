@@ -1059,10 +1059,10 @@ static void MX_GPIO_Init(void)
 	__HAL_RCC_GPIOD_CLK_ENABLE();
 
 	/*Configure GPIO pin Output Level */
-	HAL_GPIO_WritePin(GPIOC, LED_Red_Pin | GPS_RESET_Pin, GPIO_PIN_SET);
+	HAL_GPIO_WritePin(GPIOC, LED_Red_Pin | LED_Yellow_Pin | GPS_PWR_CTRL_Pin | Debug_Out_Pin | USB_FS_PWR_EN_Pin | SUPERCAP_DISCHARGE_Pin, GPIO_PIN_RESET);
 
 	/*Configure GPIO pin Output Level */
-	HAL_GPIO_WritePin(GPIOC, LED_Yellow_Pin | GPS_PWR_CTRL_Pin | Debug_Out_Pin | USB_FS_PWR_EN_Pin | SUPERCAP_DISCHARGE_Pin, GPIO_PIN_RESET);
+	HAL_GPIO_WritePin(GPS_RESET_GPIO_Port, GPS_RESET_Pin, GPIO_PIN_SET);
 
 	/*Configure GPIO pin Output Level */
 	HAL_GPIO_WritePin(GPIOA, SPI1_SD_CS_Pin | SPI1_FRAM_CS_Pin, GPIO_PIN_SET);
@@ -1209,7 +1209,7 @@ void HAL_GPIO_EXTI_Rising_Callback(uint16_t GPIO_Pin)
 {
 	if(GPIO_Pin == Blue_User_Button_Pin)  // if button is pressed
 		{
-			HAL_GPIO_TogglePin(LED_Green_GPIO_Port, LED_Green_Pin);
+			HAL_GPIO_TogglePin(LED_Red_GPIO_Port, LED_Red_Pin);
 			return;
 		}
 

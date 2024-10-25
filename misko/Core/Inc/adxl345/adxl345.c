@@ -108,7 +108,7 @@ void _ISR(void)  // ISR for the ADXL345 accelerometer
 			_WriteByte(INT_ENABLE, 0x00);  // disable interrupts
 			_WriteByte(INT_ENABLE, INT_ENABLE_ACT_CFG);  // configure for activity detection
 
-			HAL_GPIO_WritePin(LED_Red_GPIO_Port, LED_Red_Pin, GPIO_PIN_SET);  // turn LED off
+			HAL_GPIO_WritePin(LED_Green_GPIO_Port, LED_Green_Pin, GPIO_PIN_RESET);  // turn LED off
 		}
 
 	if(((__ADXL345._irq_src >> 4) & 0x01) == 0x01)  // if the activity bit is set
@@ -118,7 +118,7 @@ void _ISR(void)  // ISR for the ADXL345 accelerometer
 			_WriteByte(INT_ENABLE, INT_ENABLE_INACT_CFG);  // reconfigure for inact. detection
 			_ReadByte(INT_SOURCE);  // enable interrupts
 
-			HAL_GPIO_WritePin(LED_Red_GPIO_Port, LED_Red_Pin, GPIO_PIN_RESET);  // turn LED on
+			HAL_GPIO_WritePin(LED_Green_GPIO_Port, LED_Green_Pin, GPIO_PIN_SET);  // turn LED on
 		}
 }
 
