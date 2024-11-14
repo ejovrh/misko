@@ -26124,7 +26124,7 @@ R = 1.1V/20mA = 55 Ohm / 125mW</text>
 <sheet>
 <plain>
 <text x="304.8" y="12.7" size="1.778" layer="97">misko POC
-ejovrh rev.3</text>
+ejovrh rev.3a</text>
 <text x="350.52" y="231.14" size="1.778" layer="91" align="center">GPS subsystem</text>
 <text x="58.42" y="190.5" size="1.778" layer="97" align="center-left">free</text>
 <text x="58.42" y="88.9" size="1.778" layer="97" align="center-left">free</text>
